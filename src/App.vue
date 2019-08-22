@@ -2,7 +2,8 @@
   <div>
     <v-app>
       <NavBar></NavBar>
-      <Menu></Menu> 
+      <Menu></Menu>
+      <router-view></router-view>
     </v-app>
       
     

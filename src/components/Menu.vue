@@ -4,10 +4,10 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">
-            Application
+            Leads
           </v-list-item-title>
           <v-list-item-subtitle>
-            subtext
+            Gestión de Leads
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -37,6 +37,8 @@
 </template>
 <script>
 export default {
-    
+    data: () => ({
+      items: 'HOLA'
+    })
 }
 </script>
