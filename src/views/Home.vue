@@ -1,13 +1,16 @@
 <template>
-  <HelloWorld />
+  <div>
+    <TableDash></TableDash>
+  </div>
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld';
+
+import TableDash from '../components/TableDash';
 
 export default {
   components: {
-    HelloWorld,
+    TableDash
   },
 };
 </script>
