@@ -30,6 +30,30 @@
         <td class="text-xs-right">{{ item.salary }}</td>
       </template>
     </v-data-table>
+    <v-row justify="center">
+      <v-col cols="auto">
+        <v-progress-circular
+        :rotate="360"
+        :size="100"
+        :width="15"
+        :value="value"
+        color="orange"
+      >
+        {{ value }}
+      </v-progress-circular>
+      </v-col>
+      <v-col cols="auto">
+        <v-progress-circular
+        :rotate="360"
+        :size="100"
+        :width="15"
+        :value="value"
+        color="orange"
+      >
+        {{ value }}
+      </v-progress-circular>
+      </v-col>
+    </v-row>
     </v-container>
   </div>
 </template>

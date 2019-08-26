@@ -7,10 +7,12 @@
 <script>
 
 import TableDash from '../components/TableDash';
+import RegisterLead from '../components/RegisterLead';
 
 export default {
   components: {
-    TableDash
+    TableDash,
+    RegisterLead
   },
 };
 </script>

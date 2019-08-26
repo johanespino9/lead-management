@@ -15,10 +15,12 @@
 </template>
 <script>
 import TableDash from './TableDash';
+import RegisterLead from './RegisterLead';
 
 export default {
     components:{
-        TableDash
+        TableDash,
+        RegisterLead
     }
     
 }

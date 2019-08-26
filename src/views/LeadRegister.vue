@@ -1,6 +1,6 @@
 <template>
   <div>
-    <RegisterLead></RegisterLead>
+     <RegisterLead></RegisterLead> 
   </div>
 </template>
 
