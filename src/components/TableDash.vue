@@ -23,7 +23,7 @@
       <v-col cols="12">
         <v-combobox
           v-model="select"
-          :items="items"
+          :items="values2"
           label="Seleccionar Hotel"
         ></v-combobox>
       </v-col>
@@ -36,7 +36,7 @@
       <v-col cols="12">
         <v-combobox
           v-model="select"
-          :items="items"
+          :items="values2"
           label="Seleccionar Año"
         ></v-combobox>
       </v-col>
@@ -58,7 +58,7 @@
 </template>
           <v-data-table
             :headers="headers"
-            :items="items"
+            :items="values2"
 
           >
             <template
@@ -98,6 +98,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
   data: () => ({
@@ -105,8 +106,8 @@ export default {
     headers: [
       {
         sortable: false,
-        text: 'Lead',
-        value: 'lead'
+        text: '',
+        value: 'dato'
       },
       {
         sortable: false,
@@ -174,7 +175,33 @@ export default {
         congelado: '0',
         cancelado: '2'
       }
-    ]
-  })
+    ],
+    values2: [],
+
+  }),
+      created(){
+        this.getUser();
+        this.login();
+    },
+    methods: {
+        async getUser(){
+            let datos = await axios.get('https://casa-andina.azurewebsites.net/Home/rolo96');
+            this.values = datos.data;
+        },
+        // CREDENCIALES = username: robval96, password: 123456
+        login(){
+            axios.post('https://casa-andina.azurewebsites.net/Home', {
+                username: 'robval96',
+                password: '123456'
+            }).then(response => {
+                // Respuesta del servidor
+                console.log(response);
+                this.values2 = response.data.table;
+                console.log(response)
+            }).catch(e => {
+                console.log(e);
+            });
+        }
+    }
 }
 </script>
