@@ -1,0 +1,25 @@
+<template>
+    <div>
+        <v-content>
+      <v-container
+        fluid
+      >
+        
+          <v-flex shrink>
+              <router-view></router-view>
+            <!-- <TableDash></TableDash> -->
+          </v-flex>
+      </v-container>
+    </v-content>
+    </div>
+</template>
+<script>
+import TableDash from './TableDash';
+
+export default {
+    components:{
+        TableDash
+    }
+    
+}
+</script>

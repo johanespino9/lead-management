@@ -3,7 +3,9 @@
     <v-app>
       <NavBar></NavBar>
       <Menu></Menu>
-      <router-view></router-view>
+      <Content></Content>
+      <Footer></Footer>
+      <!-- <router-view></router-view> -->
     </v-app>
       
     
@@ -14,13 +16,17 @@
 import HelloWorld from './components/HelloWorld';
 import NavBar from './components/NavBar';
 import Menu from './components/Menu';
+import Content from './components/Content';
+import Footer from './components/Footer';
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
     NavBar,
-    Menu
+    Menu,
+    Content,
+    Footer
   },
   data: () => ({
     //

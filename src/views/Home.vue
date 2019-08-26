@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TableDash></TableDash>
+    
   </div>
 </template>
 

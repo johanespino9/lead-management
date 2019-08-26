@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import LeadRegister from './views/LeadRegister.vue'
+import TableDash from './components/TableDash'
 
 Vue.use(Router)
 
@@ -16,6 +17,11 @@ export default new Router({
       path:'/leadregister',
       name: 'leadregister',
       component: LeadRegister
+    },
+    {
+      path: '/tabledash',
+      name: 'tabledash',
+      component: TableDash
     },
     {
       path: '/about',

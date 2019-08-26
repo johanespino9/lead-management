@@ -1,34 +1,45 @@
 <template>
     <div>
-        <v-navigation-drawer permanent>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="title">
-            Leads
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            Gestión de Leads
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
-      <v-list
-        dense
-        nav
-      >
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          link
-        >
-          <v-list-item-icon>
-            <v-icon>airplane</v-icon>
-          </v-list-item-icon>
-
+        <v-navigation-drawer
+      v-model="drawer"
+      app
+      clipped
+    >
+      <v-list dense>
+        
+        <v-list-item>
+          <router-link to="/tabledash">
+          <v-list-item-action>
+            <v-icon>dashboard</v-icon>
+          </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>HOLA</v-list-item-title>
+            <v-list-item-title>DashBoard</v-list-item-title>
+          </v-list-item-content>
+          </router-link>
+        </v-list-item>
+        
+        <v-list-item @click="">
+          <v-list-item-action>
+            <v-icon>event</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Contacto</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="">
+          <v-list-item-action>
+            <v-icon>info</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Cuenta</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="">
+          <v-list-item-action>
+            <v-icon>settings</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Settings</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
