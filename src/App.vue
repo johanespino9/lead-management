@@ -5,6 +5,7 @@
       <Menu></Menu>
       <Content></Content>
       <Footer></Footer>
+      <!-- <RegisterLead></RegisterLead> -->
       <!-- <router-view></router-view> -->
     </v-app>
       
@@ -18,6 +19,7 @@ import NavBar from './components/NavBar';
 import Menu from './components/Menu';
 import Content from './components/Content';
 import Footer from './components/Footer';
+import RegisterLead from './components/RegisterLead';
 
 export default {
   name: 'App',
@@ -26,7 +28,8 @@ export default {
     NavBar,
     Menu,
     Content,
-    Footer
+    Footer,
+    RegisterLead
   },
   data: () => ({
     //
