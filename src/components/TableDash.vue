@@ -3,13 +3,13 @@
     <v-container>
     <v-row justify="center">
       <v-col cols="auto">
-        <v-combobox v-model="select" :items="values2" label="Seleccionar Hotel"></v-combobox>
+        <v-combobox v-model="hotelSelected" :items="values2" label="Seleccionar Hotel"></v-combobox>
       </v-col>
       <v-col cols="auto">
-        <v-combobox v-model="select" :items="values2" label="Seleccionar Año"></v-combobox>
+        <v-combobox v-model="monthSelected" :items="values2" label="Seleccionar Año"></v-combobox>
       </v-col>
       <v-col cols="auto">
-        <v-combobox v-model="select" :items="items" label="Seleccionar Mes"></v-combobox>
+        <v-combobox v-model="daySelected" :items="items" label="Seleccionar Mes"></v-combobox>
       </v-col>
     </v-row>
     <v-data-table :headers="headers" :items="values">
@@ -63,7 +63,61 @@ import axios from "axios";
 
 export default {
   data: () => ({
-    select: "",
+    hotelSelected: '',
+    monthSelected: '',
+    daySelected: '',
+    months:[ 
+      {
+        id: 1,
+        name: 'Enero'
+      },
+      {
+        id: 2,
+        name: 'Febrero'
+      },
+      {
+        id: 3,
+        name: 'Marzo'
+      },
+      {
+        id: 4,
+        name: 'Abril'
+      },
+      {
+        id: 5,
+        name: 'Mayo'
+      },
+      {
+        id: 6,
+        name: 'Junio'
+      },
+      {
+        id: 7,
+        name: 'Julio'
+      },
+      {
+        id: 8,
+        name: 'Agosto'
+      },
+      {
+        id: 9,
+        name: 'Setiembre'
+      },
+      {
+        id: 10,
+        name: 'Octubre'
+      },
+      {
+        id: 11,
+        name: 'Noviembre'
+      },
+      {
+        id: 12,
+        name: 'Diciembre'
+      }
+
+
+    ],
     headers: [
       {
         sortable: false,
