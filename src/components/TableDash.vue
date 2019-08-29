@@ -3,14 +3,19 @@
     <v-container>
     <v-row justify="center">
       <v-col cols="auto">
-        <v-combobox v-model="hotelSelected" :items="values2" label="Seleccionar Hotel"></v-combobox>
+        <v-combobox v-model="hotelSelected" :items="hotels" label="Seleccionar Hotel"></v-combobox>
       </v-col>
       <v-col cols="auto">
-        <v-combobox v-model="monthSelected" :items="values2" label="Seleccionar Año"></v-combobox>
+        <v-combobox v-model="monthSelected" :items="months" label="Seleccionar Mes"></v-combobox>
       </v-col>
       <v-col cols="auto">
-        <v-combobox v-model="daySelected" :items="items" label="Seleccionar Mes"></v-combobox>
+        <v-combobox v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
       </v-col>
+    </v-row>
+    <v-row justify="center">
+      <div class="text-center">
+        <v-btn @click="filterPerHotel">Button</v-btn>
+      </div>
     </v-row>
     <v-data-table :headers="headers" :items="values">
       <template slot="headerCell" slot-scope="{ header }">
@@ -36,7 +41,7 @@
         :rotate="360"
         :size="100"
         :width="15"
-        :value="value"
+        :value="roomRevenue"
         color="orange"
       >
         {{ value }}
@@ -47,8 +52,8 @@
         :rotate="360"
         :size="100"
         :width="15"
-        :value="value"
-        color="orange"
+        :value="events"
+        color="green"
       >
         {{ value }}
       </v-progress-circular>
@@ -65,59 +70,23 @@ export default {
   data: () => ({
     hotelSelected: '',
     monthSelected: '',
-    daySelected: '',
-    months:[ 
-      {
-        id: 1,
-        name: 'Enero'
-      },
-      {
-        id: 2,
-        name: 'Febrero'
-      },
-      {
-        id: 3,
-        name: 'Marzo'
-      },
-      {
-        id: 4,
-        name: 'Abril'
-      },
-      {
-        id: 5,
-        name: 'Mayo'
-      },
-      {
-        id: 6,
-        name: 'Junio'
-      },
-      {
-        id: 7,
-        name: 'Julio'
-      },
-      {
-        id: 8,
-        name: 'Agosto'
-      },
-      {
-        id: 9,
-        name: 'Setiembre'
-      },
-      {
-        id: 10,
-        name: 'Octubre'
-      },
-      {
-        id: 11,
-        name: 'Noviembre'
-      },
-      {
-        id: 12,
-        name: 'Diciembre'
-      }
-
-
+    yearSelected: null,
+    hotels: [],
+    months:[
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Setiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre'
     ],
+    years: [ 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028],
     headers: [
       {
         sortable: false,
@@ -194,13 +163,57 @@ export default {
       }
     ],
     values2: ["Chincha", "Marriot", "Hilton"],
-    values: []
+    roomRevenue: null,
+    events: null
   }),
   created() {
-    this.getUser();
+    //this.getUser();
+    this.getHotels();
     // this.login();
   },
+  computed: {
+  },
   methods: {
+    async getHotels() {
+      let res = await axios.get('https://casa-andina.azurewebsites.net/hotels');
+      console.log(res);
+      for(let i = 0; i < res.data.length; i++){
+        this.hotels.push(res.data[i].shortname);
+      }
+      console.log(this.hotels);
+    },
+    filterPerHotel(){
+      let hotelId = this.hotels.indexOf(this.hotelSelected) + 1;
+      let monthId = this.months.indexOf(this.monthSelected) + 1;
+      var sendData = {
+            hotels:{
+              hotelid: hotelId,
+              shortname: this.hotelSelected
+            },
+            month: monthId,
+            year: this.yearSelected
+      }
+      console.log(sendData.hotels.hotelid);
+      console.log(sendData.hotels.shortname);
+      console.log(sendData.month);
+      console.log(sendData.year);
+
+      
+      axios
+        .post("https://casa-andina.azurewebsites.net/robval96/dashboard", sendData)
+        .then(response => {
+          // Respuesta del servidor
+          this.values = response.data.table;
+
+      this.roomRevenue = response.data.porcentajeConcrecion.room_revenue;
+      this.events = response.data.porcentajeConcrecion.eventos;
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+
     async getUser() {
       let datos = await axios.get(
         "https://casa-andina.azurewebsites.net/robval96/Dashboard"

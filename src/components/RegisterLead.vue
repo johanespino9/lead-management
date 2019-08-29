@@ -29,7 +29,7 @@
                 <v-container>
                   <v-row>
                     <v-col cols="auto">
-        <v-combobox v-model="select" :items="values2" label="Seleccionar Segmento"></v-combobox>
+        <v-combobox v-model="select" :items="corporateSegments" label="Seleccionar Segmento"></v-combobox>
       </v-col>
                    <!--     <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field> 
@@ -167,6 +167,8 @@ export default {
     ],
     search:'',
     desserts: [],
+    corporateSegments: ['Grupos', 'Largas Estadías', 'Tripulación'],
+    agencySegments: ['Grupos', 'Series'],
     editedIndex: -1,
     editedItem: {
       name: '',
