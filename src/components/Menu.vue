@@ -22,7 +22,7 @@
             <v-icon>dashboard</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>DashBoard</v-list-item-title>
+            <v-list-item-title>DashBoard Ejecutivo</v-list-item-title>
           </v-list-item-content>
           
         </v-list-item>
@@ -33,23 +33,23 @@
             <v-icon>event</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>RegisterLead</v-list-item-title>
+            <v-list-item-title>Gestión de Leads</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="">
+        <v-list-item to="/registeruser">
           <v-list-item-action>
             <v-icon>info</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Cuenta</v-list-item-title>
+            <v-list-item-title>Gestión de Usuarios</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="">
+        <v-list-item to="/registeraccount">
           <v-list-item-action>
             <v-icon>settings</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Settings</v-list-item-title>
+            <v-list-item-title>Gestión de Cuentas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

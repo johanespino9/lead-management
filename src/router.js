@@ -5,6 +5,8 @@ import LeadRegister from './views/LeadRegister.vue'
 import TableDash from './components/TableDash'
 import RegisterLead from './components/RegisterLead'
 import Lead from './components/Lead'
+import RegisterUser from './components/RegisterUser'
+import RegisterAccount from './components/RegisterAccount'
 
 Vue.use(Router)
 
@@ -31,12 +33,14 @@ export default new Router({
       component: TableDash
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path:'/registeruser',
+      name: 'registeruser',
+      component: RegisterUser
+    },
+    {
+      path:'/registeraccount',
+      name: 'registeraccount',
+      component: RegisterAccount
     }
   ]
 })

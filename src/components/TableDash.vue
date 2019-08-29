@@ -203,7 +203,7 @@ export default {
   methods: {
     async getUser() {
       let datos = await axios.get(
-        "https://casa-andina.azurewebsites.net/robval96/Dashboard"
+        "https://casa-andina.azurewebsites.net/robval96/dashboard"
       );
       this.values = datos.data.table;
     },
