@@ -206,7 +206,7 @@ export default {
     initialize () {
       this.desserts = [
         {
-          name: 'Frozen Yogurt',
+          name: 'Alquiler de cuarto en Huanuco',
           finaldate: 159,
           contact: 6,
           account: 0,
@@ -214,7 +214,7 @@ export default {
           status: 0,
         },
         {
-          name: 'Frozen Yogurt',
+          name: 'Alquiler de cuarto en Chiclayo',
           finaldate: 159,
           contact: 6,
           account: 0,
@@ -222,7 +222,7 @@ export default {
           status: 0,
         },
         {
-          name: 'Frozen Yogurt',
+          name: 'Alquiler de cuarto en Huaraz',
           finaldate: 159,
           contact: 6,
           account: 0,
@@ -230,7 +230,7 @@ export default {
           status: 0,
         },
         {
-          name: 'Frozen Yogurt',
+          name: 'Alquiler de cuarto en Piura',
           finaldate: 159,
           contact: 6,
           account: 0,
@@ -238,7 +238,7 @@ export default {
           status: 0,
         },
         {
-          name: 'Frozen Yogurt',
+          name: 'Alquiler de cuarto en Tacna',
           finaldate: 159,
           contact: 6,
           account: 0,
@@ -246,7 +246,7 @@ export default {
           status: 0,
         },
         {
-          name: 'Frozen Yogurt',
+          name: 'Alquiler de cuarto en Lima',
           finaldate: 159,
           contact: 6,
           account: 0,
@@ -254,7 +254,7 @@ export default {
           status: 0,
         },
         {
-          name: 'Frozen Yogurt',
+          name: 'Alquiler de cuarto en Trujillo',
           finaldate: 159,
           contact: 6,
           account: 0,
@@ -262,7 +262,7 @@ export default {
           status: 0,
         },
         {
-          name: 'Frozen Yogurt',
+          name: 'Alquiler de cuarto en Ancash',
           finaldate: 159,
           contact: 6,
           account: 0,
@@ -270,7 +270,7 @@ export default {
           status: 0,
         },
         {
-          name: 'Frozen Yogurt',
+          name: 'Alquiler de cuarto en Tumbes',
           finaldate: 159,
           contact: 6,
           account: 0,
@@ -278,7 +278,7 @@ export default {
           status: 0,
         },
         {
-          name: 'Frozen Yogurt',
+          name: 'Alquiler de cuarto en Arequipa',
           finaldate: 159,
           contact: 6,
           account: 0,
