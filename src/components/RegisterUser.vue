@@ -28,15 +28,14 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <v-col cols="12" sm="6" md="4">
-                            <v-text-field v-model="editedItem.fullname" label="Full Name"></v-text-field>
+                          <v-col cols="12">
+                            <v-text-field :rules="[rules.required]" v-model="editedItem.fullname" label="Full Name"></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="4">
-                            <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                          
+                          <v-col cols="12">
+                            <v-text-field :rules="[rules.required]" v-model="editedItem.email" label="E-mail"></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="4">
-                            <v-text-field v-model="editedItem.username" label="Username"></v-text-field>
-                          </v-col>
+                          
                           <v-col cols="12" sm="6">
                                 <v-text-field
                                   v-model="password"
@@ -50,8 +49,8 @@
                                   @click:append="show1 = !show1"
                                 ></v-text-field>
                               </v-col>
-                          <v-col cols="auto">
-                            <v-combobox v-model="select" :items="groupsegment" label="Group Segment"></v-combobox>
+                          <v-col cols="auto" >
+                            <v-combobox :rules="[rules.required]" v-model="editedItem.groupsegment"  :items="segments"  label="Group Segment"></v-combobox>
                           </v-col>
                         </v-row>
                       </v-container>
@@ -90,6 +89,11 @@
   export default {
     data: () => ({
     dialog: false,
+    usern: '',
+    segments: [
+            'Ejecutivo',
+            'Gerente',
+    ], 
     headers: [
       {
         text: 'Ejecutivos',
@@ -117,12 +121,13 @@
       groupsegment: '',
     },
     show1: false,
-    password: 'Password',
+    password: '',
     rules: {
       required: value => !!value || 'Required.',
           min: v => v.length >= 8 || 'Min 8 characters',
           emailMatch: () => ('The email and password you entered don\'t match'),
-    }
+    },
+    
   }),
 
   computed: {
@@ -149,61 +154,7 @@
           email: 'renzgmc@gmail.com',
           username: 'renzgmc',
           groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
+        }, 
       ]
     },
 
@@ -227,13 +178,65 @@
     },
 
     save () {
+      this.takeUsername(this.editedItem.email);
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
-      } else {
-        this.desserts.push(this.editedItem)
+      } else {  
+      console.log(this.editedItem)
+      this.desserts.push(this.editedItem) 
       }
       this.close()
     },
+    takeUsername(correo){
+      var usernam='';
+/*       var user= this.form.email; */
+      for(var i=0; i<correo.length; i++){
+        var char = correo.charAt(i);     
+          if(char=='@'){
+              break
+              return 
+          } else{
+            usernam += char
+            this.editedItem.username = usernam
+          }
+      }
+      console.log(this.user)
+    },
+    NewUser(){
+      /* let fullname = this.desserts.indexOf(this.editItem.fullname) + 1;
+      let email = this.desserts.indexOf(this.editItem.email) + 1;
+      let username = this.desserts.indexOf(this.editItem.username) + 1;
+      let password = this.desserts.indexOf(this.password) + 1;
+
+
+      var sendData = {
+            active: TRUE,
+            email: email,
+            lastName: fullname,
+            name: fullname,
+            password: password,
+            username: username,
+
+      } */
+      console.log(this.desserts.indexOf(this.editItem.fullname) + 1);
+      
+
+
+      /* 
+      axios
+        .post("https://casa-andina.azurewebsites.net/robval96/dashboard", sendData)
+        .then(response => {
+          // Respuesta del servidor
+          this.values = response.data.table;
+
+      this.roomRevenue = response.data.porcentajeConcrecion.room_revenue;
+      this.events = response.data.porcentajeConcrecion.eventos;
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        }); */
+    }
   }
   }
 </script>
