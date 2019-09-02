@@ -7,10 +7,17 @@ import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 import "chart.js";
 import "hchs-vue-charts";
+import Axios from 'axios'
 
 Vue.use(window.VueCharts);
 
 Vue.config.productionTip = false
+Vue.prototype.$http = Axios;
+const accessToken = localStorage.getItem('access_token')
+
+if (accessToken) {
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = accessToken
+}
 
 new Vue({
   router,

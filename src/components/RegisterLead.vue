@@ -29,90 +29,97 @@
                 <v-container>
                   <v-row>
                     <v-col cols="auto">
-        <v-combobox v-model="select" :items="corporateSegments" label="Seleccionar Segmento"></v-combobox>
-      </v-col>
-                   <!--     <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field> 
-                    </v-col>--><v-col cols="auto">
-        <v-combobox v-model="select" :items="values2" label="Seleccionar Cuenta"></v-combobox>
-      </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.calories" label="Nombre de Grupo"></v-text-field>
+                        <v-combobox v-model="select" :items="corporateSegments" label="Seleccionar Segmento"></v-combobox>
+                      </v-col>
+                    <v-col cols="auto">
+                       <v-combobox v-model="select" :items="values2" label="Seleccionar Cuenta"></v-combobox>
                     </v-col>
                     <v-col cols="auto">
-        <v-combobox v-model="select" :items="values2" label="Seleccionar Hotel"></v-combobox>
-      </v-col>
+                      <v-combobox v-model="select" :items="values2" label="Seleccionar Hotel"></v-combobox>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                  <v-text-field v-model="editedItem.name" label="Nombre de Grupo"></v-text-field> 
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                  <v-text-field v-model="editedItem.description" label="Descripción de Lead"></v-text-field> 
+                    </v-col>
                     <v-col cols="12" lg="6">
-          <v-menu
-            ref="menu1"
-            v-model="menu1"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            full-width
-            max-width="290px"
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="dateFormatted"
-                label="Fecha Inicio"
-                persistent-hint
-                prepend-icon="event"
-                @blur="date = parseDate(dateFormatted)"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
-          </v-menu>
-        </v-col>
-  
-        <v-col cols="12" lg="6">
-          <v-menu
-            v-model="menu2"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            full-width
-            max-width="290px"
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="computedDateFormatted"
-                label="Fecha Fin"
-                persistent-hint
-                prepend-icon="event"
-                readonly
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="date" no-title @input="menu2 = false"></v-date-picker>
-          </v-menu>
-        </v-col>
+                      <v-menu
+                        ref="menu1"
+                        v-model="menu1"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        max-width="290px"
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="dateFormatted"
+                            label="Fecha Inicio"
+                            persistent-hint
+                            prepend-icon="event"
+                            @blur="date = parseDate(dateFormatted)"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
+                      </v-menu>
+                    </v-col>
+                    <v-col cols="12" lg="6">
+                      <v-menu
+                        v-model="menu2"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        max-width="290px"
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="computedDateFormatted"
+                            label="Fecha Fin"
+                            persistent-hint
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                                <v-date-picker v-model="date" no-title @input="menu2 = false"></v-date-picker>
+                                  </v-menu>
+                                </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Cantidad de Habitaciones"></v-text-field>
+                      <v-text-field v-model="editedItem.rooms" label="Cantidad de Habitaciones"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.carbs" label="Ingresar Tarifa"></v-text-field>
+                      <v-text-field v-model="editedItem.rateHotel" label="Ingresar Tarifa Neta"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.carbs" label="Ingresar Tarifa Total"></v-text-field>
                     </v-col>
                     <v-col cols="auto">
-        <v-combobox v-model="select" :items="values2" label="Seleccionar Revenue Eventos"></v-combobox>
-      </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.protein" label="Nombre Contacto"></v-text-field>
+                      <v-radio-group v-model="ex5" column label="Seleccionar Evento">
+                       <v-radio label="Salas" value="salas" ></v-radio>
+                       <v-radio label="Equipos" value="equipos"></v-radio>
+                       <v-radio label="Venta AyB" value="ayb"></v-radio>
+                       </v-radio-group>
+                     </v-col>
+                     <v-col cols="auto">
+                      <v-text-field v-model="editedItem.rateEvent" label="Ingresar Revenue Eventos"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.protein" label="Apellido Contacto"></v-text-field>
+                      <v-text-field v-model="editedItem.contactName" label="Nombre Contacto"></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <!-- <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.protein" label="Cargo"></v-text-field>
+                    </v-col> -->
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.contactEmail" label="Correo"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.protein" label="Correo"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.protein" label=" Celular/Teléfono"></v-text-field>
+                      <v-text-field v-model="editedItem.contactPhone" label=" Celular/Teléfono"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -161,7 +168,7 @@ export default {
       { text: 'Últ. Fech Modif', value: 'finaldate' },
       { text: 'Contacto', value: 'contact' },
       { text: 'Cuenta', value: 'account' },
-      { text: 'Total Revenue', value: 'totalrevenue' },
+      { text: 'Tarifa Neta', value: 'tarifaneta' },
       { text: 'Estado', value: 'status' },
       { text: 'Actions', value: 'action', sortable: false },
     ],
@@ -175,7 +182,7 @@ export default {
       finaldate: 0,
       contact: 0,
       account: 0,
-      totalrevenue: 0,
+      tarifaneta: 0,
       status: 0,
     },
     defaultItem: {
@@ -183,7 +190,7 @@ export default {
       finaldate: 0,
       contact: 0,
       account: 0,
-      totalrevenue: 0,
+      tarifaneta: 0,
       status: 0,
     },
   }),computed: {
@@ -210,7 +217,7 @@ export default {
           finaldate: 159,
           contact: 6,
           account: 0,
-          totalrevenue: 0,
+          tarifaneta: 0,
           status: 0,
         },
         {
@@ -218,7 +225,7 @@ export default {
           finaldate: 159,
           contact: 6,
           account: 0,
-          totalrevenue: 0,
+          tarifaneta: 0,
           status: 0,
         },
         {
@@ -226,7 +233,7 @@ export default {
           finaldate: 159,
           contact: 6,
           account: 0,
-          totalrevenue: 0,
+          tarifaneta: 0,
           status: 0,
         },
         {
@@ -234,7 +241,7 @@ export default {
           finaldate: 159,
           contact: 6,
           account: 0,
-          totalrevenue: 0,
+          tarifaneta: 0,
           status: 0,
         },
         {
@@ -242,7 +249,7 @@ export default {
           finaldate: 159,
           contact: 6,
           account: 0,
-          totalrevenue: 0,
+          tarifaneta: 0,
           status: 0,
         },
         {
@@ -250,7 +257,7 @@ export default {
           finaldate: 159,
           contact: 6,
           account: 0,
-          totalrevenue: 0,
+          tarifaneta: 0,
           status: 0,
         },
         {
@@ -258,7 +265,7 @@ export default {
           finaldate: 159,
           contact: 6,
           account: 0,
-          totalrevenue: 0,
+          tarifaneta: 0,
           status: 0,
         },
         {
@@ -266,7 +273,7 @@ export default {
           finaldate: 159,
           contact: 6,
           account: 0,
-          totalrevenue: 0,
+          tarifaneta: 0,
           status: 0,
         },
         {
@@ -274,7 +281,7 @@ export default {
           finaldate: 159,
           contact: 6,
           account: 0,
-          totalrevenue: 0,
+          tarifaneta: 0,
           status: 0,
         },
         {
@@ -282,7 +289,7 @@ export default {
           finaldate: 159,
           contact: 6,
           account: 0,
-          totalrevenue: 0,
+          tarifaneta: 0,
           status: 0,
         },
       ]
