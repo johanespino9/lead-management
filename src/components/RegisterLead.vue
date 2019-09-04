@@ -26,26 +26,26 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="auto">
+                  <v-col cols="20" sm="10" md="80" class=center>
                     <v-combobox
                       v-model="selectedSegments"
                       :items="corporateSegments"
                       label="Seleccionar Segmento"
                     ></v-combobox>
                   </v-col>
-                  <v-col cols="auto">
+                  <v-col cols="20" sm="10" md="80" class=center>
                     <v-combobox v-model="selectedAccount" :items="leadsAccounts" label="Seleccionar Cuenta"></v-combobox>
                   </v-col>
-                  <v-col cols="auto">
+                  <v-col cols="20" sm="10" md="80" class=center>
                     <v-combobox v-model="selectedHotel" :items="hotels" label="Seleccionar Hotel"></v-combobox>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="20" sm="10" md="80" class=center>
                     <v-text-field v-model="editedItem.name" label="Nombre de Grupo"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="20" sm="10" md="80" class=center>
                     <v-text-field v-model="editedItem.description" label="Descripción de Lead"></v-text-field>
                   </v-col>
-                  <v-col cols="12" lg="6">
+                  <v-col cols="20" sm="10" md="80" class=center>
                     <v-dialog
                       ref="dialog1"
                       v-model="modal1"
@@ -57,7 +57,7 @@
                       <template v-slot:activator="{ on }">
                         <v-text-field
                           v-model="date1"
-                          label="Picker in dialog"
+                          label="Fecha Inicio"
                           prepend-icon="event"
                           readonly
                           v-on="on"
@@ -70,7 +70,7 @@
                       </v-date-picker>
                     </v-dialog>
                   </v-col>
-                  <v-col cols="12" lg="6">
+                  <v-col cols="20" sm="10" md="80" class=center>
                     <v-dialog
                       ref="dialog2"
                       v-model="modal2"
@@ -82,7 +82,7 @@
                       <template v-slot:activator="{ on }">
                         <v-text-field
                           v-model="date2"
-                          label="Picker in dialog"
+                          label="Fecha Fin"
                           prepend-icon="event"
                           readonly
                           v-on="on"
@@ -95,23 +95,21 @@
                       </v-date-picker>
                     </v-dialog>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="20" sm="10" md="80" class=center>
                     <v-text-field v-model="editedItem.rooms" label="Cantidad de Habitaciones"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="20" sm="10" md="80" class=center>
                     <v-text-field v-model="editedItem.rateHotel" label="Ingresar Tarifa Neta"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.carbs" label="Ingresar Tarifa Total"></v-text-field>
+                  <v-col cols="20" sm="10" md="80">
+                    <v-container fluid>
+                      <p>{{ selected }}</p>
+                      <v-checkbox v-model="selected" label="Salas" value="3"></v-checkbox>
+                      <v-checkbox v-model="selected" label="Equipos" value="2"></v-checkbox>
+                      <v-checkbox v-model="selected" label="Alimentos y Bebidas" value="1"></v-checkbox>
+                    </v-container>
                   </v-col>
-                  <v-col cols="auto">
-                    <v-radio-group v-model="ex5" column label="Seleccionar Evento">
-                      <v-radio label="Salas" value="salas"></v-radio>
-                      <v-radio label="Equipos" value="equipos"></v-radio>
-                      <v-radio label="Venta AyB" value="ayb"></v-radio>
-                    </v-radio-group>
-                  </v-col>
-                  <v-col cols="auto">
+                  <v-col cols="20" sm="10" md="80" class=center>
                     <v-text-field v-model="editedItem.rateEvent" label="Ingresar Revenue Eventos"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
@@ -130,13 +128,13 @@
                 <v-btn @click="calcular">RESUMEN</v-btn>
                 <v-row>
                   <v-col> Room Revenue: {{ roomrev }}</v-col>
-                  
+
                 </v-row>
                 <v-row>
                   <v-col> Eventos: {{ editedItem.rateEvent }}</v-col>
                 </v-row>
                 <v-row>
-                  <v-col> <strong> TOTAL: {{ roomrev + editedItem.rateEvent }} </strong></v-col>
+                  <v-col> <strong> TOTAL: {{ (parseInt(roomrev)) + (parseInt(editedItem.rateEvent)) }} </strong></v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -180,11 +178,13 @@ export default {
         value: "lead.name"
       },
       { text: "Últ. Fech Modif", value: "initialDate" },
-      { text: "Contacto", value: "lead.account.contactName" },
+      { text: "Contacto", value: "lead.contactName" },
       { text: "Cuenta", value: "lead.account.name" },
-      { text: "Tarifa Neta", value: "lead.rateHotel" },
+      { text: "Ingreso de Hotel", value: "lead.rateHotel" },
+      { text: "Ingreso de Eventos", value: "lead.rateEvent"},
       { text: "Estado", value: "status.name" },
       { text: "Actions", value: "action", sortable: false }
+      
     ],
     search: "",
     desserts: [],
@@ -210,6 +210,11 @@ export default {
     },
     defaultItem: {
       name: "",
+      contactName: '',
+      description: '',
+      rooms: 0,
+      rateHotel: 0,
+      rateEvent: 0,
       finaldate: 0,
       contact: 0,
       account: 0,
@@ -253,7 +258,7 @@ export default {
       var end = new Date(this.date2)
       console.log(start)
       console.log(end)
-      this.roomrev = ((end - start)/3600000/24) * this.editedItem.rateHotel
+      this.roomrev = (((end - start)/3600000/24) -1) * this.editedItem.rateHotel * this.editedItem.rooms 
     },
     createLead(){
      
@@ -304,89 +309,19 @@ export default {
       }
       console.log(this.leadsAccounts);
     },
+    async getAccounts() {
+      const res = await axios.get(
+        "https://casa-andina.azurewebsites.net/user/account"
+      );
+      console.log(res);
+      for (let i = 0; i < res.data.length; i++) {
+        this.leadsAccounts.push(res.data[i].name);
+      }
+      console.log(this.leadsAccounts);
+    },
+    
     initialize() {
-      this.desserts = [
-        {
-          name: "Alquiler de cuarto en Huanuco",
-          finaldate: 159,
-          contact: 6,
-          account: 0,
-          tarifaneta: 0,
-          status: 0
-        },
-        {
-          name: "Alquiler de cuarto en Chiclayo",
-          finaldate: 159,
-          contact: 6,
-          account: 0,
-          tarifaneta: 0,
-          status: 0
-        },
-        {
-          name: "Alquiler de cuarto en Huaraz",
-          finaldate: 159,
-          contact: 6,
-          account: 0,
-          tarifaneta: 0,
-          status: 0
-        },
-        {
-          name: "Alquiler de cuarto en Piura",
-          finaldate: 159,
-          contact: 6,
-          account: 0,
-          tarifaneta: 0,
-          status: 0
-        },
-        {
-          name: "Alquiler de cuarto en Tacna",
-          finaldate: 159,
-          contact: 6,
-          account: 0,
-          tarifaneta: 0,
-          status: 0
-        },
-        {
-          name: "Alquiler de cuarto en Lima",
-          finaldate: 159,
-          contact: 6,
-          account: 0,
-          tarifaneta: 0,
-          status: 0
-        },
-        {
-          name: "Alquiler de cuarto en Trujillo",
-          finaldate: 159,
-          contact: 6,
-          account: 0,
-          tarifaneta: 0,
-          status: 0
-        },
-        {
-          name: "Alquiler de cuarto en Ancash",
-          finaldate: 159,
-          contact: 6,
-          account: 0,
-          tarifaneta: 0,
-          status: 0
-        },
-        {
-          name: "Alquiler de cuarto en Tumbes",
-          finaldate: 159,
-          contact: 6,
-          account: 0,
-          tarifaneta: 0,
-          status: 0
-        },
-        {
-          name: "Alquiler de cuarto en Arequipa",
-          finaldate: 159,
-          contact: 6,
-          account: 0,
-          tarifaneta: 0,
-          status: 0
-        }
-      ];
+      this.desserts = [];
     },
 
     editItem(item) {
