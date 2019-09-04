@@ -127,6 +127,17 @@
                     <v-text-field v-model="editedItem.contactPhone" label=" Celular/Teléfono"></v-text-field>
                   </v-col>
                 </v-row>
+                <v-btn @click="calcular">RESUMEN</v-btn>
+                <v-row>
+                  <v-col> Room Revenue: {{ roomrev }}</v-col>
+                  
+                </v-row>
+                <v-row>
+                  <v-col> Eventos: {{ editedItem.rateEvent }}</v-col>
+                </v-row>
+                <v-row>
+                  <v-col> <strong> TOTAL: {{ roomrev + editedItem.rateEvent }} </strong></v-col>
+                </v-row>
               </v-container>
             </v-card-text>
 
@@ -153,6 +164,7 @@ import axios from "axios";
 
 export default {
   data: () => ({
+    roomrev: 0,
     dialog: false,
     date1: new Date().toISOString().substr(0, 10),
     date2: new Date().toISOString().substr(0, 10),
@@ -165,13 +177,13 @@ export default {
         text: "Nombre Lead",
         align: "left",
         sortable: false,
-        value: "name"
+        value: "lead.name"
       },
-      { text: "Últ. Fech Modif", value: "finaldate" },
-      { text: "Contacto", value: "contact" },
-      { text: "Cuenta", value: "account" },
-      { text: "Tarifa Neta", value: "tarifaneta" },
-      { text: "Estado", value: "status" },
+      { text: "Últ. Fech Modif", value: "initialDate" },
+      { text: "Contacto", value: "lead.account.contactName" },
+      { text: "Cuenta", value: "lead.account.name" },
+      { text: "Tarifa Neta", value: "lead.rateHotel" },
+      { text: "Estado", value: "status.name" },
       { text: "Actions", value: "action", sortable: false }
     ],
     search: "",
@@ -187,9 +199,9 @@ export default {
       name: "",
       contactName: '',
       description: '',
-      rooms: null,
-      rateHotel: null,
-      rateEvent: null,
+      rooms: 0,
+      rateHotel: 0,
+      rateEvent: 0,
       finaldate: 0,
       contact: 0,
       account: 0,
@@ -219,14 +231,32 @@ export default {
   beforeMount() {
     this.getAccounts();
     this.getHotels();
+    this.getLeads();
   },
   created() {
     this.initialize();
   },
 
   methods: {
-
+    async getLeads(){
+      await axios.get('https://casa-andina.azurewebsites.net/user/leads')
+      .then((response) => {
+        console.log(response)
+        this.desserts = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
+    calcular(){
+      var start = new Date(this.date1)
+      var end = new Date(this.date2)
+      console.log(start)
+      console.log(end)
+      this.roomrev = ((end - start)/3600000/24) * this.editedItem.rateHotel
+    },
     createLead(){
+     
       var sendData = {
         name: this.editedItem.name,
         description: this.editedItem.description,
@@ -242,8 +272,8 @@ export default {
         hotelId: this.hotels.indexOf(this.selectedHotel) +1,
         eventsServiceId: null,
         contactName: this.editedItem.contactName,
-        contactPhone: null,
-        contactEmail: null,
+        contactPhone: this.editedItem.contactPhone,
+        contactEmail: this.editedItem.contactEmail,
         statusId: null,
         events: [
             1,

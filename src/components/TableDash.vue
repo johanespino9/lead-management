@@ -39,19 +39,20 @@
       <v-col cols="auto">
         <v-progress-circular
         :rotate="360"
-        :size="100"
-        :width="15"
+        :size="200"
+        :width="40"
         :value="roomRevenue"
         color="orange"
       >
         {{ value }}
       </v-progress-circular>
+      <h2 cols="auto">RommRevenue</h2>
       </v-col>
       <v-col cols="auto">
         <v-progress-circular
         :rotate="360"
-        :size="100"
-        :width="15"
+        :size="200"
+        :width="40"
         :value="events"
         color="green"
       >
@@ -178,7 +179,7 @@ export default {
       let res = await axios.get('https://casa-andina.azurewebsites.net/hotels');
       console.log(res);
       for(let i = 0; i < res.data.length; i++){
-        this.hotels.push(res.data[i].shortname);
+        this.hotels.push(res.data[i].shortName);
       }
       console.log(this.hotels);
     },
@@ -187,20 +188,20 @@ export default {
       let monthId = this.months.indexOf(this.monthSelected) + 1;
       var sendData = {
             hotels:{
-              hotelid: hotelId,
-              shortname: this.hotelSelected
+              hotelId: hotelId,
+              shortName: this.hotelSelected
             },
             month: monthId,
             year: this.yearSelected
       }
-      console.log(sendData.hotels.hotelid);
-      console.log(sendData.hotels.shortname);
+      console.log(sendData.hotels.hotelId);
+      console.log(sendData.hotels.shortName);
       console.log(sendData.month);
       console.log(sendData.year);
 
       
       axios
-        .post("https://casa-andina.azurewebsites.net/robval96/dashboard", sendData)
+        .post("https://casa-andina.azurewebsites.net/user/dashboard", sendData)
         .then(response => {
           // Respuesta del servidor
           this.values = response.data.table;
