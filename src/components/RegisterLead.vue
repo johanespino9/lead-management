@@ -340,6 +340,8 @@ console.log(data);
       .catch((error) => {
         console.log(error)
       })
+
+      this.dialog = false;
     },
     async getHotels() {
       let respuesta = await axios.get(
