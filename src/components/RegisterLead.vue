@@ -28,7 +28,7 @@
                 <v-row>
                   <v-col cols="20" sm="10" md="80" class=center>
                     <v-combobox
-                      v-model="selectedSegments"
+                      v-model="selectedSegment"
                       :items="corporateSegments"
                       label="Seleccionar Segmento"
                     ></v-combobox>
@@ -103,10 +103,18 @@
                   </v-col>
                   <v-col cols="20" sm="10" md="80">
                     <v-container fluid>
-                      <p>{{ selected }}</p>
-                      <v-checkbox v-model="selected" label="Salas" value="3"></v-checkbox>
-                      <v-checkbox v-model="selected" label="Equipos" value="2"></v-checkbox>
-                      <v-checkbox v-model="selected" label="Alimentos y Bebidas" value="1"></v-checkbox>
+                      <v-row>
+                        <v-col>
+                           <v-checkbox v-model="selected" label="Salas" value="3"></v-checkbox> 
+                        </v-col>
+                        <v-col>
+                           <v-checkbox v-model="selected" label="Equipos" value="2"></v-checkbox>
+                        </v-col>
+                      
+                        <v-col>
+                          <v-checkbox v-model="selected" label="Alimentos y Bebidas" value="1"></v-checkbox>
+                        </v-col>
+                      </v-row>
                     </v-container>
                   </v-col>
                   <v-col cols="20" sm="10" md="80" class=center>
@@ -162,6 +170,7 @@ import axios from "axios";
 
 export default {
   data: () => ({
+    selected:[],
     roomrev: 0,
     dialog: false,
     date1: new Date().toISOString().substr(0, 10),
@@ -190,6 +199,7 @@ export default {
     desserts: [],
     selectedAccount: '',
     selectedHotel: '',
+    selectedSegment: '',
     corporateSegments: ["Grupos", "Largas Estadías", "Tripulación"],
     leadsAccounts: [],
     hotels: [],
@@ -261,7 +271,41 @@ export default {
       this.roomrev = (((end - start)/3600000/24) -1) * this.editedItem.rateHotel * this.editedItem.rooms 
     },
     createLead(){
-     
+      var events = [ 'Salas', 'Eventos', 'Alimentos y Bebidas']
+      var indices = []
+      for(var i = 0; i < events.length; i++){
+        indices.push(events.indexOf(this.selected)+1)
+      }
+
+      var start = new Date(this.date1)
+      var end = new Date(this.date2)
+      var nights;
+      console.log(start)
+      console.log(end)
+      nights = (((end - start)/3600000/24) -1)
+      
+     var data = {
+    name: this.editedItem.name,
+    description: this.editedItem.description,
+    initialBooking: "2019-08-16T00:00:00.000+0000",
+    finalBooking: "2019-08-16T00:00:00.000+0000",
+    nights: nights,
+    months: 3,
+    rateHotel: this.editedItem.rateHotel,
+    rateEvent: this.editedItem.rateEvent,
+    rooms: this.editedItem.rooms,
+    accountId: this.leadsAccounts.indexOf(this.selectedAccount) +1,
+    segmentId: this.corporateSegments.indexOf(this.selectedSegment)+1,
+    userId: 2,
+    hotelId: this.hotels.indexOf(this.selectedHotel) +1,
+    contactName: this.editedItem.contactName,
+    contactPhone: this.editedItem.contactPhone,
+    contactEmail: this.editedItem.contactEmail,
+    statusId: null,
+    events: indices
+}
+
+console.log(data);
       var sendData = {
         name: this.editedItem.name,
         description: this.editedItem.description,
@@ -272,6 +316,7 @@ export default {
         rateHotel: this.editedItem.rateHotel,
         rateEvent: this.editedItem.rateEvent,
         rooms: this.editedItem.rooms,
+        segmentId: this.corporateSegments.indexOf(this.selectedSegment)+1,
         accountId: this.leadsAccounts.indexOf(this.selectedAccount) +1,
         userId: 2,
         hotelId: this.hotels.indexOf(this.selectedHotel) +1,
@@ -285,9 +330,12 @@ export default {
             2
         ]
       }
-      axios.post("https://casa-andina.azurewebsites.net/user/leads", sendData)
+      axios.post("https://casa-andina.azurewebsites.net/user/leads", data)
       .then((res) => {
         console.log(res)
+      })
+      .catch((error) => {
+        console.log(error)
       })
     },
     async getHotels() {
