@@ -203,7 +203,6 @@ export default {
     corporateSegments: ["Grupos", "Largas Estadías", "Tripulación"],
     leadsAccounts: [],
     hotels: [],
-    agencySegments: ["Grupos", "Series"],
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -213,8 +212,8 @@ export default {
       rateHotel: 0,
       rateEvent: 0,
       finaldate: 0,
-      contact: 0,
-      account: 0,
+      contact: '',
+      account: '',
       tarifaneta: 0,
       status: 0
     },
@@ -226,8 +225,8 @@ export default {
       rateHotel: 0,
       rateEvent: 0,
       finaldate: 0,
-      contact: 0,
-      account: 0,
+      contact: '',
+      account: '',
       tarifaneta: 0,
       status: 0
     }

@@ -29,15 +29,18 @@
                       <v-container>
                         <v-row>
                           <v-col cols="12" sm="6" md="4">
-                            <v-text-field v-model="editedItem.fullname" label="Full Name"></v-text-field>
+                            <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
-                            <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                            <v-text-field v-model="editedItem.lastName" label="Last Name"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
                             <v-text-field v-model="editedItem.username" label="Username"></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6">
+                          <v-col cols="12" sm="6" md="4">
+                            <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                          </v-col>
+                          <v-col cols="20" sm="6" md="80" class=center>
                                 <v-text-field
                                   v-model="password"
                                   :append-icon="show1 ? 'visibility' : 'visibility_off'"
@@ -50,7 +53,10 @@
                                   @click:append="show1 = !show1"
                                 ></v-text-field>
                               </v-col>
-                          <v-col cols="auto">
+                              <v-col cols="20" sm="10" md="80" class=center>
+                                <v-combobox v-model="select" :items="rol" label="Seleccionar Rol"></v-combobox>
+                              </v-col>
+                          <v-col cols="20" sm="10" md="80" class=center>
                             <v-combobox v-model="select" :items="groupsegment" label="Group Segment"></v-combobox>
                           </v-col>
                         </v-row>
@@ -87,31 +93,38 @@
           </v-data-table>
 </template>
 <script>
+import axios from "axios";
   export default {
     data: () => ({
     dialog: false,
     headers: [
       {
-        text: 'Ejecutivos',
+        text: 'Name',
         align: 'left',
         sortable: false,
-        value: 'fullname',
+        value: 'name',
       },
-      { text: 'Email', value: 'email' },
+      { text: 'Last Name', value: 'lastName' },
       { text: 'Username', value: 'username' },
-      { text: 'Group Segment', value: 'groupsegment' },
+      { text: 'Email', value: 'email' },
+      { text: 'Group Segment', value: 'groupSegment.name' },
+      { text: 'Rol', value: 'role.name' },
       { text: 'Actions', value: 'action', sortable: false },
     ],
+    search: "",
     desserts: [],
     editedIndex: -1,
     editedItem: {
-      fullname: '',
-      email: '',
+      name: "",
+      lastName: '',
       username: '',
+      email: '',
       groupsegment: '',
     },
     defaultItem: {
-      fullname: '',
+      name: "",
+      lastName: '',
+      username: '',
       email: '',
       username: '',
       groupsegment: '',
@@ -137,74 +150,29 @@
     },
   },
 
+  beforeMount() {
+    this.getUser();
+  },
+
   created () {
     this.initialize()
   },
 
   methods: {
+
+    async getUser(){
+      await axios.get('https://casa-andina.azurewebsites.net/user/all')
+      .then((response) => {
+        console.log(response)
+        this.desserts = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
+
     initialize () {
-      this.desserts = [
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-        {
-          fullname: 'Renzo Mondragon',
-          email: 'renzgmc@gmail.com',
-          username: 'renzgmc',
-          groupsegment: 'corporativo',
-        },
-      ]
+      this.desserts = []
     },
 
     editItem (item) {
