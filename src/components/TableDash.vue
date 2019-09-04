@@ -36,7 +36,7 @@
       </template>
     </v-data-table>
     <v-row justify="center">
-      <v-col cols="auto">
+      <v-col cols="left">
         <v-progress-circular
         :rotate="360"
         :size="200"
@@ -46,7 +46,7 @@
       >
         {{ value }}
       </v-progress-circular>
-      <h2 cols="auto">RommRevenue</h2>
+      <h2 cols="auto">Room Revenue : {{roomRevenue}}%</h2>
       </v-col>
       <v-col cols="auto">
         <v-progress-circular
@@ -58,6 +58,7 @@
       >
         {{ value }}
       </v-progress-circular>
+      <h2 cols="auto">Event Revenue : {{events}}%</h2>
       </v-col>
     </v-row>
     </v-container>
