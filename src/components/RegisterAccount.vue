@@ -80,6 +80,8 @@
     </v-data-table>
 </template>
 <script>
+import axios from "axios";
+
   export default {
     data: () => ({
     dialog: false,
@@ -97,6 +99,7 @@
         { text: 'Segmento', value: 'segment' },
         { text: 'Actions', value: 'action', sortable: false },
       ],
+      search: "",
       desserts: [],
       editedIndex: -1,
       editedItem: {
@@ -128,95 +131,30 @@
         val || this.close()
       },
     },
-
+      
+      beforeMount() {
+          this.getAccount();
+        },
     created () {
       this.initialize()
     },
 
     methods: {
+
+      async getAccount(){
+      await axios.get('https://casa-andina.azurewebsites.net/user/account')
+      .then((response) => {
+        console.log(response)
+        this.desserts = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
+
+
       initialize () {
-        this.desserts = [
-          {
-            name: 'Casa Andina',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Oechsle',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'UTP',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Casa Andina',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Banco Pichincha',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'BCP',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Casa Andina',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Scotiabank',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Interbank',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'BCP',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-        ]
+        this.desserts = []
       },
 
       editItem (item) {
