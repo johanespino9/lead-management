@@ -286,8 +286,8 @@ export default {
      var data = {
     name: this.editedItem.name,
     description: this.editedItem.description,
-    initialBooking: "2019-08-16T00:00:00.000+0000",
-    finalBooking: "2019-08-16T00:00:00.000+0000",
+    initialBooking: start,
+    finalBooking: end,
     nights: nights,
     months: 3,
     rateHotel: this.editedItem.rateHotel,
