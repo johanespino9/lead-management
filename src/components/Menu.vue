@@ -38,7 +38,7 @@
         </v-list-item>
         <v-list-item to="/registeruser">
           <v-list-item-action>
-            <v-icon>info</v-icon>
+            <v-icon>account-alert</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Gestión de Usuarios</v-list-item-title>
