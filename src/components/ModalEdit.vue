@@ -1,24 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="desserts" :search="search" class="elevation-1">
-    <template v-slot:top>
-      <v-toolbar flat color="white">
-        <v-toolbar-title>Gestión de Leads</v-toolbar-title>
-        <v-divider class="mx-4" inset vertical></v-divider>
-        <v-text-field
-          class="text-xs-center"
-          v-model="search"
-          append-icon="search"
-          label="Búsqueda"
-          single-line
-          hide-details
-        ></v-text-field>
-        <v-spacer></v-spacer>
-        <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="1150px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">Añadir Nuevo Lead</v-btn>
-          </template>
-          <v-card>
+    <v-card>
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
@@ -214,18 +195,8 @@
               <v-btn color="blue darken-1" text @click="createLead">Guardar</v-btn>
             </v-card-actions>
           </v-card>
-        </v-dialog>
-      </v-toolbar>
     </template>
-    <template v-slot:item.action="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
-      <v-icon small @click="deleteItem(item)">delete</v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
-    </template>
-  </v-data-table>
-</template>
+
 <script>
 import axios from "axios";
 

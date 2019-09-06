@@ -52,6 +52,14 @@
             <v-list-item-title>Gestión de Cuentas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item to="/modaledit">
+          <v-list-item-action>
+            <v-icon>settings</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Modal edit</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     </div>
