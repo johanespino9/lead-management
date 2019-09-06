@@ -54,10 +54,13 @@
                                 ></v-text-field>
                               </v-col>
                               <v-col cols="20" sm="10" md="80" class=center>
-                                <v-combobox v-model="select" :items="rol" label="Seleccionar Rol"></v-combobox>
+                                <v-combobox v-model="editedItem.role" :items="rol" label="Seleccionar Rol"></v-combobox>
                               </v-col>
                           <v-col cols="20" sm="10" md="80" class=center>
-                            <v-combobox v-model="select" :items="groupsegment" label="Group Segment"></v-combobox>
+                            <v-combobox v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
+                          </v-col>
+                          <v-col cols="20" sm="10" md="80" class=center>
+                            <v-combobox v-model="selectedSupervisor" :items="supervisors" label="Supervisor"></v-combobox>
                           </v-col>
                         </v-row>
                       </v-container>
@@ -73,6 +76,7 @@
               </v-toolbar>
             </template>
             <template v-slot:item.action="{ item }">
+              {{ item }}
               <v-icon
                 small
                 class="mr-2"
@@ -107,10 +111,13 @@ import axios from "axios";
       { text: 'Last Name', value: 'lastName' },
       { text: 'Username', value: 'username' },
       { text: 'Email', value: 'email' },
-      { text: 'Group Segment', value: 'groupSegment.name' },
-      { text: 'Rol', value: 'role.name' },
+      { text: 'Group Segment', value: 'groupSegment' },
+      { text: 'Rol', value: 'role' },
       { text: 'Actions', value: 'action', sortable: false },
     ],
+    rol: ['Ejecutivo', 'Supervisor de Segmento', 'Gerente de ventas', 'Administrador'],
+    groupSegment: ['Agencias', 'Corporativo', 'Eventos'],
+    supervisors: [],
     search: "",
     desserts: [],
     editedIndex: -1,
@@ -119,7 +126,8 @@ import axios from "axios";
       lastName: '',
       username: '',
       email: '',
-      groupsegment: '',
+      groupSegment: '',
+      role: '',
     },
     defaultItem: {
       name: "",
@@ -128,6 +136,7 @@ import axios from "axios";
       email: '',
       username: '',
       groupsegment: '',
+      role: '',
     },
     show1: false,
     password: 'Password',
@@ -152,6 +161,7 @@ import axios from "axios";
 
   beforeMount() {
     this.getUser();
+    this.getManage();
   },
 
   created () {
@@ -171,6 +181,15 @@ import axios from "axios";
       })
     },
 
+    async getManager(){
+      await axios.get('https://casa-andina.azurewebsites.net/user/manager/1')
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
     initialize () {
       this.desserts = []
     },

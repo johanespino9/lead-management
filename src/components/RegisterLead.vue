@@ -333,9 +333,13 @@ export default {
     createLead(){
       var events = [ 'Salas', 'Eventos', 'Alimentos y Bebidas']
       var indices = []
-      for(var i = 0; i < events.length; i++){
-        indices.push(events.indexOf(this.selected)+1)
+      for(var i = 0; i < this.selected.length; i++){
+        console.log("HOOOOOLAAAAA")
+        console.log(this.selected[i])
+        indices.push((this.selected[i]))
+      console.log(indices)
       }
+      console.log("TOTAL DE INDICES", indices)
 
       var start = new Date(this.date1)
       var end = new Date(this.date2)
@@ -373,6 +377,8 @@ console.log(data);
       .catch((error) => {
         console.log(error)
       })
+
+      this.dialog = false;
     },
     async getHotels() {
       let respuesta = await axios.get(

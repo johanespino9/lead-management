@@ -50,9 +50,9 @@ import {mapState} from 'vuex'
         const password = this.password
         this.$store.dispatch('login', { username, password }).then(() => this.$router.push('/')) */ 
         
-        await axios.post("https://casa-andina.azurewebsites.net/login", { username: "admin", password: 123456})
+        await axios.post("https://casa-andina.azurewebsites.net/login", { username: "robval96", password: 123456})
         .then((response)=> {
-          console.log(response.headers)
+          console.log(response)
         })
 
         if(typeof(Storage) !== undefined){
