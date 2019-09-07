@@ -247,14 +247,14 @@ export default {
         text: "Nombre Lead",
         align: "left",
         sortable: false,
-        value: "lead.name"
+        value: "name"
       },
-      { text: "Fecha de Creación", value: "initialDate" },
-      { text: "Contacto", value: "lead.contactName" },
-      { text: "Cuenta", value: "lead.account.name" },
-      { text: "Ingreso de Hotel", value: "lead.rateHotel" },
-      { text: "Ingreso de Eventos", value: "lead.rateEvent"},
-      { text: "Estado", value: "status.name" },
+      { text: "Fecha de Creación", value: "initialBooking" },
+      { text: "Contacto", value: "contactName" },
+      { text: "Cuenta", value: "account" },
+      { text: "Ingreso de Hotel", value: "rateHotel" },
+      { text: "Ingreso de Eventos", value: "rateEvent"},
+      { text: "Estado", value: "status" },
       { text: "Actions", value: "action", sortable: false }
       
     ],
@@ -331,6 +331,11 @@ export default {
       this.roomrev = (((end - start)/3600000/24) -1) * this.editedItem.rateHotel * this.editedItem.rooms 
     },
     createLead(){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
       var events = [ 'Salas', 'Eventos', 'Alimentos y Bebidas']
       var indices = []
       for(var i = 0; i < this.selected.length; i++){
@@ -353,9 +358,8 @@ export default {
     initialBooking: start,
     finalBooking: end,
     nights: nights,
-    months: 3,
+    months: [0,0],
     rateHotel: this.editedItem.rateHotel,
-    rateEvent: this.editedItem.rateEvent,
     rooms: this.editedItem.rooms,
     accountId: this.leadsAccounts.indexOf(this.selectedAccount) +1,
     segmentId: this.corporateSegments.indexOf(this.selectedSegment)+1,
@@ -364,13 +368,21 @@ export default {
     contactName: this.editedItem.contactName,
     contactPhone: this.editedItem.contactPhone,
     contactEmail: this.editedItem.contactEmail,
-    statusId: null,
-    events: indices
+    events: [
+      {
+      eventId: 1,
+      rateEvent: 5000
+      },
+      {
+      eventId: 2,
+      rateEvent: 5550
+      }
+    ]
 }
 
 console.log(data);
       var sendData = {}
-      axios.post("https://casa-andina.azurewebsites.net/user/leads", data)
+      axios.post("https://casa-andina.azurewebsites.net/user/leads", data,config)
       .then((res) => {
         console.log(res)
       })
@@ -381,8 +393,13 @@ console.log(data);
       this.dialog = false;
     },
     async getHotels() {
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
       let respuesta = await axios.get(
-        "https://casa-andina.azurewebsites.net/hotels"
+        "https://casa-andina.azurewebsites.net/hotels", config
       );
       for (let i = 0; i < respuesta.data.length; i++) {
         this.hotels.push(respuesta.data[i].shortName);
@@ -390,18 +407,13 @@ console.log(data);
       console.log(this.hotels);
     },
     async getAccounts() {
-      const res = await axios.get(
-        "https://casa-andina.azurewebsites.net/user/account"
-      );
-      console.log(res);
-      for (let i = 0; i < res.data.length; i++) {
-        this.leadsAccounts.push(res.data[i].name);
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
       }
-      console.log(this.leadsAccounts);
-    },
-    async getAccounts() {
       const res = await axios.get(
-        "https://casa-andina.azurewebsites.net/user/account"
+        "https://casa-andina.azurewebsites.net/user/account", config
       );
       console.log(res);
       for (let i = 0; i < res.data.length; i++) {
@@ -411,7 +423,17 @@ console.log(data);
     },
     
     initialize() {
-      this.desserts = [];
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      axios.get('https://casa-andina.azurewebsites.net/user/leads', config)
+      .then((res) => {
+        console.log(res.data)
+        this.desserts = res.data;  
+      })
+      
     },
 
     editItem(item) {

@@ -5,7 +5,7 @@ import TableDash from './components/TableDash'
 import RegisterLead from './components/RegisterLead'
 import RegisterUser from './components/RegisterUser'
 import RegisterAccount from './components/RegisterAccount'
-import login from './views/login'
+import Login from './components/Login'
 import ModalEdit from './components/ModalEdit'
 
 Vue.use(Router)
@@ -15,7 +15,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: login
+      component: Login
     },
     {
       path:'/registerlead',
