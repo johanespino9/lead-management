@@ -76,7 +76,7 @@
               </v-toolbar>
             </template>
             <template v-slot:item.action="{ item }">
-              {{ item }}
+              
               <v-icon
                 small
                 class="mr-2"
@@ -171,7 +171,12 @@ import axios from "axios";
   methods: {
 
     async getUser(){
-      await axios.get('https://casa-andina.azurewebsites.net/user/all')
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      await axios.get('https://casa-andina.azurewebsites.net/user/all', config)
       .then((response) => {
         console.log(response)
         this.desserts = response.data

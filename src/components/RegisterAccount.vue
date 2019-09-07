@@ -136,7 +136,12 @@ import axios from "axios";
     methods: {
 
       async getAccount(){
-      await axios.get('https://casa-andina.azurewebsites.net/user/account')
+        let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      await axios.get('https://casa-andina.azurewebsites.net/user/account', config)
       .then((response) => {
         console.log(response)
         this.desserts = response.data
