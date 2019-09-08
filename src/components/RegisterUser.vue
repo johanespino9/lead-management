@@ -55,12 +55,13 @@
                               </v-col>
                               <v-col cols="20" sm="10" md="80" class=center>
                                 <v-combobox v-model="editedItem.role" :items="rol" label="Seleccionar Rol"></v-combobox>
+                                {{rol.indexOf(editedItem.role)}}
                               </v-col>
                           <v-col cols="20" sm="10" md="80" class=center>
                             <v-combobox v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
                           </v-col>
                           <v-col cols="20" sm="10" md="80" class=center>
-                            <v-combobox v-model="selectedSupervisor" :items="supervisors" label="Supervisor"></v-combobox>
+                            <v-combobox v-model="editedItem.manager" :items="supervisors" label="Supervisor"></v-combobox>
                           </v-col>
                         </v-row>
                       </v-container>
@@ -69,7 +70,7 @@
                     <v-card-actions>
                       <div class="flex-grow-1"></div>
                       <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                      <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                      <v-btn color="blue darken-1" text @click="addUser">Save</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
@@ -117,7 +118,7 @@ import axios from "axios";
     ],
     rol: ['Ejecutivo', 'Supervisor de Segmento', 'Gerente de ventas', 'Administrador'],
     groupSegment: ['Agencias', 'Corporativo', 'Eventos'],
-    supervisors: [],
+    supervisors: ['Rolando Flores', 'Roberto Valencia', 'Maria Urquiso', 'Rodrigo Berrios'],
     search: "",
     desserts: [],
     editedIndex: -1,
@@ -128,6 +129,7 @@ import axios from "axios";
       email: '',
       groupSegment: '',
       role: '',
+      manager: ''
     },
     defaultItem: {
       name: "",
@@ -137,6 +139,7 @@ import axios from "axios";
       username: '',
       groupsegment: '',
       role: '',
+      manager: ''
     },
     show1: false,
     password: 'Password',
@@ -157,17 +160,19 @@ import axios from "axios";
     dialog (val) {
       val || this.close()
     },
+    firstName: function (val) {
+      this.fullName = val + ' ' + this.lastName
+    }
   },
 
   beforeMount() {
     this.getUser();
-    this.getManage();
+    this.getManager();
   },
 
   created () {
     this.initialize()
   },
-
   methods: {
 
     async getUser(){
@@ -187,9 +192,21 @@ import axios from "axios";
     },
 
     async getManager(){
-      await axios.get('https://casa-andina.azurewebsites.net/user/manager/1')
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      // Supersivor = 1 +1 = 2
+      let id = this.rol.indexOf(this.editedItem.role)
+      console.log('SIN + 1', id)
+      let url = 'https://casa-andina.azurewebsites.net/user/manager/role/1'
+      console.log('ID',id)
+      console.log('URL', url)
+      await axios.get(url, config)
       .then((response) => {
-        console.log(response)
+        console.log(response.data)
+        
       })
       .catch((error) => {
         console.log(error)
@@ -203,16 +220,19 @@ import axios from "axios";
         }
       }
       let user = {
-        active: TRUE,
+        active: true,
         email: this.editedItem.email,
         lastName: this.editedItem.lastName,
         name: this.editedItem.name,
         password: this.editedItem.password,
         username: this.editedItem.username,
-        groupSegmentId: this.groupSegment.indexOf(this.editedItem.groupSegment)+1 ,
+        manager: this.editedItem.manager,
+        groupSegmentId: this.groupSegment.indexOf(this.editedItem.groupSegment) +1,
         roleId: this.rol.indexOf(this.editedItem.role) +1
       }
       axios.post('https://casa-andina.azurewebsites.net/user', user,config)
+
+      console.log(this.rol.indexOf(this.editedItem.role))
     },
     initialize () {
       this.desserts = []
