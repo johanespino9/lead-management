@@ -195,6 +195,25 @@ import axios from "axios";
         console.log(error)
       })
     },
+
+    addUser(){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      let user = {
+        active: TRUE,
+        email: this.editedItem.email,
+        lastName: this.editedItem.lastName,
+        name: this.editedItem.name,
+        password: this.editedItem.password,
+        username: this.editedItem.username,
+        groupSegmentId: this.groupSegment.indexOf(this.editedItem.groupSegment)+1 ,
+        roleId: this.rol.indexOf(this.editedItem.role) +1
+      }
+      axios.post('https://casa-andina.azurewebsites.net/user', user,config)
+    },
     initialize () {
       this.desserts = []
     },

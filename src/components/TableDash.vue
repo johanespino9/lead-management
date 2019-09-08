@@ -177,7 +177,12 @@ export default {
   },
   methods: {
     async getHotels() {
-      let res = await axios.get('https://casa-andina.azurewebsites.net/hotels');
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      let res = await axios.get('https://casa-andina.azurewebsites.net/hotels', config);
       console.log(res);
       for(let i = 0; i < res.data.length; i++){
         this.hotels.push(res.data[i].shortName);
@@ -200,9 +205,13 @@ export default {
       console.log(sendData.month);
       console.log(sendData.year);
 
-      
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
       axios
-        .post("https://casa-andina.azurewebsites.net/user/dashboard", sendData)
+        .post("https://casa-andina.azurewebsites.net/user/dashboard", sendData, config)
         .then(response => {
           // Respuesta del servidor
           this.values = response.data.table;
@@ -217,8 +226,13 @@ export default {
     },
 
     async getUser() {
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
       let datos = await axios.get(
-        "https://casa-andina.azurewebsites.net/robval96/dashboard"
+        "https://casa-andina.azurewebsites.net/robval96/dashboard", config
       );
       this.values = datos.data.table;
     },
