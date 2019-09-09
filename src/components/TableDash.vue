@@ -126,45 +126,7 @@ export default {
         value: "cancelado"
       }
     ],
-    items: [
-      {
-        lead: "Cantidad",
-        prospecto: "5",
-        tentativo: "1",
-        hot: "1",
-        confirmado: "1",
-        congelado: "1",
-        cancelado: "1"
-      },
-      {
-        lead: "Room Revenue",
-        prospecto: "S/.20.000",
-        tentativo: "S/.10.000",
-        hot: "S/.8.000",
-        confirmado: "S/.40.000",
-        congelado: "S/.10.000",
-        cancelado: "S/.15.000"
-      },
-      {
-        lead: "Eventos",
-        prospecto: "S/.30.000",
-        tentativo: "S/.20.000",
-        hot: "S/.8.000",
-        confirmado: "S/.40.000",
-        congelado: "S/.11.000",
-        cancelado: "S/.13.000"
-      },
-      {
-        lead: "No atentidos",
-        prospecto: "1",
-        tentativo: "4",
-        hot: "3",
-        confirmado: "2",
-        congelado: "0",
-        cancelado: "2"
-      }
-    ],
-    values2: ["Chincha", "Marriot", "Hilton"],
+    items: [],
     roomRevenue: null,
     events: null
   }),
@@ -176,8 +138,14 @@ export default {
   computed: {
   },
   methods: {
+    
     async getHotels() {
-      let res = await axios.get('https://casa-andina.azurewebsites.net/hotels');
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      let res = await axios.get('https://casa-andina.azurewebsites.net/hotels', config);
       console.log(res);
       for(let i = 0; i < res.data.length; i++){
         this.hotels.push(res.data[i].shortName);
@@ -215,7 +183,7 @@ export default {
           console.log(e);
         });
     },
-
+  
     async getUser() {
       let datos = await axios.get(
         "https://casa-andina.azurewebsites.net/robval96/dashboard"
