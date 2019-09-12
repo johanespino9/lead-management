@@ -32,7 +32,7 @@
                               <v-text-field v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                              <v-text-field v-model="editedItem.phone" label="Teléfono"></v-text-field>
+                              <v-text-field v-model="editedItem.phone" v-mask="mask" label="Teléfono"></v-text-field>
                             </v-col>
                             <v-col cols="auto">
                               <v-combobox v-model="select" :items="branch" label="Seleccionar Sector"></v-combobox>
@@ -80,9 +80,13 @@
     </v-data-table>
 </template>
 <script>
+import { mask } from 'vue-the-mask';
 import axios from "axios";
 
   export default {
+    directives: {
+      mask,
+    },
     data: () => ({
     dialog: false,
       headers: [
@@ -99,6 +103,7 @@ import axios from "axios";
       ],
       search: "",
       desserts: [],
+      mask: '####-####-####-####',
       editedIndex: -1,
       editedItem: {
         name: '',
