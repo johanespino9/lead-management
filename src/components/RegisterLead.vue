@@ -174,13 +174,13 @@
                       </v-combobox>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateEvent" label="Ingresar Eventos AyB"></v-text-field>
+                    <v-text-field v-model="editedItem.rateEvent1" label="Ingresar Eventos AyB"></v-text-field>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateEvent" label="Ingresar Eventos Equipos"></v-text-field>
+                    <v-text-field v-model="editedItem.rateEvent2" label="Ingresar Eventos Equipos"></v-text-field>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateEvent" label="Ingresar Eventos Salas"></v-text-field>
+                    <v-text-field v-model="editedItem.rateEvent3" label="Ingresar Eventos Salas"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.contactName" label="Nombre Contacto"></v-text-field>
@@ -200,7 +200,7 @@
                   <v-col> Room Revenue: {{ roomrev }}</v-col>
                 </v-row>
                 <v-row>
-                  <v-col> Eventos: {{ editedItem.rateEvent }}</v-col>
+                  <v-col> Eventos: {{  }}</v-col>
                 </v-row>
                 <v-row>
                   <v-col> <strong> TOTAL: {{ (parseInt(roomrev)) + (parseInt(editedItem.rateEvent)) }} </strong></v-col>
@@ -273,6 +273,9 @@ export default {
       rooms: 0,
       rateHotel: 0,
       rateEvent: 0,
+      rateEvent1: 0,
+      rateEvent2: 0,
+      rateEvent3: 0,
       finaldate: 0,
       contact: '',
       account: '',
@@ -285,6 +288,9 @@ export default {
       rooms: 0,
       rateHotel: 0,
       rateEvent: 0,
+      rateEvent1: 0,
+      rateEvent2: 0,
+      rateEvent3: 0,
       finaldate: 0,
       contact: '',
       account: '',
@@ -295,6 +301,9 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+    suma:function ({state}) {
+      return state.editedItem.rateEvent1+state.editedItem.rateEvent2+state.editedItem.rateEvent3
     }
   },
 
@@ -371,11 +380,11 @@ export default {
     events: [
       {
       eventId: 1,
-      rateEvent: 5000
+      rateEvent2: 5000
       },
       {
       eventId: 2,
-      rateEvent: 5550
+      rateEvent2: 5550
       }
     ]
 }
