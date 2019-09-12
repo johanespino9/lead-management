@@ -1,10 +1,12 @@
 <template>
   <div>
     <v-app>
-      <NavBar></NavBar>
+        <NavBar></NavBar>
       <Menu></Menu>
       <Content></Content>
-      <Footer></Footer>
+      <Footer></Footer>  
+      
+      
       <!-- <RegisterLead></RegisterLead> -->
       <!-- <router-view></router-view> -->
     </v-app>
@@ -18,7 +20,7 @@ import NavBar from './components/NavBar';
 import Menu from './components/Menu';
 import Content from './components/Content';
 import Footer from './components/Footer';
-import RegisterLead from './components/RegisterLead';
+import Login from './components/Login';
 
 export default {
   name: 'App',
@@ -28,10 +30,11 @@ export default {
     Menu,
     Content,
     Footer,
-    RegisterLead
+    Login
+    
   },
   data: () => ({
-    //
+    logged: false
   }),
 };
 </script>

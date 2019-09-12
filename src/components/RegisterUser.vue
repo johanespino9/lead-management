@@ -61,7 +61,7 @@
                             <v-combobox v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
                           </v-col>
                           <v-col cols="20" sm="10" md="80" class=center>
-                            <v-combobox v-model="editedItem.manager" :items="supervisors" label="Supervisor"></v-combobox>
+                            <v-combobox v-model="editedItem.manager" :items="supervisors" @focus="getManager" label="Supervisor"></v-combobox>
                           </v-col>
                         </v-row>
                       </v-container>
@@ -118,7 +118,7 @@ import axios from "axios";
     ],
     rol: ['Ejecutivo', 'Supervisor de Segmento', 'Gerente de ventas', 'Administrador'],
     groupSegment: ['Agencias', 'Corporativo', 'Eventos'],
-    supervisors: ['Rolando Flores', 'Roberto Valencia', 'Maria Urquiso', 'Rodrigo Berrios'],
+    supervisors: [],
     search: "",
     desserts: [],
     editedIndex: -1,
@@ -154,6 +154,10 @@ import axios from "axios";
     formTitle () {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
+    managerId: function (){
+      console.log(this.rol.indexOf(this.editedItem.role).toString())
+      return this.rol.indexOf(this.editedItem.role).toString()
+    }
   },
 
   watch: {
@@ -162,7 +166,8 @@ import axios from "axios";
     },
     firstName: function (val) {
       this.fullName = val + ' ' + this.lastName
-    }
+    },
+    
   },
 
   beforeMount() {
@@ -198,14 +203,16 @@ import axios from "axios";
         }
       }
       // Supersivor = 1 +1 = 2
-      let id = this.rol.indexOf(this.editedItem.role)
-      console.log('SIN + 1', id)
-      let url = 'https://casa-andina.azurewebsites.net/user/manager/role/1'
-      console.log('ID',id)
+      //let id = this.rol.indexOf(this.editedItem.role).toString()
+      //console.log('SIN + 1', id)
+      console.log(this.managerId)
+      let url = 'https://casa-andina.azurewebsites.net/user/manager/role/'+this.managerId
+      //console.log('ID',id)
       console.log('URL', url)
       await axios.get(url, config)
       .then((response) => {
         console.log(response.data)
+        this.supervisors = response.data
         
       })
       .catch((error) => {
@@ -231,7 +238,8 @@ import axios from "axios";
         roleId: this.rol.indexOf(this.editedItem.role) +1
       }
       axios.post('https://casa-andina.azurewebsites.net/user', user,config)
-
+      console.log(this.managerId)
+      console.log('Soy un ID de Manager')
       console.log(this.rol.indexOf(this.editedItem.role))
     },
     initialize () {
@@ -258,6 +266,7 @@ import axios from "axios";
     },
 
     save () {
+      
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
       } else {
