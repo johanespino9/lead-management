@@ -61,7 +61,7 @@
                             <v-combobox v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
                           </v-col>
                           <v-col cols="20" sm="10" md="80" class=center>
-                            <v-combobox v-model="editedItem.manager" :items="supervisors" @focus="getManager" label="Supervisor"></v-combobox>
+                            <v-combobox v-model="editedItem.manager" :items="supervisors" @focus="getManager" label="Supervisores"></v-combobox>
                           </v-col>
                         </v-row>
                       </v-container>
