@@ -14,8 +14,7 @@
       
       <!-- <Session></Session> -->
     </v-app>
-      
-    
+    <router-link to="./views/login">Login</router-link>
   </div>
 </template>
 

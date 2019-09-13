@@ -6,10 +6,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+
     token: [],
     username: 'admin',
     password: 123456,
-    token: localStorage.getItem('user-token') || ''
+    token: localStorage.getItem('user-token') || '',
+    accessToken: localStorage.getItem('access_token'),
+    currentUser : {}
   },
   mutations: {
     miToken(state, tokenAction){

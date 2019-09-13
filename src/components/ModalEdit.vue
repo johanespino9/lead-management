@@ -1,24 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="desserts" :search="search" class="elevation-1">
-    <template v-slot:top>
-      <v-toolbar flat color="white">
-        <v-toolbar-title>Gestión de Leads</v-toolbar-title>
-        <v-divider class="mx-4" inset vertical></v-divider>
-        <v-text-field
-          class="text-xs-center"
-          v-model="search"
-          append-icon="search"
-          label="Búsqueda"
-          single-line
-          hide-details
-        ></v-text-field>
-        <v-spacer></v-spacer>
-        <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="1150px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">Añadir Nuevo Lead</v-btn>
-          </template>
-          <v-card>
+    <v-card>
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
@@ -145,10 +126,10 @@
                     </v-dialog>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rooms" v-mask="mask" label="Cantidad de Habitaciones"></v-text-field>
+                    <v-text-field v-model="editedItem.rooms" label="Cantidad de Habitaciones"></v-text-field>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateHotel" v-mask="mask" prefix="S/." label="Ingresar Tarifa Neta"></v-text-field>
+                    <v-text-field v-model="editedItem.rateHotel" label="Ingresar Tarifa Neta"></v-text-field>
                   </v-col>
                   <v-col cols="20" sm="4" md="80">
                     <v-combobox
@@ -174,13 +155,13 @@
                       </v-combobox>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateEvent1" v-mask="mask" prefix="S/." label="Ingresar Eventos AyB"></v-text-field>
+                    <v-text-field v-model="editedItem.rateEvent" label="Ingresar Eventos AyB"></v-text-field>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateEvent2" v-mask="mask" prefix="S/." label="Ingresar Eventos Equipos"></v-text-field>
+                    <v-text-field v-model="editedItem.rateEvent" label="Ingresar Eventos Equipos"></v-text-field>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateEvent3" v-mask="mask" prefix="S/." label="Ingresar Eventos Salas"></v-text-field>
+                    <v-text-field v-model="editedItem.rateEvent" label="Ingresar Eventos Salas"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.contactName" label="Nombre Contacto"></v-text-field>
@@ -192,7 +173,7 @@
                     <v-text-field v-model="editedItem.contactEmail" label="Correo"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.contactPhone" v-mask="mask" label=" Celular/Teléfono"></v-text-field>
+                    <v-text-field v-model="editedItem.contactPhone" label=" Celular/Teléfono"></v-text-field>
                   </v-col>
                 </v-row>
                 <v-btn @click="calcular">RESUMEN</v-btn>
@@ -200,7 +181,7 @@
                   <v-col> Room Revenue: {{ roomrev }}</v-col>
                 </v-row>
                 <v-row>
-                  <v-col> Eventos: {{  }}</v-col>
+                  <v-col> Eventos: {{ editedItem.rateEvent }}</v-col>
                 </v-row>
                 <v-row>
                   <v-col> <strong> TOTAL: {{ (parseInt(roomrev)) + (parseInt(editedItem.rateEvent)) }} </strong></v-col>
@@ -214,31 +195,15 @@
               <v-btn color="blue darken-1" text @click="createLead">Guardar</v-btn>
             </v-card-actions>
           </v-card>
-        </v-dialog>
-      </v-toolbar>
     </template>
-    <template v-slot:item.action="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
-      <v-icon small @click="deleteItem(item)">delete</v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
-    </template>
-  </v-data-table>
-</template>
+
 <script>
-import { mask } from 'vue-the-mask';
 import axios from "axios";
 
 export default {
-  
-    directives: {
-      mask,
-    },
   data: () => ({
     items: ['Alimentos y bebidas', 'Equipos', 'Salas'], // Array Events
     model: [],
-    mask: '####-####-####-####',
     selected:[],
     roomrev: 0,
     dialog: false,
@@ -253,14 +218,14 @@ export default {
         text: "Nombre Lead",
         align: "left",
         sortable: false,
-        value: "name"
+        value: "lead.name"
       },
-      { text: "Fecha de Creación", value: "initialBooking" },
-      { text: "Contacto", value: "contactName" },
-      { text: "Cuenta", value: "account" },
-      { text: "Ingreso de Hotel", value: "rateHotel" },
-      { text: "Ingreso de Eventos", value: "rateEvent"},
-      { text: "Estado", value: "status" },
+      { text: "Fecha de Creación", value: "initialDate" },
+      { text: "Contacto", value: "lead.contactName" },
+      { text: "Cuenta", value: "lead.account.name" },
+      { text: "Ingreso de Hotel", value: "lead.rateHotel" },
+      { text: "Ingreso de Eventos", value: "lead.rateEvent"},
+      { text: "Estado", value: "status.name" },
       { text: "Actions", value: "action", sortable: false }
       
     ],
@@ -279,9 +244,6 @@ export default {
       rooms: 0,
       rateHotel: 0,
       rateEvent: 0,
-      rateEvent1: 0,
-      rateEvent2: 0,
-      rateEvent3: 0,
       finaldate: 0,
       contact: '',
       account: '',
@@ -294,9 +256,6 @@ export default {
       rooms: 0,
       rateHotel: 0,
       rateEvent: 0,
-      rateEvent1: 0,
-      rateEvent2: 0,
-      rateEvent3: 0,
       finaldate: 0,
       contact: '',
       account: '',
@@ -307,9 +266,6 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
-    suma:function ({state}) {
-      return state.editedItem.rateEvent1+state.editedItem.rateEvent2+state.editedItem.rateEvent3
     }
   },
 
@@ -346,20 +302,11 @@ export default {
       this.roomrev = (((end - start)/3600000/24) -1) * this.editedItem.rateHotel * this.editedItem.rooms 
     },
     createLead(){
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
       var events = [ 'Salas', 'Eventos', 'Alimentos y Bebidas']
       var indices = []
-      for(var i = 0; i < this.selected.length; i++){
-        console.log("HOOOOOLAAAAA")
-        console.log(this.selected[i])
-        indices.push((this.selected[i]))
-      console.log(indices)
+      for(var i = 0; i < events.length; i++){
+        indices.push(events.indexOf(this.selected)+1)
       }
-      console.log("TOTAL DE INDICES", indices)
 
       var start = new Date(this.date1)
       var end = new Date(this.date2)
@@ -373,8 +320,9 @@ export default {
     initialBooking: start,
     finalBooking: end,
     nights: nights,
-    months: [0,0],
+    months: 3,
     rateHotel: this.editedItem.rateHotel,
+    rateEvent: this.editedItem.rateEvent,
     rooms: this.editedItem.rooms,
     accountId: this.leadsAccounts.indexOf(this.selectedAccount) +1,
     segmentId: this.corporateSegments.indexOf(this.selectedSegment)+1,
@@ -383,38 +331,23 @@ export default {
     contactName: this.editedItem.contactName,
     contactPhone: this.editedItem.contactPhone,
     contactEmail: this.editedItem.contactEmail,
-    events: [
-      {
-      eventId: 1,
-      rateEvent2: 5000
-      },
-      {
-      eventId: 2,
-      rateEvent2: 5550
-      }
-    ]
+    statusId: null,
+    events: indices
 }
 
 console.log(data);
       var sendData = {}
-      axios.post("https://casa-andina.azurewebsites.net/user/leads", data,config)
+      axios.post("https://casa-andina.azurewebsites.net/user/leads", data)
       .then((res) => {
         console.log(res)
       })
       .catch((error) => {
         console.log(error)
       })
-
-      this.dialog = false;
     },
     async getHotels() {
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
       let respuesta = await axios.get(
-        "https://casa-andina.azurewebsites.net/hotels", config
+        "https://casa-andina.azurewebsites.net/hotels"
       );
       for (let i = 0; i < respuesta.data.length; i++) {
         this.hotels.push(respuesta.data[i].shortName);
@@ -422,13 +355,18 @@ console.log(data);
       console.log(this.hotels);
     },
     async getAccounts() {
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
       const res = await axios.get(
-        "https://casa-andina.azurewebsites.net/user/account", config
+        "https://casa-andina.azurewebsites.net/user/account"
+      );
+      console.log(res);
+      for (let i = 0; i < res.data.length; i++) {
+        this.leadsAccounts.push(res.data[i].name);
+      }
+      console.log(this.leadsAccounts);
+    },
+    async getAccounts() {
+      const res = await axios.get(
+        "https://casa-andina.azurewebsites.net/user/account"
       );
       console.log(res);
       for (let i = 0; i < res.data.length; i++) {
@@ -438,17 +376,7 @@ console.log(data);
     },
     
     initialize() {
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
-      axios.get('https://casa-andina.azurewebsites.net/user/leads', config)
-      .then((res) => {
-        console.log(res.data)
-        this.desserts = res.data;  
-      })
-      
+      this.desserts = [];
     },
 
     editItem(item) {

@@ -1,14 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import LeadRegister from './views/LeadRegister.vue'
+/* import Home from './views/Home.vue' */
 import TableDash from './components/TableDash'
 import RegisterLead from './components/RegisterLead'
-import Lead from './components/Lead'
 import RegisterUser from './components/RegisterUser'
 import RegisterAccount from './components/RegisterAccount'
+
 import Login from './views/Login'
 import Session from './views/Session'
+
+import Login from './components/Login'
+import ModalEdit from './components/ModalEdit'
+
 
 Vue.use(Router)
 
@@ -17,12 +20,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Lead
-    },
-    {
-      path:'/leadregister',
-      name: 'leadregister',
-      component: LeadRegister
+      component: Login
     },
     {
       path:'/registerlead',
@@ -45,6 +43,7 @@ export default new Router({
       component: RegisterAccount
     },
     {
+
       path:  '/Login',
       name:  'Login',
       component:  Login
@@ -53,6 +52,11 @@ export default new Router({
       path:  '/Session',
       name:  'Session',
       component:  Session
+    },
+    {
+      path:'/modaledit',
+      name: 'modaledit',
+      component: ModalEdit
     }
   ]
 })

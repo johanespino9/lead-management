@@ -32,7 +32,7 @@
                               <v-text-field v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                              <v-text-field v-model="editedItem.phone" label="Teléfono"></v-text-field>
+                              <v-text-field v-model="editedItem.phone" v-mask="mask" label="Teléfono"></v-text-field>
                             </v-col>
                             <v-col cols="auto">
                               <v-combobox v-model="select" :items="branch" label="Seleccionar Sector"></v-combobox>
@@ -80,7 +80,13 @@
     </v-data-table>
 </template>
 <script>
+import { mask } from 'vue-the-mask';
+import axios from "axios";
+
   export default {
+    directives: {
+      mask,
+    },
     data: () => ({
     dialog: false,
       headers: [
@@ -90,30 +96,26 @@
           sortable: false,
           value: 'name',
         },
-        { text: 'Teléfono', value: 'phone' },
-        { text: 'Sector', value: 'branch' },
-        { text: 'Categoría', value: 'category' },
-        { text: 'Grupo Segmento', value: 'groupsegment' },
-        { text: 'Segmento', value: 'segment' },
+        { text: 'Sector', value: 'branch.name' },
+        { text: 'Categoría', value: 'category.name' },
+        { text: 'Grupo Segmento', value: 'groupSegment.name' },
         { text: 'Actions', value: 'action', sortable: false },
       ],
+      search: "",
       desserts: [],
+      mask: '####-####-####-####',
       editedIndex: -1,
       editedItem: {
         name: '',
-        phone: 0,
         branch: 0,
         category: 0,
         groupsegment: 0,
-        segment: 0,
       },
       defaultItem: {
         name: '',
-        phone: 0,
         branch: 0,
         category: 0,
         groupsegment: 0,
-        segment: 0,
       },
     }),
 
@@ -128,95 +130,35 @@
         val || this.close()
       },
     },
-
+      
+      beforeMount() {
+          this.getAccount();
+        },
     created () {
       this.initialize()
     },
 
     methods: {
+
+      async getAccount(){
+        let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      await axios.get('https://casa-andina.azurewebsites.net/user/account', config)
+      .then((response) => {
+        console.log(response)
+        this.desserts = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
+
+
       initialize () {
-        this.desserts = [
-          {
-            name: 'Casa Andina',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Oechsle',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'UTP',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Casa Andina',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Banco Pichincha',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'BCP',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Casa Andina',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Scotiabank',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'Interbank',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-          {
-            name: 'BCP',
-            phone: 955955626,
-            branch: 0,
-            category: 0,
-            groupsegment: 0,
-            segment: 0,
-          },
-        ]
+        this.desserts = []
       },
 
       editItem (item) {

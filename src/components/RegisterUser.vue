@@ -37,6 +37,7 @@
                           </v-col>
                           
                           <v-col cols="12" sm="6">
+
                                 <v-text-field
                                   v-model="password"
                                   :append-icon="show1 ? 'visibility' : 'visibility_off'"
@@ -49,8 +50,10 @@
                                   @click:append="show1 = !show1"
                                 ></v-text-field>
                               </v-col>
+
                           <v-col cols="auto" >
                             <v-combobox :rules="[rules.required]" v-model="editedItem.groupsegment"  :items="segments"  label="Group Segment"></v-combobox>
+
                           </v-col>
                         </v-row>
                       </v-container>
@@ -59,13 +62,14 @@
                     <v-card-actions>
                       <div class="flex-grow-1"></div>
                       <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                      <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                      <v-btn color="blue darken-1" text @click="addUser">Save</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
               </v-toolbar>
             </template>
             <template v-slot:item.action="{ item }">
+              
               <v-icon
                 small
                 class="mr-2"
@@ -86,6 +90,7 @@
           </v-data-table>
 </template>
 <script>
+import axios from "axios";
   export default {
     data: () => ({
     dialog: false,
@@ -96,29 +101,42 @@
     ], 
     headers: [
       {
-        text: 'Ejecutivos',
+        text: 'Name',
         align: 'left',
         sortable: false,
-        value: 'fullname',
+        value: 'name',
       },
-      { text: 'Email', value: 'email' },
+      { text: 'Last Name', value: 'lastName' },
       { text: 'Username', value: 'username' },
-      { text: 'Group Segment', value: 'groupsegment' },
+      { text: 'Email', value: 'email' },
+      { text: 'Group Segment', value: 'groupSegment' },
+      { text: 'Rol', value: 'role' },
       { text: 'Actions', value: 'action', sortable: false },
     ],
+    rol: ['Ejecutivo', 'Supervisor de Segmento', 'Gerente de ventas', 'Administrador'],
+    groupSegment: ['Agencias', 'Corporativo', 'Eventos'],
+    supervisors: ['Rolando Flores', 'Roberto Valencia', 'Maria Urquiso', 'Rodrigo Berrios'],
+    search: "",
     desserts: [],
     editedIndex: -1,
     editedItem: {
-      fullname: '',
-      email: '',
+      name: "",
+      lastName: '',
       username: '',
-      groupsegment: '',
+      email: '',
+      groupSegment: '',
+      role: '',
+      manager: ''
     },
     defaultItem: {
-      fullname: '',
+      name: "",
+      lastName: '',
+      username: '',
       email: '',
       username: '',
       groupsegment: '',
+      role: '',
+      manager: ''
     },
     show1: false,
     password: '',
@@ -140,14 +158,82 @@
     dialog (val) {
       val || this.close()
     },
+    firstName: function (val) {
+      this.fullName = val + ' ' + this.lastName
+    }
+  },
+
+  beforeMount() {
+    this.getUser();
+    this.getManager();
   },
 
   created () {
     this.initialize()
   },
-
   methods: {
+
+    async getUser(){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      await axios.get('https://casa-andina.azurewebsites.net/user/all', config)
+      .then((response) => {
+        console.log(response)
+        this.desserts = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
+
+    async getManager(){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      // Supersivor = 1 +1 = 2
+      let id = this.rol.indexOf(this.editedItem.role)
+      console.log('SIN + 1', id)
+      let url = 'https://casa-andina.azurewebsites.net/user/manager/role/1'
+      console.log('ID',id)
+      console.log('URL', url)
+      await axios.get(url, config)
+      .then((response) => {
+        console.log(response.data)
+        
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
+
+    addUser(){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      let user = {
+        active: true,
+        email: this.editedItem.email,
+        lastName: this.editedItem.lastName,
+        name: this.editedItem.name,
+        password: this.editedItem.password,
+        username: this.editedItem.username,
+        manager: this.editedItem.manager,
+        groupSegmentId: this.groupSegment.indexOf(this.editedItem.groupSegment) +1,
+        roleId: this.rol.indexOf(this.editedItem.role) +1
+      }
+      axios.post('https://casa-andina.azurewebsites.net/user', user,config)
+
+      console.log(this.rol.indexOf(this.editedItem.role))
+    },
     initialize () {
+
       this.desserts = [
         {
           fullname: 'Renzo Mondragon',
@@ -156,6 +242,7 @@
           groupsegment: 'corporativo',
         }, 
       ]
+
     },
 
     editItem (item) {

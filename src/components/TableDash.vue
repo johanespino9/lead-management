@@ -36,27 +36,29 @@
       </template>
     </v-data-table>
     <v-row justify="center">
-      <v-col cols="auto">
+      <v-col cols="left">
         <v-progress-circular
         :rotate="360"
-        :size="100"
-        :width="15"
+        :size="200"
+        :width="40"
         :value="roomRevenue"
         color="orange"
       >
         {{ value }}
       </v-progress-circular>
+      <h2 cols="auto">Room Revenue : {{roomRevenue}}%</h2>
       </v-col>
       <v-col cols="auto">
         <v-progress-circular
         :rotate="360"
-        :size="100"
-        :width="15"
+        :size="200"
+        :width="40"
         :value="events"
         color="green"
       >
         {{ value }}
       </v-progress-circular>
+      <h2 cols="auto">Event Revenue : {{events}}%</h2>
       </v-col>
     </v-row>
     </v-container>
@@ -124,45 +126,7 @@ export default {
         value: "cancelado"
       }
     ],
-    items: [
-      {
-        lead: "Cantidad",
-        prospecto: "5",
-        tentativo: "1",
-        hot: "1",
-        confirmado: "1",
-        congelado: "1",
-        cancelado: "1"
-      },
-      {
-        lead: "Room Revenue",
-        prospecto: "S/.20.000",
-        tentativo: "S/.10.000",
-        hot: "S/.8.000",
-        confirmado: "S/.40.000",
-        congelado: "S/.10.000",
-        cancelado: "S/.15.000"
-      },
-      {
-        lead: "Eventos",
-        prospecto: "S/.30.000",
-        tentativo: "S/.20.000",
-        hot: "S/.8.000",
-        confirmado: "S/.40.000",
-        congelado: "S/.11.000",
-        cancelado: "S/.13.000"
-      },
-      {
-        lead: "No atentidos",
-        prospecto: "1",
-        tentativo: "4",
-        hot: "3",
-        confirmado: "2",
-        congelado: "0",
-        cancelado: "2"
-      }
-    ],
-    values2: ["Chincha", "Marriot", "Hilton"],
+    items: [],
     roomRevenue: null,
     events: null
   }),
@@ -174,11 +138,17 @@ export default {
   computed: {
   },
   methods: {
+    
     async getHotels() {
-      let res = await axios.get('https://casa-andina.azurewebsites.net/hotels');
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      let res = await axios.get('https://casa-andina.azurewebsites.net/hotels', config);
       console.log(res);
       for(let i = 0; i < res.data.length; i++){
-        this.hotels.push(res.data[i].shortname);
+        this.hotels.push(res.data[i].shortName);
       }
       console.log(this.hotels);
     },
@@ -187,20 +157,24 @@ export default {
       let monthId = this.months.indexOf(this.monthSelected) + 1;
       var sendData = {
             hotels:{
-              hotelid: hotelId,
-              shortname: this.hotelSelected
+              hotelId: hotelId,
+              shortName: this.hotelSelected
             },
             month: monthId,
             year: this.yearSelected
       }
-      console.log(sendData.hotels.hotelid);
-      console.log(sendData.hotels.shortname);
+      console.log(sendData.hotels.hotelId);
+      console.log(sendData.hotels.shortName);
       console.log(sendData.month);
       console.log(sendData.year);
 
-      
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
       axios
-        .post("https://casa-andina.azurewebsites.net/robval96/dashboard", sendData)
+        .post("https://casa-andina.azurewebsites.net/user/dashboard", sendData, config)
         .then(response => {
           // Respuesta del servidor
           this.values = response.data.table;
@@ -213,10 +187,15 @@ export default {
           console.log(e);
         });
     },
-
+  
     async getUser() {
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
       let datos = await axios.get(
-        "https://casa-andina.azurewebsites.net/robval96/dashboard"
+        "https://casa-andina.azurewebsites.net/robval96/dashboard", config
       );
       this.values = datos.data.table;
     },
