@@ -16,7 +16,7 @@
         <div class="flex-grow-1"></div>
         <v-dialog v-model="dialog" max-width="1150px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">Añadir Nuevo Lead</v-btn>
+            <v-btn color="primary" dark class="mb-2" v-on="on" @click="getSegments">Añadir Nuevo Lead</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -81,7 +81,7 @@
                   <v-col cols="20" sm="4" md="80" class=center>
                     <v-combobox
                       v-model="selectedSegment"
-                      :items="corporateSegments"
+                      :items="segments"
                       label="Seleccionar Segmento"
                     ></v-combobox>
                   </v-col>
@@ -269,7 +269,12 @@ export default {
     selectedAccount: '',
     selectedHotel: '',
     selectedSegment: '',
+    corporateView: false,
+    agencyGroupsView: false,
+    agencySeriesView: false,
+    eventsView: false,
     corporateSegments: ["Grupos", "Largas Estadías", "Tripulación"],
+    segments: [],
     leadsAccounts: [],
     hotels: [],
     editedIndex: -1,
@@ -316,23 +321,48 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
+    },
+    selectedSegment: function () {
+      
     }
   },
   beforeMount() {
+    this.getSegments();
     this.getAccounts();
     this.getHotels();
     this.getLeads();
+    
   },
   created() {
     this.initialize();
   },
 
   methods: {
-    async getLeads(){
+    /* async getLeads(){
       await axios.get('https://casa-andina.azurewebsites.net/user/leads')
       .then((response) => {
         console.log(response)
         this.desserts = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }, */
+    test(){
+      console.log('ESTA SELECCIONANDO')
+    },
+    async getSegments(){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      await axios.get('https://casa-andina.azurewebsites.net/user/segment', config)
+      .then((res) => {
+        if(this.segments.length == 0){
+        console.log(res.data)
+        this.segments = res.data.map( segment => segment.name)
+        }
       })
       .catch((error) => {
         console.log(error)
@@ -373,7 +403,7 @@ export default {
     initialBooking: start,
     finalBooking: end,
     nights: nights,
-    months: [0,0],
+    months: [],
     rateHotel: this.editedItem.rateHotel,
     rooms: this.editedItem.rooms,
     accountId: this.leadsAccounts.indexOf(this.selectedAccount) +1,
