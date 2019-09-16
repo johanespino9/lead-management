@@ -6,10 +6,11 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
-
   "dependencies": {
     "@mdi/font": "^3.6.95",
     "axios": "^0.19.0",
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.1",
     "chart.js": "^2.8.0",
     "core-js": "^2.6.5",
     "fusioncharts": "^3.14.0-sr.1",

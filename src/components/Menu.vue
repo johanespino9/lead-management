@@ -1,13 +1,28 @@
 <template>
-    <div>
-        <v-navigation-drawer
-      v-model="drawer"
+    <div> 
+    <v-card >
+    <v-navigation-drawer
       app
       clipped
+      v-model="drawer"
+      :mini-variant.sync="mini"
+      permanent
     >
+      <v-list-item>
+        <v-list-item-avatar>
+          <v-img src="../assets/chupetin.jpg"></v-img>
+        </v-list-item-avatar>
+        <v-list-item-title>Usuario</v-list-item-title>
+        <v-btn
+          icon
+          @click.stop="mini = !mini"
+        >
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+      </v-list-item>
+      <v-divider></v-divider>
       <v-list dense>
-        <v-list-item to="/">
-          
+        <v-list-item to="/">       
           <v-list-item-action>
             <v-icon>home</v-icon>
           </v-list-item-action>
@@ -56,13 +71,30 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block @click="Logout()">Logout</v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
+  </v-card>
+
     </div>
+    
 </template>
 <script>
+import { mapActions } from 'vuex';
 export default {
     data: () => ({
-      items: 'HOLA'
-    })
+      items: 'HOLA',
+      drawer: true,
+      mini: true,
+    }),
+    methods: {
+      ...mapActions(['Logout']),
+      Logout(){
+        this.$store.dispatch('Logout')
+      }
+    },
 }
 </script>

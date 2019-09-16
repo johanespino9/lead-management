@@ -131,9 +131,13 @@ export default {
     events: null
   }),
   created() {
-    //this.getUser();
-    this.getHotels();
-    // this.login();
+    try {
+      this.getHotels();
+      //this.getUser();  
+      // this.login();
+    } catch (error) {
+    }
+   
   },
   computed: {
   },

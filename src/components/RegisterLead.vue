@@ -18,6 +18,7 @@
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" v-on="on" @click="getSegments">Añadir Nuevo Lead</v-btn>
           </template>
+          
           <v-card>
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
@@ -326,12 +327,14 @@ export default {
       
     }
   },
-  beforeMount() {
-    this.getSegments();
+  created() {
+    try {
+      this.getSegments();
     this.getAccounts();
     this.getHotels();
     this.getLeads();
-    
+    } catch (error) {   
+    }  
   },
   created() {
     this.initialize();

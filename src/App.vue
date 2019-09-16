@@ -1,16 +1,17 @@
 <template>
   <div>
-    <v-app>
-        <NavBar></NavBar>
+    <v-app v-if="accessToken==null">
+        <Login2></Login2> 
+    </v-app>
+    <v-app v-if="accessToken!=null"> 
+      <NavBar></NavBar>
       <Menu></Menu>
       <Content></Content>
-      <Footer></Footer>  
-      
-      
+      <Footer></Footer> 
       <!-- <RegisterLead></RegisterLead> -->
-      <!-- <router-view></router-view> -->
+      <!-- <router-view></router-view> --> 
     </v-app>
-    <router-link to="./views/login">Login</router-link>
+   
   </div>
 </template>
 
@@ -21,6 +22,9 @@ import Menu from './components/Menu';
 import Content from './components/Content';
 import Footer from './components/Footer';
 import Login from './components/Login';
+import Login2 from './components/Login2';
+
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'App',
@@ -30,11 +34,19 @@ export default {
     Menu,
     Content,
     Footer,
-    Login
-    
+    Login,
+    Login2
   },
-  data: () => ({
-    logged: false
+  data: () => ({ 
+
   }),
+  computed: {
+    ...mapState(['accessToken'])
+  },
+  methods: {
+  },
+  created() {
+    console.log(localStorage.getItem('token'))
+  },
 };
 </script>

@@ -8,6 +8,8 @@ import RegisterAccount from './components/RegisterAccount'
 import Login from './components/Login'
 import ModalEdit from './components/ModalEdit'
 
+import Login2 from './components/Login2'
+
 Vue.use(Router)
 
 export default new Router({
@@ -41,6 +43,11 @@ export default new Router({
       path:'/modaledit',
       name: 'modaledit',
       component: ModalEdit
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login2
     }
   ]
 })

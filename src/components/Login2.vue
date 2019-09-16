@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <v-container>
+    <v-container>
       <v-row>
         <v-col cols="4">
           
@@ -16,19 +16,16 @@
               counter
             ></v-text-field>
 
-            <v-btn color="success" class="mr-4" @click="login">Validate</v-btn>
-
-            <v-btn color="error" class="mr-4" @click="reset">Reset Form</v-btn>
-
-            <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
+            <v-btn color="success" class="mr-4" @click="login()">Validate</v-btn>
         </v-col>
       </v-row>
-    </v-container> -->
+    </v-container>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
   data(){
@@ -38,19 +35,24 @@ export default {
       show1: false
     }
   },
+  computed: {
+  },
   methods: {
+      ...mapActions(['verLogin']),
     async login(){
+      try {
       var sendData = {
         username: this.email,
         password: this.password
       }
       await axios.post('https://casa-andina.azurewebsites.net/login', sendData)
-      .then((res) => {
+      .then((res) => { 
         console.log(res.data);
         localStorage.setItem('token',res.data.token)
+        this.$store.dispatch('verLogin')
       })
-
-
+      } catch (error) { 
+      }
     }
   }
 }
