@@ -146,10 +146,10 @@
                     </v-dialog>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rooms" v-mask="mask" label="Cantidad de Habitaciones"></v-text-field>
+                    <v-text-field v-model="editedItem.rooms" label="Cantidad de Habitaciones"></v-text-field>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateHotel" v-mask="mask" prefix="S/." label="Ingresar Tarifa Neta"></v-text-field>
+                    <v-text-field v-model="editedItem.rateHotel" prefix="S/." label="Ingresar Tarifa Neta"></v-text-field>
                   </v-col>
                   <v-col cols="20" sm="4" md="80">
                     <v-combobox
@@ -175,13 +175,13 @@
                       </v-combobox>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateEvent1" v-mask="mask" prefix="S/." label="Ingresar Eventos AyB"></v-text-field>
+                    <v-text-field v-model="editedItem.rateEvent1" prefix="S/." label="Ingresar Eventos AyB"></v-text-field>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateEvent2" v-mask="mask" prefix="S/." label="Ingresar Eventos Equipos"></v-text-field>
+                    <v-text-field v-model="editedItem.rateEvent2" prefix="S/." label="Ingresar Eventos Equipos"></v-text-field>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center>
-                    <v-text-field v-model="editedItem.rateEvent3" v-mask="mask" prefix="S/." label="Ingresar Eventos Salas"></v-text-field>
+                    <v-text-field v-model="editedItem.rateEvent3" prefix="S/." label="Ingresar Eventos Salas"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.contactName" label="Nombre Contacto"></v-text-field>
@@ -193,7 +193,7 @@
                     <v-text-field v-model="editedItem.contactEmail" label="Correo"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.contactPhone" v-mask="mask" label=" Celular/Teléfono"></v-text-field>
+                    <v-text-field v-model="editedItem.contactPhone" label=" Celular/Teléfono"></v-text-field>
                   </v-col>
                 </v-row>
                 <v-btn @click="calcular">RESUMEN</v-btn>
@@ -228,18 +228,14 @@
   </v-data-table>
 </template>
 <script>
-import { mask } from 'vue-the-mask';
+
 import axios from "axios";
 
 export default {
   
-    directives: {
-      mask,
-    },
   data: () => ({
     items: ['Alimentos y bebidas', 'Equipos', 'Salas'], // Array Events
     model: [],
-    mask: '####-####-####-####',
     selected:[],
     roomrev: 0,
     dialog: false,
@@ -400,21 +396,21 @@ export default {
       console.log(start)
       console.log(end)
       nights = (((end - start)/3600000/24) -1)
-      
+      // COMPARA ESTE JSON CON EL QUE SI FUNCIONA CUANDO LO HAGAS CON POSTMAN, MAS QUE TODO LA ESTRUCTURA.
      var data = {
     name: this.editedItem.name,
     initialBooking: start,
     finalBooking: end,
     nights: nights,
     months: [],
-    rateHotel: this.editedItem.rateHotel,
-    rooms: this.editedItem.rooms,
+    rateHotel: parseInt(this.editedItem.rateHotel,10 ),
+    rooms: parseInt(this.editedItem.rooms, 10),
     accountId: this.leadsAccounts.indexOf(this.selectedAccount) +1,
     segmentId: this.corporateSegments.indexOf(this.selectedSegment)+1,
     userId: 2,
     hotelId: this.hotels.indexOf(this.selectedHotel) +1,
     contactName: this.editedItem.contactName,
-    contactPhone: this.editedItem.contactPhone,
+    contactPhone: parseInt(this.editedItem.contactPhone,10),
     contactEmail: this.editedItem.contactEmail,
     events: [
       {
@@ -430,7 +426,7 @@ export default {
 
 console.log(data);
       var sendData = {}
-      axios.post("https://casa-andina.azurewebsites.net/user/leads", data,config)
+      axios.post("https://casa-andina.azurewebsites.net/user/leads", data,config) // MIRA ESTOS COMENTARIOS
       .then((res) => {
         console.log(res)
       })
