@@ -67,9 +67,12 @@
 
 <script>
 import axios from "axios";
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data: () => ({
+    values:[],
+    value: 0,
     hotelSelected: '',
     monthSelected: '',
     yearSelected: null,
@@ -130,32 +133,29 @@ export default {
     roomRevenue: null,
     events: null
   }),
+
   created() {
     try {
-      this.getHotels();
+      this.$store.dispatch('getHotels')
+      this.getNameHotels();
       //this.getUser();  
-      // this.login();
+      this.values = Users;
     } catch (error) {
     }
    
   },
   computed: {
+    ...mapState(['Users', 'Hoteles']),
   },
   methods: {
+    ...mapActions(['getHotels']),
+    getNameHotels() {
+      for(let i = 0; i < this.Hoteles.length; i++){
+        this.hotels.push(this.Hoteles[i].shortName);
+      }
+    }
     
-    async getHotels() {
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
-      let res = await axios.get('https://casa-andina.azurewebsites.net/hotels', config);
-      console.log(res);
-      for(let i = 0; i < res.data.length; i++){
-        this.hotels.push(res.data[i].shortName);
-      }
-      console.log(this.hotels);
-    },
+    ,
     filterPerHotel(){
       let hotelId = this.hotels.indexOf(this.hotelSelected) + 1;
       let monthId = this.months.indexOf(this.monthSelected) + 1;
@@ -191,20 +191,10 @@ export default {
           console.log(e);
         });
     },
-  
-    async getUser() {
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
-      let datos = await axios.get(
-        "https://casa-andina.azurewebsites.net/robval96/dashboard", config
-      );
-      this.values = datos.data.table;
-    },
+
+    
     // CREDENCIALES = username: robval96, password: 123456
-    login() {
+    /* login() {
       axios
         .post("https://casa-andina.azurewebsites.net/Home", {
           username: "robval96",
@@ -219,7 +209,7 @@ export default {
         .catch(e => {
           console.log(e);
         });
-    }
+    } */
   }
 };
 </script>

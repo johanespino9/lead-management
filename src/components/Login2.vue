@@ -39,6 +39,11 @@ export default {
   },
   methods: {
       ...mapActions(['verLogin']),
+      ...mapActions(['getHotels']),
+      ...mapActions(['getDashboard']),
+      ...mapActions(['getAllLeads']),
+      ...mapActions(['getUsers']),
+
     async login(){
       try {
       var sendData = {
@@ -50,8 +55,15 @@ export default {
         console.log(res.data);
         localStorage.setItem('token',res.data.token)
         this.$store.dispatch('verLogin')
+        this.$store.dispatch('getHotels')
+        this.$store.dispatch('getUsers')
+        this.$store.dispatch('getAccounts')
+        this.$store.dispatch('getSegmentos')
+        this.$store.dispatch('getAllLeads')
+
       })
       } catch (error) { 
+          alert('Datos Incorrectos')
       }
     }
   }

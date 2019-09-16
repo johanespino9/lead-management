@@ -16,9 +16,9 @@
         <div class="flex-grow-1"></div>
         <v-dialog v-model="dialog" max-width="1150px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on" @click="getSegments">Añadir Nuevo Lead</v-btn>
+            <v-btn color="primary" dark class="mb-2" v-on="on" >Añadir Nuevo Lead</v-btn>
           </template>
-          
+
           <v-card>
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
@@ -80,11 +80,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="20" sm="4" md="80" class=center>
-                    <v-combobox
-                      v-model="selectedSegment"
-                      :items="segments"
-                      label="Seleccionar Segmento"
-                    ></v-combobox>
+                    <v-combobox v-model="selectedSegment" :items="segments" label="Seleccionar Segmento" ></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="4" md="80" class=center>
                     <v-combobox v-model="selectedAccount" :items="leadsAccounts" label="Seleccionar Cuenta"></v-combobox>
@@ -223,14 +219,14 @@
       <v-icon small @click="deleteItem(item)">delete</v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
+      <v-btn color="primary" @click="getAllLeads">Reset</v-btn>
     </template>
   </v-data-table>
 </template>
 <script>
 
 import axios from "axios";
-
+import {mapActions, mapState} from 'vuex'
 export default {
   
   data: () => ({
@@ -307,12 +303,15 @@ export default {
     }
   }),
   computed: {
+    ...mapState(['Users', 'Hoteles', 'Accounts', 'AllLeads', 'Segmentos']),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
     suma:function ({state}) {
       return state.editedItem.rateEvent1+state.editedItem.rateEvent2+state.editedItem.rateEvent3
-    }
+    },
+    
+    
   },
 
   watch: {
@@ -323,49 +322,29 @@ export default {
       
     }
   },
+
   created() {
     try {
-      this.getSegments();
-    this.getAccounts();
-    this.getHotels();
-    this.getLeads();
+      this.$store.dispatch('getAccounts')
+      this.$store.dispatch('getHotels')
+      this.$store.dispatch('getAllLeads')
+      this.$store.dispatch('getSegmentos')
+      this.getNameAccounts();
+      this.getNameHotels();
+      this.getNameSegments();
+      this.getLeads();
     } catch (error) {   
     }  
   },
-  created() {
-    this.initialize();
-  },
+  
 
   methods: {
-    /* async getLeads(){
-      await axios.get('https://casa-andina.azurewebsites.net/user/leads')
-      .then((response) => {
-        console.log(response)
-        this.desserts = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    }, */
+    ...mapActions(['getHotels', 'getAllLeads']),
+    getLeads(){
+      this.desserts = this.AllLeads
+    },
     test(){
       console.log('ESTA SELECCIONANDO')
-    },
-    async getSegments(){
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
-      await axios.get('https://casa-andina.azurewebsites.net/user/segment', config)
-      .then((res) => {
-        if(this.segments.length == 0){
-        console.log(res.data)
-        this.segments = res.data.map( segment => segment.name)
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      })
     },
     calcular(){
       var start = new Date(this.date1)
@@ -423,7 +402,6 @@ export default {
       }
     ]
 }
-
 console.log(data);
       var sendData = {}
       axios.post("https://casa-andina.azurewebsites.net/user/leads", data,config) // MIRA ESTOS COMENTARIOS
@@ -436,49 +414,26 @@ console.log(data);
 
       this.dialog = false;
     },
-    async getHotels() {
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
+
+    //Modified
+    async getNameSegments(){
+        for (let i = 0; i < this.Segmentos.length; i++) {
+        this.segments.push(this.Segmentos[i].name);
         }
-      }
-      let respuesta = await axios.get(
-        "https://casa-andina.azurewebsites.net/hotels", config
-      );
-      for (let i = 0; i < respuesta.data.length; i++) {
-        this.hotels.push(respuesta.data[i].shortName);
-      }
-      console.log(this.hotels);
     },
-    async getAccounts() {
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
+    async getNameHotels() {
+      for (let i = 0; i < this.Hoteles.length; i++) {
+        this.hotels.push(this.Hoteles[i].shortName);
       }
-      const res = await axios.get(
-        "https://casa-andina.azurewebsites.net/user/account", config
-      );
-      console.log(res);
-      for (let i = 0; i < res.data.length; i++) {
-        this.leadsAccounts.push(res.data[i].name);
-      }
-      console.log(this.leadsAccounts);
     },
+
+    async getNameAccounts() {
+      for (let i = 0; i < this.Accounts.length; i++) {
+        this.leadsAccounts.push(this.Accounts[i].name);
+      }
+    },
+    // hasta aqui
     
-    initialize() {
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
-      axios.get('https://casa-andina.azurewebsites.net/user/leads', config)
-      .then((res) => {
-        console.log(res.data)
-        this.desserts = res.data;  
-      })
-      
-    },
 
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);

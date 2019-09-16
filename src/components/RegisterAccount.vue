@@ -35,16 +35,16 @@
                               <v-text-field v-model="editedItem.phone" v-mask="mask" label="Teléfono"></v-text-field>
                             </v-col>
                             <v-col cols="auto">
-                              <v-combobox v-model="select" :items="branch" label="Seleccionar Sector"></v-combobox>
+                              <v-combobox v-model="select" :items="editedItem.branch" label="Seleccionar Sector"></v-combobox>
                             </v-col>
                             <v-col cols="auto">
-                               <v-combobox v-model="select" :items="category" label="Seleccionar Categoría"></v-combobox>
+                               <v-combobox v-model="select" :items="editedItem.category" label="Seleccionar Categoría"></v-combobox>
                             </v-col>
                             <v-col cols="auto">
-                             <v-combobox v-model="select" :items="groupsegment" label="Grupo Segmento"></v-combobox>
+                             <v-combobox v-model="select" :items="editedItem.groupsegment" label="Grupo Segmento"></v-combobox>
                             </v-col>
                             <v-col cols="auto">
-                             <v-combobox v-model="select" :items="segment" label="Seleccionar Segmento"></v-combobox>
+                             <v-combobox v-model="select" :items="editedItem.segment" label="Seleccionar Segmento"></v-combobox>
                             </v-col>
                           </v-row>
                         </v-container>
@@ -81,14 +81,14 @@
 </template>
 <script>
 import { mask } from 'vue-the-mask';
-import axios from "axios";
-
+import {mapState, mapActions} from 'vuex'
   export default {
     directives: {
       mask,
     },
     data: () => ({
     dialog: false,
+    select: '',
       headers: [
         {
           text: 'Nombre de Cuenta',
@@ -120,6 +120,7 @@ import axios from "axios";
     }),
 
     computed: {
+       ...mapState(['Accounts']),
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       },
@@ -129,32 +130,24 @@ import axios from "axios";
       dialog (val) {
         val || this.close()
       },
-    },
-      
-      beforeMount() {
+    }, 
+   beforeMount() {
           this.getAccount();
-        },
+   },
     created () {
+      this.$store.dispatch('getAccounts')
+      this.$store.dispatch('getAccounts')
       this.initialize()
     },
 
     methods: {
-
+      /* ...mapActions(['getAccounts']), */
+      
       async getAccount(){
-        let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
-      await axios.get('https://casa-andina.azurewebsites.net/user/account', config)
-      .then((response) => {
-        console.log(response)
-        this.desserts = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    },
+
+        this.desserts = this.Accounts
+      },
+
 
 
       initialize () {

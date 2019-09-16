@@ -3,7 +3,7 @@
     <v-app v-if="accessToken==null">
         <Login2></Login2> 
     </v-app>
-    <v-app v-if="accessToken!=null"> 
+    <v-app v-if="accessToken!=null" > 
       <NavBar></NavBar>
       <Menu></Menu>
       <Content></Content>

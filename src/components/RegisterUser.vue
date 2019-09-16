@@ -99,6 +99,7 @@
 </template>
 <script>
 import axios from "axios";
+import { mapState, mapActions } from 'vuex';
   export default {
     data: () => ({
     dialog: false,
@@ -151,6 +152,7 @@ import axios from "axios";
   }),
 
   computed: {
+    ...mapState(['Users']),
     formTitle () {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
@@ -171,29 +173,19 @@ import axios from "axios";
   },
 
   beforeMount() {
-    this.getUser();
-    this.getManager();
+    /* this.getManager(); */
   },
 
   created () {
-    this.initialize()
+    this.$store.dispatch('getUsers')
+    this.getUser()
+    /* this.getManager() */
+    /* this.initialize() */
   },
   methods: {
-
-    async getUser(){
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
-      await axios.get('https://casa-andina.azurewebsites.net/user/all', config)
-      .then((response) => {
-        console.log(response)
-        this.desserts = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    ...mapActions(['getUsers']),
+    getUser(){
+      this.desserts= this.Users
     },
 
     async getManager(){
@@ -213,10 +205,10 @@ import axios from "axios";
       .then((response) => {
         console.log(response.data)
         this.supervisors = response.data
-        
       })
       .catch((error) => {
         console.log(error)
+        
       })
     },
 

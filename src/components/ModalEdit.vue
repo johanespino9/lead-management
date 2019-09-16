@@ -1,4 +1,5 @@
 <template>
+<div>
     <v-card>
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
@@ -195,6 +196,7 @@
               <v-btn color="blue darken-1" text @click="createLead">Guardar</v-btn>
             </v-card-actions>
           </v-card>
+    </div>
     </template>
 
 <script>
