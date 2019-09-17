@@ -1,26 +1,43 @@
 <template>
-  <div>
-    <v-container>
-      <v-row>
-        <v-col cols="4">
-          
+  <div id="login">
+  <br><br><br>
+  <v-card
+      class="mx-auto"
+      :flat="flat"
+      :loading="loading"
+      :outlined="outlined"
+      :elevation="elevation"
+      :raised="raised"
+      max-width="450"
+      :height="height"
+    >
+      <v-img
+        v-if="media"
+        class="white--text"
+        height="343px"
+        src="../assets/casa-andina.png"
+      >
+      </v-img>  
+       <v-form>
+        <v-col cols="12">
             <v-text-field v-model="email" label="Usuario" required></v-text-field>
             <v-text-field
               v-model="password"
               :append-icon="show1 ? 'visibility' : 'visibility_off'"
-              
               :type="show1 ? 'text' : 'password'"
               name="input-10-1"
               label="Contraseña"
               hint="At least 8 characters"
               counter
             ></v-text-field>
-
-            <v-btn color="success" class="mr-4" @click="login()">Validate</v-btn>
+            <div class="text-center">
+              <v-btn color="info" class="mr-4" @click="login()">Ingresar</v-btn>
+            </div>
+            <br>
         </v-col>
-      </v-row>
-    </v-container>
-  </div>
+    </v-form>
+    </v-card>
+	</div>
 </template>
 
 <script>
@@ -32,7 +49,15 @@ export default {
     return{
       password: '',
       email: '',
-      show1: false
+      show1: false,
+      flat: false,
+      media: true,
+      loading: false,
+      outlined: false,
+      elevation: undefined,
+      raised: false,
+      height: undefined,
+
     }
   },
   computed: {
@@ -69,3 +94,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .v-input__slider {
+    width: 100%;
+  }
+  #login{
+    height: 100%;
+    background-color: #546E7A 
+  }
+</style>

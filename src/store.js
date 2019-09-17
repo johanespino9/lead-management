@@ -49,12 +49,12 @@ export default new Vuex.Store({
   actions: {
     verLogin(){
         const token= localStorage.getItem('token')
-        this.commit('Token', token)     
+        this.commit('Token', token)   
     },
     Logout(){
+       window.location.href = '/'
       localStorage.removeItem('token')
-      this.commit('Token', null) 
-      window.location.href = '/'
+      this.commit('Token', null)
     },
     //OBTENIENDO Dashboadr DE UN USUARIO
     async getDashboard({state, commit}) {
@@ -178,7 +178,7 @@ export default new Vuex.Store({
       .catch((error) => {
         console.log(error)
         localStorage.removeItem('token')
-        location.reload();
+        window.location.href = '/'
       })
     }
   

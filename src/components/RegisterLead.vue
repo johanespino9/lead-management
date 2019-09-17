@@ -219,7 +219,7 @@
       <v-icon small @click="deleteItem(item)">delete</v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="getAllLeads">Reset</v-btn>
+      <v-btn color="primary" @click="allItems()">Reset</v-btn>
     </template>
   </v-data-table>
 </template>
@@ -414,7 +414,6 @@ console.log(data);
 
       this.dialog = false;
     },
-
     //Modified
     async getNameSegments(){
         for (let i = 0; i < this.Segmentos.length; i++) {
@@ -431,6 +430,12 @@ console.log(data);
       for (let i = 0; i < this.Accounts.length; i++) {
         this.leadsAccounts.push(this.Accounts[i].name);
       }
+    },
+    allItems(){
+      this.getNameAccounts();
+      this.getNameHotels();
+      this.getNameSegments();
+      this.getLeads();
     },
     // hasta aqui
     

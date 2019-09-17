@@ -10,8 +10,11 @@ import "hchs-vue-charts";
 import Axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 
+
+
 Vue.use(BootstrapVue)
 Vue.use(window.VueCharts);
+
 
 
 Vue.config.productionTip = false

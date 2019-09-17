@@ -75,7 +75,7 @@
                 </v-icon>
               </template>
               <template v-slot:no-data>
-                <v-btn color="primary" @click="initialize">Reset</v-btn>
+                <v-btn color="primary" @click="allItems()">Reset</v-btn>
               </template>
     </v-data-table>
 </template>
@@ -131,27 +131,21 @@ import {mapState, mapActions} from 'vuex'
         val || this.close()
       },
     }, 
-   beforeMount() {
-          this.getAccount();
-   },
+   
     created () {
       this.$store.dispatch('getAccounts')
       this.$store.dispatch('getAccounts')
-      this.initialize()
+      this.getAccount();
     },
 
     methods: {
       /* ...mapActions(['getAccounts']), */
       
       async getAccount(){
-
         this.desserts = this.Accounts
       },
-
-
-
-      initialize () {
-        this.desserts = []
+      allItems(){
+        this.getAccount();
       },
 
       editItem (item) {

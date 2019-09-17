@@ -12,7 +12,7 @@
         <v-list-item-avatar>
           <v-img src="../assets/chupetin.jpg"></v-img>
         </v-list-item-avatar>
-        <v-list-item-title>Usuario</v-list-item-title>
+        <v-list-item-title>{{username}}</v-list-item-title>
         <v-btn
           icon
           @click.stop="mini = !mini"
@@ -83,13 +83,16 @@
     
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 export default {
     data: () => ({
       items: 'HOLA',
       drawer: true,
       mini: true,
     }),
+    computed: {
+      ...mapState(['username'])
+    },
     methods: {
       ...mapActions(['Logout']),
       Logout(){
