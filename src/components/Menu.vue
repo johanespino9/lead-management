@@ -21,7 +21,7 @@
         </v-btn>
       </v-list-item>
       <v-divider></v-divider>
-      <v-list dense>
+      <v-list dense style="text-decoration:none;">
         <v-list-item to="/">       
           <v-list-item-action>
             <v-icon>home</v-icon>

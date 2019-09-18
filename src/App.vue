@@ -24,6 +24,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Login2 from './components/Login2';
 
+
 import { mapActions, mapState } from 'vuex'
 
 export default {

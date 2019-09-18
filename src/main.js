@@ -28,7 +28,7 @@ if (accessToken) {
 new Vue({
   router,
   store,
-  vuetify,
   BootstrapVue,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')

@@ -1,4 +1,18 @@
 <template>
+<div>
+    <b-alert
+      :show="dismissCountDown"
+      @dismissed="dismissCountDown=0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <v-alert v-if="type=='error'" icon="mdi-delete" type="info" :v-show="dismissCountDown" v-model="snackbar">
+           {{msjerror}}
+      </v-alert>
+      <v-alert  v-if="type=='success'" icon="mdi-shield-lock-outline" type="success" :v-show="dismissCountDown" v-model="snackbar">
+           {{msjsuccess}}
+      </v-alert>
+    </b-alert>
+
   <v-data-table :headers="headers" :items="desserts" :search="search" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -222,7 +236,23 @@
       <v-btn color="primary" @click="allItems()">Reset</v-btn>
     </template>
   </v-data-table>
+
+
+        <!-- <v-alert type="success" v-model="snackbar" dismissible width="300" height="50" style="float: right; position:absolute">
+           I'm a success alert.
+        </v-alert> -->
+       
+
+    
+    <b-button @click="showAlert" variant="info" class="m-1">
+      Show alert with count-down timer
+    </b-button>
+
+</div>
 </template>
+
+
+
 <script>
 
 import axios from "axios";
@@ -230,6 +260,13 @@ import {mapActions, mapState} from 'vuex'
 export default {
   
   data: () => ({
+    msjerror: 'Se eliminó correctamente',
+    msjsuccess:'Se guardó correctamente',
+    type: 'success',
+    dismissSecs: 2,
+    dismissCountDown: 0,
+    showDismissibleAlert: false,
+
     items: ['Alimentos y bebidas', 'Equipos', 'Salas'], // Array Events
     model: [],
     selected:[],
@@ -310,8 +347,7 @@ export default {
     suma:function ({state}) {
       return state.editedItem.rateEvent1+state.editedItem.rateEvent2+state.editedItem.rateEvent3
     },
-    
-    
+ 
   },
 
   watch: {
@@ -339,6 +375,14 @@ export default {
   
 
   methods: {
+     countDownChanged(dismissCountDown) {
+        this.dismissCountDown = dismissCountDown
+      },
+      showAlert() {
+        this.dismissCountDown = this.dismissSecs
+      }, 
+
+
     ...mapActions(['getHotels', 'getAllLeads']),
     getLeads(){
       this.desserts = this.AllLeads
@@ -450,6 +494,8 @@ console.log(data);
       const index = this.desserts.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
         this.desserts.splice(index, 1);
+        this.type='error'
+        this.showAlert();
     },
 
     close() {
@@ -458,6 +504,7 @@ console.log(data);
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
+
     },
 
     save() {
@@ -467,6 +514,8 @@ console.log(data);
         this.desserts.push(this.editedItem);
       }
       this.close();
+      this.type='success'
+      this.showAlert()
     }
   }
 };
