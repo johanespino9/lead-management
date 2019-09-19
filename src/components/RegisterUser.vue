@@ -63,6 +63,7 @@
                           <v-col cols="20" sm="10" md="80" class=center>
                             <v-combobox v-model="editedItem.manager" :items="supervisors" @focus="getManager" label="Supervisores"></v-combobox>
                           </v-col>
+                          <v-col cols="20" sm="10" md="80" class=center><v-switch v-model="switch1" :label="`Activo ${switch1.toString()}`"></v-switch></v-col>
                         </v-row>
                       </v-container>
                     </v-card-text>
@@ -102,6 +103,8 @@ import axios from "axios";
 import { mapState, mapActions } from 'vuex';
   export default {
     data: () => ({
+    switch1: true,
+    switch2: false,
     dialog: false,
     headers: [
       {

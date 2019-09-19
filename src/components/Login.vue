@@ -267,15 +267,15 @@ export default {
       total2: 0,
       ej_d1: [
         "Luis",
-        "Vera<3",
+        "Vera",
         "Alvaro",
         "Johan",
         "Rodrigo",
         "Miguel",
         "Roberto",
         "Renzo",
-        "Sideral",
-        "Chupetin"
+        "Jorge",
+        "Juan"
       ],
       data1_bruto: [
         62000,
