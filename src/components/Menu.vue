@@ -7,12 +7,18 @@
       v-model="drawer"
       :mini-variant.sync="mini"
       permanent
+      dark
     >
       <v-list-item>
         <v-list-item-avatar>
           <v-img src="../assets/chupetin.jpg"></v-img>
         </v-list-item-avatar>
-        <v-list-item-title>Usuario</v-list-item-title>
+        <!-- <v-list-item-title>{{username}}</v-list-item-title>
+        <v-list-item-subtitle>chupetin@gmail.com</v-list-item-subtitle> -->
+        <v-list-item-content>
+            <v-list-item-title >{{username}}</v-list-item-title>
+            <v-list-item-subtitle id="subtitle">{{email}}</v-list-item-subtitle>
+          </v-list-item-content>
         <v-btn
           icon
           @click.stop="mini = !mini"
@@ -22,14 +28,17 @@
       </v-list-item>
       <v-divider></v-divider>
       <v-list dense>
+
+        <v-list-item-group >
+
         <v-list-item to="/">       
           <v-list-item-action>
             <v-icon>home</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Home</v-list-item-title>
+            <v-list-item-title> Home </v-list-item-title>
           </v-list-item-content>     
-            </v-list-item>
+       </v-list-item>
             <v-list-item to="/tabledash">
               <v-list-item-action>
                 <v-icon>dashboard</v-icon>
@@ -70,6 +79,9 @@
             <v-list-item-title>Modal edit</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
+        </v-list-item-group>
+
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
@@ -83,13 +95,17 @@
     
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 export default {
     data: () => ({
       items: 'HOLA',
       drawer: true,
       mini: true,
+      email: 'chupetin@gmail.com',
     }),
+    computed: {
+      ...mapState(['username'])
+    },
     methods: {
       ...mapActions(['Logout']),
       Logout(){
@@ -98,3 +114,12 @@ export default {
     },
 }
 </script>
+<style>
+#subtitle{
+  font-size: 12px;
+}
+.title{
+  font-size: 8px;
+
+}
+</style>

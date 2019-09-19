@@ -93,7 +93,7 @@
               </v-icon>
             </template>
             <template v-slot:no-data>
-              <v-btn color="primary" @click="initialize">Reset</v-btn>
+              <v-btn color="primary" @click="allItems()">Reset</v-btn>
             </template>
           </v-data-table>
 </template>
@@ -187,7 +187,9 @@ import { mapState, mapActions } from 'vuex';
     getUser(){
       this.desserts= this.Users
     },
-
+    allItems(){
+      this.getUser()
+    },
     async getManager(){
       let config = {
         headers: {

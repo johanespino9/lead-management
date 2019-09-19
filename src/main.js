@@ -10,8 +10,11 @@ import "hchs-vue-charts";
 import Axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 
+
+
 Vue.use(BootstrapVue)
 Vue.use(window.VueCharts);
+
 
 
 Vue.config.productionTip = false
@@ -25,7 +28,7 @@ if (accessToken) {
 new Vue({
   router,
   store,
-  vuetify,
   BootstrapVue,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container>
+    <v-container class="col-md-10 ">
     <v-row justify="center">
       <v-col cols="auto">
         <v-combobox v-model="hotelSelected" :items="hotels" label="Seleccionar Hotel"></v-combobox>
@@ -11,13 +11,13 @@
       <v-col cols="auto">
         <v-combobox v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
       </v-col>
+      <v-col cols="auto" style="margin-top: 10px;">
+        <v-btn @click="filterPerHotel">Buscar Registros</v-btn>
+      </v-col>
     </v-row>
-    <v-row justify="center">
-      <div class="text-center">
-        <v-btn @click="filterPerHotel">Button</v-btn>
-      </div>
-    </v-row>
-    <v-data-table :headers="headers" :items="values">
+  </v-container>  
+  <v-container class="col-md-12">
+   <v-data-table :headers="headers" :items="values">
       <template slot="headerCell" slot-scope="{ header }">
         <span
           class="subheading font-weight-light text-success text--darken-3"
@@ -35,8 +35,11 @@
         <td class="text-xs-right">{{ item.salary }}</td>
       </template>
     </v-data-table>
-    <v-row justify="center">
-      <v-col cols="left">
+</v-container>
+
+<v-container class="col-md-6 ">
+    <v-row >
+      <v-col>
         <v-progress-circular
         :rotate="360"
         :size="200"
@@ -48,7 +51,7 @@
       </v-progress-circular>
       <h2 cols="auto">Room Revenue : {{roomRevenue}}%</h2>
       </v-col>
-      <v-col cols="auto">
+      <v-col>
         <v-progress-circular
         :rotate="360"
         :size="200"
@@ -61,6 +64,7 @@
       <h2 cols="auto">Event Revenue : {{events}}%</h2>
       </v-col>
     </v-row>
+
     </v-container>
   </div>
 </template>
@@ -68,9 +72,9 @@
 <script>
 import axios from "axios";
 import { mapState, mapActions } from 'vuex';
-
 export default {
   data: () => ({
+
     values:[],
     value: 0,
     hotelSelected: '',
