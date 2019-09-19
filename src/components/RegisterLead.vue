@@ -5,10 +5,10 @@
       @dismissed="dismissCountDown=0"
       @dismiss-count-down="countDownChanged"
     >
-      <v-alert v-if="type=='error'" icon="mdi-delete" type="info" :v-show="dismissCountDown" v-model="snackbar">
+      <v-alert v-if="type=='error'" icon="mdi-delete" type="info" :v-show="dismissCountDown" >
            {{msjerror}}
       </v-alert>
-      <v-alert  v-if="type=='success'" icon="mdi-shield-lock-outline" type="success" :v-show="dismissCountDown" v-model="snackbar">
+      <v-alert  v-if="type=='success'" icon="mdi-shield-lock-outline" type="success" :v-show="dismissCountDown">
            {{msjsuccess}}
       </v-alert>
     </b-alert>
@@ -244,9 +244,7 @@
        
 
     
-    <b-button @click="showAlert" variant="info" class="m-1">
-      Show alert with count-down timer
-    </b-button>
+    
 
 </div>
 </template>
@@ -260,6 +258,7 @@ import {mapActions, mapState} from 'vuex'
 export default {
   
   data: () => ({
+    snackbar:false,
     msjerror: 'Se eliminó correctamente',
     msjsuccess:'Se guardó correctamente',
     type: 'success',
