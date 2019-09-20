@@ -103,6 +103,9 @@ export default {
   }
   #login{
     height: 100%;
-    background-color: #546E7A 
+    /* background-color: #000000; */
+    /* background-image: url('~@/assets/casa-andina-fondo.jpg'); */
+    background-image: -webkit-linear-gradient(to right, rgb(34, 34, 34), rgb(68, 68, 68), #3A1C71);
+    background-image: linear-gradient(to right, rgb(0, 0, 0), rgb(36, 36, 36), rgb(46, 24, 0));
   }
 </style>

@@ -11,7 +11,7 @@
     >
       <v-list-item>
         <v-list-item-avatar>
-          <v-img src="../assets/chupetin.jpg"></v-img>
+          <v-img src="../assets/profile.png"></v-img>
         </v-list-item-avatar>
         <!-- <v-list-item-title>{{username}}</v-list-item-title>
         <v-list-item-subtitle>chupetin@gmail.com</v-list-item-subtitle> -->
@@ -36,7 +36,7 @@
             <v-icon>home</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title> Home </v-list-item-title>
+            <v-list-item-title> Dashboard Jefes </v-list-item-title>
           </v-list-item-content>     
        </v-list-item>
             <v-list-item to="/tabledash">
