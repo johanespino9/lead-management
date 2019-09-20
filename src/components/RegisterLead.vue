@@ -505,8 +505,6 @@ console.log(data);
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
-      this.type='success'
-      this.showAlert()
 
     },
 
