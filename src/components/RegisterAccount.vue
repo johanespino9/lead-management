@@ -132,9 +132,11 @@ import {mapState, mapActions} from 'vuex'
       },
     }, 
    
-    created () {
-      this.$store.dispatch('getAccounts')
-      this.$store.dispatch('getAccounts')
+   mounted(){
+     this.$store.dispatch('getAccounts')
+     this.$store.dispatch('getAccounts')
+   },
+    created(){
       this.getAccount();
     },
 

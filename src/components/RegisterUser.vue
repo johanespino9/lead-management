@@ -1,8 +1,21 @@
 <template>
+<div>
+    <b-alert
+      :show="dismissCountDown"
+      @dismissed="dismissCountDown=0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <v-alert v-if="type=='error'" icon="mdi-delete" type="info" :v-show="dismissCountDown" >
+           {{msjerror}}
+      </v-alert>
+      <v-alert  v-if="type=='success'" icon="mdi-shield-lock-outline" type="success" :v-show="dismissCountDown">
+           {{msjsuccess}}
+      </v-alert>
+    </b-alert>
         <v-data-table
             :headers="headers"
             :items="desserts"
-            sort-by="email"
+            sort-by="userId"
             class="elevation-1"
           >
             <template v-slot:top>
@@ -28,16 +41,19 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
+                          <v-col cols="12" sm="12" md="12" v-if="editedIndex>-1">
+                            <v-text-field cols="12" disabled  v-if="editedIndex>-1" v-model="editedItem.userId" label="ID"></v-text-field>
+                          </v-col>
                           <v-col cols="12" sm="6" md="4">
                             <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="4">
+                          <v-col cols="12" sm="8" >
                             <v-text-field v-model="editedItem.lastName" label="Last Name"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
                             <v-text-field v-model="editedItem.username" label="Username"></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="4">
+                          <v-col cols="12" sm="6" md="8">
                             <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
                           </v-col>
                           <v-col cols="20" sm="6" md="80" class=center>
@@ -70,7 +86,7 @@
                     <v-card-actions>
                       <div class="flex-grow-1"></div>
                       <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                      <v-btn color="blue darken-1" text @click="addUser">Save</v-btn>
+                      <v-btn color="blue darken-1" text @click="save()">Save</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
@@ -96,14 +112,23 @@
               <v-btn color="primary" @click="allItems()">Reset</v-btn>
             </template>
           </v-data-table>
+    </div>
 </template>
 <script>
 import axios from "axios";
 import { mapState, mapActions } from 'vuex';
   export default {
     data: () => ({
+    msjerror: 'Se eliminó correctamente',
+    msjsuccess:'Se guardó correctamente',
+    type: 'success',
+    dismissSecs: 2,
+    dismissCountDown: 0,
+    showDismissibleAlert: false,
+
     dialog: false,
     headers: [
+      {text: 'ID', value: 'userId'},
       {
         text: 'Name',
         align: 'left',
@@ -124,15 +149,17 @@ import { mapState, mapActions } from 'vuex';
     desserts: [],
     editedIndex: -1,
     editedItem: {
+      userId: '',
       name: "",
       lastName: '',
       username: '',
       email: '',
       groupSegment: '',
       role: '',
-      manager: ''
+      manager: null
     },
     defaultItem: {
+      userId:'',
       name: "",
       lastName: '',
       username: '',
@@ -140,7 +167,7 @@ import { mapState, mapActions } from 'vuex';
       username: '',
       groupsegment: '',
       role: '',
-      manager: ''
+      manager: null
     },
     show1: false,
     password: 'Password',
@@ -152,7 +179,7 @@ import { mapState, mapActions } from 'vuex';
   }),
 
   computed: {
-    ...mapState(['Users']),
+    ...mapState(['Users', 'accessToken']),
     formTitle () {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
@@ -176,15 +203,27 @@ import { mapState, mapActions } from 'vuex';
     /* this.getManager(); */
   },
 
-  created () {
+  mounted() {
     this.$store.dispatch('getUsers')
+  },
+  created () {
+    /* this.$store.dispatch('getUsers') */
     this.getUser()
     /* this.getManager() */
     /* this.initialize() */
   },
   methods: {
-    ...mapActions(['getUsers']),
+      countDownChanged(dismissCountDown) {
+        this.dismissCountDown = dismissCountDown
+      },
+      showAlert() {
+        this.dismissCountDown = this.dismissSecs
+      }, 
+
+
+    ...mapActions(['getUsers', 'editUser']),
     getUser(){
+      console.log(this.Users)
       this.desserts= this.Users
     },
     allItems(){
@@ -214,28 +253,61 @@ import { mapState, mapActions } from 'vuex';
       })
     },
 
-    addUser(){
+   async addUser(){
+      var datos = {	
+          "active": true,
+          "email": this.editedItem.email,
+          "lastName": this.editedItem.lastName,
+          "name": this.editedItem.name,
+          "password": this.password,
+          "username": this.editedItem.username,
+          "manager": this.editedItem.manager,
+          "groupSegment": this.editedItem.groupSegment,
+          "role": this.editedItem.role
+      }
       let config = {
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
+          'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let user = {
-        active: true,
-        email: this.editedItem.email,
-        lastName: this.editedItem.lastName,
-        name: this.editedItem.name,
-        password: this.editedItem.password,
-        username: this.editedItem.username,
-        manager: this.editedItem.manager,
-        groupSegmentId: this.groupSegment.indexOf(this.editedItem.groupSegment) +1,
-        roleId: this.rol.indexOf(this.editedItem.role) +1
+      let url = 'https://casa-andina.azurewebsites.net/user'
+      await axios.post(url, datos, config)
+      .then(response => { 
+        console.log(response.data)
+        this.Users.push(datos)
+      }).catch(error => {
+        console.log('Hubo un error ', error)
+      })
+    }, 
+
+    async editUser(){
+      var datos = {	
+          "userId": this.editedItem.userId,
+          "active": true,
+          "email": this.editedItem.email,
+          "lastName": this.editedItem.lastName,
+          "name": this.editedItem.name,
+          "password": this.password,
+          "username": this.editedItem.username,
+          "manager": this.editedItem.manager,
+          "groupSegment": this.editedItem.groupSegment,
+          "role": this.editedItem.role
       }
-      axios.post('https://casa-andina.azurewebsites.net/user', user,config)
-      console.log(this.managerId)
-      console.log('Soy un ID de Manager')
-      console.log(this.rol.indexOf(this.editedItem.role))
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/user'
+      await axios.put(url, datos, config)
+      .then(response => { 
+        console.log(response.data)
+        this.Users.splice(this.editedIndex, datos)
+      }).catch(error => {
+        console.log('Hubo un error ', error)
+      })
     },
+
     initialize () {
       this.desserts = []
     },
@@ -249,6 +321,8 @@ import { mapState, mapActions } from 'vuex';
     deleteItem (item) {
       const index = this.desserts.indexOf(item)
       confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+      this.type='error'
+      this.showAlert()
     },
 
     close () {
@@ -259,15 +333,25 @@ import { mapState, mapActions } from 'vuex';
       }, 300)
     },
 
-    save () {
-      
+    save () {  
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        console.log('se edito') 
+        this.editUser()
+        this.type='success'
+        this.showAlert()
       } else {
-        this.desserts.push(this.editedItem)
+        this.addUser()
+        this.close();
+        this.type='success'
+        this.showAlert()
+        /* this.desserts.push(this.editedItem) */
       }
       this.close()
     },
+
+    
+
   }
   }
 </script>

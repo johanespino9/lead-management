@@ -20,7 +20,7 @@
       </v-img>  
        <v-form>
         <v-col cols="12">
-            <v-text-field v-model="email" label="Usuario" required></v-text-field>
+            <v-text-field color="info" v-model="email" label="Usuario" required></v-text-field>
             <v-text-field
               v-model="password"
               :append-icon="show1 ? 'visibility' : 'visibility_off'"
@@ -29,8 +29,9 @@
               label="Contraseña"
               hint="At least 8 characters"
               counter
+              color="info"
             ></v-text-field>
-            <div class="text-center">
+            <div class="text-center" style="margin-top: 30px;">
               <v-btn color="info" class="mr-4" @click="login()">Ingresar</v-btn>
             </div>
             <br>
@@ -68,6 +69,8 @@ export default {
       ...mapActions(['getDashboard']),
       ...mapActions(['getAllLeads']),
       ...mapActions(['getUsers']),
+      /* ...mapActions(['getManagers']), */
+
 
     async login(){
       try {
@@ -85,10 +88,10 @@ export default {
         this.$store.dispatch('getAccounts')
         this.$store.dispatch('getSegmentos')
         this.$store.dispatch('getAllLeads')
-
+        /* this.$store.dispatch('getManagers') */
       })
       } catch (error) { 
-          alert('Datos Incorrectos')
+          alert('No tienes acceso')
       }
     }
   }

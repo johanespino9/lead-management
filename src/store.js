@@ -9,12 +9,14 @@ export default new Vuex.Store({
     accessToken: localStorage.getItem('token'),
     currentUser : {},
     username:'robval96',
+    roleid: 1,
     Dashboard:[],
     Users:[],
     Hoteles:[],
     Accounts: [],
     AllLeads: [],
-    Segmentos:[]
+    Segmentos:[],
+    Managers: []
 
   },
   mutations: {
@@ -44,6 +46,9 @@ export default new Vuex.Store({
     },
     Segmentos(state, segmentsAction){
       state.Segmentos = segmentsAction
+    },
+    Managers(state, managersAction){
+      state.Managers = managersAction
     }
   },
   actions: {
@@ -76,12 +81,13 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let res = await axios.get('https://casa-andina.azurewebsites.net/hotels', config)
+      await axios.get('https://casa-andina.azurewebsites.net/hotels', config)
       .then(response =>{
       commit('Hoteles', response.data)
       }).catch(error =>{
         console.log(error)
         localStorage.removeItem('token')
+        location.reload();
       }); 
     },
     // Obteniendo todos los Leads
@@ -136,8 +142,39 @@ export default new Vuex.Store({
         location.reload();
       })
     },
+    //Registrando Usuario
+      /* async addUser(item){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.state.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/user'
+      await axios.post(url, item, config)
+      .then(response => { 
+        this.commit('Users', response.data)
+      }).catch(error => {
+        alert('Hubo un error ',error )
+      })
+    },
+    //Editando User
+    async editUser({state, commit}, item){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + state.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/user'
+      await axios.put(url, config, item)
+      .then(response => { 
+        commit('Users', response.data)
+      }).catch(error => {
+        alert('Hubo un error al registrar')
+      })
+    }, */
+
     // Obteniendo Manager
-    async getManager({state, commit}){
+    async getManagers({state, commit}){
       let config = {
         headers: {
           'Authorization': 'Bearer ' + state.accessToken
@@ -146,20 +183,17 @@ export default new Vuex.Store({
       // Supersivor = 1 +1 = 2
       //let id = this.rol.indexOf(this.editedItem.role).toString()
       //console.log('SIN + 1', id)
-      console.log(this.managerId)
-      let url = 'https://casa-andina.azurewebsites.net/user/manager/role/'+this.managerId
+      let url = 'https://casa-andina.azurewebsites.net/user/manager/role/'+state.roleid
       //console.log('ID',id)
       console.log('URL', url)
       await axios.get(url, config)
       .then((response) => {
-        console.log(response.data)
-        this.supervisors = response.data
-        
+        commit('Managers', response.data)
       })
       .catch((error) => {
         console.log(error)
-        localStorage.removeItem('token')
-        location.reload();
+        /* localStorage.removeItem('token')
+        location.reload(); */
       })
     },
 

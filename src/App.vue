@@ -1,5 +1,7 @@
 <template>
   <div>
+     
+             
     <v-app v-if="accessToken==null">
         <Login2></Login2> 
     </v-app>
@@ -8,9 +10,10 @@
       <Menu></Menu>
       <Content></Content>
       <Footer></Footer> 
-      <!-- <RegisterLead></RegisterLead> -->
+    </v-app> -->
+
+     <!-- <RegisterLead></RegisterLead> -->
       <!-- <router-view></router-view> --> 
-    </v-app>
    
   </div>
 </template>
@@ -24,7 +27,6 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Login2 from './components/Login2';
 
-
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -36,7 +38,7 @@ export default {
     Content,
     Footer,
     Login,
-    Login2
+    Login2,
   },
   data: () => ({ 
 

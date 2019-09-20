@@ -358,12 +358,14 @@ export default {
     }
   },
 
-  created() {
-    try {
+  mounted() {
       this.$store.dispatch('getAccounts')
       this.$store.dispatch('getHotels')
       this.$store.dispatch('getAllLeads')
       this.$store.dispatch('getSegmentos')
+  },
+  created() {
+    try { 
       this.getNameAccounts();
       this.getNameHotels();
       this.getNameSegments();
@@ -503,15 +505,17 @@ console.log(data);
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
+      this.type='success'
+      this.showAlert()
 
     },
 
-    save() {
+    save(){
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem);
       } else {
         this.desserts.push(this.editedItem);
-      }
+      } 
       this.close();
       this.type='success'
       this.showAlert()
