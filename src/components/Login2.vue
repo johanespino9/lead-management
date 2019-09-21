@@ -69,7 +69,9 @@ export default {
       ...mapActions(['getDashboard']),
       ...mapActions(['getAllLeads']),
       ...mapActions(['getUsers']),
-      /* ...mapActions(['getManagers']), */
+      ...mapActions(['getManagers']),
+      ...mapActions(['getDashboard']),
+
 
 
     async login(){
@@ -85,10 +87,14 @@ export default {
         this.$store.dispatch('verLogin')
         this.$store.dispatch('getHotels')
         this.$store.dispatch('getUsers')
+        this.$store.dispatch('getAllLeads')
         this.$store.dispatch('getAccounts')
         this.$store.dispatch('getSegmentos')
-        this.$store.dispatch('getAllLeads')
-        /* this.$store.dispatch('getManagers') */
+        this.$store.dispatch('getManagers')
+        this.$store.dispatch('getDashboard')
+        this.$store.dispatch('getDataUser')
+
+        
       })
       } catch (error) { 
           alert('No tienes acceso')

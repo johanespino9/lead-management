@@ -12,7 +12,7 @@
         <v-combobox v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
       </v-col>
       <v-col cols="auto" style="margin-top: 10px;">
-        <v-btn @click="filterPerHotel">Buscar Registros</v-btn>
+        <v-btn @click="FiltroDashboard()">Buscar Registros</v-btn>
       </v-col>
     </v-row>
   </v-container>  
@@ -44,24 +44,24 @@
         :rotate="360"
         :size="200"
         :width="40"
-        :value="roomRevenue"
+        :value="percents.room_revenue"
         color="orange"
       >
-        {{ value }}
+        {{ percents.room_revenue }}
       </v-progress-circular>
-      <h2 cols="auto">Room Revenue : {{roomRevenue}}%</h2>
+      <h2 cols="auto">Room Revenue : {{percents.room_revenue}}%</h2>
       </v-col>
       <v-col>
         <v-progress-circular
         :rotate="360"
         :size="200"
         :width="40"
-        :value="events"
+        :value="percents.eventos"
         color="green"
       >
-        {{ value }}
+        {{ percents.eventos }}
       </v-progress-circular>
-      <h2 cols="auto">Event Revenue : {{events}}%</h2>
+      <h2 cols="auto">Event Revenue : {{percents.eventos}}%</h2>
       </v-col>
     </v-row>
 
@@ -74,10 +74,10 @@ import axios from "axios";
 import { mapState, mapActions } from 'vuex';
 export default {
   data: () => ({
-
+    percents: {},
     values:[],
     value: 0,
-    hotelSelected: '',
+    hotelSelected: null,
     monthSelected: '',
     yearSelected: null,
     hotels: [],
@@ -138,28 +138,37 @@ export default {
     events: null
   }),
 
-  created() {
-    try {
-      this.$store.dispatch('getHotels')
-      this.getNameHotels();
-      //this.getUser();  
-      this.values = Users;
-    } catch (error) {
-    }
-   
-  },
+
   computed: {
-    ...mapState(['Users', 'Hoteles']),
+    ...mapState(['Users', 'Hoteles', 'Dashboard', 'accessToken']),
+  },
+  mounted() {
+    try {
+      var Dash = JSON.parse(localStorage.getItem('dashboard'))
+      if(this.values.length==0 && Dash!=null && this.percents!=null){
+        this.values = Dash.table
+        this.percents = Dash.porcentajeConcrecion
+        this.getNameHotels();
+        console.log('Carga Dash completa')
+      }
+      /* this.$store.dispatch('getUsers')
+        this.desserts= this.Users */
+    }catch (error){
+      console.log('Hubo un error')
+    }
+    /* console.log(this.Dashboard)
+    this.values = this.Dashboard
+    console.log(this.values) */
   },
   methods: {
-    ...mapActions(['getHotels']),
+    ...mapActions(['getHotels', 'getDashboard']),
     getNameHotels() {
-      for(let i = 0; i < this.Hoteles.length; i++){
-        this.hotels.push(this.Hoteles[i].shortName);
+      var hoteless = JSON.parse(localStorage.getItem('hoteles'))
+      for(let i = 0; i < hoteless.length; i++){
+        this.hotels.push(hoteless[i].shortName);
       }
-    }
-    
-    ,
+    },
+/* 
     filterPerHotel(){
       let hotelId = this.hotels.indexOf(this.hotelSelected) + 1;
       let monthId = this.months.indexOf(this.monthSelected) + 1;
@@ -194,7 +203,32 @@ export default {
         .catch(e => {
           console.log(e);
         });
-    },
+    }, */
+    async FiltroDashboard(){
+      var datos = {
+    		"hotel": this.hotels.indexOf(this.hotelSelected) + 1,
+    		"month": this.months.indexOf(this.monthSelected) + 1,
+    		"year": this.yearSelected
+      }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      console.log(datos)
+      let url = 'https://casa-andina.azurewebsites.net/user/dashboard'
+      await axios.post(url, datos, config)
+      .then((res) => {
+        console.log(res.data)
+        this.values = res.data.table
+        this.percents = res.data.porcentajeConcrecion
+      }) 
+      .catch((error) => {
+        console.log('Hubo un error',error)
+        /* localStorage.removeItem('token') */
+      })
+      
+    }
 
     
     // CREDENCIALES = username: robval96, password: 123456

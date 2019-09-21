@@ -16,7 +16,7 @@
         <!-- <v-list-item-title>{{username}}</v-list-item-title>
         <v-list-item-subtitle>chupetin@gmail.com</v-list-item-subtitle> -->
         <v-list-item-content>
-            <v-list-item-title >{{username}}</v-list-item-title>
+            <v-list-item-title >{{usern}}</v-list-item-title>
             <v-list-item-subtitle id="subtitle">{{email}}</v-list-item-subtitle>
           </v-list-item-content>
         <v-btn
@@ -31,7 +31,7 @@
 
         <v-list-item-group >
 
-        <v-list-item to="/">       
+        <v-list-item  to="/">       
           <v-list-item-action>
             <v-icon>home</v-icon>
           </v-list-item-action>
@@ -55,7 +55,7 @@
             <v-list-item-title>Gestión de Leads</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/registeruser">
+        <v-list-item   to="/registeruser">
           <v-list-item-action>
             <v-icon>event</v-icon>
           </v-list-item-action>
@@ -71,14 +71,14 @@
             <v-list-item-title>Gestión de Cuentas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/modaledit">
+        <!-- <v-list-item to="/modaledit">
           <v-list-item-action>
             <v-icon>settings</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Modal edit</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
         </v-list-item-group>
 
@@ -98,13 +98,16 @@
 import { mapActions, mapState } from 'vuex';
 export default {
     data: () => ({
+      Usuario: {},
       items: 'HOLA',
       drawer: true,
       mini: true,
       email: 'chupetin@gmail.com',
+      usern:'',
+      role:''
     }),
     computed: {
-      ...mapState(['username'])
+      ...mapState(['username', 'User'])
     },
     methods: {
       ...mapActions(['Logout']),
@@ -112,6 +115,32 @@ export default {
         this.$store.dispatch('Logout')
       }
     },
+   /* mounted(){
+    try {
+      this.Usuario = JSON.parse(localStorage.getItem('usuario'))
+      console.log(this.Usuario)
+      console.log(this.User)
+      this.usern = this.Usuario.username
+      this.email = this.Usuario.email
+      this.role = this.Usuario.role
+      
+    } catch (error) {
+      console.log('Hubo un error')
+    }
+  } */
+  created() {
+    try {
+      this.Usuario = JSON.parse(localStorage.getItem('usuario'))
+      console.log(this.Usuario)
+      console.log(this.User)
+      this.usern = this.Usuario.username
+      this.email = this.Usuario.email
+      this.role = this.Usuario.role
+      
+    } catch (error) {
+      console.log('Hubo un error')
+    }
+  },
 }
 </script>
 <style>

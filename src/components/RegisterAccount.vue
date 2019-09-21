@@ -133,12 +133,21 @@ import {mapState, mapActions} from 'vuex'
     }, 
    
    mounted(){
-     this.$store.dispatch('getAccounts')
-     this.$store.dispatch('getAccounts')
+     try {
+       var cuentas = JSON.parse(localStorage.getItem('accounts'))
+       if(this.desserts.length==0){
+         console.log(cuentas)
+         this.desserts = cuentas
+         this.$store.commit('Accounts', cuentas)
+         console.log('Carga completa')
+       }
+     } catch (error) {
+       console.log('Hubo un error')
+     }
+     /* this.$store.dispatch('getAccounts')
+     this.$store.dispatch('getAccounts') */
    },
-    created(){
-      this.getAccount();
-    },
+    
 
     methods: {
       /* ...mapActions(['getAccounts']), */

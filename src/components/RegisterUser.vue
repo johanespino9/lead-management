@@ -77,9 +77,9 @@
                             <v-combobox v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
                           </v-col>
                           <v-col cols="20" sm="10" md="80" class=center>
-                            <v-combobox v-model="editedItem.manager" :items="supervisors" @focus="getManager" label="Supervisores"></v-combobox>
+                            <v-combobox v-model="editedItem.manager" :items="supervisors" @focus="getManagers()" label="Supervisores"></v-combobox>
                           </v-col>
-                          <v-col cols="20" sm="10" md="80" class=center><v-switch v-model="switch1" :label="`Activo ${switch1.toString()}`"></v-switch></v-col>
+                          <v-col cols="20" sm="10" md="80" class=center><v-switch v-model="editedItem.active" :label="`Activo ${editedItem.active.toString()}`"></v-switch></v-col>
                         </v-row>
                       </v-container>
                     </v-card-text>
@@ -120,19 +120,14 @@ import axios from "axios";
 import { mapState, mapActions } from 'vuex';
   export default {
     data: () => ({
-<<<<<<< HEAD
     msjerror: 'Se eliminó correctamente',
     msjsuccess:'Se guardó correctamente',
     type: 'success',
     dismissSecs: 2,
     dismissCountDown: 0,
     showDismissibleAlert: false,
-
-=======
-    switch1: true,
-    switch2: false,
->>>>>>> 43d954a0956c633ed23bc3e436a59d9e5f46792c
     dialog: false,
+    segments:[],
     headers: [
       {text: 'ID', value: 'userId'},
       {
@@ -156,6 +151,7 @@ import { mapState, mapActions } from 'vuex';
     editedIndex: -1,
     editedItem: {
       userId: '',
+      active: false,
       name: "",
       lastName: '',
       username: '',
@@ -166,6 +162,7 @@ import { mapState, mapActions } from 'vuex';
     },
     defaultItem: {
       userId:'',
+      active: false,
       name: "",
       lastName: '',
       username: '',
@@ -204,17 +201,39 @@ import { mapState, mapActions } from 'vuex';
     },
     
   },
-
-  beforeMount() {
-    /* this.getManager(); */
-  },
+/* this.getManager(); */
+  /* beforeCreate() {
+    
+    try {
+      var usuarios = localStorage.getItem('usuarios')
+      this.desserts = JSON.parse(usuarios)
+      console.log('Entro')
+      console.log(JSON.parse(usuarios))
+      console.log(JSON.parse(this.desserts))
+    } catch (error) {
+      console.log('ERROR')
+    }
+  }, */
 
   mounted() {
-    this.$store.dispatch('getUsers')
+    try {
+      var usuarios = JSON.parse(localStorage.getItem('usuarios'))
+      if(this.desserts.length==0 && usuarios!=null){
+        this.desserts = JSON.parse(localStorage.getItem('usuarios'))
+        console.log('Carga completa')
+      }
+      /* this.$store.dispatch('getUsers')
+        this.desserts= this.Users */
+    }catch (error){
+      console.log('Hubo un error')
+    }
+   /*  this.$store.dispatch('getUsers')
+    this.desserts= this.Users */
   },
+  
   created () {
     /* this.$store.dispatch('getUsers') */
-    this.getUser()
+    /* this.getUser() */
     /* this.getManager() */
     /* this.initialize() */
   },
@@ -227,15 +246,16 @@ import { mapState, mapActions } from 'vuex';
       }, 
 
 
-    ...mapActions(['getUsers', 'editUser']),
-    getUser(){
-      console.log(this.Users)
-      this.desserts= this.Users
-    },
+      ...mapActions(['getUsers', 'editUser', 'getSegmentos']),
+      getUser(){
+       console.log(this.Users)
+       this.desserts= this.Users
+      },
     allItems(){
       this.getUser()
     },
-    async getManager(){
+
+    /* async getManager(){
       let config = {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -257,11 +277,11 @@ import { mapState, mapActions } from 'vuex';
         console.log(error)
         
       })
-    },
-
+    }, */
+   //Agregrar usuarios
    async addUser(){
       var datos = {	
-          "active": true,
+          "active": this.editedItem.active.toString(),
           "email": this.editedItem.email,
           "lastName": this.editedItem.lastName,
           "name": this.editedItem.name,
@@ -279,17 +299,18 @@ import { mapState, mapActions } from 'vuex';
       let url = 'https://casa-andina.azurewebsites.net/user'
       await axios.post(url, datos, config)
       .then(response => { 
-        console.log(response.data)
-        this.Users.push(datos)
+        localStorage.setItem('usuarios', JSON.stringify(response.data))
+        this.$store.commit('Users', response.data)
+        this.desserts=this.Users
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
     }, 
-
+    //Editar usuarios
     async editUser(){
       var datos = {	
           "userId": this.editedItem.userId,
-          "active": true,
+          "active": this.editedItem.active.toString(),
           "email": this.editedItem.email,
           "lastName": this.editedItem.lastName,
           "name": this.editedItem.name,
@@ -302,13 +323,14 @@ import { mapState, mapActions } from 'vuex';
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
-        }
+      }
       }
       let url = 'https://casa-andina.azurewebsites.net/user'
       await axios.put(url, datos, config)
-      .then(response => { 
-        console.log(response.data)
-        this.Users.splice(this.editedIndex, datos)
+      .then(response => {
+        localStorage.setItem('usuarios', JSON.stringify(response.data))
+        this.$store.commit('Users', response.data)
+        this.desserts=this.Users
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -342,20 +364,42 @@ import { mapState, mapActions } from 'vuex';
     save () {  
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
-        console.log('se edito') 
         this.editUser()
         this.type='success'
         this.showAlert()
+        
       } else {
         this.addUser()
         this.close();
         this.type='success'
         this.showAlert()
+        
         /* this.desserts.push(this.editedItem) */
       }
       this.close()
     },
+    //Obteniendo Managers
+    async getManagers(){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/role/'+(this.rol.indexOf(this.editedItem.role)) +'/manager'
 
+      console.log('URL', url)
+      await axios.get(url, config)
+      .then((response) => {
+        console.log(response.data)
+        console.log(this.groupSegment)
+        this.supervisors=response.data
+      })
+      .catch((error) => {
+        console.log(error)
+        /* localStorage.removeItem('token')
+        location.reload(); */
+      })
+    },
     
 
   }
