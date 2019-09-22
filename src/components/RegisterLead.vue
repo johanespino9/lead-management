@@ -93,19 +93,19 @@
             <v-card-text>
               <v-container>
                 <v-row >
-                  <v-col cols="20" sm="12" md="80" class=center >
+                  <v-col cols="20" sm="2" md="80" class=center >
                     <v-text-field  disabled  label="Lead ID" ></v-text-field>
                   </v-col>
-                  <v-col cols="20" sm="4" md="80" class=center>
+                  <v-col cols="20" sm="3" md="80" class=center>
                     <v-combobox  v-model="editedItem.segment" :items="segments" label="Seleccionar Segmento" ></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="4" md="80" class=center>
                     <v-combobox  v-model="editedItem.account" :items="leadsAccounts" label="Seleccionar Cuenta"></v-combobox>
                   </v-col>
-                  <v-col cols="20" sm="4" md="80" class=center>
+                  <v-col cols="20" sm="3" md="80" class=center>
                     <v-combobox  v-model="editedItem.hotel" :items="hotels" label="Seleccionar Hotel"></v-combobox>
                   </v-col>
-                  <v-col cols="20" sm="4" md="80" class=center>
+                  <v-col cols="20" sm="3" md="80" class=center>
                     <v-text-field   v-model="editedItem.name" label="Nombre de Grupo"></v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center>
@@ -161,14 +161,15 @@
                   <v-col cols="20" sm="2" md="80" class=center >
                     <v-text-field  v-if="editedItem.segment!='Eventos' && editedItem.segment!='Series'" v-model="editedItem.rooms" label="Cantidad de Habitaciones" >{{editedItem.rooms}}</v-text-field>
                   </v-col>
-                  <v-col cols="20" sm="2" md="80" class=center >
-                    <v-text-field  v-if="editedItem.segment=='Series'" v-model="editedItem.rooms" label="Cantidad de Noches" >{{editedItem.rooms}}</v-text-field>
-                  </v-col>
                   <v-col cols="20" sm="2" md="80" class=center v-if="editedItem.segment != 'Eventos'" >
                     <v-text-field  v-model="editedItem.rateHotel" prefix="S/." label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
                   </v-col>
+                  <v-col cols="20" sm="2" md="80" class=center >
+                    <v-text-field  v-if="editedItem.segment=='Series'" v-model="editedItem.rooms" label="Cantidad de Noches" >{{editedItem.rooms}}</v-text-field>
+                  </v-col>
+                  
 
-                  <v-col v-if="editedItem.segment =='Series'" cols="20" sm="12" md="80">
+                  <v-col v-if="editedItem.segment =='Series'" cols="20" sm="3" md="80">
                     <v-combobox 
                         v-model="editedItem.month"
                         :items="months"
@@ -195,7 +196,7 @@
                   </v-col>
 
 
-                  <v-col v-if="editedItem.segment!='Series'" cols="20" sm="6" md="80" >
+                  <v-col v-if="editedItem.segment!='Series'" cols="20" sm="3" md="80" >
                     <v-combobox
                         v-model="editedItem.eventsName"
                         :items="items"
@@ -746,6 +747,14 @@ console.log(data);
     async addOtherLead(){
       this.editedItem.initialdate=this.date1
       this.editedItem.finaldate=this.date2
+      var rateevent =[]
+      var events =[]
+      rateevent.push(this.editedItem.rateEvent1, this.editedItem.rateEvent2,this.editedItem.rateEvent3)
+      for(let i = 0; i < this.editedItem.eventsName.length; i++){
+         console.log(this.editedItem.eventsName[i], rateevent[i])
+         var obj = {name: this.editedItem.eventsName[i], rateEvent: parseInt(rateevent[i])}
+         events.push(obj)
+      }
       var datos={
         "name": this.editedItem.name,
         "initialBooking": this.editedItem.initialdate,

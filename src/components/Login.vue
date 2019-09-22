@@ -154,7 +154,7 @@
                     <v-list-item-avatar color="grey darken-3">
                       <v-img
                         class="elevation-6"
-                        src="../assets/chupetin.jpg"
+                        src="../assets/profile.png"
                       ></v-img>
                     </v-list-item-avatar>
 
