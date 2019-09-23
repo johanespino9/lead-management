@@ -102,7 +102,7 @@ export default {
       items: 'HOLA',
       drawer: true,
       mini: true,
-      email: 'chupetin@gmail.com',
+      email: 'user@casa-andina.com',
       usern:'',
       role:''
     }),
@@ -149,6 +149,5 @@ export default {
 }
 .title{
   font-size: 8px;
-
 }
 </style>
