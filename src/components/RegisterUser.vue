@@ -72,12 +72,12 @@
                               </v-col>
                               <v-col cols="20" sm="10" md="80" class=center>
                                 <v-combobox v-model="editedItem.role" :items="rol" label="Seleccionar Rol"></v-combobox>
-                                {{rol.indexOf(editedItem.role)}}
+          
                               </v-col>
-                          <v-col cols="20" sm="10" md="80" class=center>
+                          <v-col v-if="editedItem.role=='Ejecutivo'" cols="20" sm="10" md="80" class=center>
                             <v-combobox v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
                           </v-col>
-                          <v-col cols="20" sm="10" md="80" class=center>
+                          <v-col v-if="editedItem.role!='Administrador'" cols="20" sm="10" md="80" class=center>
                             <v-combobox v-model="editedItem.manager" :items="supervisors" @focus="getManagers()" label="Supervisores"></v-combobox>
                           </v-col>
                           <v-col cols="20" sm="10" md="80" class=center><v-switch v-model="editedItem.active" :label="`Activo ${editedItem.active.toString()}`"></v-switch></v-col>
