@@ -12,7 +12,7 @@
         <v-combobox v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
       </v-col>
       <v-col cols="auto" style="margin-top: 10px;">
-        <v-btn @click="FiltroDashboard()">Buscar Registros</v-btn>
+        <v-btn color="#444444" style="color: #FAFAFA;" @click="FiltroDashboard()">Buscar Registros</v-btn>
       </v-col>
     </v-row>
   </v-container>  

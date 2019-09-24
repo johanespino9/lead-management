@@ -30,7 +30,7 @@
         <div class="flex-grow-1"></div>
         <v-dialog v-model="dialog" max-width="1150px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on" >Añadir Nuevo Lead</v-btn>
+            <v-btn color="#444444" style="color: #FAFAFA;" dark class="mb-2" v-on="on" >Añadir Nuevo Lead</v-btn>
           </template>
 
           <v-card>
@@ -93,19 +93,19 @@
             <v-card-text>
               <v-container>
                 <v-row >
-                  <v-col cols="20" sm="12" md="80" class=center >
+                  <v-col cols="20" sm="2" md="80" class=center >
                     <v-text-field  disabled  label="Lead ID" ></v-text-field>
                   </v-col>
-                  <v-col cols="20" sm="4" md="80" class=center>
+                  <v-col cols="20" sm="3" md="80" class=center>
                     <v-combobox  v-model="editedItem.segment" :items="segments" label="Seleccionar Segmento" ></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="4" md="80" class=center>
                     <v-combobox  v-model="editedItem.account" :items="leadsAccounts" label="Seleccionar Cuenta"></v-combobox>
                   </v-col>
-                  <v-col cols="20" sm="4" md="80" class=center>
+                  <v-col cols="20" sm="3" md="80" class=center>
                     <v-combobox  v-model="editedItem.hotel" :items="hotels" label="Seleccionar Hotel"></v-combobox>
                   </v-col>
-                  <v-col cols="20" sm="4" md="80" class=center>
+                  <v-col cols="20" sm="3" md="80" class=center>
                     <v-text-field   v-model="editedItem.name" label="Nombre de Grupo"></v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center>
@@ -159,16 +159,17 @@
                     </v-dialog>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center >
-                    <v-text-field  v-if="editedItem.segment!='Eventos' && editedItem.segment!='Series'" v-model="editedItem.rooms" label="Cantidad de Habitaciones" >{{editedItem.rooms}}</v-text-field>
-                  </v-col>
-                  <v-col cols="20" sm="2" md="80" class=center >
-                    <v-text-field  v-if="editedItem.segment=='Series'" v-model="editedItem.rooms" label="Cantidad de Noches" >{{editedItem.rooms}}</v-text-field>
+                    <v-text-field v-mask="mask" v-if="editedItem.segment!='Eventos' && editedItem.segment!='Series'" v-model="editedItem.rooms" label="Cantidad de Habitaciones" >{{editedItem.rooms}}</v-text-field>
                   </v-col>
                   <v-col cols="20" sm="2" md="80" class=center v-if="editedItem.segment != 'Eventos'" >
-                    <v-text-field  v-model="editedItem.rateHotel" prefix="S/." label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
+                    <v-text-field v-mask="mask" v-model="editedItem.rateHotel" prefix="S/." label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
                   </v-col>
+                  <v-col cols="20" sm="2" md="80" class=center >
+                    <v-text-field v-mask="mask" v-if="editedItem.segment=='Series'" v-model="editedItem.rooms" label="Cantidad de Noches" >{{editedItem.rooms}}</v-text-field>
+                  </v-col>
+                  
 
-                  <v-col v-if="editedItem.segment =='Series'" cols="20" sm="12" md="80">
+                  <v-col v-if="editedItem.segment =='Series'" cols="20" sm="3" md="80">
                     <v-combobox 
                         v-model="editedItem.month"
                         :items="months"
@@ -195,7 +196,7 @@
                   </v-col>
 
 
-                  <v-col v-if="editedItem.segment!='Series'" cols="20" sm="6" md="80" >
+                  <v-col v-if="editedItem.segment!='Series'" cols="20" sm="3" md="80" >
                     <v-combobox
                         v-model="editedItem.eventsName"
                         :items="items"
@@ -220,13 +221,13 @@
                     
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center >
-                    <v-text-field  v-model="editedItem.rateEvent1" prefix="S/." label="Ingresar Eventos AyB">{{editedItem.rateEvent1}}</v-text-field>
+                    <v-text-field v-mask="mask" v-model="editedItem.rateEvent1" prefix="S/." label="Ingresar Eventos AyB">{{editedItem.rateEvent1}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center >
-                    <v-text-field  v-model="editedItem.rateEvent2" prefix="S/." label="Ingresar Eventos Equipos">{{editedItem.rateEvent2}}</v-text-field>
+                    <v-text-field v-mask="mask" v-model="editedItem.rateEvent2" prefix="S/." label="Ingresar Eventos Equipos">{{editedItem.rateEvent2}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center >
-                    <v-text-field  v-model="editedItem.rateEvent3" prefix="S/." label="Ingresar Eventos Salas">{{editedItem.rateEvent3}}</v-text-field>
+                    <v-text-field v-mask="mask" v-model="editedItem.rateEvent3" prefix="S/." label="Ingresar Eventos Salas">{{editedItem.rateEvent3}}</v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field  v-model="editedItem.contactName" label="Nombre Contacto"></v-text-field>
@@ -238,7 +239,7 @@
                     <v-text-field  v-model="editedItem.contactEmail" label="Correo"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field   v-model="editedItem.contactPhone" label=" Celular/Teléfono"></v-text-field>
+                    <v-text-field v-mask="mask"  v-model="editedItem.contactPhone" label=" Celular/Teléfono"></v-text-field>
                   </v-col>
                 </v-row>
                 <v-btn @click="calcular">RESUMEN</v-btn>
@@ -267,9 +268,9 @@
       <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
       <v-icon small @click="deleteItem(item)">delete</v-icon>
     </template>
-    <template v-slot:no-data>
+    <!-- <template v-slot:no-data>
       <v-btn color="primary" @click="allItems()">Reset</v-btn>
-    </template>
+    </template> -->
   </v-data-table>
 
 
@@ -290,9 +291,13 @@
 
 import axios from "axios";
 import {mapActions, mapState} from 'vuex'
+import { mask } from 'vue-the-mask'
 export default {
-  
+  directives: {
+      mask,
+    },
   data: () => ({
+    mask: '################',
     snackbar:false,
     monthselected: [],
     msjerror: 'Se eliminó correctamente',
@@ -748,6 +753,14 @@ console.log(data);
     async addOtherLead(){
       this.editedItem.initialdate=this.date1
       this.editedItem.finaldate=this.date2
+      var rateevent =[]
+      var events =[]
+      rateevent.push(this.editedItem.rateEvent1, this.editedItem.rateEvent2,this.editedItem.rateEvent3)
+      for(let i = 0; i < this.editedItem.eventsName.length; i++){
+         console.log(this.editedItem.eventsName[i], rateevent[i])
+         var obj = {name: this.editedItem.eventsName[i], rateEvent: parseInt(rateevent[i])}
+         events.push(obj)
+      }
       var datos={
         "name": this.editedItem.name,
         "initialBooking": this.editedItem.initialdate,
