@@ -20,8 +20,9 @@
       </v-img>  
        <v-form>
         <v-col cols="12">
-            <v-text-field color="info" v-model="email" label="Usuario" required></v-text-field>
+            <v-text-field color="#ff4200" v-model="email" label="Usuario" required></v-text-field>
             <v-text-field
+              color="#ff4200"
               v-model="password"
               :append-icon="show1 ? 'visibility' : 'visibility_off'"
               :type="show1 ? 'text' : 'password'"
@@ -29,10 +30,9 @@
               label="Contraseña"
               hint="At least 8 characters"
               counter
-              color="info"
             ></v-text-field>
             <div class="text-center" style="margin-top: 30px;">
-              <v-btn color="info" class="mr-4" @click="login()">Ingresar</v-btn>
+              <v-btn color="#000000" class="white--text" @click="login()">Ingresar</v-btn>
             </div>
             <br>
         </v-col>

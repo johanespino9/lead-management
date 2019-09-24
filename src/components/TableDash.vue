@@ -3,16 +3,16 @@
     <v-container class="col-md-10 ">
     <v-row justify="center">
       <v-col cols="auto">
-        <v-combobox v-model="hotelSelected" :items="hotels" label="Seleccionar Hotel"></v-combobox>
+        <v-combobox color="#ff4200" v-model="hotelSelected" :items="hotels" label="Seleccionar Hotel"></v-combobox>
       </v-col>
       <v-col cols="auto">
-        <v-combobox v-model="monthSelected" :items="months" label="Seleccionar Mes"></v-combobox>
+        <v-combobox color="#ff4200" v-model="monthSelected" :items="months" label="Seleccionar Mes"></v-combobox>
       </v-col>
       <v-col cols="auto">
-        <v-combobox v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
+        <v-combobox color="#ff4200" v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
       </v-col>
       <v-col cols="auto" style="margin-top: 10px;">
-        <v-btn color="#444444" style="color: #FAFAFA;" @click="FiltroDashboard()">Buscar Registros</v-btn>
+        <v-btn color="#ff4200" style="color: #FAFAFA;" @click="FiltroDashboard()">Buscar Registros</v-btn>
       </v-col>
     </v-row>
   </v-container>  
@@ -163,7 +163,7 @@ export default {
       if(localStorage.length>=8){
 
 
-        
+
         this.$store.dispatch('stateToken')
       }
       /* this.$store.dispatch('getUsers')

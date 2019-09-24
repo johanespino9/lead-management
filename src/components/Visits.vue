@@ -27,7 +27,7 @@
     </v-data-table>
 </v-container>
 <v-col cols="auto" style="margin-top: 10px;">
-        <v-btn color="#444444" style="color: #FAFAFA;" @click="FiltroDashboard()">Registrar Visita</v-btn>
+        <v-btn color="#ff4200"  @click="FiltroDashboard()">Registrar Visita</v-btn>
 </v-col>
     <div>
         <template>
