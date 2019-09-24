@@ -64,16 +64,16 @@ export default {
   computed: {
   },
   methods: {
-      ...mapActions(['verLogin']),
-      ...mapActions(['getHotels']),
-      ...mapActions(['getDashboard']),
-      ...mapActions(['getAllLeads']),
-      ...mapActions(['getUsers']),
-      ...mapActions(['getManagers']),
-      ...mapActions(['getDashboard']),
-
-
-
+      ...mapActions([
+        'verLogin',
+        'getHotels',
+        'getDashboard',
+        'getAllLeads',
+        'getUsers',
+        'getManagers',
+        'getDashboard',
+        'redirigir',
+      ]),
     async login(){
       try {
       var sendData = {
@@ -82,19 +82,16 @@ export default {
       }
       await axios.post('https://casa-andina.azurewebsites.net/login', sendData)
       .then((res) => { 
-        console.log(res.data);
         localStorage.setItem('token',res.data.token)
         this.$store.dispatch('verLogin')
         this.$store.dispatch('getHotels')
         this.$store.dispatch('getUsers')
         this.$store.dispatch('getAllLeads')
         this.$store.dispatch('getAccounts')
+        this.$store.dispatch('getDashboard')
         this.$store.dispatch('getSegmentos')
         this.$store.dispatch('getManagers')
-        this.$store.dispatch('getDashboard')
-        this.$store.dispatch('getDataUser')
-
-        
+        this.$store.dispatch('getDataUser') 
       })
       } catch (error) { 
           alert('No tienes acceso')

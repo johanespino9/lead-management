@@ -1,12 +1,18 @@
 import Vue from 'vue'
 import axios from 'axios'
 import Vuex from 'vuex'
+import router2 from './views/router'
+import router from './router'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     accessToken: localStorage.getItem('token'),
+    localStorageLength: 0,
+    otherLenght: localStorage.getItem('objects'),
+    tipo_usuario: '',
+    status: false,
     currentUser : {},
     username:'robval96',
     roleid: 1,
@@ -22,6 +28,12 @@ export default new Vuex.Store({
   mutations: {
     Login(state, LoginAction){
       state.login = LoginAction
+    },
+    localStorageLength(state, localSAction){
+      state.localStorageLength += localSAction
+    },
+    Status(state, statusAction){
+      state.status = statusAction
     },
     Menu(state, menuAction){
       state.menu = menuAction
@@ -55,15 +67,19 @@ export default new Vuex.Store({
     },
     Dashboard(state, dashAction){
       state.Dashboard = dashAction
+    },
+    tipoUser(state, tuserAction){
+      state.tipo_usuario = tuserAction
     }
   },
   actions: {
     verLogin(){
         const token= localStorage.getItem('token')
-        this.commit('Token', token)   
+        this.commit('Token', token)
+        this.commit('localStorageLength', 1)
+        localStorage.setItem('objects', this.state.localStorageLength)
     },
-    Logout(){
-      window.location.href = '/'
+    Logout({state, commit}){
        //Remover los items del localStorage
       localStorage.removeItem('token')
       localStorage.removeItem('usuarios')
@@ -73,7 +89,11 @@ export default new Vuex.Store({
       localStorage.removeItem('segmentos')
       localStorage.removeItem('accounts')
       localStorage.removeItem('usuario')
-      this.commit('Token', null)
+      localStorage.removeItem('objects')
+      commit('Token', null)
+      commit('localStorageLength', -8)
+      state.localStorageLength = 0
+      window.location.href = '/'
     },
     //OBTENIENDO Dashboadr DE UN USUARIO
     /* async getDashboard({state, commit}) {
@@ -99,10 +119,24 @@ export default new Vuex.Store({
       .then(response =>{
       commit('Hoteles', response.data)
       localStorage.setItem('hoteles', JSON.stringify(response.data))
+      commit('localStorageLength', 1)
+      localStorage.setItem('objects', state.localStorageLength)
       }).catch(error =>{
         console.log(error)
+        alert('hotels')
         localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
         localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/'
       }); 
     },
     // Obteniendo todos los Leads
@@ -114,15 +148,26 @@ export default new Vuex.Store({
       }
       axios.get('https://casa-andina.azurewebsites.net/user/leads', config)
       .then((res) => {
-        console.log('aaaaaa')
-        console.log(res.data)
         commit('AllLeads', res.data)
         localStorage.setItem('leads', JSON.stringify(res.data))
+        commit('localStorageLength', 1)
+        localStorage.setItem('objects', state.localStorageLength)
       }).catch(error =>{
         console.log(error)
+        alert('leads')
         localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
         localStorage.removeItem('leads')
-        location.reload();
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/'
       })
     },
 
@@ -133,16 +178,29 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
         }
-      await axios.get('https://casa-andina.azurewebsites.net/user/account', config)
+      await axios.get('https://casa-andina.azurewebsites.net/user/accounts', config)
       .then((response) => {
         commit('Accounts', response.data)
         localStorage.setItem('accounts', JSON.stringify(response.data))
+        commit('localStorageLength', 1)
+        localStorage.setItem('objects', state.localStorageLength)
       })
       .catch((error) => {
+        alert('error en get accounts')
         console.log(error)
         localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
         localStorage.removeItem('accounts')
-        location.reload();
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/'
       }) 
     },
 
@@ -157,45 +215,28 @@ export default new Vuex.Store({
       .then((response) => {
         commit('Users', response.data)
         localStorage.setItem('usuarios', JSON.stringify(response.data))
+        commit('localStorageLength', 1)
+        localStorage.setItem('objects', state.localStorageLength)
       })
       .catch((error) => {
         console.log(error)
+        alert('users')
         localStorage.removeItem('token')
         localStorage.removeItem('usuarios')
-        location.reload();
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/'
       })
     },
-    //Registrando Usuario
-      /* async addUser(item){
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.state.accessToken
-        }
-      }
-      let url = 'https://casa-andina.azurewebsites.net/user'
-      await axios.post(url, item, config)
-      .then(response => { 
-        this.commit('Users', response.data)
-      }).catch(error => {
-        alert('Hubo un error ',error )
-      })
-    },
-    //Editando User
-    async editUser({state, commit}, item){
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + state.accessToken
-        }
-      }
-      let url = 'https://casa-andina.azurewebsites.net/user'
-      await axios.put(url, config, item)
-      .then(response => { 
-        commit('Users', response.data)
-      }).catch(error => {
-        alert('Hubo un error al registrar')
-      })
-    }, */
-
+  
     // Obteniendo Manager
     async getManagers({state, commit}){
       let config = {
@@ -211,10 +252,12 @@ export default new Vuex.Store({
       console.log('URL', url)
       await axios.get(url, config)
       .then((response) => {
+        console.log('Managers',response.data)
         commit('Managers', response.data)
       })
       .catch((error) => {
         console.log(error)
+        alert('managers')
         /* localStorage.removeItem('token')
         location.reload(); */
       })
@@ -231,15 +274,30 @@ export default new Vuex.Store({
       .then((res) => {
         commit('Segmentos', res.data)
         localStorage.setItem('segmentos', JSON.stringify(res.data))
+        commit('localStorageLength', 1)
+        localStorage.setItem('objects', state.localStorageLength)
       })
       .catch((error) => {
+        alert('segmentos')
         console.log(error)
         localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
         localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/'
       })
     },
     //Obteniendo datos del username
     async getDataUser({state, commit}){
+      try {    
       let config = {
         headers: {
           'Authorization': 'Bearer ' + state.accessToken
@@ -248,21 +306,43 @@ export default new Vuex.Store({
       let url = 'https://casa-andina.azurewebsites.net/user'
       await axios.get(url , config)
       .then((res) => {
-        console.log(res.data)
         localStorage.setItem('usuario', JSON.stringify(res.data))
         commit('User', res.data)
+        commit('localStorageLength', 1)
+        localStorage.setItem('objects', state.localStorageLength)
+        var user = JSON.parse(localStorage.getItem('usuario'))
+        commit('tipoUser', user.role)
+        if(user.role =='Ejecutivo'){
+          router.push({path: '/dashboard-ejecutivos', name: 'dashboard-ejecutivos',})
+        }else{
+          router.push({path: '/dashboard_jefes', name: 'dashboard_jefes'})
+        }
       })
       .catch((error) => {
         console.log('Hubo un error', error)
-        /* localStorage.removeItem('token') */
-        /* localStorage.removeItem('usuario') */
-        /* window.location.href = '/' */
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/'
       })
+    } catch (error) {
+         alert('datauser')
+        console.log('Hubo un error')
+    }
     },
     //OBETENIENDO DATOS INICIALES PARA EL DASHBOARD
     async getDashboard({state, commit}){
       var datos = {
-    		"hotel": null,
+    		"hotel": "[Seleccionar todos]",
     		"month": 0,
     		"year": 2019
       }
@@ -271,22 +351,64 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      console.log('aaaaaa')
       let url = 'https://casa-andina.azurewebsites.net/user/dashboard'
       await axios.post(url, datos, config)
       .then((res) => {
-        console.log('aaaaaa')
-        console.log(res.data)
         localStorage.setItem('dashboard', JSON.stringify(res.data))
         commit('Dashboard', res.data)
+        commit('localStorageLength', 1)
+        localStorage.setItem('objects', state.localStorageLength)
       })
       .catch((error) => {
+        alert('error en Dash', error)
         console.log(error)
-        /* localStorage.removeItem('token') */
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/'
       })
-      
     },
-  
+    //OBTENIENDO EL ESTADO DEL TOKEN
+    async stateToken({state, commit}){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + state.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/user/exist_token'
+      await axios.get(url, config)
+      .then(response =>{
+        console.log('Aun hay conexión', response.data)
+      })
+      .catch(error => {
+        alert('El token expiro')
+        console.log('Token expirado', error)
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/'
+      })
+    }    
+
+ 
    
   
     

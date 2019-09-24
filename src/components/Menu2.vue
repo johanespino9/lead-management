@@ -16,8 +16,8 @@
         </v-list-item-avatar>
         <!-- <v-list-item-title>{{username}}</v-list-item-title>
         <v-list-item-subtitle>chupetin@gmail.com</v-list-item-subtitle> -->
-        <v-list-item-content to="/profile">
-            <v-list-item-title ><a class="text" color="info">{{usern}}</a> </v-list-item-title>
+        <v-list-item-content>
+            <v-list-item-title >{{usern}}</v-list-item-title>
             <v-list-item-subtitle id="subtitle">{{email}}</v-list-item-subtitle>
           </v-list-item-content>
         <v-btn
@@ -32,7 +32,7 @@
 
         <v-list-item-group >
 
-        <v-list-item v-if="role!='Ejecutivo'" to="/dashboard_jefes">       
+        <v-list-item v-if="role!='Ejecutivo'" to="/boss-dashboard-casa-a">       
           <v-list-item-action>
             <v-icon>home</v-icon>
           </v-list-item-action>
@@ -40,7 +40,7 @@
             <v-list-item-title> Dashboard Jefes </v-list-item-title>
           </v-list-item-content>     
        </v-list-item>
-            <v-list-item v-if="role=='Ejecutivo'" to="/dashboard-ejecutivos">
+            <v-list-item v-if="role!='Ejecutivo'" to="/tabledash">
               <v-list-item-action>
                 <v-icon>dashboard</v-icon>
               </v-list-item-action>
@@ -48,7 +48,7 @@
                 <v-list-item-title>DashBoard Ejecutivo</v-list-item-title>
               </v-list-item-content>
               </v-list-item>
-            <v-list-item v-if="role=='Ejecutivo'" to="/register-lead">
+            <v-list-item v-if="role!='Ejecutivo'" to="/registerlead">
               <v-list-item-action>
                 <v-icon>event</v-icon>
               </v-list-item-action>
@@ -56,7 +56,7 @@
             <v-list-item-title>Gestión de Leads</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="role=='Administrador'" to="/register-user">
+        <v-list-item v-if="role!='Administrador'" to="/registeruser">
           <v-list-item-action>
             <v-icon>event</v-icon>
           </v-list-item-action>
@@ -64,20 +64,12 @@
             <v-list-item-title>Gestión de Usuarios</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="role=='Ejecutivo' || role=='Supervisor de Segmento'" to="/register-account">
+        <v-list-item v-if="role!='Ejecutivo'" to="/registeraccount">
           <v-list-item-action>
             <v-icon>event</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Gestión de Cuentas</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item  to="/profile">
-          <v-list-item-action>
-            <v-icon>perm_identity</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Mi Perfil</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <!-- <v-list-item to="">
@@ -145,7 +137,7 @@ export default {
       this.usern = this.Usuario.username
       this.email = this.Usuario.email
       this.role = this.Usuario.role   
-      console.log(this.role)
+
     } catch (error) {
       console.log('Hubo un error')
     }
@@ -158,9 +150,6 @@ export default {
 }
 .title{
   font-size: 8px;
-}
-.text{
-  text-decoration: none;
-  color: #FAFAFA;
+
 }
 </style>

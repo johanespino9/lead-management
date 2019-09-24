@@ -4,12 +4,6 @@
     <v-container class="col-md-10">
       <v-row justify="center">
         <v-col cols="auto">
-          <v-combobox color="#757575" label="Selecciona Estado"></v-combobox>
-        </v-col>
-        <v-col cols="auto">
-          <v-combobox color="#757575" label="Seleccionar Hotel"></v-combobox>
-        </v-col>
-        <v-col cols="auto">
           <v-combobox color="#757575" label="Seleccionar Mes"></v-combobox>
         </v-col>
         <v-col cols="auto">
@@ -241,14 +235,9 @@
 
 
 
-
-  </div>
-
-
-</template>
-
 <script>
 import axios from "axios";
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -332,6 +321,7 @@ export default {
   },
   computed: {},
   methods: {
+    ...mapActions(['stateToken']),
     tot() {
       var total1 = 0;
       var index1 = 0;
@@ -544,10 +534,17 @@ export default {
   },
 
   mounted() {
+    try { 
     this.grafico1();
     this.grafico2();
     this.tot();
     this.porcentajes();
+    if(localStorage.length>=8){
+        this.$store.dispatch('stateToken')
+    }
+    } catch (error) {
+      
+    }
   }
 };
 </script>

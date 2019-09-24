@@ -25,7 +25,7 @@
         />
       </template>
       <template slot="items" slot-scope="{ item }">
-        <td>{{ item.lead }}</td>
+        <td><strong> {{ item.lead }}</strong> </td>
         <td>{{ item.prospecto }}</td>
         <td>{{ item.tentativo }}</td>
         <td>{{ item.hot }}</td>
@@ -80,8 +80,8 @@ export default {
     hotelSelected: null,
     monthSelected: '',
     yearSelected: null,
-    hotels: [],
-    months:[
+    hotels: ['[Seleccionar todos]'],
+    months:['[Seleccionar todos]',
         'Enero',
         'Febrero',
         'Marzo',
@@ -95,7 +95,7 @@ export default {
         'Noviembre',
         'Diciembre'
     ],
-    years: [ 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028],
+    years: [],
     headers: [
       {
         sortable: false,
@@ -142,8 +142,17 @@ export default {
   computed: {
     ...mapState(['Users', 'Hoteles', 'Dashboard', 'accessToken']),
   },
-  mounted() {
+  created() {
+    
+  },
+  mounted() {  
     try {
+      this.cargarAños()
+      this.hotelSelected = '[Seleccionar todos]'
+      this.monthSelected = '[Seleccionar todos]'
+      var fecha = new Date();
+      var año = fecha.getFullYear();
+      this.yearSelected = año 
       var Dash = JSON.parse(localStorage.getItem('dashboard'))
       if(this.values.length==0 && Dash!=null && this.percents!=null){
         this.values = Dash.table
@@ -151,63 +160,30 @@ export default {
         this.getNameHotels();
         console.log('Carga Dash completa')
       }
+      if(localStorage.length>=8){
+        this.$store.dispatch('stateToken')
+      }
       /* this.$store.dispatch('getUsers')
         this.desserts= this.Users */
     }catch (error){
       console.log('Hubo un error')
     }
-    /* console.log(this.Dashboard)
-    this.values = this.Dashboard
-    console.log(this.values) */
+  },
+  updated() {
   },
   methods: {
-    ...mapActions(['getHotels', 'getDashboard']),
+    ...mapActions(['getHotels', 'getDashboard', 'stateToken']),
     getNameHotels() {
       var hoteless = JSON.parse(localStorage.getItem('hoteles'))
       for(let i = 0; i < hoteless.length; i++){
         this.hotels.push(hoteless[i].shortName);
       }
     },
-/* 
-    filterPerHotel(){
-      let hotelId = this.hotels.indexOf(this.hotelSelected) + 1;
-      let monthId = this.months.indexOf(this.monthSelected) + 1;
-      var sendData = {
-            hotels:{
-              hotelId: hotelId,
-              shortName: this.hotelSelected
-            },
-            month: monthId,
-            year: this.yearSelected
-      }
-      console.log(sendData.hotels.hotelId);
-      console.log(sendData.hotels.shortName);
-      console.log(sendData.month);
-      console.log(sendData.year);
-
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
-      axios
-        .post("https://casa-andina.azurewebsites.net/user/dashboard", sendData, config)
-        .then(response => {
-          // Respuesta del servidor
-          this.values = response.data.table;
-
-      this.roomRevenue = response.data.porcentajeConcrecion.room_revenue;
-      this.events = response.data.porcentajeConcrecion.eventos;
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    }, */
+    //Filtro dashboard
     async FiltroDashboard(){
       var datos = {
-    		"hotel": this.hotels.indexOf(this.hotelSelected) + 1,
-    		"month": this.months.indexOf(this.monthSelected) + 1,
+    		"hotel": this.hotelSelected,
+    		"month": this.months.indexOf(this.monthSelected),
     		"year": this.yearSelected
       }
       let config = {
@@ -228,26 +204,16 @@ export default {
         /* localStorage.removeItem('token') */
       })
       
+    },
+    cargarAños(){
+      var fecha = new Date();
+      var año = fecha.getFullYear();
+      for(var i=2018; i<=año; i++){
+        this.years.push(i)
+      }
     }
 
-    
-    // CREDENCIALES = username: robval96, password: 123456
-    /* login() {
-      axios
-        .post("https://casa-andina.azurewebsites.net/Home", {
-          username: "robval96",
-          password: "123456"
-        })
-        .then(response => {
-          // Respuesta del servidor
-          console.log(response);
-          this.values2 = response.data.table;
-          console.log(response);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    } */
+
   }
 };
 </script>

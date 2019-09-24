@@ -67,6 +67,7 @@
                                   hint="At least 8 characters"
                                   counter
                                   @click:append="show1 = !show1"
+                                  @focus="vaciaPass"
                                 ></v-text-field>
                               </v-col>
                               <v-col cols="20" sm="10" md="80" class=center>
@@ -151,7 +152,7 @@ import { mapState, mapActions } from 'vuex';
     editedIndex: -1,
     editedItem: {
       userId: '',
-      active: false,
+      active: true,
       name: "",
       lastName: '',
       username: '',
@@ -214,28 +215,26 @@ import { mapState, mapActions } from 'vuex';
       console.log('ERROR')
     }
   }, */
-
+  created() {
+    
+  },
   mounted() {
     try {
       var usuarios = JSON.parse(localStorage.getItem('usuarios'))
       if(this.desserts.length==0 && usuarios!=null){
         this.desserts = JSON.parse(localStorage.getItem('usuarios'))
-        console.log('Carga completa')
+        console.log('Carga de usuarios completa')
       }
-      /* this.$store.dispatch('getUsers')
-        this.desserts= this.Users */
+      if(localStorage.length>=8){
+        this.$store.dispatch('stateToken')
+      }
     }catch (error){
       console.log('Hubo un error')
     }
-   /*  this.$store.dispatch('getUsers')
-    this.desserts= this.Users */
+
   },
-  
-  created () {
-    /* this.$store.dispatch('getUsers') */
-    /* this.getUser() */
-    /* this.getManager() */
-    /* this.initialize() */
+  updated() {
+    
   },
   methods: {
       countDownChanged(dismissCountDown) {
@@ -246,7 +245,7 @@ import { mapState, mapActions } from 'vuex';
       }, 
 
 
-      ...mapActions(['getUsers', 'editUser', 'getSegmentos']),
+      ...mapActions(['getUsers', 'editUser', 'getSegmentos', 'stateToken']),
       getUser(){
        console.log(this.Users)
        this.desserts= this.Users
@@ -254,7 +253,9 @@ import { mapState, mapActions } from 'vuex';
     allItems(){
       this.getUser()
     },
-
+    vaciaPass(){
+      this.password=''
+    },
     /* async getManager(){
       let config = {
         headers: {

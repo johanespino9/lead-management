@@ -420,25 +420,28 @@ export default {
     }
     
   },
-
+  created() {
+    
+  },
   mounted() {
-      try {
+    try {
       var todoleads = JSON.parse(localStorage.getItem('leads'))
-      console.log(todoleads)
       if(this.leadsAccounts.length==0 && this.hotels.length==0 && this.segments.length==0 && this.desserts.length==0){
         this.getNameAccounts();
         this.getNameHotels();
         this.getNameSegments();
         this.desserts = todoleads
-        console.log('Carga completa')
+        console.log('Carga de Leads completa')
+      }
+      if(localStorage.length>=8){
+        this.$store.dispatch('stateToken')
       }
     }catch (error){
       console.log('Hubo un error')
     }
-      /* this.$store.dispatch('getAccounts')
-      this.$store.dispatch('getHotels')
-      this.$store.dispatch('getAllLeads')
-      this.$store.dispatch('getSegmentos') */
+  },
+  updated() {
+     
   },
   created() {
     /* try { 
@@ -450,7 +453,6 @@ export default {
   
 
   methods: {
-  
      countDownChanged(dismissCountDown) {
         this.dismissCountDown = dismissCountDown
       },
@@ -459,7 +461,7 @@ export default {
       }, 
 
 
-    ...mapActions(['getHotels', 'getAllLeads']),
+    ...mapActions(['getHotels', 'getAllLeads', 'stateToken']),
     getLeads(){
       this.desserts = this.AllLeads
     },
@@ -473,7 +475,7 @@ export default {
       console.log(end)
       this.roomrev = (((end - start)/3600000/24) -1) * this.editedItem.rateHotel * this.editedItem.rooms 
     },
-    createLead(){
+    /* createLead(){
       let config = {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -533,7 +535,7 @@ console.log(data);
       })
 
       this.dialog = false;
-    },
+    }, */
 
     //Modified
      getNameSegments(segmentos){ 
@@ -892,6 +894,7 @@ console.log(data);
         console.log('Hubo un error ', error)
       })
     },
+    
 
 
   }
