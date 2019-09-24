@@ -111,9 +111,9 @@
                 delete
               </v-icon>
             </template>
-            <template v-slot:no-data>
+            <!-- <template v-slot:no-data>
               <v-btn color="primary" @click="allItems()">Reset</v-btn>
-            </template>
+            </template> -->
           </v-data-table>
     </div>
 </template>
