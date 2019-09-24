@@ -1,4 +1,4 @@
-import Vue from 'vue'
+/* import Vue from 'vue'
 import Router from 'vue-router'
 
 import TableDash from '../components/TableDash'
@@ -70,3 +70,4 @@ const routerSupervisores = new Router({
 }) 
 console.log('router 2 fin')
 export default routerSupervisores; 
+ */

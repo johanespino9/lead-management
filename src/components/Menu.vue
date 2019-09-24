@@ -9,17 +9,18 @@
       :mini-variant.sync="mini"
       permanent
       dark
+      color="#000000"
     >
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-img src="../assets/profile.png"></v-img>
+      <v-list-item  color="#ff4200">
+        <v-list-item-avatar >
+          <v-img src="../assets/avatar2.jpg"></v-img>
         </v-list-item-avatar>
         <!-- <v-list-item-title>{{username}}</v-list-item-title>
         <v-list-item-subtitle>chupetin@gmail.com</v-list-item-subtitle> -->
-        <v-list-item-content to="/profile">
-            <v-list-item-title ><a class="text" color="info">{{usern}}</a> </v-list-item-title>
+        <v-list-item-content >
+            <v-list-item-title >{{usern}}</v-list-item-title>
             <v-list-item-subtitle id="subtitle">{{email}}</v-list-item-subtitle>
-          </v-list-item-content>
+        </v-list-item-content>
         <v-btn
           icon
           @click.stop="mini = !mini"
@@ -29,7 +30,6 @@
       </v-list-item>
       <v-divider></v-divider>
       <v-list dense>
-
         <v-list-item-group >
 
         <v-list-item v-if="role!='Ejecutivo'" to="/dashboard_jefes">       
@@ -155,8 +155,5 @@ export default {
 <style>
 #subtitle{
   font-size: 12px;
-}
-.title{
-  font-size: 8px;
 }
 </style>

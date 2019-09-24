@@ -37,10 +37,11 @@
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
-              <v-stepper non-linear v-if="editedIndex=-1">
+              <v-stepper  v-model="editedItem.statusid"  non-linear >
                       <v-stepper-header>
                         <v-stepper-step
                           editable
+                          :complete="editedItem.statusid>0"
                           step="1"
                         >
                           Prospecto
@@ -49,7 +50,9 @@
                         <v-divider></v-divider>
                 
                         <v-stepper-step
+                          v-if="editedIndex>-1" 
                           editable
+                          :complete="editedItem.statusid>1"
                           step="2"
                         >
                           Tentativo
@@ -58,6 +61,8 @@
                         <v-divider></v-divider>
                 
                         <v-stepper-step
+                          v-if="editedIndex>-1"
+                          :complete="editedItem.statusid>2"
                           step="3"
                           editable
                         >
@@ -66,6 +71,8 @@
                         <v-divider></v-divider>
                 
                         <v-stepper-step
+                          v-if="editedIndex>-1"
+                          :complete="editedItem.statusid>3"
                           step="4"
                           editable
                         >
@@ -74,6 +81,8 @@
                         <v-divider></v-divider>
                 
                         <v-stepper-step
+                          v-if="editedIndex>-1"
+                          :complete="editedItem.statusid>4"
                           step="5"
                           editable
                         >
@@ -83,6 +92,8 @@
                         <v-divider></v-divider>
                 
                         <v-stepper-step
+                          v-if="editedIndex>-1"
+                          :complete="editedItem.statusid>5"
                           step="6"
                           editable
                         >
@@ -90,22 +101,23 @@
                         </v-stepper-step>
                       </v-stepper-header>
                     </v-stepper>
+
             <v-card-text>
               <v-container>
                 <v-row >
-                  <v-col cols="20" sm="2" md="80" class=center >
-                    <v-text-field  disabled  label="Lead ID" ></v-text-field>
+                  <v-col v-if="editedIndex>-1" cols="20" sm="12" md="80" class=center >
+                    <v-text-field v-model="editedItem.leadid" disabled  label="Lead ID" ></v-text-field>
                   </v-col>
-                  <v-col cols="20" sm="3" md="80" class=center>
+                  <v-col cols="20" sm="4" md="80" class=center>
                     <v-combobox  v-model="editedItem.segment" :items="segments" label="Seleccionar Segmento" ></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="4" md="80" class=center>
                     <v-combobox  v-model="editedItem.account" :items="leadsAccounts" label="Seleccionar Cuenta"></v-combobox>
                   </v-col>
-                  <v-col cols="20" sm="3" md="80" class=center>
+                  <v-col cols="20" sm="4" md="80" class=center>
                     <v-combobox  v-model="editedItem.hotel" :items="hotels" label="Seleccionar Hotel"></v-combobox>
                   </v-col>
-                  <v-col cols="20" sm="3" md="80" class=center>
+                  <v-col cols="20" sm="4" md="80" class=center>
                     <v-text-field   v-model="editedItem.name" label="Nombre de Grupo"></v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center>
@@ -158,18 +170,17 @@
                       </v-date-picker>
                     </v-dialog>
                   </v-col>
-                  <v-col cols="20" sm="2" md="80" class=center >
-                    <v-text-field v-mask="mask" v-if="editedItem.segment!='Eventos' && editedItem.segment!='Series'" v-model="editedItem.rooms" label="Cantidad de Habitaciones" >{{editedItem.rooms}}</v-text-field>
+                  <v-col  v-if="editedItem.segment!='Eventos'"  cols="20" sm="2" md="80" class=center >
+                    <v-text-field v-mask="mask" v-model="editedItem.rooms" label="Cantidad de Habitaciones" >{{editedItem.rooms}}</v-text-field>
                   </v-col>
-                  <v-col cols="20" sm="2" md="80" class=center v-if="editedItem.segment != 'Eventos'" >
+                  <v-col v-if="editedItem.segment != 'Eventos'" cols="20" sm="2" md="80" class=center  >
                     <v-text-field v-mask="mask" v-model="editedItem.rateHotel" prefix="S/." label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
                   </v-col>
-                  <v-col cols="20" sm="2" md="80" class=center >
-                    <v-text-field v-mask="mask" v-if="editedItem.segment=='Series'" v-model="editedItem.rooms" label="Cantidad de Noches" >{{editedItem.rooms}}</v-text-field>
+                  <v-col v-if="editedItem.segment=='Series'" cols="20" sm="2" md="80" class=center >
+                    <v-text-field v-mask="mask"  v-model="editedItem.nights" label="Cantidad de Noches" >{{editedItem.nights}}</v-text-field>
                   </v-col>
-                  
 
-                  <v-col v-if="editedItem.segment =='Series'" cols="20" sm="3" md="80">
+                  <v-col v-if="editedItem.segment =='Series'" cols="20" sm="12" md="80">
                     <v-combobox 
                         v-model="editedItem.month"
                         :items="months"
@@ -194,9 +205,17 @@
                       </v-combobox>
                     
                   </v-col>
-
-
-                  <v-col v-if="editedItem.segment!='Series'" cols="20" sm="3" md="80" >
+                  <v-col v-if="editedItem.segment!='Series'" cols="20" sm="12">
+                    <v-btn-toggle color="primary" v-model="sevent">
+                      <v-btn @click="limpiarfilas()" text value="no">
+                        Sin evento
+                      </v-btn>
+                      <v-btn text value="si">
+                        Evento
+                      </v-btn>
+                    </v-btn-toggle>
+                  </v-col>
+                  <v-col v-if="editedItem.segment!='Series' && sevent=='si'" cols="20" sm="4" md="80" >
                     <v-combobox
                         v-model="editedItem.eventsName"
                         :items="items"
@@ -218,15 +237,24 @@
                           </v-list-item>
                         </template>
                       </v-combobox>
-                    
                   </v-col>
-                  <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center >
+                  <v-col v-if="sevent=='si'" cols="20" sm="2" md="80" style="margin-top=15px;">
+                    <!-- <v-btn-toggle color="primary">
+                      <v-btn @click="cantTfield()" text value="si">
+                        Ingresar Costos
+                      </v-btn>
+                      </v-btn-toggle> -->
+                      <v-btn @click="cantTfield()" class="mx-12" fab dark color="primary">
+                        <v-icon dark>mdi-plus</v-icon>
+                      </v-btn>
+                  </v-col>
+                  <v-col v-if="editedItem.segment!='Series' && sevent=='si' && name1=='Alimentos y bebidas' || name2=='Alimentos y bebidas' || name3=='Alimentos y bebidas' " cols="20" sm="2" md="80" class=center >
                     <v-text-field v-mask="mask" v-model="editedItem.rateEvent1" prefix="S/." label="Ingresar Eventos AyB">{{editedItem.rateEvent1}}</v-text-field>
                   </v-col>
-                  <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center >
+                  <v-col v-if="editedItem.segment!='Series' && sevent=='si'  && (name1=='Equipos' || name2=='Equipos' || name3=='Equipos')" cols="20" sm="2" md="80" class=center >
                     <v-text-field v-mask="mask" v-model="editedItem.rateEvent2" prefix="S/." label="Ingresar Eventos Equipos">{{editedItem.rateEvent2}}</v-text-field>
                   </v-col>
-                  <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center >
+                  <v-col v-if="editedItem.segment!='Series' && sevent=='si'  && (name1=='Salas' || name2=='Salas' || name3=='Salas')" cols="20" sm="2" md="80" class=center >
                     <v-text-field v-mask="mask" v-model="editedItem.rateEvent3" prefix="S/." label="Ingresar Eventos Salas">{{editedItem.rateEvent3}}</v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
@@ -242,15 +270,20 @@
                     <v-text-field v-mask="mask"  v-model="editedItem.contactPhone" label=" Celular/Teléfono"></v-text-field>
                   </v-col>
                 </v-row>
-                <v-btn @click="calcular">RESUMEN</v-btn>
                 <v-row>
-                  <v-col> Room Revenue: {{ roomrev }}</v-col>
+                  <v-col v-if="editedItem.Segment!='Series' && editedItem.Segment!='Eventos'"> Room Revenue: {{ (parseInt(editedItem.rooms)) *(parseInt(editedItem.rateHotel))*(parseInt(editedItem.nights)) }}</v-col>
+                  <v-col v-if="editedItem.Segment=='Series'"> Room Revenue: {{ (parseInt(editedItem.rooms)) *(parseInt(editedItem.rateHotel))  *(parseInt(editedItem.nights))}}</v-col>
                 </v-row>
                 <v-row>
-                  <v-col> Eventos: {{  }}</v-col>
+                  <v-col v-if="editedItem.Segment!='Series' && editedItem.Segment!='Eventos'"> Eventos: {{(parseInt(editedItem.rateEvent1)) + (parseInt(editedItem.rateEvent2))+ (parseInt(editedItem.rateEvent3))}} </v-col>
+                  
                 </v-row>
                 <v-row>
-                  <v-col> <strong> TOTAL: {{ (parseInt(roomrev)) + (parseInt(editedItem.rateEvent)) }} </strong></v-col>
+                  <v-col v-if="editedItem.Segment!='Series' && editedItem.Segment!='Eventos'"> <strong> TOTAL: {{(parseInt(editedItem.rateEvent1)) + (parseInt(editedItem.rateEvent2))+ (parseInt(editedItem.rateEvent3)) +
+                     ((parseInt(editedItem.rooms)) * (parseInt(editedItem.rateHotel)) )}} </strong></v-col>
+                  <v-col v-if="editedItem.Segment=='Series'"> <strong> TOTAL: {{((parseInt(editedItem.rooms))* (parseInt(editedItem.rateHotel)) * (parseInt(editedItem.nights)))}} </strong></v-col>
+                  <v-col v-if="editedItem.Segment=='Eventos'"> <strong> TOTAL: {{(parseInt(editedItem.rateEvent1)) + (parseInt(editedItem.rateEvent2))+ (parseInt(editedItem.rateEvent3)) +
+                     ((parseInt(editedItem.rooms)) * (parseInt(editedItem.rateHotel)) )}} </strong></v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -297,6 +330,9 @@ export default {
       mask,
     },
   data: () => ({
+    sevent:"no",
+    step: null,
+    cantevtrate: [],
     mask: '################',
     snackbar:false,
     monthselected: [],
@@ -308,10 +344,10 @@ export default {
     showDismissibleAlert: false,
 
     tipo_lead : 0, // Indicará el tipo de lead a elegir
+    allstatus:['','Prospecto', 'Tentativo', 'Hot', 'Confirmado', 'Congelado', 'Cancelado'],
     items: ['Alimentos y bebidas', 'Equipos', 'Salas'], // Array Events
     model: [],
     selected:[],
-    roomrev: 0,
     dialog: false,
     date1: new Date().toISOString().substr(0, 10),
     date2: new Date().toISOString().substr(0, 10),
@@ -337,6 +373,9 @@ export default {
       
     ],
     search: "",
+    name1: "",
+    name2: "",
+    name3: "",
     desserts: [],
     selectedAccount: '',
     selectedHotel: '',
@@ -372,9 +411,10 @@ export default {
       rateEvent3: 0,
       contact: '',
       month:[],
-     
+      status: 0,
+      statusid:0 ,
       tarifaneta: 0,
-      status: 0
+      
     },
     defaultItem: {
       segment: '',
@@ -390,19 +430,20 @@ export default {
       contact: '',
       account: '',
       tarifaneta: 0,
-      status: 0
+      status: '',
+      statusid:0 
     }
   }),
   computed: {
     ...mapState(['Users', 'Hoteles', 'Accounts', 'AllLeads', 'Segmentos', 'accessToken']),
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "Nuevo Lead" : "Editar Lead";
     },
     
     suma:function ({state}) {
       return state.editedItem.rateEvent1+state.editedItem.rateEvent2+state.editedItem.rateEvent3
-    },
- 
+    }, 
+  
   },
 
   watch: {
@@ -422,7 +463,7 @@ export default {
         if (val.length > 3) {
           this.$nextTick(() => this.editedItem.eventsName.pop())
         }
-    }
+    },
     
   },
   created() {
@@ -473,74 +514,6 @@ export default {
     test(){
       console.log('ESTA SELECCIONANDO')
     },
-    calcular(){
-      var start = new Date(this.date1)
-      var end = new Date(this.date2)
-      console.log(start)
-      console.log(end)
-      this.roomrev = (((end - start)/3600000/24) -1) * this.editedItem.rateHotel * this.editedItem.rooms 
-    },
-    /* createLead(){
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
-      var events = [ 'Salas', 'Eventos', 'Alimentos y Bebidas']
-      var indices = []
-      for(var i = 0; i < this.selected.length; i++){
-        console.log("HOOOOOLAAAAA")
-        console.log(this.selected[i])
-        indices.push((this.selected[i]))
-      console.log(indices)
-      }
-      console.log("TOTAL DE INDICES", indices)
-
-      var start = new Date(this.date1)
-      var end = new Date(this.date2)
-      var nights;
-      console.log(start)
-      console.log(end)
-      nights = (((end - start)/3600000/24) -1)
-      // COMPARA ESTE JSON CON EL QUE SI FUNCIONA CUANDO LO HAGAS CON POSTMAN, MAS QUE TODO LA ESTRUCTURA.
-     var data = {
-    name: this.editedItem.name,
-    initialBooking: start,
-    finalBooking: end,
-    nights: nights,
-    months: [],
-    rateHotel: parseInt(this.editedItem.rateHotel,10 ),
-    rooms: parseInt(this.editedItem.rooms, 10),
-    accountId: this.leadsAccounts.indexOf(this.selectedAccount) +1,
-    segmentId: this.corporateSegments.indexOf(this.selectedSegment)+1,
-    userId: 2,
-    hotelId: this.hotels.indexOf(this.selectedHotel) +1,
-    contactName: this.editedItem.contactName,
-    contactPhone: parseInt(this.editedItem.contactPhone,10),
-    contactEmail: this.editedItem.contactEmail,
-    events: [
-      {
-      eventId: 1,
-      rateEvent2: 5000
-      },
-      {
-      eventId: 2,
-      rateEvent2: 5550
-      }
-    ]
-}
-console.log(data);
-      var sendData = {}
-      axios.post("https://casa-andina.azurewebsites.net/user/leads", data,config) // MIRA ESTOS COMENTARIOS
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-      this.dialog = false;
-    }, */
 
     //Modified
      getNameSegments(segmentos){ 
@@ -575,8 +548,7 @@ console.log(data);
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
-      console.log(this.editedItem.events)
-      console.log(this.editedIndex)
+      this.EditMesyEvents()
     },
 
     deleteItem(item) {
@@ -676,7 +648,7 @@ console.log(data);
       this.editedItem.finaldate=this.date2
       var datos={
         "name": this.editedItem.name,
-        "nights": 5,
+        "nights": parseInt(this.editedItem.nights),
         "initialBooking": "",
         "finalBooking": "",
         "rateHotel": parseInt(this.editedItem.rateHotel),
@@ -689,7 +661,8 @@ console.log(data);
         "contactEmail": this.editedItem.contactEmail,
         "months": this.editedItem.month,
       }
-      let config = {
+      console.log(datos)
+       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }  
@@ -703,7 +676,7 @@ console.log(data);
         this.desserts = this.AllLeads
       }).catch(error => {
         console.log('Hubo un error ', error)
-      })
+      }) 
     },
     //Agregar Lead de eventos
     async addEventLead(){
@@ -751,6 +724,19 @@ console.log(data);
     },
     //Agregar otro tipo de Lead 
     async addOtherLead(){
+      var fec1= this.date1
+      var fec2= this.date2
+      var f1= ''
+      var f2= ''
+      for(var i=0; i<10; i++){
+        f1+= fec1.charAt(i) 
+        f2+= fec2.charAt(i) 
+      }
+      var fechaInicio = new Date(f1).getTime();
+      var fechaFin    =new Date(f2).getTime ();
+      var diff = fechaFin - fechaInicio;
+      var noches = diff/(1000*60*60*24)
+
       this.editedItem.initialdate=this.date1
       this.editedItem.finaldate=this.date2
       var rateevent =[]
@@ -761,6 +747,7 @@ console.log(data);
          var obj = {name: this.editedItem.eventsName[i], rateEvent: parseInt(rateevent[i])}
          events.push(obj)
       }
+
       var datos={
         "name": this.editedItem.name,
         "initialBooking": this.editedItem.initialdate,
@@ -768,7 +755,7 @@ console.log(data);
         "rateHotel": parseInt(this.editedItem.rateHotel),
         "rooms": parseInt(this.editedItem.rooms),
         "account": this.editedItem.account,
-        "nights": 8,
+        "nights": noches,
         "segment": this.editedItem.segment,
         "hotel": this.editedItem.hotel,
         "contactName": this.editedItem.contactName,
@@ -798,7 +785,7 @@ console.log(data);
       var datos={
         "leadid": parseInt(this.editedItem.leadid),
         "name": this.editedItem.name,
-        "nights": 5,
+        "nights": parseInt(this.editedItem.nights),
         "initialBooking": "",
         "finalBooking": "",
         "rateHotel": parseInt(this.editedItem.rateHotel),
@@ -809,6 +796,7 @@ console.log(data);
         "contactName": this.editedItem.contactName,
         "contactPhone": parseInt(this.editedItem.contactPhone),
         "contactEmail": this.editedItem.contactEmail,
+        "status": this.allstatus[this.editedItem.statusid],
         "months": this.editedItem.month,
       }
       console.log(datos)
@@ -847,14 +835,15 @@ console.log(data);
       var datos={
         "leadid": parseInt(this.editedItem.leadid),
         "name": this.editedItem.name,
-        "initialBooking": this.editedItem.initialdate,
-        "finalBooking": this.editedItem.finaldate,
+        "initialBooking": this.date1,
+        "finalBooking": this.date2,
         "account": this.editedItem.account,
         "segment": this.editedItem.segment,
         "hotel": this.editedItem.hotel,
         "contactName": this.editedItem.contactName,
         "contactPhone": parseInt(this.editedItem.contactPhone),
         "contactEmail": this.editedItem.contactEmail,
+        "status": this.allstatus[this.editedItem.statusid],
         "events": events,
       }
       let config = {
@@ -874,8 +863,33 @@ console.log(data);
     },
     //Editar otro tipo de Lead 
     async editOtherLead(){
+      var rateevent =[]
+      var events =[]
+      rateevent.push(this.editedItem.rateEvent1, this.editedItem.rateEvent2,this.editedItem.rateEvent3)
+      for(let i = 0; i < this.editedItem.eventsName.length; i++){
+         console.log(this.editedItem.eventsName[i], rateevent[i])
+         var obj = {name: this.editedItem.eventsName[i], rateEvent: parseInt(rateevent[i])}
+         events.push(obj)
+      }
+      var fec1= this.date1
+      var fec2= this.date2
+      var f1= ''
+      var f2= ''
+      for(var i=0; i<10; i++){
+        f1+= fec1.charAt(i) 
+        f2+= fec2.charAt(i) 
+      }
+      this.date1 = f1
+      this.date2 = f2
+
+      var fechaInicio = new Date(f1).getTime();
+      var fechaFin    =new Date(f2).getTime ();
+      var diff = fechaFin - fechaInicio;
+      var noches = diff/(1000*60*60*24)
       this.editedItem.initialdate=this.date1
       this.editedItem.finaldate=this.date2
+
+
       var datos={
         "leadid": parseInt(this.editedItem.leadid),
         "name": this.editedItem.name,
@@ -884,14 +898,16 @@ console.log(data);
         "rateHotel": parseInt(this.editedItem.rateHotel),
         "rooms": parseInt(this.editedItem.rooms),
         "account": this.editedItem.account,
-        "nights": 8,
+        "nights": noches,
         "segment": this.editedItem.segment,
         "hotel": this.editedItem.hotel,
         "contactName": this.editedItem.contactName,
         "contactPhone": parseInt(this.editedItem.contactPhone),
         "contactEmail": this.editedItem.contactEmail,
+        "status": this.allstatus[this.editedItem.statusid],
         "events": events
       }
+      console.log(datos)
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
@@ -907,8 +923,98 @@ console.log(data);
         console.log('Hubo un error ', error)
       })
     },
-    
+    cantTfield(){
+      try {
+        if(this.editedItem.eventsName.length!=null || this.editedItem.eventsName.length>=0){
+        this.name1 =this.editedItem.eventsName[0]
+        this.name2 =this.editedItem.eventsName[1]
+        this.name3 =this.editedItem.eventsName[2]
+        return
+        }
+        this.name1 = ''
+        this.name2 = ''
+        this.name3 = ''
+      } catch (error) {
+        
+      }
+    },
+    limpiarfilas(){
+      this.editedItem.rateEvent1 = 0
+      this.editedItem.rateEvent2 = 0
+      this.editedItem.rateEvent3 = 0
+      this.editedItem.eventsName = []
+      this.name1 = ''
+      this.name2 = ''
+      this.name3 = ''
+    },
+    EditMesyEvents(){
+      try {
+      var events =this.editedItem.events
+      var nombres = []
+      var costos = []
+      var status = this.editedItem.status
+      for(var i = 0; i< this.allstatus.length; i++){
+        if(this.allstatus[i]==status){
+          this.editedItem.statusid=i
+        }
+      }
+      var fec1= this.editedItem.initialBooking
+      var fec2= this.editedItem.finalBooking
+      var f1= ''
+      var f2= ''
+      for(var i=0; i<10; i++){
+        f1+= fec1.charAt(i) 
+        f2+= fec2.charAt(i) 
+      }
+      this.date1 = f1
+      this.date2 = f2
 
+      var fechaInicio = new Date(f1).getTime();
+      var fechaFin    =new Date(f2).getTime ();
+      var diff = fechaFin - fechaInicio;
+      var dias = diff/(1000*60*60*24)
+      if(dias>1){
+         this.editedItem.nights = dias
+      }else{
+        this.editedItem.nights=1
+      }
+
+      if(events.length>0){
+      this.sevent='si'  
+      for(var i=0; i<events.length; i++){
+        nombres.push(events[i].name)
+        if(events[i].name == 'Alimentos y bebidas'){
+          this.editedItem.rateEvent1 =events[i].rateEvent
+        }else if(events[i].name == 'Equipos'){
+          this.editedItem.rateEvent2 =events[i].rateEvent
+        }else if(events[i].name == 'Salas'){
+          this.editedItem.rateEvent3 =events[i].rateEvent
+        }
+      }
+      this.name1 = nombres[0]
+      this.name2 = nombres[1]
+      this.name3 = nombres[2]
+      this.editedItem.eventsName=nombres
+      if(this.editedItem.rateEvent1==null){this.editedItem.rateEvent1=0}
+      if(this.editedItem.rateEvent2==null){this.editedItem.rateEvent2=0}
+      if(this.editedItem.rateEvent3==null){this.editedItem.rateEvent3=0}
+      }else{
+        this.sevent='no'
+      }
+
+      /* if(this.editedItem.months.length>0){
+        var meses=["Enero","Febrero"]
+        for(var i=0; i< meses.length; i++){
+
+        }
+      } */
+
+
+      } catch (error) {
+        
+      }
+
+    }
 
   }
 }

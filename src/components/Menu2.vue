@@ -97,7 +97,6 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex';
-import router from '../router'
 
 export default {
     data: () => ({
