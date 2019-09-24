@@ -3,7 +3,7 @@
     <v-app-bar
       app
       clipped-left
-      color="#424242"
+      color="#000000"
     >
       <v-toolbar-title class="white--text">Casa Andina Project</v-toolbar-title>
 

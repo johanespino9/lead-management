@@ -26,12 +26,12 @@
                   inset
                   vertical
                 ></v-divider>
-                <v-text-field class="text-xs-center" v-model="search" append-icon="search" label="Búsqueda" single-line hide-details></v-text-field>
+                <v-text-field color="#ff4200" class="text-xs-center" v-model="search" append-icon="search" label="Búsqueda" single-line hide-details></v-text-field>
                   <v-spacer></v-spacer>
                 <div class="flex-grow-1"></div>
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on }">
-                    <v-btn color="#444444" style="color: #FAFAFA;" dark class="mb-2" v-on="on">ADD NEW USER</v-btn>
+                    <v-btn color="#ff4200" style="color: #FAFAFA;" dark class="mb-2" v-on="on">Añadir Nuevo Usuario</v-btn>
                   </template>
                   <v-card>
                     <v-card-title>
@@ -42,22 +42,23 @@
                       <v-container>
                         <v-row>
                           <v-col cols="12" sm="12" md="12" v-if="editedIndex>-1">
-                            <v-text-field cols="12" disabled  v-if="editedIndex>-1" v-model="editedItem.userId" label="ID"></v-text-field>
+                            <v-text-field color="#ff4200" cols="12" disabled  v-if="editedIndex>-1" v-model="editedItem.userId" label="ID"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
-                            <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
+                            <v-text-field color="#ff4200" v-model="editedItem.name" label="Name"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="8" >
-                            <v-text-field v-model="editedItem.lastName" label="Last Name"></v-text-field>
+                            <v-text-field color="#ff4200" v-model="editedItem.lastName" label="Last Name"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
-                            <v-text-field v-model="editedItem.username" label="Username"></v-text-field>
+                            <v-text-field color="#ff4200" v-model="editedItem.username" label="Username"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="8">
-                            <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                            <v-text-field color="#ff4200" v-model="editedItem.email" label="E-mail"></v-text-field>
                           </v-col>
                           <v-col cols="20" sm="6" md="80" class=center>
                                 <v-text-field
+                                  color="#ff4200"
                                   v-model="password"
                                   :append-icon="show1 ? 'visibility' : 'visibility_off'"
                                   :rules="[rules.required, rules.min]"
@@ -71,24 +72,24 @@
                                 ></v-text-field>
                               </v-col>
                               <v-col cols="20" sm="10" md="80" class=center>
-                                <v-combobox v-model="editedItem.role" :items="rol" label="Seleccionar Rol"></v-combobox>
+                                <v-combobox color="#ff4200" v-model="editedItem.role" :items="rol" label="Seleccionar Rol"></v-combobox>
           
                               </v-col>
                           <v-col v-if="editedItem.role=='Ejecutivo'" cols="20" sm="10" md="80" class=center>
-                            <v-combobox v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
+                            <v-combobox color="#ff4200" v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
                           </v-col>
                           <v-col v-if="editedItem.role!='Administrador'" cols="20" sm="10" md="80" class=center>
-                            <v-combobox v-model="editedItem.manager" :items="supervisors" @focus="getManagers()" label="Supervisores"></v-combobox>
+                            <v-combobox color="#ff4200" v-model="editedItem.manager" :items="supervisors" @focus="getManagers()" label="Supervisores"></v-combobox>
                           </v-col>
-                          <v-col cols="20" sm="10" md="80" class=center><v-switch v-model="editedItem.active" :label="`Activo ${editedItem.active.toString()}`"></v-switch></v-col>
+                          <v-col cols="20" sm="10" md="80" class=center><v-switch color="#ff4200" v-model="editedItem.active" :label="`Activo ${editedItem.active.toString()}`"></v-switch></v-col>
                         </v-row>
                       </v-container>
                     </v-card-text>
         
                     <v-card-actions>
                       <div class="flex-grow-1"></div>
-                      <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                      <v-btn color="blue darken-1" text @click="save()">Save</v-btn>
+                      <v-btn color="#ff4200" text @click="close">Cancel</v-btn>
+                      <v-btn color="#ff4200" text @click="save()">Save</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
@@ -110,9 +111,9 @@
                 delete
               </v-icon>
             </template>
-            <template v-slot:no-data>
+            <!-- <template v-slot:no-data>
               <v-btn color="primary" @click="allItems()">Reset</v-btn>
-            </template>
+            </template> -->
           </v-data-table>
     </div>
 </template>
@@ -185,7 +186,7 @@ import { mapState, mapActions } from 'vuex';
   computed: {
     ...mapState(['Users', 'accessToken']),
     formTitle () {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      return this.editedIndex === -1 ? 'Nuevo Usuario' : 'Editar Usuario'
     },
     managerId: function (){
       console.log(this.rol.indexOf(this.editedItem.role).toString())

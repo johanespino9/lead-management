@@ -13,12 +13,12 @@
                     inset
                     vertical
                   ></v-divider>
-                  <v-text-field class="text-xs-center" v-model="search" append-icon="search" label="Búsqueda" single-line hide-details></v-text-field>
+                  <v-text-field color="#ff4200" class="text-xs-center" v-model="search" append-icon="search" label="Búsqueda" single-line hide-details></v-text-field>
                    <v-spacer></v-spacer>
                   <div class="flex-grow-1"></div>
                   <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on }">
-                      <v-btn color="#444444" style="color: #FAFAFA;" dark class="mb-2" v-on="on">new account</v-btn>
+                      <v-btn color="#ff4200" dark class="mb-2" v-on="on">Añadir Nueva Cuenta</v-btn>
                     </template>
                     <v-card>
                       <v-card-title>
@@ -29,22 +29,22 @@
                         <v-container>
                           <v-row>
                             <v-col cols="12" sm="6" md="4">
-                              <v-text-field v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
+                              <v-text-field color="#ff4200" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                              <v-text-field v-model="editedItem.phone" v-mask="mask" label="Teléfono"></v-text-field>
+                              <v-text-field color="#ff4200" v-model="editedItem.phone" v-mask="mask" label="Teléfono"></v-text-field>
                             </v-col>
                             <v-col cols="auto">
-                              <v-combobox v-model="select" :items="editedItem.branch" label="Seleccionar Sector"></v-combobox>
+                              <v-combobox color="#ff4200" v-model="select" :items="editedItem.branch" label="Seleccionar Sector"></v-combobox>
                             </v-col>
                             <v-col cols="auto">
-                               <v-combobox v-model="select" :items="editedItem.category" label="Seleccionar Categoría"></v-combobox>
+                               <v-combobox color="#ff4200" v-model="select" :items="editedItem.category" label="Seleccionar Categoría"></v-combobox>
                             </v-col>
                             <v-col cols="auto">
-                             <v-combobox v-model="select" :items="editedItem.groupsegment" label="Grupo Segmento"></v-combobox>
+                             <v-combobox color="#ff4200" v-model="select" :items="editedItem.groupsegment" label="Grupo Segmento"></v-combobox>
                             </v-col>
                             <v-col cols="auto">
-                             <v-combobox v-model="select" :items="editedItem.segment" label="Seleccionar Segmento"></v-combobox>
+                             <v-combobox color="#ff4200" v-model="select" :items="editedItem.segment" label="Seleccionar Segmento"></v-combobox>
                             </v-col>
                           </v-row>
                         </v-container>
@@ -52,8 +52,8 @@
           
                       <v-card-actions>
                         <div class="flex-grow-1"></div>
-                        <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                        <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                        <v-btn color="#ff4200" text @click="close">Cancel</v-btn>
+                        <v-btn color="#ff4200" text @click="save">Save</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -74,9 +74,9 @@
                   delete
                 </v-icon>
               </template>
-              <template v-slot:no-data>
+              <!-- <template v-slot:no-data>
                 <v-btn color="primary" @click="allItems()">Reset</v-btn>
-              </template>
+              </template> -->
     </v-data-table>
 </template>
 <script>
@@ -122,7 +122,7 @@ import {mapState, mapActions} from 'vuex'
     computed: {
        ...mapState(['Accounts']),
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Nueva Cuenta' : 'Editar Nueva Cuenta'
       },
     },
 

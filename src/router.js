@@ -24,7 +24,7 @@ const routerEjecutivo = new Router({
     {
       path: '/dashboard-ejecutivos',
       name: 'dashboard-ejecutivos',
-      component: TableDash
+      component: TableDash,
     },
     {
       path:'/register-lead',

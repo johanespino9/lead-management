@@ -10,7 +10,7 @@
           <v-combobox color="#757575" label="Seleccionar Año"></v-combobox>
         </v-col>
         <v-col cols="auto" style="margin-top: 12px;">
-          <v-btn color="#444444" style="color: #FAFAFA;">Filtrar Registros</v-btn>
+          <v-btn color="#ff4200" style="color: #FAFAFA;">Filtrar Registros</v-btn>
         </v-col>
       </v-row>
     </v-container>

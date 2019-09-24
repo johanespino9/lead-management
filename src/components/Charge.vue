@@ -3,7 +3,7 @@
   <div class="text-center" >
       
     <v-overlay :value="true">
-        <v-progress-circular color="info" indeterminate size="50"></v-progress-circular>
+        <v-progress-circular color="#ff4200" indeterminate size="80"></v-progress-circular>
         <h5>Cargando</h5>
       </v-overlay>
   </div>
