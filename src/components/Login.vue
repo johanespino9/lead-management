@@ -153,7 +153,7 @@
                     </v-list-item-avatar>
 
                     <v-list-item-content>
-                      <v-list-item-title><a class="link" href="#">{{MejorEmpleadoEv.nombre}}</a> </v-list-item-title>
+                      <v-list-item-title ><a class="link" href="/#/register-lead">{{MejorEmpleadoEv.nombre}}</a> </v-list-item-title>
                       <v-list-item-subtitle>${{MejorEmpleadoEv.monto}}</v-list-item-subtitle>
                     </v-list-item-content>
 
