@@ -161,6 +161,9 @@ export default {
         console.log('Carga Dash completa')
       }
       if(localStorage.length>=8){
+
+
+        
         this.$store.dispatch('stateToken')
       }
       /* this.$store.dispatch('getUsers')

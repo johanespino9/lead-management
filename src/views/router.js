@@ -19,7 +19,7 @@ const routerSupervisores = new Router({
     {
       path: '/boss-dashboard',
       name: 'home',
-      component: DashJefe, 
+      component: DashJefe
     },
     {
       path: '/tabledash',
@@ -29,7 +29,7 @@ const routerSupervisores = new Router({
     {
       path:'/registerlead',
       name: 'registerlead',
-      component: RegisterLead,
+      component: RegisterLead
     },
     
     {
