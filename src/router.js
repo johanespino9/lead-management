@@ -10,7 +10,7 @@ import ModalEdit from './components/ModalEdit'
 import Login2 from './components/Login2'
 import NotFound from './components/NotFound'
 import Config from './components/Config'
-
+import Visits from './components/Visits'
 
 Vue.use(Router)
 console.log('router1 iniciado')
@@ -61,7 +61,12 @@ const routerEjecutivo = new Router({
         path: '/profile',
         name: 'profile',
         component: Config
-      },
+    },
+    {
+        path : '/visits',
+        name: 'visits',
+        component: Visits
+    },
     {
       path: '*',
       redirect: '/casa-andina'

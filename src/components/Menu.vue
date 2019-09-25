@@ -72,6 +72,14 @@
             <v-list-item-title>Gestión de Cuentas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item color="#ff4200" to="/visits">
+          <v-list-item-action>
+            <v-icon>notification_important</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Visitas</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item color="#ff4200" to="/profile">
           <v-list-item-action>
             <v-icon>perm_identity</v-icon>
@@ -80,6 +88,7 @@
             <v-list-item-title>Mi Perfil</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        
         <!-- <v-list-item to="">
           <v-list-item-action>
             <v-icon>settings</v-icon>

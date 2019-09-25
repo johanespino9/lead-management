@@ -18,7 +18,7 @@
                   <div class="flex-grow-1"></div>
                   <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on }">
-                      <v-btn color="#ff4200" dark class="mb-2" v-on="on">Añadir Nueva Cuenta</v-btn>
+                      <v-btn @click="rellenadatos()" color="#ff4200" dark class="mb-2" v-on="on">Añadir Nueva Cuenta</v-btn>
                     </template>
                     <v-card>
                       <v-card-title>
@@ -28,23 +28,20 @@
                       <v-card-text>
                         <v-container>
                           <v-row>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-text-field color="#ff4200" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
+                            <v-col v-if="editedIndex>-1" cols="12" sm="6" md="12">
+                              <v-text-field disabled color="#ff4200" v-model="editedItem.accountId" label="Account Id"></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-text-field color="#ff4200" v-model="editedItem.phone" v-mask="mask" label="Teléfono"></v-text-field>
-                            </v-col>
-                            <v-col cols="auto">
-                              <v-combobox color="#ff4200" v-model="select" :items="editedItem.branch" label="Seleccionar Sector"></v-combobox>
+                            <v-col cols="12" sm="6" md="12">
+                              <v-text-field @focus="rellenadatos()" color="#ff4200" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                             </v-col>
                             <v-col cols="auto">
-                               <v-combobox color="#ff4200" v-model="select" :items="editedItem.category" label="Seleccionar Categoría"></v-combobox>
+                              <v-combobox color="#ff4200" v-model="editedItem.branch" :items="branchs" label="Seleccionar Sector"></v-combobox>
                             </v-col>
                             <v-col cols="auto">
-                             <v-combobox color="#ff4200" v-model="select" :items="editedItem.groupsegment" label="Grupo Segmento"></v-combobox>
+                               <v-combobox color="#ff4200" v-model="editedItem.category" :items="categories" label="Seleccionar Categoría"></v-combobox>
                             </v-col>
-                            <v-col cols="auto">
-                             <v-combobox color="#ff4200" v-model="select" :items="editedItem.segment" label="Seleccionar Segmento"></v-combobox>
+                            <v-col cols="12" sm="6" md="6">
+                              <v-text-field color="#ff4200" disabled v-model="editedItem.groupSegment" label="Group Segment"></v-text-field>
                             </v-col>
                           </v-row>
                         </v-container>
@@ -82,6 +79,7 @@
 <script>
 import { mask } from 'vue-the-mask';
 import {mapState, mapActions} from 'vuex'
+import axios from 'axios';
   export default {
     directives: {
       mask,
@@ -90,37 +88,42 @@ import {mapState, mapActions} from 'vuex'
     dialog: false,
     select: '',
       headers: [
+        { text: 'Sector', value: 'accountId' },
         {
           text: 'Nombre de Cuenta',
           align: 'left',
           sortable: false,
           value: 'name',
         },
-        { text: 'Sector', value: 'branch.name' },
-        { text: 'Categoría', value: 'category.name' },
-        { text: 'Grupo Segmento', value: 'groupSegment.name' },
+        { text: 'Sector', value: 'branch' },
+        { text: 'Categoría', value: 'category' },
+        { text: 'Grupo Segmento', value: 'groupSegment' },
         { text: 'Actions', value: 'action', sortable: false },
       ],
       search: "",
       desserts: [],
       mask: '####-####-####-####',
       editedIndex: -1,
+      gsegment: JSON.parse(localStorage.getItem('usuario')).groupSegment,
       editedItem: {
+        accountId: 0,
         name: '',
-        branch: 0,
-        category: 0,
-        groupsegment: 0,
+        branch: '',
+        category: '',
+        groupSegment: JSON.parse(localStorage.getItem('usuario')).groupSegment,
       },
       defaultItem: {
         name: '',
-        branch: 0,
-        category: 0,
-        groupsegment: 0,
+        branch: '',
+        category: '',
+        groupsegment: '',
       },
+      categories:[],
+      branchs:[],
     }),
 
     computed: {
-       ...mapState(['Accounts']),
+       ...mapState(['Accounts', 'Branchs', 'Categories', 'accessToken']),
       formTitle () {
         return this.editedIndex === -1 ? 'Nueva Cuenta' : 'Editar Nueva Cuenta'
       },
@@ -133,17 +136,32 @@ import {mapState, mapActions} from 'vuex'
     }, 
    created() {
      try {
+       this.$store.dispatch('getCategories')
+       this.$store.dispatch('getBranch')
        var cuentas = JSON.parse(localStorage.getItem('accounts'))
-       if(this.desserts.length==0){
+       var categories = JSON.parse(localStorage.getItem('categories'))
+       var branchs = JSON.parse(localStorage.getItem('branchs'))
+       if(this.desserts.length==0 && this.branchs.length==0 && this.categories.length==0){
          this.desserts = cuentas
-         this.$store.commit('Accounts', cuentas)
+         this.categories = categories
+         this.branchs = branchs
+         /* this.gsegment = JSON.parse(localStorage.getItem('usuario')).groupSegment */
+         console.log(JSON.parse(localStorage.getItem('usuario')).groupSegment)
+         /* this.$store.commit('Accounts', cuentas)
+         this.$store.commit('Categories', categories)
+         this.$store.commit('Branchs', branchs) */
          console.log('Carga de Accounts completa')
+
+         /* this.$store.dispatch('getCategories')
+         this.$store.dispatch('getGroupSegment')
+         this.$store.dispatch('getBranch') */
        }
      } catch (error) {
        console.log('Hubo un error')
      }
    },
    mounted(){
+
      if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
      }
@@ -158,10 +176,70 @@ import {mapState, mapActions} from 'vuex'
         this.getAccount();
       },
 
+    //Agregrar nueva cuenta
+    async addAcount(){
+      var datos = {	
+          "name": this.editedItem.name,
+          "category": this.editedItem.category,
+          "branch": this.editedItem.branch,
+          "groupSegment": this.editedItem.groupSegment
+      }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/user/account'
+      await axios.post(url, datos, config)
+      .then(response => { 
+        console.log(response)
+        localStorage.setItem('accounts', JSON.stringify(response.data))
+        this.$store.commit('Accounts', response.data)
+        this.desserts=this.Accounts
+      }).catch(error => {
+        console.log('Hubo un error ', error)
+      })
+    }, 
+
+    //Editar cuenta
+    async editAccount(){
+      var datos = {	
+          "accountId": this.editedItem.editAccount,
+          "name": this.editedItem.name,
+          "category": this.editedItem.category,
+          "branch": this.editedItem.branch,
+          "groupSegment": this.editedItem.groupSegment
+      }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/user/account'
+      await axios.put(url, datos, config)
+      .then(response => { 
+        console.log(response)
+        localStorage.setItem('accounts', JSON.stringify(response.data))
+        this.$store.commit('Accounts', response.data)
+        this.desserts=this.Accounts
+      }).catch(error => {
+        console.log('Hubo un error ', error)
+      })
+    }, 
+
+      rellenadatos(){
+        var user = JSON.parse(localStorage.getItem('usuario'))
+        this.editedItem.groupSegment = user.groupSegment
+      },
+
       editItem (item) {
         this.editedIndex = this.desserts.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
+        if(this.editedIndex>-1){
+          this.editedItem = Object.assign({}, item)
+          this.dialog = true
+         console.log(this.editedIndex)
+        }
+        
       },
 
       deleteItem (item) {
@@ -179,9 +257,11 @@ import {mapState, mapActions} from 'vuex'
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
+          console.log('se edito')
+          this.editAccount()
         } else {
-          this.desserts.push(this.editedItem)
+          console.log('se añadio')
+          this.addAcount()
         }
         this.close()
       },

@@ -91,7 +91,9 @@ export default {
         this.$store.dispatch('getDashboard')
         this.$store.dispatch('getSegmentos')
         this.$store.dispatch('getManagers')
-        this.$store.dispatch('getDataUser') 
+        this.$store.dispatch('getDataUser')
+        this.$store.dispatch('getCategories')
+        this.$store.dispatch('getBranch') 
       })
       } catch (error) { 
           alert('No tienes acceso')

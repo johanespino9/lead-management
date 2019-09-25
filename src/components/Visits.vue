@@ -1,7 +1,7 @@
 <template>
   <div>
   <v-container class="col-md-12">
-   <v-data-table :headers="headers" :items="values">
+   <v-data-table hide-default-footer :headers="headers" :items="values">
       <template slot="headerCell" slot-scope="{ header }">
         <span
           class="subheading font-weight-light text-success text--darken-3"
@@ -25,9 +25,10 @@
         <td class="text-xs-right">{{ item.salary }}</td>
       </template>
     </v-data-table>
+
 </v-container>
 <v-col cols="auto" style="margin-top: 10px;">
-        <v-btn color="#ff4200"  @click="FiltroDashboard()">Registrar Visita</v-btn>
+        <v-btn color="#ff4200" >Registrar Visita</v-btn>
 </v-col>
     <div>
         <template>
@@ -83,6 +84,7 @@ import axios from "axios";
 import { mapState, mapActions } from 'vuex';
 export default {
   data: () => ({
+    state: true,
     today: '2019-01-08',
     events: [
       {
@@ -177,7 +179,6 @@ export default {
       if(this.values.length==0 && Dash!=null && this.percents!=null){
         this.values = Dash.table
         this.percents = Dash.porcentajeConcrecion
-        this.getNameHotels();
         console.log('Carga Dash completa')
       }
       if(localStorage.length>=8){

@@ -17,7 +17,7 @@
     </v-row>
   </v-container>  
   <v-container class="col-md-12">
-   <v-data-table :headers="headers" :items="values">
+   <v-data-table hide-default-footer :headers="headers" :items="values">
       <template slot="headerCell" slot-scope="{ header }">
         <span
           class="subheading font-weight-light text-success text--darken-3"
@@ -37,7 +37,7 @@
     </v-data-table>
 </v-container>
 
-<v-container class="col-md-6 ">
+<v-container class="col-md-6">
     <v-row >
       <v-col>
         <v-progress-circular

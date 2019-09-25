@@ -21,9 +21,12 @@ export default new Vuex.Store({
     Hoteles:[],
     Accounts: [],
     AllLeads: [],
-    Segmentos:[],
+    GSegmentos:[],
     Managers: [],
-    User:{}
+    User:{},
+    //Añadi 3 más
+    Branchs:[],
+    Categories: [],
   },
   mutations: {
     Login(state, LoginAction){
@@ -70,7 +73,14 @@ export default new Vuex.Store({
     },
     tipoUser(state, tuserAction){
       state.tipo_usuario = tuserAction
-    }
+    },
+    Branchs(state, branchAction){
+      state.Branchs = branchAction
+    },
+    Categories(state, categoriesAction){
+      state.Categories = categoriesAction
+    },
+    
   },
   actions: {
     verLogin(){
@@ -90,6 +100,9 @@ export default new Vuex.Store({
       localStorage.removeItem('accounts')
       localStorage.removeItem('usuario')
       localStorage.removeItem('objects')
+      localStorage.removeItem('categories')
+      localStorage.removeItem('group_segment')
+      localStorage.removeItem('branchs')
       commit('Token', null)
       commit('localStorageLength', -8)
       state.localStorageLength = 0
@@ -133,6 +146,8 @@ export default new Vuex.Store({
         localStorage.removeItem('accounts')
         localStorage.removeItem('usuario')
         localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -164,6 +179,8 @@ export default new Vuex.Store({
         localStorage.removeItem('accounts')
         localStorage.removeItem('usuario')
         localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -197,6 +214,8 @@ export default new Vuex.Store({
         localStorage.removeItem('accounts')
         localStorage.removeItem('usuario')
         localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -230,6 +249,8 @@ export default new Vuex.Store({
         localStorage.removeItem('accounts')
         localStorage.removeItem('usuario')
         localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -289,6 +310,8 @@ export default new Vuex.Store({
         localStorage.removeItem('accounts')
         localStorage.removeItem('usuario')
         localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -329,6 +352,8 @@ export default new Vuex.Store({
         localStorage.removeItem('accounts')
         localStorage.removeItem('usuario')
         localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -371,13 +396,89 @@ export default new Vuex.Store({
         localStorage.removeItem('accounts')
         localStorage.removeItem('usuario')
         localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
         window.location.href = '/'
       })
     },
-    //OBTENIENDO EL ESTADO DEL TOKEN
+    //Obteniendo los branch
+    async getBranch({state, commit}){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + state.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/branch'
+      await axios.get(url, config)
+      .then((res) => {
+        localStorage.setItem('branchs', JSON.stringify(res.data))
+        commit('Branchs', res.data)
+        /* commit('localStorageLength', 1)
+        localStorage.setItem('objects', state.localStorageLength) */
+      })
+      .catch((error) => {
+        alert('error obteniendo Branchs', error)
+        /* console.log(error)
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/' */
+      })
+    },
+
+    //Obteniendo las categorias
+    async getCategories({state, commit}){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + state.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/category'
+      await axios.get(url, config)
+      .then((res) => {
+        localStorage.setItem('categories', JSON.stringify(res.data))
+        commit('Categories', res.data)
+        /* commit('localStorageLength', 1)
+        localStorage.setItem('objects', state.localStorageLength) */
+      })
+      .catch((error) => {
+        alert('Error obteniendo Categories', error)
+        /* console.log(error)
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/' */
+      })
+    },
+
+    //Obteniendo los segmentos de grupo
+  
+    //Verificando EL ESTADO DEL TOKEN
     async stateToken({state, commit}){
       let config = {
         headers: {
@@ -401,6 +502,8 @@ export default new Vuex.Store({
         localStorage.removeItem('accounts')
         localStorage.removeItem('usuario')
         localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
