@@ -202,7 +202,7 @@
                         label="Seleccionar Meses"
                         multiple
                         persistent-hint
-                        small-chips
+                        
                       
                       >
                         <template v-slot:no-data>
@@ -238,7 +238,7 @@
                         label="Seleccionar Eventos"
                         multiple
                         persistent-hint
-                        small-chips
+                        
                       >
                         <template v-slot:no-data>
                           <v-list-item>

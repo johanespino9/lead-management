@@ -189,7 +189,7 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/account'
+      let url = 'https://casa-andina.azurewebsites.net/user/accounts'
       await axios.post(url, datos, config)
       .then(response => { 
         console.log(response)
@@ -215,7 +215,7 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/account'
+      let url = 'https://casa-andina.azurewebsites.net/user/accounts'
       await axios.put(url, datos, config)
       .then(response => { 
         console.log(response)
