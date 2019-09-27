@@ -59,7 +59,7 @@
                           <v-col cols="20" sm="6" md="80" class=center>
                                 <v-text-field
                                   color="#ff4200"
-                                  v-model="password"
+                                  v-model="editedItem.password"
                                   :append-icon="show1 ? 'visibility' : 'visibility_off'"
                                   :rules="[rules.required, rules.min]"
                                   :type="show1 ? 'text' : 'password'"
@@ -288,7 +288,7 @@ import { mapState, mapActions } from 'vuex';
           "email": this.editedItem.email,
           "lastName": this.editedItem.lastName,
           "name": this.editedItem.name,
-          "password": this.password,
+          "password": this.editedItem.password,
           "username": this.editedItem.username,
           "manager": this.editedItem.manager,
           "groupSegment": this.editedItem.groupSegment,
@@ -317,7 +317,7 @@ import { mapState, mapActions } from 'vuex';
           "email": this.editedItem.email,
           "lastName": this.editedItem.lastName,
           "name": this.editedItem.name,
-          "password": this.password,
+          "password": editedItem.password,
           "username": this.editedItem.username,
           "manager": this.editedItem.manager,
           "groupSegment": this.editedItem.groupSegment,
