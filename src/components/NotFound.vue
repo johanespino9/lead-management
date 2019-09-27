@@ -15,6 +15,7 @@ export default {
         model: 0,
         }
     },
+
 }
 </script>
 <style >

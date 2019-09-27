@@ -28,7 +28,7 @@ import Menu2 from './components/Menu2';
 import Menu from './components/Menu';
 import Content from './components/Content';
 import Footer from './components/Footer';
-import Login from './components/Login';
+import DashJefe from './components/DashJefe';
 import Login2 from './components/Login2';
 import Charge from './components/Charge'
 import NotFound from './components/NotFound'
@@ -43,7 +43,7 @@ export default {
     Menu,
     Content,
     Footer,
-    Login,
+    DashJefe,
     Login2,
     Charge,
     NotFound,
@@ -72,18 +72,50 @@ export default {
     }
   },
  created() {
-
-   /*    localStorage.removeItem('token')
-      localStorage.removeItem('usuarios')
-      localStorage.removeItem('dashboard')
-      localStorage.removeItem('leads')
-      localStorage.removeItem('hoteles')
-      localStorage.removeItem('segmentos')
-      localStorage.removeItem('accounts')
-      localStorage.removeItem('usuario')
-      localStorage.removeItem('objects') 
- */
-  } 
+   /* localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+         localStorage.removeItem('visitas') */
+  },
+  destroyed() {
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+         localStorage.removeItem('visitas')
+  },
+  beforeDestroy() {
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
+  },
 
 };
 </script>

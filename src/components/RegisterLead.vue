@@ -81,7 +81,7 @@
                           step="4"
                           editable
                         >
-                          Confirmado
+                          Cancelado
                         </v-stepper-step>
                         <v-divider></v-divider>
                 
@@ -104,7 +104,7 @@
                           step="6"
                           editable
                         >
-                          Cancelado
+                          Confirmado
                         </v-stepper-step>
                       </v-stepper-header>
                     </v-stepper>
@@ -368,7 +368,7 @@ export default {
     showDismissibleAlert: false,
 
     tipo_lead : 0, // Indicará el tipo de lead a elegir
-    allstatus:['','Prospecto', 'Tentativo', 'Hot', 'Confirmado', 'Congelado', 'Cancelado'],
+    allstatus:['','Prospecto', 'Tentativo', 'Hot', 'Cancelado', 'Congelado', 'Confirmado'],
     items: ['Alimentos y bebidas', 'Equipos', 'Salas'], // Array Events
     model: [],
     selected:[],
@@ -512,7 +512,7 @@ export default {
             }
            }
 
-           totalh = todoleads[i].rateHotel * todoleads[i].rooms *  todoleads[i].nights
+           totalh = todoleads[i].rateHotel * todoleads[i].rooms *  (todoleads[i].nights-1)
            this.desserts.push(
              {
               account: todoleads[i].account,
@@ -1084,6 +1084,7 @@ export default {
       return this.eventrevenue()+this.roomrevenue()
 
     }
-  }
+  },
+
 }
 </script>

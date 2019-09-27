@@ -3,7 +3,7 @@
     <v-container class="col-md-10 ">
     <v-row justify="center">
       <v-col cols="auto">
-        <v-combobox color="#ff4200" v-model="hotelSelected" :items="hotels" label="Seleccionar Hotel"></v-combobox>
+        <v-combobox  v-model="hotelSelected" :items="hotels"  label="Seleccionar Hotel" :color="color" ></v-combobox>
       </v-col>
       <v-col cols="auto">
         <v-combobox color="#ff4200" v-model="monthSelected" :items="months" label="Seleccionar Mes"></v-combobox>
@@ -74,6 +74,7 @@ import axios from "axios";
 import { mapState, mapActions } from 'vuex';
 export default {
   data: () => ({
+    color: '#ff4200',
     percents: {},
     values:[],
     value: 0,
@@ -161,9 +162,6 @@ export default {
         console.log('Carga Dash completa')
       }
       if(localStorage.length>=8){
-
-
-
         this.$store.dispatch('stateToken')
       }
       /* this.$store.dispatch('getUsers')
@@ -217,6 +215,7 @@ export default {
     }
 
 
-  }
+  },
+
 };
 </script>

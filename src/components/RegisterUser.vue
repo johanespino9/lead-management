@@ -226,17 +226,18 @@ import { mapState, mapActions } from 'vuex';
         this.desserts = JSON.parse(localStorage.getItem('usuarios'))
         console.log('Carga de usuarios completa')
       }
-      if(localStorage.length>=8){
-        this.$store.dispatch('stateToken')
-      }
+      
     }catch (error){
       console.log('Hubo un error')
     }
 
   },
   updated() {
-    
+    if(localStorage.length>=8){
+        this.$store.dispatch('stateToken')
+      }
   },
+
   methods: {
       countDownChanged(dismissCountDown) {
         this.dismissCountDown = dismissCountDown
@@ -403,7 +404,8 @@ import { mapState, mapActions } from 'vuex';
       })
     },
     
+  },
 
-  }
+
   }
 </script>

@@ -94,6 +94,8 @@ export default {
         this.$store.dispatch('getDataUser')
         this.$store.dispatch('getCategories')
         this.$store.dispatch('getBranch') 
+        this.$store.dispatch('getDashJefes') 
+        this.$store.dispatch('getVisits')
       })
       } catch (error) { 
           alert('No tienes acceso')

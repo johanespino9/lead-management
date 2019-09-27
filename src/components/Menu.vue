@@ -13,7 +13,11 @@
     >
       <v-list-item  color="#ff4200">
         <v-list-item-avatar >
-          <v-img src="../assets/avatar2.jpg"></v-img>
+          <!-- <v-img src="../assets/avatar2.jpg"></v-img> -->
+          <img
+             src="https://cdn.vuetifyjs.com/images/john.jpg"
+             alt="John"
+          >
         </v-list-item-avatar>
         <!-- <v-list-item-title>{{username}}</v-list-item-title>
         <v-list-item-subtitle>chupetin@gmail.com</v-list-item-subtitle> -->
@@ -72,7 +76,7 @@
             <v-list-item-title>Gestión de Cuentas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item color="#ff4200" to="/visits">
+        <v-list-item v-if="role=='Ejecutivo'" color="#ff4200" to="/visits">
           <v-list-item-action>
             <v-icon>notification_important</v-icon>
           </v-list-item-action>
@@ -135,20 +139,44 @@ export default {
         this.Logout()
       }
     },
-   /* mounted(){
+    mounted(){
     try {
-      this.Usuario = JSON.parse(localStorage.getItem('usuario'))
-      console.log(this.Usuario)
-      console.log(this.User)
-      this.usern = this.Usuario.username
-      this.email = this.Usuario.email
-      this.role = this.Usuario.role
+      if( Object.keys(this.User).length === 0){
+        console.log('vacio')
+        let user = JSON.parse(localStorage.getItem('usuario'))
+        this.$store.commit('User', user)
+        this.usern = this.User.username
+        this.email = this.User.email
+        this.role = this.User.role
+      }else{
+        this.usern = this.User.username
+        this.email = this.User.email
+        this.role = this.User.role
+      }
       
     } catch (error) {
       console.log('Hubo un error')
     }
-  } */
-  created() {
+  },
+
+  updated() {
+    /* var user = JSON.parse(localStorage.getItem('usuario'))
+    this.$store.commit('User', user) */
+    this.usern = this.User.username
+    this.email = this.User.email
+    this.role = this.User.role
+    if(localStorage.length>=8){
+        this.$store.dispatch('stateToken')
+    }
+    /* console.log(this.User) */
+  },
+  /* beforeUpdate() {
+    console.log('desde before u')
+    this.usern = this.User.username
+    this.email = this.User.email
+    this.role = this.User.role
+  }, */
+  /* created() {
     try {
       this.Usuario = JSON.parse(localStorage.getItem('usuario'))
       this.usern = this.Usuario.username
@@ -158,7 +186,7 @@ export default {
     } catch (error) {
       console.log('Hubo un error')
     }
-  },
+  }, */ 
 }
 </script>
 <style>

@@ -10,7 +10,7 @@
           <v-combobox color="#757575" label="Seleccionar Año"></v-combobox>
         </v-col>
         <v-col cols="auto" style="margin-top: 12px;">
-          <v-btn color="#ff4200" style="color: #FAFAFA;">Filtrar Registros</v-btn>
+          <v-btn color="#000000" style="color: #FAFAFA;">Filtrar Registros</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -23,7 +23,7 @@
           <div class="col-lg-6">
             <!-- PRIMER CARD DESDE ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
             <div class="card">
-              <v-card light dark>
+              <v-card light >
                 <v-card-title>
                   <v-list-item two-line>
                     <v-list-item-avatar class="ml-0" color="grey darken-3">
@@ -41,16 +41,16 @@
                   <v-list-item two-line>
                     <v-list-item-content>
                       <v-list-item-title class="headline">${{total1}}</v-list-item-title>
-                      <v-list-item-subtitle><strong>{{estado}} </strong> </v-list-item-subtitle>
+                      <v-list-item-subtitle><strong>Monto bruto total </strong> </v-list-item-subtitle>
                     </v-list-item-content>
 
                     
                     <v-list-item-content class="text-right">
                        <v-list-item-subtitle > 
-                        <span v-if="porcentaje1>=0" class="green--text"><strong>Alzas</strong> </span>
-                        <span v-if="porcentaje1<0" class="red--text"><strong>Bajas</strong> </span>
+                        <v-list-item-title class="headline" style="color: black;">${{totalconcretado1}}</v-list-item-title>
+                        <v-list-item-subtitle><strong>Monto concretado </strong> </v-list-item-subtitle>
                       </v-list-item-subtitle>
-                      <v-list-item-subtitle>
+                      <!-- <v-list-item-subtitle>
                         <span v-if="porcentaje1<0" class="red--text">
                         <i class="fas fa-arrow-up"></i>
                         <strong>{{porcentaje1}}%</strong> 
@@ -59,7 +59,7 @@
                         <i class="fas fa-arrow-up"></i>
                         <strong>+{{porcentaje1}}%</strong> 
                       </span>
-                      </v-list-item-subtitle>
+                      </v-list-item-subtitle> -->
                     </v-list-item-content>
 
                   </v-list-item>
@@ -100,7 +100,7 @@
           <div class="col-lg-6">
             <!-- SEGUNDO CARD DESDE ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
             <div class="card">
-              <v-card light dark>
+              <v-card light>
                 <v-card-title>
                   <v-list-item two-line>
                     <v-list-item-avatar color="grey darken-3">
@@ -119,15 +119,15 @@
                   <v-list-item two-line>
                     <v-list-item-content>
                       <v-list-item-title class="headline">${{total2}}</v-list-item-title>
-                      <v-list-item-subtitle><strong>{{estado}}</strong></v-list-item-subtitle>
+                      <v-list-item-subtitle><strong>Monto bruto total</strong></v-list-item-subtitle>
                     </v-list-item-content>
 
                     <v-list-item-content class="text-right">
                        <v-list-item-subtitle > 
-                        <span v-if="porcentaje2>=0" class="green--text"><strong>Alzas</strong> </span>
-                        <span v-if="porcentaje2<0" class="red--text"><strong> Bajas</strong></span>
+                        <v-list-item-title class="headline" style="color: black;">${{totalconcretado2}}</v-list-item-title>
+                      <v-list-item-subtitle><strong>Monto concretado</strong></v-list-item-subtitle>
                       </v-list-item-subtitle>
-                      <v-list-item-subtitle>
+<!--                       <v-list-item-subtitle>
                         <span v-if="porcentaje2<0" class="red--text">
                         <i class="fas fa-arrow-up"></i>
                         <strong>{{porcentaje2}}%</strong> 
@@ -136,7 +136,7 @@
                         <i class="fas fa-arrow-up"></i>
                         <strong>+{{porcentaje2}}%</strong> 
                       </span>
-                      </v-list-item-subtitle>
+                      </v-list-item-subtitle> -->
                     </v-list-item-content>
                   </v-list-item>
                 </v-card-title>
@@ -242,6 +242,82 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
+      totalconcretado1: 0,
+      totalconcretado2: 0,
+      dashboardRateHotel:[
+			     {
+            user_id:1,
+            name: "aaaaaa",
+            last_name:"aaaaaaa",
+            rate_hotel:5000,
+            total:18000
+			      },
+			      {
+            user_id:2,
+            name:"aaaaaa",
+            last_name:"aaaaaaa",
+            rate_hotel:4000,
+            total:21000
+            },
+            {
+            user_id:3,
+            name: "aaaaaa",
+            last_name:"aaaaaaa",
+            rate_hotel:2000,
+            total:31000
+			      },
+			      {
+            user_id:4,
+            name:"Luis",
+            last_name:"Melgarejo",
+            rate_hotel:2000,
+            total:41000
+			      },
+			  ],
+       dashboardRateEvents : [
+            {
+            user_id:1,
+            name:"u",
+            last_name:"aaaaaaa",
+            rate_events:2000,
+            total:21000
+            },
+            {
+            user_id:2,
+            name:"m",
+            last_name:"aaaaaaa",
+            rate_events:2000,
+            total:21000
+           },
+           {
+            user_id:3,
+            name:"l",
+            last_name:"aaaaaaa",
+            rate_events:2000,
+            total:21000
+            },
+            {
+            user_id:4,
+            name:"gaaaa",
+            last_name:"xd",
+            rate_events:4000,
+            total:22000
+           },
+           {
+            user_id:5,
+            name:"eee",
+            last_name:"aaaaaaa",
+            rate_events:2000,
+            total:21000
+            },
+            {
+            user_id:6,
+            name:"aaaaaa",
+            last_name:"aaaaaaa",
+            rate_events:2000,
+            total:21000
+           },
+         ],
       estado: 'Prospecto',
       fecha: 'SEPTIEMBRE 2019',
       MejorEmpleadoRR: {
@@ -254,112 +330,82 @@ export default {
       },
       total1: 0,
       total2: 0,
-      ej_d1: [
-        "Luis",
-        "Vera",
-        "Alvaro",
-        "Johan",
-        "Rodrigo",
-        "Miguel",
-        "Roberto",
-        "Renzo",
-        "Jorge",
-        "Juan"
-      ],
-      data1_bruto: [
-        62000,
-        50000,
-        45000,
-        55000,
-        27000,
-        48000,
-        13000,
-        60000,
-        50000,
-        40000
-      ],
-      data1_bruto_ant: [
-        15000,
-        15000,
-        45000,
-        60000,
-        27000,
-        48000,
-        13000,
-        60000,
-        50000,
-        40000
-      ],
-      data1_concretado: [
-        15000,
-        10000,
-        40000,
-        10000,
-        20000,
-        30000,
-        10000,
-        10000,
-        40000,
-        10000
-      ],
+      ids1:[],
+      ids2:[],
+      ej_d1: [],
+      data1_bruto: [],
+
+      data1_concretado: [],
       porcentaje1: 0,
 
       ej_d2: [
-        "Luis",
-        "Renzo",
-        "Alvaro",
-        "Johan",
-        "Rodrigo",
-        "Miguel",
-        "Roberto"
+        
       ],
-      data2_bruto: [20000, 15000, 45000, 60000, 27000, 48000, 13000],
-      data2_bruto_ant: [30000, 10000, 45000, 70000, 37000, 58000, 15000],
-      data2_concretado: [15000, 10000, 40000, 10000, 20000, 30000, 10000],
+      data2_bruto: [],
+
+      data2_concretado: [],
       porcentaje2: 0
     };
   },
-  computed: {},
+  computed: {
+
+  },
   methods: {
+    
     ...mapActions(['stateToken']),
     tot() {
-      var total1 = 0;
-      var index1 = 0;
-      var index2 = 0;
-      var mejor_empleado1 = 0;
-      var mejor_empleado2 = 0;
+      let total1 = 0;
+      let index1 = 0;
+      let index2 = 0;
+      let mejor_empleado1 = 0;
+      let mejor_empleado2 = 0;
+      let concretado1 = 0
+      let concretado2 = 0
+      //sumando el total rr bruto
       this.data1_bruto.forEach(function(element) {
         total1 += element;
       });
       this.total1 = total1;
-
-      var total2 = 0;
+      //sumando el total rr concretado
+      this.data1_concretado.forEach(function(element) {
+        concretado1 += element;
+      });
+      this.totalconcretado1 = concretado1;
+      console.log(concretado1)
+      //sumando el total re concretado
+      this.data2_concretado.forEach(function(element) {
+        concretado2 += element;
+      });
+      this.totalconcretado2 = concretado2;
+      
+      let total2 = 0;
       this.data2_bruto.forEach(function(element) {
         total2 += element;
       });
       this.total2 = total2;
-      this.data1_bruto.forEach(mejorempleado);
-      this.data2_bruto.forEach(mejorempleado_);
 
+      this.data1_bruto.forEach(mejorempleado);
       function mejorempleado(element, indice) {
         if (element > mejor_empleado1) {
           mejor_empleado1 = element;
           index1 = indice;
         }
       }
-      function mejorempleado_(element, indice) {
-        if (element > mejor_empleado2) {
-          mejor_empleado2 = element;
-          index2 = indice;
+      this.data2_bruto.forEach(mejorempleado2);
+      function mejorempleado2(element2, indice2) {
+        if (element2 > mejor_empleado2) {
+          mejor_empleado2 = element2;
+          index2 = indice2;
         }
       }
       this.MejorEmpleadoRR.nombre = this.ej_d1[index1];
       this.MejorEmpleadoRR.monto = this.data1_bruto[index1];
-      this.MejorEmpleadoEv.nombre = this.ej_d1[index2];
+      this.MejorEmpleadoEv.nombre = this.ej_d2[index2];
       this.MejorEmpleadoEv.monto = this.data2_bruto[index2];
+
     },
 
-    porcentajes() {
+    /* porcentajes() {
       var total_pasado = 0;
       this.data1_bruto_ant.forEach(function(element) {
         total_pasado += element;
@@ -373,15 +419,39 @@ export default {
       });
       var porcentaje2 = (this.total2 * 100) / total_pasado2 - 100;
       this.porcentaje2 = porcentaje2.toFixed(2);
-    },
+    }, */
     generarAlertas(colors, texto, estado) {
       this.alerts.push({ color: colors, text: texto, state: estado });
     },
-
+    cargarDatos(){
+    let data = JSON.parse(localStorage.getItem('dashjefe'))
+    try {
+      //Rellenando arrays de rate hotel
+      let rhotel = data.dashboardRateHotel
+      console.log(this.dashboardRateHotel.length)
+      for(let i = 0; i< this.dashboardRateHotel.length; i++){
+        this.ids1.push(parseInt(this.dashboardRateHotel[i].user_id))
+        this.data1_bruto.push(parseInt(this.dashboardRateHotel[i].total))
+        this.data1_concretado.push(parseInt(this.dashboardRateHotel[i].rate_hotel))
+        this.ej_d1.push(this.dashboardRateHotel[i].name+" "+this.dashboardRateHotel[i].last_name)
+      }
+      //Rellenando arrays de rate event
+      let revent = data.dashboardRateEvents
+      for(let i = 0; i< this.dashboardRateEvents.length; i++){
+        this.ids2.push(parseInt(this.dashboardRateEvents[i].user_id))
+        this.data2_bruto.push(parseInt(this.dashboardRateEvents[i].total))
+        this.data2_concretado.push(parseInt(this.dashboardRateEvents[i].rate_events))
+        this.ej_d2.push(this.dashboardRateEvents[i].name+" "+this.dashboardRateEvents[i].last_name)
+      }
+    } catch (error) {
+      console.log('error cargando datos')
+    }
+    
+  },
     grafico1() {
       var ctx = document.getElementById("sales-chart").getContext("2d");
       var ticksStyle = {
-        fontColor: "#FFFFFF",
+        fontColor: "#000000",
         fontStyle: "bold"
       };
       var mode = "index";
@@ -455,9 +525,11 @@ export default {
     },
 
     grafico2() {
+      console.log(this.data2_bruto)
+      console.log(this.data2_concretado)
       var ctx = document.getElementById("sales-chart2").getContext("2d");
       var ticksStyle = {
-        fontColor: "#FFFFFF",
+        fontColor: "#000000",
         fontStyle: "bold"
       };
       var mode = "index";
@@ -532,20 +604,24 @@ export default {
       });
     }
   },
-
+ created() {
+   
+ },
   mounted() {
     try { 
-    this.grafico1();
+    this.cargarDatos();
+    this.grafico1(); 
     this.grafico2();
     this.tot();
-    this.porcentajes();
+    /* this.porcentajes(); */
     if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
     }
     } catch (error) {
       
     }
-  }
+  },
+
 };
 </script>
 <style >

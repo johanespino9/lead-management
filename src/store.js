@@ -27,6 +27,9 @@ export default new Vuex.Store({
     //Añadi 3 más
     Branchs:[],
     Categories: [],
+    Visits:[],
+    DashJefe: {},
+    Reasons:[]
   },
   mutations: {
     Login(state, LoginAction){
@@ -80,6 +83,15 @@ export default new Vuex.Store({
     Categories(state, categoriesAction){
       state.Categories = categoriesAction
     },
+    Visits(state, visitsAction){
+      state.Visits = visitsAction
+    },
+    DashJefe(state, dashJAction){
+      state.DashJefe = dashJAction
+    },
+    Reasons(state, reasonsAction){
+      state.Reasons = reasonsAction
+    }
     
   },
   actions: {
@@ -103,6 +115,8 @@ export default new Vuex.Store({
       localStorage.removeItem('categories')
       localStorage.removeItem('group_segment')
       localStorage.removeItem('branchs')
+      localStorage.removeItem('dashjefe')
+      localStorage.removeItem('visitas')
       commit('Token', null)
       commit('localStorageLength', -8)
       state.localStorageLength = 0
@@ -148,6 +162,8 @@ export default new Vuex.Store({
         localStorage.removeItem('objects')
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -181,6 +197,8 @@ export default new Vuex.Store({
         localStorage.removeItem('objects')
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -216,6 +234,8 @@ export default new Vuex.Store({
         localStorage.removeItem('objects')
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -251,6 +271,8 @@ export default new Vuex.Store({
         localStorage.removeItem('objects')
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -265,9 +287,6 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      // Supersivor = 1 +1 = 2
-      //let id = this.rol.indexOf(this.editedItem.role).toString()
-      //console.log('SIN + 1', id)
       let url = 'https://casa-andina.azurewebsites.net/role/'+state.roleid+'/manager'
       //console.log('ID',id)
       console.log('URL', url)
@@ -312,6 +331,8 @@ export default new Vuex.Store({
         localStorage.removeItem('objects')
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -354,6 +375,8 @@ export default new Vuex.Store({
         localStorage.removeItem('objects')
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -398,6 +421,8 @@ export default new Vuex.Store({
         localStorage.removeItem('objects')
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -433,6 +458,8 @@ export default new Vuex.Store({
         localStorage.removeItem('objects')
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -469,6 +496,128 @@ export default new Vuex.Store({
         localStorage.removeItem('objects')
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/' */
+      })
+    },
+    async getVisits({state, commit}){
+      let fec = new Date()
+      let year = fec.getFullYear()
+      let datos= {
+        "year": year
+      }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + state.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/user/dashboard/visits'
+      await axios.post(url, datos, config)
+      .then((res) => {
+        console.log(res.data)
+        commit('Visits', res.data)
+        localStorage.setItem('visitas', JSON.stringify(res.data))
+      })
+      .catch((error) => {
+        alert('Error obteniendo Categories', error)
+        /* console.log(error)
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        state.localStorageLength = 0
+        window.location.href = '/' */
+      })
+    },
+
+    async getDashJefes({state, commit}){
+      let fec = new Date()
+      let month = (fec.getMonth() +1) 
+      let year = fec.getFullYear()
+      let datos = {
+    		"month": month,
+    		"year": year
+	    }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + state.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/user/dashboard/jefes'
+
+      await axios.post(url, datos, config)
+      .then(response =>{
+        console.log(response.data)
+        localStorage.setItem('dashjefe', JSON.stringify(response.data)) 
+        /* commit('DashJefe', response.data)
+        */
+      })
+      .catch(error => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
+        commit('Token', null)
+        commit('localStorageLength', -8)
+        alert('Error al cargar dashboard Jefes')
+        state.localStorageLength = 0
+        window.location.href = '/' 
+      })
+    },
+
+    async getReasons({state, commit}){
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + state.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/reason'
+      await axios.get(url, config)
+      .then((res) => {
+        commit('Reasons', res.data)
+        /* commit('localStorageLength', 1)
+        localStorage.setItem('objects', state.localStorageLength) */
+      })
+      .catch((error) => {
+        alert('Error obteniendo Categories', error)
+        /* console.log(error)
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuarios')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('leads')
+        localStorage.removeItem('hoteles')
+        localStorage.removeItem('segmentos')
+        localStorage.removeItem('accounts')
+        localStorage.removeItem('usuario')
+        localStorage.removeItem('objects')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -504,6 +653,8 @@ export default new Vuex.Store({
         localStorage.removeItem('objects')
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
+        localStorage.removeItem('dashjefe')
+        localStorage.removeItem('visitas')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0

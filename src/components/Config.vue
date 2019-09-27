@@ -8,71 +8,117 @@
          <v-card> 
               <v-container>
                 <v-row>
-                    <v-col cols="1" md="3" sm="10">
-                        <v-avatar size="100">
+                    <v-col cols="1" md="2" sm="12">
+                        <v-avatar size="150">
                             <img
                                 src="https://cdn.vuetifyjs.com/images/john.jpg"
                                 alt="John"
                             >
-                            </v-avatar>
-                        </v-col>
+                         </v-avatar>
+                         
+                    </v-col>
                   <v-col cols="20" sm="3" md="80" class=center>
                     <v-text-field
-                            prepend-icon="account_circle"
-                            ref="fullname"
-                            v-model="fullname"
-                            label="Full Name"
-                            placeholder=""
-                            disabled=""
-                            
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="20" sm="3" md="80" class=center>
-                      <v-text-field
-                            prepend-icon="email"
-                            ref="email"
-                            v-model="email"
-                            label="E-mail"
-                            placeholder=""
-                            disabled=""
-                        ></v-text-field>
-                    </v-col>
-                    <v-col cols="20" sm="3" md="80" class=center>
-                      <v-text-field
-                            prepend-icon="account_circle"
-                            ref="role"
-                            v-model="role"
-                            label="Role"
-                            placeholder=""
-                            disabled=""
-                        ></v-text-field>
-                    </v-col>
-                    <v-col cols="20" sm="3" md="80" class=center>
-                      <v-text-field
+                            color="#ff4200" 
                             prepend-icon="group"
                             ref="groupsegment"
-                            v-model="groupsegment"
+                            v-model="user.groupSegment"
                             label="Grupo de Segmento"
                             disabled=""
                             placeholder=""
                         ></v-text-field>
-                    </v-col>
-                    <v-col cols="20" sm="3" md="80" class=center>
-                      <v-text-field
+                        <v-text-field
+                            color="#ff4200" 
                             prepend-icon="account_circle"
                             ref="jefe"
-                            v-model="jefe"
-                            label="Jefe"
+                            v-model="user.manager"
+                            label="Manager"
                             disabled=""
                             placeholder=""
                         ></v-text-field>
+                    <v-text-field
+                            color="#ff4200" 
+                            prepend-icon="account_circle"
+                            ref="role"
+                            v-model="user.role"
+                            label="Rol"
+                            placeholder=""
+                            disabled=""
+                        ></v-text-field>
+                    <v-text-field
+                            color="#ff4200" 
+                            prepend-icon="account_circle"
+                            ref="email"
+                            v-model="user.username"
+                            label="Username"
+                            placeholder=""
+                            disabled=""
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="20" sm="3" md="80" class=center>
+                    <v-text-field
+                            color="#ff4200" 
+                            prepend-icon="account_circle"
+                            ref="id"
+                            v-model="user.userId"
+                            label="ID Usuario"
+                            placeholder=""
+                            disabled
+                    ></v-text-field>
+                    <v-text-field
+                            color="#ff4200" 
+                            prepend-icon="email"
+                            ref="email"
+                            v-model="user.email"
+                            label="E-mail"
+                            placeholder=""
+                    ></v-text-field>
+                    <v-text-field
+                            color="#ff4200" 
+                            prepend-icon="account_circle"
+                            ref="name"
+                            v-model="user.name"
+                            label="Nombres"
+                            placeholder=""  
+                    ></v-text-field>
+                    <v-text-field
+                            color="#ff4200" 
+                            prepend-icon="account_circle"
+                            ref="lastname"
+                            v-model="user.lastName"
+                            label="Apellidos"
+                            placeholder=""
+                    ></v-text-field>
                     </v-col>
+
+                    <v-col cols="20" sm="3" md="80" class=center>
+                    <v-text-field
+                            color="#ff4200" 
+                            prepend-icon=""
+                            ref="active"
+                            v-model="estado"
+                            label="Estado Actual"
+                            placeholder=""
+                            disabled
+                    ></v-text-field>
+                    <v-text-field
+                      color="#ff4200"
+                      v-model="user.password"
+                      :append-icon="show1 ? 'visibility' : 'visibility_off'"
+                      :type="show1 ? 'text' : 'password'"
+                      name="input-10-1"
+                      label="Contraseña"
+                      hint="Se recomienda 8 caracteres"
+                      counter
+                      @click:append="show1 = !show1"
+                    ></v-text-field>
+                    </v-col> 
                 </v-row>
               </v-container>
             <v-card-actions>
                       <div class="flex-grow-1"></div>
-                      <v-btn color="#ff4200" text @click="close">Cancel</v-btn>
-                      <v-btn color="#ff4200" text @click="save()">Save</v-btn>
+                      <v-btn color="#ff4200" text @click="editUser()">Guardar cambios</v-btn>
          </v-card-actions>
         </v-card>
   <!--   </v-dialog> -->
@@ -81,24 +127,79 @@
 
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import axios from 'axios'
 export default {
     data: () => ({
-      fullname: null,
-      email: null,
-      role: null,
-      groupsegment: null,
-      jefe: null,
+      estado:'',
+      user:{
+        userId: 0,
+        username: '',
+        active: true,
+        email: '',
+        groupSegment: '',
+        name: '',
+        lastName: '',
+        manager: '',
+        password: '',
+        role: ''
+      },
+      show1: false,
     }),
     computed: {
-      form () {
-        return {
-          fullname: this.fullname,
-          email: this.email,
-          role: this.role,
-          groupsegment: this.groupsegment,
-          jefe: this.jefe,
-        }
-      },
+      ...mapState(['User','accessToken']), 
     },
+    mounted() {
+      /* this.$store.dispatch('getDashJefes') */
+
+      this.user = JSON.parse(localStorage.getItem('usuario'))
+      if(this.user.active== true){
+        this.estado='Activo'
+      }else{
+        this.estado='Inactivo'
+      }
+    },
+    //METHODS
+    methods: {
+      async editUser(){
+        var datos = {	
+          "userId": this.user.userId,
+          "active": this.user.active,
+          "email": this.user.email,
+          "lastName": this.user.lastName,
+          "name": this.user.name,
+          "password": this.user.password,
+          "username": this.user.username,
+          "manager": this.user.manager,
+          "groupSegment": this.user.groupSegment,
+          "role": this.user.role,
+      }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/user/'+this.user.userId
+      await axios.put(url, datos, config)
+      .then(response => { 
+        this.$store.commit('Users', response.data)
+        for(let i=0; i<response.data.length; i++){
+          if(response.data[i].userId==this.user.userId){
+            localStorage.setItem('usuario', JSON.stringify(response.data[i]))
+            this.$store.commit('User', response.data[i])
+            this.user=this.User
+          }
+        }
+      }).catch(error => {
+        console.log('Hubo un error ', error)
+      })
+      }
+    },
+    updated() {
+    if(localStorage.length>=8){
+        this.$store.dispatch('stateToken')
+      }
+  },
+
 }
 </script>
