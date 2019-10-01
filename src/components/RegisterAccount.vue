@@ -28,9 +28,9 @@
                       <v-card-text>
                         <v-container>
                           <v-row>
-                            <v-col v-if="editedIndex>-1" cols="12" sm="6" md="12">
+                            <!-- <v-col v-if="editedIndex>-1" cols="12" sm="6" md="12">
                               <v-text-field disabled color="#ff4200" v-model="editedItem.accountId" label="Account Id"></v-text-field>
-                            </v-col>
+                            </v-col> -->
                             <v-col cols="12" sm="6" md="12">
                               <v-text-field @focus="rellenadatos()" color="#ff4200" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                             </v-col>
@@ -88,7 +88,7 @@ import axios from 'axios';
     dialog: false,
     select: '',
       headers: [
-        { text: 'Sector', value: 'accountId' },
+        /* { text: 'Sector', value: 'accountId' }, */
         {
           text: 'Nombre de Cuenta',
           align: 'left',
@@ -189,7 +189,7 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/account'
+      let url = 'https://casa-andina.azurewebsites.net/user/accounts'
       await axios.post(url, datos, config)
       .then(response => { 
         console.log(response)
@@ -204,7 +204,7 @@ import axios from 'axios';
     //Editar cuenta
     async editAccount(){
       var datos = {	
-          "accountId": this.editedItem.editAccount,
+          "accountId": this.editedItem.accountId,
           "name": this.editedItem.name,
           "category": this.editedItem.category,
           "branch": this.editedItem.branch,
@@ -215,7 +215,7 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/account'
+      let url = 'https://casa-andina.azurewebsites.net/user/accounts'
       await axios.put(url, datos, config)
       .then(response => { 
         console.log(response)

@@ -120,11 +120,6 @@ export default {
       },
       {
         sortable: false,
-        text: "Confirmado",
-        value: "confirmado"
-      },
-      {
-        sortable: false,
         text: "Congelado",
         value: "congelado"
       },
@@ -132,6 +127,11 @@ export default {
         sortable: false,
         text: "Cancelado",
         value: "cancelado"
+      },
+      {
+        sortable: false,
+        text: "Confirmado",
+        value: "confirmado"
       }
     ],
     items: [],

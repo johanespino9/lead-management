@@ -81,7 +81,7 @@
                           step="4"
                           editable
                         >
-                          Cancelado
+                          Congelado
                         </v-stepper-step>
                         <v-divider></v-divider>
                 
@@ -92,7 +92,7 @@
                           step="5"
                           editable
                         >
-                          Congelado
+                          Cancelado
                         </v-stepper-step>
                         
                         <v-divider></v-divider>
@@ -112,9 +112,9 @@
             <v-card-text>
               <v-container>
                 <v-row >
-                  <v-col v-if="editedIndex>-1" cols="20" sm="12" md="80" class=center >
+                  <!-- <v-col v-if="editedIndex>-1" cols="20" sm="12" md="80" class=center >
                     <v-text-field v-model="editedItem.leadid" disabled  label="Lead ID" ></v-text-field>
-                  </v-col>
+                  </v-col> -->
                   <v-col cols="20" sm="4" md="80" class=center>
                     <v-combobox color="#ff4200" v-model="editedItem.segment" :items="segments" label="Seleccionar Segmento" ></v-combobox>
                   </v-col>
@@ -314,7 +314,8 @@
     </template>
     <template v-slot:item.action="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
-      <v-icon small @click="deleteItem(item)">delete</v-icon>
+      
+     <!--  <v-icon small @click="deleteItem(item)">delete</v-icon> -->
     </template>
     <!-- <template v-slot:no-data>
       <v-btn color="primary" @click="allItems()">Reset</v-btn>
@@ -368,7 +369,7 @@ export default {
     showDismissibleAlert: false,
 
     tipo_lead : 0, // Indicará el tipo de lead a elegir
-    allstatus:['','Prospecto', 'Tentativo', 'Hot', 'Cancelado', 'Congelado', 'Confirmado'],
+    allstatus:['','Prospecto', 'Tentativo', 'Hot', 'Congelado', 'Cancelado',  'Confirmado'],
     items: ['Alimentos y bebidas', 'Equipos', 'Salas'], // Array Events
     model: [],
     selected:[],
@@ -380,7 +381,7 @@ export default {
       modal2: false,
       menu2: false,
      headers: [
-      { text: "Lead ID", value: "leadid" },
+      /* { text: "Lead ID", value: "leadid" }, */
       {
         text: "Nombre Lead",
         align: "left",

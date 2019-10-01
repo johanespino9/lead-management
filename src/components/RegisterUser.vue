@@ -41,9 +41,9 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <v-col cols="12" sm="12" md="12" v-if="editedIndex>-1">
+                          <!-- <v-col cols="12" sm="12" md="12" v-if="editedIndex>-1">
                             <v-text-field color="#ff4200" cols="12" disabled  v-if="editedIndex>-1" v-model="editedItem.userId" label="ID"></v-text-field>
-                          </v-col>
+                          </v-col> -->
                           <v-col cols="12" sm="6" md="4">
                             <v-text-field color="#ff4200" v-model="editedItem.name" label="Name"></v-text-field>
                           </v-col>
@@ -130,8 +130,9 @@ import { mapState, mapActions } from 'vuex';
     showDismissibleAlert: false,
     dialog: false,
     segments:[],
+    order:[],
     headers: [
-      {text: 'ID', value: 'userId'},
+      /* {text: 'ID', value: 'userId'}, */
       {
         text: 'Name',
         align: 'left',
@@ -160,7 +161,8 @@ import { mapState, mapActions } from 'vuex';
       email: '',
       groupSegment: '',
       role: '',
-      manager: null
+      manager: null,
+      password: ''
     },
     defaultItem: {
       userId:'',
@@ -346,6 +348,7 @@ import { mapState, mapActions } from 'vuex';
     editItem (item) {
       this.editedIndex = this.desserts.indexOf(item)
       this.editedItem = Object.assign({}, item)
+      this.password = this.editedItem.password
       this.dialog = true
     },
 
@@ -403,8 +406,14 @@ import { mapState, mapActions } from 'vuex';
         location.reload(); */
       })
     },
+    Ordenamiento(){
+      for(let i=0; i< this.desserts.length; i++){
+        this.order.push(i)
+      }
+    }
     
   },
+
 
 
   }

@@ -29,6 +29,7 @@
               name="input-10-1"
               label="Contraseña"
               hint="At least 8 characters"
+               @click:append="show1 = !show1"
               counter
             ></v-text-field>
             <div class="text-center" style="margin-top: 30px;">
