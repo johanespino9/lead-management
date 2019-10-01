@@ -388,11 +388,13 @@ export default {
         sortable: false,
         value: "name"
       },
+      { text: "Segmento", value: "segment" },
       { text: "Fecha de Creación", value: "createDate" },
       { text: "Contacto", value: "contactName" },
       { text: "Cuenta", value: "account" },
-      { text: "Ingreso de Hotel", value: "totalhotel" },
+      { text: "Ingreso de Alojamiento", value: "totalhotel" },
       { text: "Ingreso de Eventos", value: "totalevents"},
+      { text: "Total Ingresos", value: "totalhotel"},
       { text: "Estado", value: "status" },
       { text: "Actions", value: "action", sortable: false }
       

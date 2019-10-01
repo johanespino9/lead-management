@@ -32,7 +32,7 @@
                               <v-text-field disabled color="#ff4200" v-model="editedItem.accountId" label="Account Id"></v-text-field>
                             </v-col> -->
                             <v-col cols="12" sm="6" md="12">
-                              <v-text-field @focus="rellenadatos()" color="#ff4200" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
+                              <v-text-field  color="#ff4200" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                             </v-col>
                             <v-col cols="auto">
                               <v-combobox color="#ff4200" v-model="editedItem.branch" :items="branchs" label="Seleccionar Sector"></v-combobox>
@@ -64,12 +64,12 @@
                 >
                   edit
                 </v-icon>
-                <v-icon
+                <!-- <v-icon
                   small
                   @click="deleteItem(item)"
                 >
                   delete
-                </v-icon>
+                </v-icon> -->
               </template>
               <!-- <template v-slot:no-data>
                 <v-btn color="primary" @click="allItems()">Reset</v-btn>
@@ -229,6 +229,7 @@ import axios from 'axios';
 
       rellenadatos(){
         var user = JSON.parse(localStorage.getItem('usuario'))
+        console.log(user)
         this.editedItem.groupSegment = user.groupSegment
       },
 

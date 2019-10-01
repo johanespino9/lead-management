@@ -41,9 +41,9 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <!-- <v-col cols="12" sm="12" md="12" v-if="editedIndex>-1">
+                          <v-col cols="12" sm="12" md="12" v-if="editedIndex>-1">
                             <v-text-field color="#ff4200" cols="12" disabled  v-if="editedIndex>-1" v-model="editedItem.userId" label="ID"></v-text-field>
-                          </v-col> -->
+                          </v-col>
                           <v-col cols="12" sm="6" md="4">
                             <v-text-field color="#ff4200" v-model="editedItem.name" label="Name"></v-text-field>
                           </v-col>
@@ -59,7 +59,7 @@
                           <v-col cols="20" sm="6" md="80" class=center>
                                 <v-text-field
                                   color="#ff4200"
-                                  v-model="editedItem.password"
+                                  v-model="password"
                                   :append-icon="show1 ? 'visibility' : 'visibility_off'"
                                   :rules="[rules.required, rules.min]"
                                   :type="show1 ? 'text' : 'password'"
@@ -290,7 +290,7 @@ import { mapState, mapActions } from 'vuex';
           "email": this.editedItem.email,
           "lastName": this.editedItem.lastName,
           "name": this.editedItem.name,
-          "password": this.editedItem.password,
+          "password": this.password,
           "username": this.editedItem.username,
           "manager": this.editedItem.manager,
           "groupSegment": this.editedItem.groupSegment,
@@ -319,7 +319,7 @@ import { mapState, mapActions } from 'vuex';
           "email": this.editedItem.email,
           "lastName": this.editedItem.lastName,
           "name": this.editedItem.name,
-          "password": editedItem.password,
+          "password": this.password,
           "username": this.editedItem.username,
           "manager": this.editedItem.manager,
           "groupSegment": this.editedItem.groupSegment,
