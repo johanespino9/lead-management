@@ -516,7 +516,7 @@ export default {
       let hour2= this.horaFin
       let datos= {
         "name": this.editedItem.name,
-        "description": this.editedItem.name,
+        "description": this.editedItem.description,
         "start": this.date1+"T"+hour1+":00",
         "finish": this.date1+"T"+hour2+":00",
         "account": this.editedItem.account,
