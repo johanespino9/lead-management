@@ -117,6 +117,7 @@ export default new Vuex.Store({
       localStorage.removeItem('branchs')
       localStorage.removeItem('dashjefe')
       localStorage.removeItem('visitas')
+      localStorage.removeItem('yearandmonth')
       commit('Token', null)
       commit('localStorageLength', -8)
       state.localStorageLength = 0
@@ -164,6 +165,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -199,6 +201,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -236,6 +239,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -273,6 +277,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -333,6 +338,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -377,6 +383,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -423,6 +430,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -460,6 +468,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -498,6 +507,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -538,6 +548,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -581,6 +592,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         alert('Error al cargar dashboard Jefes')
@@ -618,6 +630,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -637,7 +650,7 @@ export default new Vuex.Store({
       let url = 'https://casa-andina.azurewebsites.net/user/exist_token'
       await axios.get(url, config)
       .then(response =>{
-        console.log('Aun hay conexión', response.data)
+
       })
       .catch(error => {
         alert('El token expiro')
@@ -655,6 +668,7 @@ export default new Vuex.Store({
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0

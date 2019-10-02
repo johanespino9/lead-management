@@ -5,6 +5,17 @@
 <!--       <template v-slot:activator="{ on }">
           <v-btn color="#ff4200" style="color: #FAFAFA;" dark class="mb-2" v-on="on">Editar Perfil</v-btn>
        </template> -->
+    <b-alert
+      :show="dismissCountDown"
+      @dismissed="dismissCountDown=0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <v-alert  v-if="type=='success'" icon="mdi-shield-lock-outline" type="success" :v-show="dismissCountDown">
+           {{msjsuccess}}
+      </v-alert>
+    </b-alert> 
+      
+    <div>
          <v-card> 
               <v-container>
                 <v-row>
@@ -122,6 +133,8 @@
          </v-card-actions>
         </v-card>
   <!--   </v-dialog> -->
+  </div>
+  
 </div>
 </template>
 
@@ -145,6 +158,10 @@ export default {
         role: ''
       },
       show1: false,
+      msjsuccess:'Se guardó correctamente',
+      type: 'success',
+      dismissCountDown: 0,
+      dismissSecs: 2,
     }),
     computed: {
       ...mapState(['User','accessToken']), 
@@ -161,6 +178,12 @@ export default {
     },
     //METHODS
     methods: {
+      countDownChanged(dismissCountDown) {
+        this.dismissCountDown = dismissCountDown
+      },
+      showAlert() {
+        this.dismissCountDown = this.dismissSecs
+      }, 
       async editUser(){
         var datos = {	
           "userId": this.user.userId,
@@ -190,6 +213,7 @@ export default {
             this.user=this.User
           }
         }
+         this.showAlert()
       }).catch(error => {
         console.log('Hubo un error ', error)
       })

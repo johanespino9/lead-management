@@ -4,13 +4,13 @@
     <v-container class="col-md-10">
       <v-row justify="center">
         <v-col cols="auto">
-          <v-combobox color="#757575" label="Seleccionar Mes"></v-combobox>
+          <v-combobox :items="months" v-model="monthSelected" color="#757575" label="Seleccionar Mes"></v-combobox>
         </v-col>
         <v-col cols="auto">
-          <v-combobox color="#757575" label="Seleccionar Año"></v-combobox>
+          <v-combobox :items="years" v-model="yearSelected" color="#757575" label="Seleccionar Año"></v-combobox>
         </v-col>
         <v-col cols="auto" style="margin-top: 12px;">
-          <v-btn color="#000000" style="color: #FAFAFA;">Filtrar Registros</v-btn>
+          <v-btn color="#000000" style="color: #FAFAFA;" @click="Filtro()">Filtrar Registros</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -237,14 +237,68 @@
 
 <script>
 import axios from "axios";
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   data() {
     return {
       totalconcretado1: 0,
       totalconcretado2: 0,
-      dashboardRateHotel:[
+      yearSelected: "",
+      monthSelected : "",
+       months:['[Seleccionar todos]',
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Setiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre'
+    ],
+    years: [],
+    data2:{
+       dashboardRateHotel:[
+			      {
+            user_id:4,
+            name:"Luis",
+            last_name:"Melgarejo",
+            rate_hotel:2000,
+            total:41000
+			      },
+			  ],
+       dashboardRateEvents : [
+            {
+            user_id:4,
+            name:"gaaaa",
+            last_name:"xd",
+            rate_events:4000,
+            total:22000
+           },
+           {
+            user_id:5,
+            name:"eee",
+            last_name:"aaaaaaa",
+            rate_events:2000,
+            total:21000
+            },
+            {
+            user_id:6,
+            name:"aaaaaa",
+            last_name:"aaaaaaa",
+            rate_events:2000,
+            total:21000
+           },
+         ],
+
+    },
+     
+     data:{
+       dashboardRateHotel:[
 			     {
             user_id:1,
             name: "aaaaaa",
@@ -318,8 +372,10 @@ export default {
             total:21000
            },
          ],
+
+    },
       estado: 'Prospecto',
-      fecha: 'SEPTIEMBRE 2019',
+      fecha: '',
       MejorEmpleadoRR: {
         nombre: "",
         monto: ""
@@ -328,27 +384,24 @@ export default {
         nombre: "",
         monto: ""
       },
-      total1: 0,
-      total2: 0,
-      ids1:[],
-      ids2:[],
+
+      ids1:[], 
       ej_d1: [],
       data1_bruto: [],
-
       data1_concretado: [],
-      porcentaje1: 0,
-
-      ej_d2: [
-        
-      ],
+      total1: 0,
+      /* porcentaje1: 0, */
+      ids2:[],
+      ej_d2: [],      
       data2_bruto: [],
-
       data2_concretado: [],
-      porcentaje2: 0
+      total2: 0,
+      /* porcentaje2: 0 */
+      dataTemp: []
     };
   },
   computed: {
-
+    ...mapState(['accessToken'])
   },
   methods: {
     
@@ -371,7 +424,6 @@ export default {
         concretado1 += element;
       });
       this.totalconcretado1 = concretado1;
-      console.log(concretado1)
       //sumando el total re concretado
       this.data2_concretado.forEach(function(element) {
         concretado2 += element;
@@ -423,12 +475,11 @@ export default {
     generarAlertas(colors, texto, estado) {
       this.alerts.push({ color: colors, text: texto, state: estado });
     },
-    cargarDatos(){
-    let data = JSON.parse(localStorage.getItem('dashjefe'))
+    cargarDatos(data){
     try {
       //Rellenando arrays de rate hotel
       let rhotel = data.dashboardRateHotel
-      console.log(this.dashboardRateHotel.length)
+      this.dashboardRateHotel = rhotel 
       for(let i = 0; i< this.dashboardRateHotel.length; i++){
         this.ids1.push(parseInt(this.dashboardRateHotel[i].user_id))
         this.data1_bruto.push(parseInt(this.dashboardRateHotel[i].total))
@@ -437,6 +488,7 @@ export default {
       }
       //Rellenando arrays de rate event
       let revent = data.dashboardRateEvents
+      this.dashboardRateEvents = revent
       for(let i = 0; i< this.dashboardRateEvents.length; i++){
         this.ids2.push(parseInt(this.dashboardRateEvents[i].user_id))
         this.data2_bruto.push(parseInt(this.dashboardRateEvents[i].total))
@@ -448,6 +500,21 @@ export default {
     }
     
   },
+   cargarAños(){
+      var fecha = new Date();
+      var año = fecha.getFullYear();
+      for(var i=2018; i<=año; i++){
+        this.years.push(i)
+      }
+    },
+    modificarFecha(){
+      if(this.monthSelected!='[Seleccionar todos]'){
+        this.fecha = this.monthSelected +' '+this.yearSelected
+      }else{
+        this.fecha = this.yearSelected
+      }
+     
+    },
     grafico1() {
       var ctx = document.getElementById("sales-chart").getContext("2d");
       var ticksStyle = {
@@ -525,8 +592,6 @@ export default {
     },
 
     grafico2() {
-      console.log(this.data2_bruto)
-      console.log(this.data2_concretado)
       var ctx = document.getElementById("sales-chart2").getContext("2d");
       var ticksStyle = {
         fontColor: "#000000",
@@ -602,15 +667,86 @@ export default {
           }
         }
       });
+    },
+    async Filtro(){
+      this.resetFiltro()
+      let datos = {
+    		"month": this.months.indexOf(this.monthSelected),
+    		"year": this.yearSelected
+      }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      let url = 'https://casa-andina.azurewebsites.net/user/dashboard/jefes'
+      await axios.post(url, datos, config)
+      .then(response =>{
+        let fec = {}
+        if(this.monthSelected!='[Seleccionar todos]'){
+          fec = {
+                  year:this.yearSelected,
+                  month: this.monthSelected
+                  }
+        }else{
+          fec = {
+                  year:this.yearSelected,
+                  month: ''
+                  }
+        } 
+        localStorage.setItem('dashjefe', JSON.stringify(response.data))
+        localStorage.setItem('yearandmonth', JSON.stringify(fec))
+        this.cargarDatos(JSON.parse(localStorage.getItem('dashjefe')))
+        this.modificarFecha()
+        this.tot()
+        /* this.grafico1()
+        this.grafico2() */
+        location.reload() 
+      })
+      .catch(error => {
+         alert('Hubo un error Filtrando los datos')
+      })
+    },
+
+    resetFiltro(){
+      this.total1 = 0
+      this.total2 = 0
+      this.ids1 = []
+      this.ids2 = []
+      this.ej_d1 = []
+      this.ej_d2 = []
+      this.data1_bruto = []
+      this.data2_bruto = []
+      this.data1_concretado = []
+      this.data2_concretado = []
     }
+
+
   },
- created() {
-   
- },
+
   mounted() {
     try { 
-    this.cargarDatos();
-    this.grafico1(); 
+    let data = JSON.parse(localStorage.getItem('dashjefe'))
+    if(JSON.parse(localStorage.getItem('yearandmonth'))==null){
+      this.monthSelected = '[Seleccionar todos]'
+      var fecha = new Date();
+      var año = fecha.getFullYear();
+      this.yearSelected = año
+      this.modificarFecha();
+    }else {
+      let yam = JSON.parse(localStorage.getItem('yearandmonth'))
+      if(yam.month==''){
+        this.monthSelected='[Seleccionar todos]'
+        this.yearSelected = yam.year
+      }else{
+        this.monthSelected = yam.month
+        this.yearSelected = yam.year
+      }
+      this.fecha = yam.month + " " + yam.year
+    }
+    this.cargarDatos(data)
+    this.cargarAños();
+    this.grafico1();
     this.grafico2();
     this.tot();
     /* this.porcentajes(); */

@@ -355,8 +355,11 @@ import { mapState, mapActions } from 'vuex';
     deleteItem (item) {
       const index = this.desserts.indexOf(item)
       confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
-      this.type='error'
+      if(this.desserts.length< JSON.parse(localStorage.getItem('usuarios'))){
+        this.type='error'
       this.showAlert()
+      }
+      
     },
 
     close () {

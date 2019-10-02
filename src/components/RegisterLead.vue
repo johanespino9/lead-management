@@ -191,7 +191,7 @@
                     <v-text-field color="#ff4200" v-mask="mask"  v-model="nights" label="Cantidad de Noches" >{{editedItem.nights}}</v-text-field>
                   </v-col>
 
-                  <v-col v-if="editedItem.segment =='Series'" cols="20" sm="12" md="80">
+                  <v-col v-if="editedItem.segment =='Series'" cols="20" sm="10" md="80">
                     <v-combobox
                         color="#ff4200" 
                         v-model="editedItem.month"
@@ -202,8 +202,6 @@
                         label="Seleccionar Meses"
                         multiple
                         persistent-hint
-                        
-                      
                       >
                         <template v-slot:no-data>
                           <v-list-item>
@@ -214,10 +212,55 @@
                             </v-list-item-content>
                           </v-list-item>
                         </template>
-                      </v-combobox>
-                    
+                  </v-combobox>
                   </v-col>
-                  <v-col v-if="editedItem.segment!='Series'" cols="20" sm="12">
+
+                  <v-col v-if="editedItem.segment =='Series'" cols="20" sm="2" md="80" style="margin-top=15px;">
+                      <v-btn  @click="monthsLenght()" class="mx-12" fab color="#ff4200">
+                        <v-icon color="#FAFAFA" dark>mdi-plus</v-icon>
+                      </v-btn>
+                  </v-col>
+                  <!-- MESES -->
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 1 " cols="2" sm="1"   >
+                    <v-text-field color="#ff4200" label="S/" v-mask="mask"  v-model="month1"  ></v-text-field>
+                  </v-col>
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 2" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200"  v-mask="mask"  v-model="month2" label="S/"  ></v-text-field>
+                  </v-col>  
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 3" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200"  v-mask="mask"  v-model="month3" label="S/ " ></v-text-field>
+                  </v-col>  
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 4" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month4" label="S/" ></v-text-field>
+                  </v-col>
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 5" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month5" label="S/" ></v-text-field>
+                  </v-col>  
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 6" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month6" label="S/" ></v-text-field>
+                  </v-col>  
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 7" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month7" label="S/" ></v-text-field>
+                  </v-col>  
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 8" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month8" label="S/" ></v-text-field>
+                  </v-col>  
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 9" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month9" label="S/" ></v-text-field>
+                  </v-col>  
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 10" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month10" label="S/" ></v-text-field>
+                  </v-col>  
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 11" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month11" label="S/" ></v-text-field>
+                  </v-col>  
+                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 12" cols="2" sm="1"  >
+                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month12" label="S/" ></v-text-field>
+                  </v-col>      
+
+                   <!-- TERMINAN LOS MESES -->
+                  
+                  <v-col v-if="editedItem.segment!='Series' || editedItem.segment==''" cols="20" sm="12">
                     <v-btn-toggle color="primary" v-model="sevent">
                       <v-btn color="#ff4200" @click="limpiarfilas()" text value="no">
                         Sin evento
@@ -459,7 +502,35 @@ export default {
       tarifaneta: 0,
       status: '',
       statusid:0 
-    }
+    },
+    rateMonths:{
+      month1:0,
+      month2:0,
+      month3:0,
+      month4:0,
+      month5:0,
+      month6:0,
+      month7:0,
+      month8:0,
+      month9:0,
+      month10:0,
+      month11:0,
+      month12:0,
+    },
+    lenghtMonth: 0,
+    month1:0,
+    month2:0,
+    month3:0,
+    month4:0,
+    month5:0,
+    month6:0,
+    month7:0,
+    month8:0,
+    month9:0,
+    month10:0,
+    month11:0,
+    month12:0,
+   
   }),
   computed: {
     ...mapState(['Users', 'Hoteles', 'Accounts', 'AllLeads', 'Segmentos', 'accessToken']),
@@ -483,7 +554,6 @@ export default {
     selectedSegment: function () {
       
     },
-
     month(val) {
         if (val.length > 4) {
           this.$nextTick(() => this.editedItem.month.pop())
@@ -501,45 +571,11 @@ export default {
   },
   mounted() {
     try {
-      var todoleads = JSON.parse(localStorage.getItem('leads'))
       if(this.leadsAccounts.length==0 && this.hotels.length==0 && this.segments.length==0 && this.desserts.length==0){
         this.getNameAccounts();
         this.getNameHotels();
         this.getNameSegments();
-        for(let i=0; i<todoleads.length; i++){
-          let totale = 0
-          let totalh = 0 
-           if(todoleads[i].events.length>0){
-            for(let j=0; j<todoleads[i].events.length; j++){
-              totale += todoleads[i].events[j].rateEvent
-            }
-           }
-
-           totalh = todoleads[i].rateHotel * todoleads[i].rooms *  (todoleads[i].nights-1)
-           this.desserts.push(
-             {
-              account: todoleads[i].account,
-              contactEmail: todoleads[i].contactEmail,
-              contactName: todoleads[i].contactName,
-              contactPhone: todoleads[i].contactPhone,
-              createDate: todoleads[i].createDate,
-              finalBooking: todoleads[i].finalBooking,
-              hotel: todoleads[i].hotel,
-              initialBooking: todoleads[i].initialBooking,
-              leadid: todoleads[i].leadid,
-              months: todoleads[i].months,
-              name: todoleads[i].name,
-              nights: todoleads[i].nights,
-              rateHotel: todoleads[i].rateHotel,
-              rooms: todoleads[i].rooms,
-              segment: todoleads[i].segment,
-              status: todoleads[i].status,
-              user: todoleads[i].user,
-              events: todoleads[i].events,
-              totalevents: totale,
-              totalhotel: totalh
-             })
-        }
+        this.calculaTotal()
         console.log('Carga de Leads completa')
       }
       if(localStorage.length>=8){
@@ -592,12 +628,13 @@ export default {
     async addSegmentSeriesLead(){
       this.editedItem.initialdate=this.date1
       this.editedItem.finaldate=this.date2
-      var f1 = Date.parse(this.editedItem.initialdate)
-      var f2 = Date.parse(this.editedItem.finaldate)
-      var fe1= new Date(f1)
-      var fe2= new Date(f2)
+      let f1 = Date.parse(this.editedItem.initialdate)
+      let f2 = Date.parse(this.editedItem.finaldate)
+      let fe1= new Date(f1)
+      let fe2= new Date(f2)
       this.editedItem.initialdate=this.date1
       this.editedItem.finaldate=this.date2
+      let rateMonthHotel = this.WatchLenght()
       var datos={
         "name": this.editedItem.name,
         "nights": parseInt(this.nights),
@@ -611,7 +648,7 @@ export default {
         "contactName": this.editedItem.contactName,
         "contactPhone": parseInt(this.editedItem.contactPhone),
         "contactEmail": this.editedItem.contactEmail,
-        "months": this.editedItem.month,
+        "months": rateMonthHotel,
       }
        let config = {
         headers: {
@@ -621,9 +658,14 @@ export default {
       let url = 'https://casa-andina.azurewebsites.net/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
+        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
-        this.desserts = this.AllLeads
+        this.desserts = []
+        this.calculaTotal()
+        this.type='success'
+        this.showAlert()
+
       }).catch(error => {
         console.log('Hubo un error ', error)
       }) 
@@ -659,9 +701,14 @@ export default {
       let url = 'https://casa-andina.azurewebsites.net/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
+        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
-        this.desserts = this.AllLeads
+        this.desserts = []
+        this.calculaTotal()
+        this.type='success'
+        this.showAlert()
+
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -715,7 +762,11 @@ export default {
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
-        this.desserts = this.AllLeads
+        this.desserts = []
+        this.calculaTotal()
+        this.type='success'
+        this.showAlert()
+
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -724,6 +775,8 @@ export default {
     /*----------- PUT DE LEADS -------------------*/
     //Edita Lead Segmentos
     async editSegmentSeriesLead(){
+      let monthRate = this.WatchLenght()
+      console.log(monthRate)
       var datos={
         "leadid": parseInt(this.editedItem.leadid),
         "name": this.editedItem.name,
@@ -739,19 +792,24 @@ export default {
         "contactPhone": parseInt(this.editedItem.contactPhone),
         "contactEmail": this.editedItem.contactEmail,
         "status": this.allstatus[this.editedItem.statusid],
-        "months": this.editedItem.month,
+        "months": monthRate,
       }
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
+      console.log(datos)
       let url = 'https://casa-andina.azurewebsites.net/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
-        this.desserts = this.AllLeads
+        this.desserts = []
+        this.calculaTotal()
+        this.type='success'
+        this.showAlert()
+
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -791,7 +849,10 @@ export default {
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
-        this.desserts = this.AllLeads
+        this.desserts = []
+        this.calculaTotal()
+        this.type='success'
+        this.showAlert()
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -848,7 +909,11 @@ export default {
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
-        this.desserts = this.AllLeads
+        this.desserts = []
+        this.calculaTotal()
+        this.type='success'
+        this.showAlert()
+
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -862,6 +927,7 @@ export default {
       this.dialog = true;
         if(this.editedIndex>=0){
           this.editedItem = Object.assign({}, item);
+          this.SeparaMesyRate(item)
           this.EditMesyEvents()
         }else{
         }
@@ -870,9 +936,9 @@ export default {
     deleteItem(item) {
       const index = this.desserts.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        this.desserts.splice(index, 1);
-        this.type='error'
-        this.showAlert();
+      this.desserts.splice(index, 1);
+      this.type='error'
+      this.showAlert();
     },
 
     close() {
@@ -900,21 +966,15 @@ export default {
         }else{
           this.addOtherLead()
         }
-        
       } 
       this.close();
-      this.type='success'
-      this.showAlert()
     },
 
     
     
 
     /* EDICIONES LEADS */
-     
-   
     
-
     cantTfield(){
       try {
         if(this.editedItem.eventsName.length!=null || this.editedItem.eventsName.length>=0){
@@ -940,17 +1000,42 @@ export default {
       this.name3 = ''
     },
     FiltraDatos(){
-
        if(this.editedItem.segment=='Eventos'){
         this.rateHotel = 0
         this.romms = 0
         this.nights = 0
       }else if(this.editedItem.segment=='Series'){
+        this.lenghtMonth= 0
+        this.month1 =0
+        this.month2 =0
+        this.month3 =0
+        this.month4 =0
+        this.month5 =0
+        this.month6 =0
+        this.month7 =0
+        this.month8 =0
+        this.month9 =0
+        this.month10 =0
+        this.month11 =0
+        this.month12 =0
         this.rateEvent1 = 0
         this.rateEvent2 = 0
         this.rateEvent3 = 0
         this.editedItem.eventsName = []
       }else if(this.editedItem.segment == ''){
+        this.lenghtMonth= 0
+        this.month1 =0
+        this.month2 =0
+        this.month3 =0
+        this.month4 =0
+        this.month5 =0
+        this.month6 =0
+        this.month7 =0
+        this.month8 =0
+        this.month9 =0
+        this.month10 =0
+        this.month11 =0
+        this.month12 =0
         this.sevent ='no'
         this.editedItem.eventsName = []
         this.rateHotel = 0
@@ -1085,8 +1170,85 @@ export default {
     },
     grantotal: function(){ 
       return this.eventrevenue()+this.roomrevenue()
-
+    },
+    monthsLenght(){
+      this.lenghtMonth = this.editedItem.month.length
+      console.log(this.editedItem.month.length)   
+    },
+    WatchLenght: function(){
+      let MonthsRate = []
+      if(this.editedItem.month.length>=1){MonthsRate.push({"name":this.editedItem.month[0],"rateHotel": parseInt(this.month1)})}
+      if(this.editedItem.month.length>=2){MonthsRate.push({"name":this.editedItem.month[1],"rateHotel": parseInt(this.month2)})}
+      if(this.editedItem.month.length>=3){MonthsRate.push({"name":this.editedItem.month[2],"rateHotel": parseInt(this.month3)})}
+      if(this.editedItem.month.length>=4){MonthsRate.push({"name":this.editedItem.month[3],"rateHotel": parseInt(this.month4)})}
+      if(this.editedItem.month.length>=5){MonthsRate.push({"name":this.editedItem.month[4],"rateHotel": parseInt(this.month5)})}
+      if(this.editedItem.month.length>=6){MonthsRate.push({"name":this.editedItem.month[5],"rateHotel": parseInt(this.month6)})}
+      if(this.editedItem.month.length>=7){MonthsRate.push({"name":this.editedItem.month[6],"rateHotel": parseInt(this.month7)})}
+      if(this.editedItem.month.length>=8){MonthsRate.push({"name":this.editedItem.month[7],"rateHotel": parseInt(this.month8)})}
+      if(this.editedItem.month.length>=9){MonthsRate.push({"name":this.editedItem.month[8],"rateHotel": parseInt(this.month9)})}
+      if(this.editedItem.month.length>=10){MonthsRate.push({"name":this.editedItem.month[9],"rateHotel": parseInt(this.month10)})}
+      if(this.editedItem.month.length>=11){MonthsRate.push({"name":this.editedItem.month[10],"rateHotel": parseInt(this.month11)})}
+      if(this.editedItem.month.length>=12){MonthsRate.push({"name":this.editedItem.month[11],"rateHotel": parseInt(this.month12)})}
+      return MonthsRate
+    },
+    SeparaMesyRate(item){
+      this.lenghtMonth = item.months.length
+      this.editedItem.month = []
+      for(let i=0; i<item.months.length; i++){
+        this.editedItem.month.push(item.months[i].name)
+      }
+      if(this.lenghtMonth>=1){ this.month1= item.months[0].rateHotel}
+      if(this.lenghtMonth>=2){ this.month2= item.months[1].rateHotel}
+      if(this.lenghtMonth>=3){ this.month3= item.months[2].rateHotel}
+      if(this.lenghtMonth>=4){ this.month4= item.months[3].rateHotel}
+      if(this.lenghtMonth>=5){ this.month5= item.months[4].rateHotel}
+      if(this.lenghtMonth>=6){ this.month6= item.months[5].rateHotel}
+      if(this.lenghtMonth>=7){ this.month7= item.months[6].rateHotel}
+      if(this.lenghtMonth>=8){ this.month8= item.months[7].rateHotel}
+      if(this.lenghtMonth>=9){ this.month9= item.months[8].rateHotel}
+      if(this.lenghtMonth>=10){ this.month10= item.months[9].rateHotel}
+      if(this.lenghtMonth>=11){ this.month11= item.months[10].rateHotel}
+      if(this.lenghtMonth>=12){ this.month12= item.months[11].rateHotel} 
+    },
+    calculaTotal(){
+      var todoleads = JSON.parse(localStorage.getItem('leads'))
+        for(let i=0; i<todoleads.length; i++){
+          let totale = 0
+          let totalh = 0 
+           if(todoleads[i].events.length>0){
+            for(let j=0; j<todoleads[i].events.length; j++){
+              totale += todoleads[i].events[j].rateEvent
+            }
+           }
+           totalh = todoleads[i].rateHotel * todoleads[i].rooms *  (todoleads[i].nights)
+           this.desserts.push(
+             {
+              account: todoleads[i].account,
+              contactEmail: todoleads[i].contactEmail,
+              contactName: todoleads[i].contactName,
+              contactPhone: todoleads[i].contactPhone,
+              createDate: todoleads[i].createDate,
+              finalBooking: todoleads[i].finalBooking,
+              hotel: todoleads[i].hotel,
+              initialBooking: todoleads[i].initialBooking,
+              leadid: todoleads[i].leadid,
+              months: todoleads[i].months,
+              name: todoleads[i].name,
+              nights: todoleads[i].nights,
+              rateHotel: todoleads[i].rateHotel,
+              rooms: todoleads[i].rooms,
+              segment: todoleads[i].segment,
+              status: todoleads[i].status,
+              user: todoleads[i].user,
+              events: todoleads[i].events,
+              totalevents: totale,
+              totalhotel: totalh
+             })
+        }
     }
+
+
+
   },
 
 }

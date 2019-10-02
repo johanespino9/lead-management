@@ -1,4 +1,14 @@
 <template>
+  <div>
+    <b-alert
+      :show="dismissCountDown"
+      @dismissed="dismissCountDown=0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <v-alert  v-if="type=='success'" icon="mdi-shield-lock-outline" type="success" :v-show="dismissCountDown">
+           {{msjsuccess}}
+      </v-alert>
+    </b-alert> 
         <v-data-table
               :headers="headers"
               :items="desserts"
@@ -75,6 +85,7 @@
                 <v-btn color="primary" @click="allItems()">Reset</v-btn>
               </template> -->
     </v-data-table>
+    </div>
 </template>
 <script>
 import { mask } from 'vue-the-mask';
@@ -120,6 +131,10 @@ import axios from 'axios';
       },
       categories:[],
       branchs:[],
+      msjsuccess:'Se guardó correctamente',
+      type: 'success',
+      dismissCountDown: 0,
+      dismissSecs: 2,
     }),
 
     computed: {
@@ -146,12 +161,9 @@ import axios from 'axios';
          this.categories = categories
          this.branchs = branchs
          /* this.gsegment = JSON.parse(localStorage.getItem('usuario')).groupSegment */
-         console.log(JSON.parse(localStorage.getItem('usuario')).groupSegment)
          /* this.$store.commit('Accounts', cuentas)
          this.$store.commit('Categories', categories)
          this.$store.commit('Branchs', branchs) */
-         console.log('Carga de Accounts completa')
-
          /* this.$store.dispatch('getCategories')
          this.$store.dispatch('getGroupSegment')
          this.$store.dispatch('getBranch') */
@@ -175,6 +187,12 @@ import axios from 'axios';
       allItems(){
         this.getAccount();
       },
+      countDownChanged(dismissCountDown) {
+        this.dismissCountDown = dismissCountDown
+      },
+      showAlert() {
+        this.dismissCountDown = this.dismissSecs
+      }, 
 
     //Agregrar nueva cuenta
     async addAcount(){
@@ -192,10 +210,10 @@ import axios from 'axios';
       let url = 'https://casa-andina.azurewebsites.net/user/accounts'
       await axios.post(url, datos, config)
       .then(response => { 
-        console.log(response)
         localStorage.setItem('accounts', JSON.stringify(response.data))
         this.$store.commit('Accounts', response.data)
         this.desserts=this.Accounts
+        this.showAlert()
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -218,10 +236,10 @@ import axios from 'axios';
       let url = 'https://casa-andina.azurewebsites.net/user/accounts'
       await axios.put(url, datos, config)
       .then(response => { 
-        console.log(response)
         localStorage.setItem('accounts', JSON.stringify(response.data))
         this.$store.commit('Accounts', response.data)
         this.desserts=this.Accounts
+        this.showAlert()
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -229,7 +247,6 @@ import axios from 'axios';
 
       rellenadatos(){
         var user = JSON.parse(localStorage.getItem('usuario'))
-        console.log(user)
         this.editedItem.groupSegment = user.groupSegment
       },
 
@@ -238,7 +255,6 @@ import axios from 'axios';
         if(this.editedIndex>-1){
           this.editedItem = Object.assign({}, item)
           this.dialog = true
-         console.log(this.editedIndex)
         }
         
       },
