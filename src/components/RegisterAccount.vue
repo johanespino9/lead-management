@@ -23,12 +23,12 @@
                     inset
                     vertical
                   ></v-divider>
-                  <v-text-field color="#ff4200" class="text-xs-center" v-model="search" append-icon="search" label="Búsqueda" single-line hide-details></v-text-field>
+                  <v-text-field color="#d69c4f" class="text-xs-center" v-model="search" append-icon="search" label="Búsqueda" single-line hide-details></v-text-field>
                    <v-spacer></v-spacer>
                   <div class="flex-grow-1"></div>
                   <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on }">
-                      <v-btn @click="rellenadatos()" color="#ff4200" dark class="mb-2" v-on="on">Añadir Nueva Cuenta</v-btn>
+                      <v-btn @click="rellenadatos()" color="#d69c4f" dark class="mb-2" v-on="on">Añadir Nueva Cuenta</v-btn>
                     </template>
                     <v-card>
                       <v-card-title>
@@ -42,16 +42,16 @@
                               <v-text-field disabled color="#ff4200" v-model="editedItem.accountId" label="Account Id"></v-text-field>
                             </v-col> -->
                             <v-col cols="12" sm="6" md="12">
-                              <v-text-field  color="#ff4200" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
+                              <v-text-field  color="#d69c4f" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                             </v-col>
                             <v-col cols="auto">
-                              <v-combobox color="#ff4200" v-model="editedItem.branch" :items="branchs" label="Seleccionar Sector"></v-combobox>
+                              <v-combobox color="#d69c4f" v-model="editedItem.branch" :items="branchs" label="Seleccionar Sector"></v-combobox>
                             </v-col>
                             <v-col cols="auto">
-                               <v-combobox color="#ff4200" v-model="editedItem.category" :items="categories" label="Seleccionar Categoría"></v-combobox>
+                               <v-combobox color="#d69c4f" v-model="editedItem.category" :items="categories" label="Seleccionar Categoría"></v-combobox>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
-                              <v-text-field color="#ff4200" disabled v-model="editedItem.groupSegment" label="Group Segment"></v-text-field>
+                              <v-text-field color="#d69c4f" disabled v-model="editedItem.groupSegment" label="Group Segment"></v-text-field>
                             </v-col>
                           </v-row>
                         </v-container>
@@ -59,8 +59,8 @@
           
                       <v-card-actions>
                         <div class="flex-grow-1"></div>
-                        <v-btn color="#ff4200" text @click="close">Cancel</v-btn>
-                        <v-btn color="#ff4200" text @click="save">Save</v-btn>
+                        <v-btn color="#d69c4f" text @click="close">Cancel</v-btn>
+                        <v-btn color="#d69c4f" text @click="save">Save</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>

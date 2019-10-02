@@ -3,7 +3,7 @@
   <v-container class="col-md-12">
     <v-row >
         <v-col cols="auto">
-          <v-combobox color="#ff4200"  v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
+          <v-combobox color="#d69c4f"  v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
         </v-col>
         <v-col cols="auto" style="margin-top: 12px;">
           <v-btn @click="getVisits()" color="#000000" style="color: #FAFAFA;">Filtrar Registros</v-btn>
@@ -37,7 +37,7 @@
                 <v-col cols="20" sm="6" md="80" class=center >
                     <v-text-field 
                     v-model="editedItem.name"
-                    color="#ff4200" 
+                    color="#d69c4f" 
                     label="Nombre">
                     </v-text-field>
                   </v-col>
@@ -45,7 +45,7 @@
                     <v-combobox
                       v-model="editedItem.account"
                       :items="allAccounts"
-                      color="#ff4200"
+                      color="#d69c4f"
                       label="Seleccionar Empresa"
                     ></v-combobox>
                   </v-col>
@@ -53,7 +53,7 @@
                     <v-combobox
                       v-model="editedItem.razon"
                       :items="Reasons"
-                      color="#ff4200"
+                      color="#d69c4f"
                       label="Seleccionar razón"
                     ></v-combobox>
 
@@ -62,7 +62,7 @@
                   <v-col cols="20" sm="3" md="80" class=center>
                       <v-menu
                         ref="menu"
-                        color="#ff4200"
+                        color="#d69c4f"
                         v-model="menu"
                         :close-on-content-click="false"
                         :return-value.sync="date1"
@@ -73,7 +73,7 @@
                       >
                         <template v-slot:activator="{ on }">
                           <v-text-field
-                            color="#ff4200"
+                            color="#d69c4f"
                             v-model="date1"
                             label="Fecha de Visita"
                             prepend-icon="event"
@@ -83,15 +83,15 @@
                         </template>
                         <v-date-picker v-model="date1" no-title scrollable color="#000000">
                           <div class="flex-grow-1"></div>
-                          <v-btn text color="#ff4200" @click="menu = false">Cancel</v-btn>
-                          <v-btn text color="#ff4200" @click="$refs.menu.save(date1)">OK</v-btn>
+                          <v-btn text color="#d69c4f" @click="menu = false">Cancel</v-btn>
+                          <v-btn text color="#d69c4f" @click="$refs.menu.save(date1)">OK</v-btn>
                         </v-date-picker>
                       </v-menu>
                   </v-col>
                   <v-col cols="12" sm="6" md="80" >
                     <v-textarea
                       v-model="editedItem.description"
-                      color="#ff4200" 
+                      color="#d69c4f" 
                       height="30"
                       :auto-grow="true"
                       :clearable="true"
@@ -101,11 +101,11 @@
                   
                   <v-col class="lg-offset8" md="6" lg="6">
                         <h3>Hora Inicio</h3>
-                        <v-time-picker width="250" header-color="#000000"  v-model="horaInicio" color="#ff4200"></v-time-picker>
+                        <v-time-picker width="250" header-color="#000000"  v-model="horaInicio" color="#d69c4f"></v-time-picker>
                  </v-col>
                  <v-col class="lg-offset8" md="6" lg="6">
                       <h3>Hora Fin</h3>
-                       <v-time-picker width="250" header-color="#000000"  v-model="horaFin"  color="#ff4200"></v-time-picker>
+                       <v-time-picker width="250" header-color="#000000"  v-model="horaFin"  color="#d69c4f"></v-time-picker>
                  </v-col>
               
             </v-row>
@@ -113,7 +113,7 @@
          </v-container>
           <v-card-actions>
                       <div class="flex-grow-1"></div>
-                      <v-btn color="#ff4200" text @click="save()">Save</v-btn>
+                      <v-btn color="#d69c4f" text @click="save()">Save</v-btn>
             </v-card-actions>
        </v-card-text>
        </v-card>         
@@ -198,7 +198,7 @@
             flat
           >
             <v-toolbar
-              color="#ff4200"
+              color="#d69c4f"
               dark
             >
               <!-- <v-btn icon @click="editItem(selectedEvent)">
@@ -547,7 +547,7 @@ export default {
             end: visitas[i].finish.toString(),
             account: visitas[i].account,
             reason: visitas[i].reason,
-            color: '#ff4200',
+            color: '#d69c4f',
           })
         }
         this.events = array 
@@ -608,7 +608,7 @@ export default {
             end: visitas[i].finish.toString(),
             account: visitas[i].account,
             reason: visitas[i].reason,
-            color: '#ff4200',
+            color: '#d69c4f',
           })
         }     
         console.log(array)

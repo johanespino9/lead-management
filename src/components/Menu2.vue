@@ -10,7 +10,7 @@
       permanent
       dark
     >
-      <v-list-item color="#ff4200">
+      <v-list-item color="#d69c4f">
         <v-list-item-avatar>
           <v-img src="../assets/profile.png"></v-img>
         </v-list-item-avatar>
@@ -32,7 +32,7 @@
 
         <v-list-item-group >
 
-        <v-list-item color="#ff4200" v-if="role!='Ejecutivo'" to="/boss-dashboard-casa-a">       
+        <v-list-item color="#d69c4f" v-if="role!='Ejecutivo'" to="/boss-dashboard-casa-a">       
           <v-list-item-action>
             <v-icon>home</v-icon>
           </v-list-item-action>
@@ -40,7 +40,7 @@
             <v-list-item-title> Dashboard Jefes </v-list-item-title>
           </v-list-item-content>     
        </v-list-item>
-            <v-list-item color="#ff4200" v-if="role!='Ejecutivo'" to="/tabledash">
+            <v-list-item color="#d69c4f" v-if="role!='Ejecutivo'" to="/tabledash">
               <v-list-item-action>
                 <v-icon>dashboard</v-icon>
               </v-list-item-action>
@@ -48,7 +48,7 @@
                 <v-list-item-title>DashBoard Ejecutivo</v-list-item-title>
               </v-list-item-content>
               </v-list-item>
-            <v-list-item color="#ff4200" v-if="role!='Ejecutivo'" to="/registerlead">
+            <v-list-item color="#d69c4f" v-if="role!='Ejecutivo'" to="/registerlead">
               <v-list-item-action>
                 <v-icon>event</v-icon>
               </v-list-item-action>
@@ -56,7 +56,7 @@
             <v-list-item-title>Gestión de Leads</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item color="#ff4200" v-if="role!='Administrador'" to="/registeruser">
+        <v-list-item color="#d69c4f" v-if="role!='Administrador'" to="/registeruser">
           <v-list-item-action>
             <v-icon>event</v-icon>
           </v-list-item-action>
@@ -64,7 +64,7 @@
             <v-list-item-title>Gestión de Usuarios</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item color="#ff4200" v-if="role!='Ejecutivo'" to="/registeraccount">
+        <v-list-item color="#d69c4f" v-if="role!='Ejecutivo'" to="/registeraccount">
           <v-list-item-action>
             <v-icon>event</v-icon>
           </v-list-item-action>
