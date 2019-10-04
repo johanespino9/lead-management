@@ -20,9 +20,9 @@
       </v-img>  
        <v-form>
         <v-col cols="12">
-            <v-text-field color="#ff4200" v-model="email" label="Usuario" required></v-text-field>
+            <v-text-field color="#d69c4f" v-model="email" label="Usuario" required></v-text-field>
             <v-text-field
-              color="#ff4200"
+              color="#d69c4f"
               v-model="password"
               :append-icon="show1 ? 'visibility' : 'visibility_off'"
               :type="show1 ? 'text' : 'password'"

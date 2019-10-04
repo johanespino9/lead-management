@@ -11,7 +11,7 @@
       dark
       color="#000000"
     >
-      <v-list-item  color="#ff4200">
+      <v-list-item  color="#d69c4f">
         <v-list-item-avatar >
           <!-- <v-img src="../assets/avatar2.jpg"></v-img> -->
           <img
@@ -36,7 +36,7 @@
       <v-list dense>
         <v-list-item-group >
 
-        <v-list-item color="#ff4200" v-if="role!='Ejecutivo'" to="/dashboard_jefes">       
+        <v-list-item color="#d69c4f" v-if="role!='Ejecutivo'" to="/dashboard_jefes">       
           <v-list-item-action>
             <v-icon>dashboard</v-icon>
           </v-list-item-action>
@@ -44,7 +44,7 @@
             <v-list-item-title> Dashboard Jefes </v-list-item-title>
           </v-list-item-content>     
        </v-list-item>
-            <v-list-item color="#ff4200" v-if="role=='Ejecutivo'" to="/dashboard-ejecutivos">
+            <v-list-item color="#d69c4f" v-if="role=='Ejecutivo'" to="/dashboard-ejecutivos">
               <v-list-item-action>
                 <v-icon>dashboard</v-icon>
               </v-list-item-action>
@@ -52,7 +52,7 @@
                 <v-list-item-title>DashBoard Ejecutivo</v-list-item-title>
               </v-list-item-content>
               </v-list-item>
-            <v-list-item color="#ff4200" v-if="role=='Ejecutivo'" to="/register-lead">
+            <v-list-item color="#d69c4f" v-if="role=='Ejecutivo'" to="/register-lead">
               <v-list-item-action>
                 <v-icon>event</v-icon>
               </v-list-item-action>
@@ -60,7 +60,7 @@
             <v-list-item-title>Gestión de Leads</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item color="#ff4200" v-if="role=='Administrador'" to="/register-user">
+        <v-list-item color="#d69c4f" v-if="role=='Administrador'" to="/register-user">
           <v-list-item-action>
             <v-icon>event</v-icon>
           </v-list-item-action>
@@ -68,7 +68,7 @@
             <v-list-item-title>Gestión de Usuarios</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item color="#ff4200" v-if="role=='Ejecutivo' || role=='Supervisor de Segmento'" to="/register-account">
+        <v-list-item color="#d69c4f" v-if="role=='Ejecutivo' || role=='Supervisor de Segmento'" to="/register-account">
           <v-list-item-action>
             <v-icon>event</v-icon>
           </v-list-item-action>
@@ -76,7 +76,7 @@
             <v-list-item-title>Gestión de Cuentas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="role=='Ejecutivo'" color="#ff4200" to="/visits">
+        <v-list-item v-if="role=='Ejecutivo'" color="#d69c4f" to="/visits">
           <v-list-item-action>
             <v-icon>notification_important</v-icon>
           </v-list-item-action>
@@ -84,7 +84,7 @@
             <v-list-item-title>Visitas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item color="#ff4200" to="/profile">
+        <v-list-item color="#d69c4f" to="/profile">
           <v-list-item-action>
             <v-icon>perm_identity</v-icon>
           </v-list-item-action>
@@ -107,7 +107,7 @@
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn color="#ff4200" block @click="CerrarSession()">Logout</v-btn>
+          <v-btn color="#d69c4f" class="black--text" block @click="CerrarSession()">Logout</v-btn>
         </div>
       </template>
     </v-navigation-drawer>

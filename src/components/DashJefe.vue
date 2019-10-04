@@ -4,10 +4,10 @@
     <v-container class="col-md-10">
       <v-row justify="center">
         <v-col cols="auto">
-          <v-combobox :items="months" v-model="monthSelected" color="#757575" label="Seleccionar Mes"></v-combobox>
+          <v-combobox :items="months" v-model="monthSelected" color="#d69c4f" label="Seleccionar Mes"></v-combobox>
         </v-col>
         <v-col cols="auto">
-          <v-combobox :items="years" v-model="yearSelected" color="#757575" label="Seleccionar Año"></v-combobox>
+          <v-combobox :items="years" v-model="yearSelected" color="#d69c4f" label="Seleccionar Año"></v-combobox>
         </v-col>
         <v-col cols="auto" style="margin-top: 12px;">
           <v-btn color="#000000" style="color: #FAFAFA;" @click="Filtro()">Filtrar Registros</v-btn>

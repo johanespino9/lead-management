@@ -6,13 +6,13 @@
         <v-combobox  v-model="hotelSelected" :items="hotels"  label="Seleccionar Hotel" :color="color" ></v-combobox>
       </v-col>
       <v-col cols="auto">
-        <v-combobox color="#ff4200" v-model="monthSelected" :items="months" label="Seleccionar Mes"></v-combobox>
+        <v-combobox color="#d69c4f" v-model="monthSelected" :items="months" label="Seleccionar Mes"></v-combobox>
       </v-col>
       <v-col cols="auto">
-        <v-combobox color="#ff4200" v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
+        <v-combobox color="#d69c4f" v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
       </v-col>
       <v-col cols="auto" style="margin-top: 10px;">
-        <v-btn color="#ff4200" style="color: #FAFAFA;" @click="FiltroDashboard()">Buscar Registros</v-btn>
+        <v-btn color="#d69c4f" style="color: #FAFAFA;" @click="FiltroDashboard()">Buscar Registros</v-btn>
       </v-col>
     </v-row>
   </v-container>  
@@ -74,7 +74,7 @@ import axios from "axios";
 import { mapState, mapActions } from 'vuex';
 export default {
   data: () => ({
-    color: '#ff4200',
+    color: '#d69c4f',
     percents: {},
     values:[],
     value: 0,

@@ -30,7 +30,7 @@
                     </v-col>
                   <v-col cols="20" sm="3" md="80" class=center>
                     <v-text-field
-                            color="#ff4200" 
+                            color="#d69c4f" 
                             prepend-icon="group"
                             ref="groupsegment"
                             v-model="user.groupSegment"
@@ -39,7 +39,7 @@
                             placeholder=""
                         ></v-text-field>
                         <v-text-field
-                            color="#ff4200" 
+                            color="#d69c4f" 
                             prepend-icon="account_circle"
                             ref="jefe"
                             v-model="user.manager"
@@ -48,7 +48,7 @@
                             placeholder=""
                         ></v-text-field>
                     <v-text-field
-                            color="#ff4200" 
+                            color="#d69c4f" 
                             prepend-icon="account_circle"
                             ref="role"
                             v-model="user.role"
@@ -57,7 +57,7 @@
                             disabled=""
                         ></v-text-field>
                     <v-text-field
-                            color="#ff4200" 
+                            color="#d69c4f" 
                             prepend-icon="account_circle"
                             ref="email"
                             v-model="user.username"
@@ -69,7 +69,7 @@
 
                   <v-col cols="20" sm="3" md="80" class=center>
                     <v-text-field
-                            color="#ff4200" 
+                            color="#d69c4f" 
                             prepend-icon="account_circle"
                             ref="id"
                             v-model="user.userId"
@@ -78,7 +78,7 @@
                             disabled
                     ></v-text-field>
                     <v-text-field
-                            color="#ff4200" 
+                            color="#d69c4f" 
                             prepend-icon="email"
                             ref="email"
                             v-model="user.email"
@@ -86,7 +86,7 @@
                             placeholder=""
                     ></v-text-field>
                     <v-text-field
-                            color="#ff4200" 
+                            color="#d69c4f" 
                             prepend-icon="account_circle"
                             ref="name"
                             v-model="user.name"
@@ -94,7 +94,7 @@
                             placeholder=""  
                     ></v-text-field>
                     <v-text-field
-                            color="#ff4200" 
+                            color="#d69c4f" 
                             prepend-icon="account_circle"
                             ref="lastname"
                             v-model="user.lastName"
@@ -105,7 +105,7 @@
 
                     <v-col cols="20" sm="3" md="80" class=center>
                     <v-text-field
-                            color="#ff4200" 
+                            color="#d69c4f" 
                             prepend-icon=""
                             ref="active"
                             v-model="estado"
@@ -114,7 +114,7 @@
                             disabled
                     ></v-text-field>
                     <v-text-field
-                      color="#ff4200"
+                      color="#d69c4f"
                       v-model="user.password"
                       :append-icon="show1 ? 'visibility' : 'visibility_off'"
                       :type="show1 ? 'text' : 'password'"
@@ -129,7 +129,7 @@
               </v-container>
             <v-card-actions>
                       <div class="flex-grow-1"></div>
-                      <v-btn color="#ff4200" text @click="editUser()">Guardar cambios</v-btn>
+                      <v-btn color="#d69c4f" text @click="editUser()">Guardar cambios</v-btn>
          </v-card-actions>
         </v-card>
   <!--   </v-dialog> -->

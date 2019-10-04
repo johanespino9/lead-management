@@ -19,7 +19,7 @@
         <v-toolbar-title>Gestión de Leads</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-text-field
-          color="#ff4200"
+          color="#d69c4f"
           class="text-xs-center"
           v-model="search"
           append-icon="search"
@@ -31,7 +31,7 @@
         <div class="flex-grow-1"></div>
         <v-dialog v-model="dialog" max-width="1150px">
           <template v-slot:activator="{ on }">
-            <v-btn color="#ff4200" @click="FiltraDatos()" style="color: #FAFAFA;" dark class="mb-2" v-on="on" >Añadir Nuevo Lead</v-btn>
+            <v-btn color="#d69c4f" @click="FiltraDatos()" style="color: #FAFAFA;" dark class="mb-2" v-on="on" >Añadir Nuevo Lead</v-btn>
           </template>
 
           <v-card>
@@ -41,7 +41,7 @@
               <v-stepper  v-model="editedItem.statusid"  non-linear >
                       <v-stepper-header>
                         <v-stepper-step
-                          color="#ff4200"
+                          color="#d69c4f"
                           editable
                           :complete="editedItem.statusid>0"
                           step="1"
@@ -52,7 +52,7 @@
                         <v-divider></v-divider>
                 
                         <v-stepper-step
-                          color="#ff4200"
+                          color="#d69c4f"
                           v-if="editedIndex>-1" 
                           editable
                           :complete="editedItem.statusid>1"
@@ -64,7 +64,7 @@
                         <v-divider></v-divider>
                 
                         <v-stepper-step
-                          color="#ff4200"
+                          color="#d69c4f"
                           v-if="editedIndex>-1"
                           :complete="editedItem.statusid>2"
                           step="3"
@@ -75,7 +75,7 @@
                         <v-divider></v-divider>
                 
                         <v-stepper-step
-                          color="#ff4200"
+                          color="#d69c4f"
                           v-if="editedIndex>-1"
                           :complete="editedItem.statusid>3"
                           step="4"
@@ -86,7 +86,7 @@
                         <v-divider></v-divider>
                 
                         <v-stepper-step
-                          color="#ff4200"
+                          color="#d69c4f"
                           v-if="editedIndex>-1"
                           :complete="editedItem.statusid>4"
                           step="5"
@@ -98,7 +98,7 @@
                         <v-divider></v-divider>
                 
                         <v-stepper-step
-                          color="#ff4200"
+                          color="#d69c4f"
                           v-if="editedIndex>-1"
                           :complete="editedItem.statusid>5"
                           step="6"
@@ -116,20 +116,20 @@
                     <v-text-field v-model="editedItem.leadid" disabled  label="Lead ID" ></v-text-field>
                   </v-col> -->
                   <v-col cols="20" sm="4" md="80" class=center>
-                    <v-combobox color="#ff4200" v-model="editedItem.segment" :items="segments" label="Seleccionar Segmento" ></v-combobox>
+                    <v-combobox color="#d69c4f" v-model="editedItem.segment" :items="segments" label="Seleccionar Segmento" ></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="4" md="80" class=center>
-                    <v-combobox color="#ff4200" v-model="editedItem.account" :items="leadsAccounts" label="Seleccionar Cuenta"></v-combobox>
+                    <v-combobox color="#d69c4f" v-model="editedItem.account" :items="leadsAccounts" label="Seleccionar Cuenta"></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="4" md="80" class=center>
-                    <v-combobox color="#ff4200" v-model="editedItem.hotel" :items="hotels" label="Seleccionar Hotel"></v-combobox>
+                    <v-combobox color="#d69c4f" v-model="editedItem.hotel" :items="hotels" label="Seleccionar Hotel"></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="4" md="80" class=center>
-                    <v-text-field color="#ff4200"  v-model="editedItem.name" label="Nombre de Grupo"></v-text-field>
+                    <v-text-field color="#d69c4f"  v-model="editedItem.name" label="Nombre de Grupo"></v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center>
                     <v-dialog
-                      color="#ff4200"
+                      color="#d69c4f"
                       ref="dialog1"
                       v-model="modal1"
                       :return-value.sync="date1"
@@ -139,7 +139,7 @@
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          color="#ff4200"
+                          color="#d69c4f"
                           v-model="date1"
                           label="Fecha Inicio"
                           prepend-icon="event"
@@ -156,7 +156,7 @@
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center>
                     <v-dialog
-                      color="#ff4200"
+                      color="#d69c4f"
                       ref="dialog2"
                       v-model="modal2"
                       :return-value.sync="date2"
@@ -166,7 +166,7 @@
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          color="#ff4200"
+                          color="#d69c4f"
                           v-model="date2"
                           label="Fecha Fin"
                           prepend-icon="event"
@@ -182,18 +182,18 @@
                     </v-dialog>
                   </v-col>
                   <v-col  v-if="editedItem.segment!='Eventos'"  cols="20" sm="2" md="80" class=center >
-                    <v-text-field color="#ff4200" v-mask="mask" v-model="rooms" label="Cantidad de Habitaciones"  >{{editedItem.rooms}}</v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rooms" label="Cantidad de Habitaciones"  >{{editedItem.rooms}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment != 'Eventos'" cols="20" sm="2" md="80" class=center  >
-                    <v-text-field color="#ff4200" v-mask="mask" v-model="rateHotel" prefix="S/." label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateHotel" prefix="S/." label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment=='Series'" cols="20" sm="2" md="80" class=center >
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="nights" label="Cantidad de Noches" >{{editedItem.nights}}</v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="nights" label="Cantidad de Noches" >{{editedItem.nights}}</v-text-field>
                   </v-col>
 
                   <v-col v-if="editedItem.segment =='Series'" cols="20" sm="10" md="80">
                     <v-combobox
-                        color="#ff4200" 
+                        color="#d69c4f" 
                         v-model="editedItem.month"
                         :items="months"
                         :search-input.sync="search"
@@ -216,63 +216,63 @@
                   </v-col>
 
                   <v-col v-if="editedItem.segment =='Series'" cols="20" sm="2" md="80" style="margin-top=15px;">
-                      <v-btn  @click="monthsLenght()" class="mx-12" fab color="#ff4200">
+                      <v-btn  @click="monthsLenght()" class="mx-12" fab color="#d69c4f">
                         <v-icon color="#FAFAFA" dark>mdi-plus</v-icon>
                       </v-btn>
                   </v-col>
                   <!-- MESES -->
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 1 " cols="2" sm="1"   >
-                    <v-text-field color="#ff4200" label="S/" v-mask="mask"  v-model="month1"  ></v-text-field>
+                    <v-text-field color="#d69c4f" label="S/" v-mask="mask"  v-model="month1"  ></v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 2" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200"  v-mask="mask"  v-model="month2" label="S/"  ></v-text-field>
+                    <v-text-field color="#d69c4f"  v-mask="mask"  v-model="month2" label="S/"  ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 3" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200"  v-mask="mask"  v-model="month3" label="S/ " ></v-text-field>
+                    <v-text-field color="#d69c4f"  v-mask="mask"  v-model="month3" label="S/ " ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 4" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month4" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month4" label="S/" ></v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 5" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month5" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month5" label="S/" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 6" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month6" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month6" label="S/" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 7" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month7" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month7" label="S/" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 8" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month8" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month8" label="S/" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 9" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month9" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month9" label="S/" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 10" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month10" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month10" label="S/" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 11" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month11" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month11" label="S/" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 12" cols="2" sm="1"  >
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="month12" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month12" label="S/" ></v-text-field>
                   </v-col>      
 
                    <!-- TERMINAN LOS MESES -->
                   
                   <v-col v-if="editedItem.segment!='Series' || editedItem.segment==''" cols="20" sm="12">
                     <v-btn-toggle color="primary" v-model="sevent">
-                      <v-btn color="#ff4200" @click="limpiarfilas()" text value="no">
+                      <v-btn color="#d69c4f" @click="limpiarfilas()" text value="no">
                         Sin evento
                       </v-btn>
-                      <v-btn color="#ff4200" text value="si">
+                      <v-btn color="#d69c4f" text value="si">
                         Evento
                       </v-btn>
                     </v-btn-toggle>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series' && sevent=='si'" cols="20" sm="4" md="80" >
                     <v-combobox
-                        color="#ff4200"
+                        color="#d69c4f"
                         v-model="editedItem.eventsName"
                         :items="items"
                         :search-input.sync="search"
@@ -300,30 +300,30 @@
                         Ingresar Costos
                       </v-btn>
                       </v-btn-toggle> -->
-                      <v-btn  @click="cantTfield()" class="mx-12" fab color="#ff4200">
+                      <v-btn  @click="cantTfield()" class="mx-12" fab color="#d69c4f">
                         <v-icon color="#FAFAFA" dark>mdi-plus</v-icon>
                       </v-btn>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series' && sevent=='si' && name1=='Alimentos y bebidas' || name2=='Alimentos y bebidas' || name3=='Alimentos y bebidas' " cols="20" sm="2" md="80" class=center >
-                    <v-text-field color="#ff4200" v-mask="mask" v-model="rateEvent1" prefix="S/." label="Ingresar Eventos AyB">{{editedItem.rateEvent1}}</v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateEvent1" prefix="S/." label="Ingresar Eventos AyB">{{editedItem.rateEvent1}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series' && sevent=='si'  && (name1=='Equipos' || name2=='Equipos' || name3=='Equipos')" cols="20" sm="2" md="80" class=center >
-                    <v-text-field color="#ff4200" v-mask="mask" v-model="rateEvent2"  prefix="S/." label="Ingresar Eventos Equipos">{{editedItem.rateEvent2}}</v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateEvent2"  prefix="S/." label="Ingresar Eventos Equipos">{{editedItem.rateEvent2}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series' && sevent=='si'  && (name1=='Salas' || name2=='Salas' || name3=='Salas')" cols="20" sm="2" md="80" class=center >
-                    <v-text-field color="#ff4200" v-mask="mask" v-model="rateEvent3"  prefix="S/." label="Ingresar Eventos Salas">{{editedItem.rateEvent3}}</v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateEvent3"  prefix="S/." label="Ingresar Eventos Salas">{{editedItem.rateEvent3}}</v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field color="#ff4200" v-model="editedItem.contactName" label="Nombre Contacto"></v-text-field>
+                    <v-text-field color="#d69c4f" v-model="editedItem.contactName" label="Nombre Contacto"></v-text-field>
                   </v-col>
                   <!-- <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.protein" label="Cargo"></v-text-field>
                   </v-col>-->
                   <v-col cols="12" sm="6" md="4" >
-                    <v-text-field color="#ff4200" v-model="editedItem.contactEmail" label="Correo"></v-text-field>
+                    <v-text-field color="#d69c4f" v-model="editedItem.contactEmail" label="Correo"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field color="#ff4200" v-mask="mask"  v-model="editedItem.contactPhone" label=" Celular/Teléfono"></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="editedItem.contactPhone" label=" Celular/Teléfono"></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -348,8 +348,8 @@
 
             <v-card-actions>
               <div class="flex-grow-1"></div>
-              <v-btn color="#ff4200" text @click="close">Cancelar</v-btn>
-              <v-btn color="#ff4200" text @click="save()">Guardar</v-btn>
+              <v-btn color="#d69c4f" text @click="close">Cancelar</v-btn>
+              <v-btn color="#d69c4f" text @click="save()">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
