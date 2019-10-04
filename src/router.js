@@ -5,12 +5,18 @@ import TableDash from './components/TableDash'
 import RegisterLead from './components/RegisterLead'
 import RegisterUser from './components/RegisterUser'
 import RegisterAccount from './components/RegisterAccount'
-import DashJefe from './components/DashJefe'
+
+import DashJefe from './components/BarChart'
+import UserLeads from './components/UserLeads'
+
+
 import ModalEdit from './components/ModalEdit'
 import Login2 from './components/Login2'
 import NotFound from './components/NotFound'
 import Config from './components/Config'
 import Visits from './components/Visits'
+
+
 
 Vue.use(Router)
 console.log('router1 iniciado')
@@ -66,6 +72,11 @@ const routerEjecutivo = new Router({
         path : '/visits',
         name: 'visits',
         component: Visits
+    },
+    {
+      path : '/datos-lead-user',
+      name: 'datos-leads',
+      component: UserLeads
     },
     {
       path: '*',

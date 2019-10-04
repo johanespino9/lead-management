@@ -31,7 +31,7 @@ new Vue({
   store,
   BootstrapVue,
   vuetify,
-   router,
+  router,
   
   render: h => h(App)
 }).$mount('#app')

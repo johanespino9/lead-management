@@ -16,11 +16,14 @@
 <script>
 import TableDash from './TableDash';
 import RegisterLead from './RegisterLead';
+import UserLeads from './UserLeads';
+
 
 export default {
     components:{
         TableDash,
-        RegisterLead
+        RegisterLead,
+        UserLeads
     }
     
 }

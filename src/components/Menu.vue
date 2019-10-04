@@ -38,7 +38,7 @@
 
         <v-list-item color="#ff4200" v-if="role!='Ejecutivo'" to="/dashboard_jefes">       
           <v-list-item-action>
-            <v-icon>home</v-icon>
+            <v-icon>dashboard</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title> Dashboard Jefes </v-list-item-title>

@@ -29,7 +29,8 @@ export default new Vuex.Store({
     Categories: [],
     Visits:[],
     DashJefe: {},
-    Reasons:[]
+    Reasons:[],
+    
   },
   mutations: {
     Login(state, LoginAction){
@@ -563,7 +564,8 @@ export default new Vuex.Store({
       let datos = {
     		"month": month,
     		"year": year
-	    }
+      }
+      console.log(datos)
       let config = {
         headers: {
           'Authorization': 'Bearer ' + state.accessToken
@@ -579,7 +581,7 @@ export default new Vuex.Store({
         */
       })
       .catch(error => {
-        localStorage.removeItem('token')
+        /* localStorage.removeItem('token')
         localStorage.removeItem('usuarios')
         localStorage.removeItem('dashboard')
         localStorage.removeItem('leads')
@@ -595,9 +597,9 @@ export default new Vuex.Store({
         localStorage.removeItem('yearandmonth')
         commit('Token', null)
         commit('localStorageLength', -8)
-        alert('Error al cargar dashboard Jefes')
+        alert('Error al cargar dashboard Jefes', error)
         state.localStorageLength = 0
-        window.location.href = '/' 
+        window.location.href = '/'  */
       })
     },
 

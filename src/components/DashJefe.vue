@@ -497,8 +497,7 @@ export default {
       }
     } catch (error) {
       console.log('error cargando datos')
-    }
-    
+    } 
   },
    cargarAños(){
       var fecha = new Date();
@@ -513,7 +512,6 @@ export default {
       }else{
         this.fecha = this.yearSelected
       }
-     
     },
     grafico1() {
       var ctx = document.getElementById("sales-chart").getContext("2d");
@@ -620,6 +618,7 @@ export default {
         },
         // Opciones del gráfico
         options: {
+          
           maintainAspectRatio: false,
           tooltips: {
             mode: mode,
@@ -679,6 +678,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
+      console.log(datos)
       let url = 'https://casa-andina.azurewebsites.net/user/dashboard/jefes'
       await axios.post(url, datos, config)
       .then(response =>{
