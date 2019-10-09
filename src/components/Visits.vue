@@ -174,7 +174,7 @@
         <v-calendar
           ref="calendar"
           v-model="focus"
-          color="primary"
+          color="info"
           :events="events"
           :event-color="getEventColor"
           :event-margin-bottom="3"
@@ -405,8 +405,8 @@ export default {
   },
    mounted (){ 
     try {  
-      this.cargarVisitas()
       let visitas = JSON.parse(localStorage.getItem('visitas'))
+      this.cargarVisitas(visitas)
       this.listaVisitas = visitas.calendar.listVisit
       this.tablaVisitas = visitas.tableVisits 
       var fecha = new Date();
@@ -416,7 +416,7 @@ export default {
       this.$store.dispatch('getReasons')
       this.getNameAccounts()
       this.tablaVisitas1 = this.tablaVisitas.tableVisitsNumber1
-      this.tablaVisitas2 = this.tablaVisitas.tableVisitsNumber1
+      this.tablaVisitas2 = this.tablaVisitas.tableVisitsNumber2
       this.tablaVisitas3 = this.tablaVisitas.tableVisitsPercent
       this.cargaTable()
       } catch (error) {
@@ -499,7 +499,6 @@ export default {
       let url = 'https://casa-andina.azurewebsites.net/user/dashboard/visits'
       await axios.post(url, datos, config)
       .then((res) => {
-        console.log(res.data)
         let array = []
         array.push(res.data.tableVisits.tableVisitsNumber1, res.data.tableVisits.tableVisitsNumber1, res.data.tableVisits.tableVisitsPercent)
         this.values= array
@@ -522,17 +521,14 @@ export default {
         "account": this.editedItem.account,
         "reason": this.editedItem.razon,
       }
-      console.log(datos)
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      console.log(datos)
       let url = 'https://casa-andina.azurewebsites.net/user/visits'
       await axios.post(url, datos, config)
       .then((res) => {
-        console.log(res.data)
         this.$store.commit('Visits', res.data)
         localStorage.setItem('visitas', JSON.stringify(res.data))
         let visitas = res.data.calendar.listVisit
@@ -551,6 +547,11 @@ export default {
           })
         }
         this.events = array 
+        this.values = []
+        this.tablaVisitas1 = res.data.tableVisits.tableVisitsNumber1
+        this.tablaVisitas2 = res.data.tableVisits.tableVisitsNumber2
+        this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
+        this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3) 
       })
       .catch((error) => {
         alert('Error agregando la visita')
@@ -591,12 +592,9 @@ export default {
       focuss(){
         this.editedItem.reason = ''
       },
-      cargarVisitas(){
+      cargarVisitas(data){
         try {
-        let data = JSON.parse(localStorage.getItem('visitas'))
         let visitas =  data.calendar.listVisit
-        console.log(visitas)
-
         let array = []
         for(let i=0; i<visitas.length; i++){
           array.push({
@@ -611,12 +609,9 @@ export default {
             color: '#d69c4f',
           })
         }     
-        console.log(array)
         this.events = []
         this.events= array
-
         } catch (error) {
-          
         }
       }
 

@@ -8,7 +8,9 @@
 
 <script>
 export default {
-
+  mounted() {
+    console.log('© Team Anonymous - UTP 2019')
+  },
 }
 </script>
 

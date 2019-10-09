@@ -29,9 +29,9 @@
         <td>{{ item.prospecto }}</td>
         <td>{{ item.tentativo }}</td>
         <td>{{ item.hot }}</td>
-        <td>{{ item.confirmado }}</td>
         <td>{{ item.congelado }}</td>
         <td>{{ item.cancelado }}</td>
+        <td>{{ item.confirmado }}</td>
         <td class="text-xs-right">{{ item.salary }}</td>
       </template>
     </v-data-table>
@@ -159,7 +159,6 @@ export default {
         this.values = Dash.table
         this.percents = Dash.porcentajeConcrecion
         this.getNameHotels();
-        console.log('Carga Dash completa')
       }
       if(localStorage.length>=8){
         this.$store.dispatch('stateToken')

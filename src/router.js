@@ -16,10 +16,7 @@ import NotFound from './components/NotFound'
 import Config from './components/Config'
 import Visits from './components/Visits'
 
-
-
 Vue.use(Router)
-console.log('router1 iniciado')
 const routerEjecutivo = new Router({
   routes:[
     {
@@ -84,7 +81,5 @@ const routerEjecutivo = new Router({
     }
   ]
 })
-console.log('router 1 - fin')
-
 export default routerEjecutivo;
 

@@ -142,7 +142,6 @@ export default {
     mounted(){
     try {
       if( Object.keys(this.User).length === 0){
-        console.log('vacio')
         let user = JSON.parse(localStorage.getItem('usuario'))
         this.$store.commit('User', user)
         this.usern = this.User.username

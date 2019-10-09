@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import Vuex from 'vuex'
-import router2 from './views/router'
 import router from './router'
 
 Vue.use(Vuex)
@@ -99,7 +98,7 @@ export default new Vuex.Store({
     verLogin(){
         const token= localStorage.getItem('token')
         this.commit('Token', token)
-        this.commit('localStorageLength', 1)
+        this.commit('localStorageLength', 2)
         localStorage.setItem('objects', this.state.localStorageLength)
     },
     Logout({state, commit}){
@@ -119,6 +118,7 @@ export default new Vuex.Store({
       localStorage.removeItem('dashjefe')
       localStorage.removeItem('visitas')
       localStorage.removeItem('yearandmonth')
+      localStorage.removeItem('leads-user')
       commit('Token', null)
       commit('localStorageLength', -8)
       state.localStorageLength = 0
@@ -167,6 +167,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -203,6 +204,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -241,6 +243,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -279,6 +282,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -298,7 +302,6 @@ export default new Vuex.Store({
       console.log('URL', url)
       await axios.get(url, config)
       .then((response) => {
-        console.log('Managers',response.data)
         commit('Managers', response.data)
       })
       .catch((error) => {
@@ -340,6 +343,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -385,6 +389,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -397,10 +402,13 @@ export default new Vuex.Store({
     },
     //OBETENIENDO DATOS INICIALES PARA EL DASHBOARD
     async getDashboard({state, commit}){
+      let fec = new Date()
+      let month = (fec.getMonth() +1) 
+      let year = fec.getFullYear()
       var datos = {
     		"hotel": "[Seleccionar todos]",
     		"month": 0,
-    		"year": 2019
+    		"year": year
       }
       let config = {
         headers: {
@@ -412,8 +420,10 @@ export default new Vuex.Store({
       .then((res) => {
         localStorage.setItem('dashboard', JSON.stringify(res.data))
         commit('Dashboard', res.data)
-        commit('localStorageLength', 1)
+        if(localStorage.length<15){
+          commit('localStorageLength', 1)
         localStorage.setItem('objects', state.localStorageLength)
+        }
       })
       .catch((error) => {
         alert('error en Dash', error)
@@ -432,6 +442,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -454,7 +465,7 @@ export default new Vuex.Store({
         localStorage.setItem('objects', state.localStorageLength) */
       })
       .catch((error) => {
-        alert('error obteniendo Branchs', error)
+        console.log('error obteniendo Branchs', error)
         /* console.log(error)
         localStorage.removeItem('token')
         localStorage.removeItem('usuarios')
@@ -470,6 +481,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -493,7 +505,7 @@ export default new Vuex.Store({
         localStorage.setItem('objects', state.localStorageLength) */
       })
       .catch((error) => {
-        alert('Error obteniendo Categories', error)
+        console.log('Error obteniendo Categories', error)
         /* console.log(error)
         localStorage.removeItem('token')
         localStorage.removeItem('usuarios')
@@ -509,6 +521,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -529,12 +542,11 @@ export default new Vuex.Store({
       let url = 'https://casa-andina.azurewebsites.net/user/dashboard/visits'
       await axios.post(url, datos, config)
       .then((res) => {
-        console.log(res.data)
         commit('Visits', res.data)
         localStorage.setItem('visitas', JSON.stringify(res.data))
       })
       .catch((error) => {
-        alert('Error obteniendo Categories', error)
+        console.log('Error obteniendo Categories', error)
         /* console.log(error)
         localStorage.removeItem('token')
         localStorage.removeItem('usuarios')
@@ -550,6 +562,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -561,11 +574,28 @@ export default new Vuex.Store({
       let fec = new Date()
       let month = (fec.getMonth() +1) 
       let year = fec.getFullYear()
+      let months = ['[Seleccionar todos]',
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Setiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre'
+        ]
       let datos = {
     		"month": month,
     		"year": year
       }
-      console.log(datos)
+      let fecha = {
+        "year": year,
+        "month": months[month]
+      }
       let config = {
         headers: {
           'Authorization': 'Bearer ' + state.accessToken
@@ -575,12 +605,12 @@ export default new Vuex.Store({
 
       await axios.post(url, datos, config)
       .then(response =>{
-        console.log(response.data)
         localStorage.setItem('dashjefe', JSON.stringify(response.data)) 
-        /* commit('DashJefe', response.data)
-        */
+        localStorage.setItem('yearandmonth', JSON.stringify(fecha))
+        commit('DashJefe', response.data)
       })
       .catch(error => {
+        console.log('Error obteniendo dashboard jefes')
         /* localStorage.removeItem('token')
         localStorage.removeItem('usuarios')
         localStorage.removeItem('dashboard')
@@ -595,6 +625,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         alert('Error al cargar dashboard Jefes', error)
@@ -617,7 +648,7 @@ export default new Vuex.Store({
         localStorage.setItem('objects', state.localStorageLength) */
       })
       .catch((error) => {
-        alert('Error obteniendo Categories', error)
+        console.log('Error obteniendo Categories', error)
         /* console.log(error)
         localStorage.removeItem('token')
         localStorage.removeItem('usuarios')
@@ -633,6 +664,7 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
@@ -655,7 +687,7 @@ export default new Vuex.Store({
 
       })
       .catch(error => {
-        alert('El token expiro')
+        alert('La sesion se ha terminado')
         console.log('Token expirado', error)
         localStorage.removeItem('token')
         localStorage.removeItem('usuarios')
@@ -671,17 +703,13 @@ export default new Vuex.Store({
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
         commit('Token', null)
         commit('localStorageLength', -8)
         state.localStorageLength = 0
         window.location.href = '/'
       })
     }    
-
- 
-   
-  
-    
 
   
   }

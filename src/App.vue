@@ -72,7 +72,7 @@ export default {
     }
   },
  created() {
-   /* localStorage.removeItem('token')
+        /* localStorage.removeItem('token')
         localStorage.removeItem('usuarios')
         localStorage.removeItem('dashboard')
         localStorage.removeItem('leads')
@@ -84,7 +84,9 @@ export default {
         localStorage.removeItem('categories')
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
-         localStorage.removeItem('visitas') */
+        localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user') */
   },
   destroyed() {
         localStorage.removeItem('token')
@@ -100,6 +102,8 @@ export default {
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
          localStorage.removeItem('visitas')
+         localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
   },
   beforeDestroy() {
         localStorage.removeItem('token')
@@ -115,6 +119,8 @@ export default {
         localStorage.removeItem('branchs')
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
+        localStorage.removeItem('yearandmonth')
+        localStorage.removeItem('leads-user')
   },
 
 };

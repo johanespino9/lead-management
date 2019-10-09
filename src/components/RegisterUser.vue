@@ -226,7 +226,6 @@ import { mapState, mapActions } from 'vuex';
       var usuarios = JSON.parse(localStorage.getItem('usuarios'))
       if(this.desserts.length==0 && usuarios!=null){
         this.desserts = JSON.parse(localStorage.getItem('usuarios'))
-        console.log('Carga de usuarios completa')
       }
       
     }catch (error){

@@ -437,7 +437,7 @@ export default {
       { text: "Cuenta", value: "account" },
       { text: "Ingreso de Alojamiento", value: "totalhotel" },
       { text: "Ingreso de Eventos", value: "totalevents"},
-      { text: "Total Ingresos", value: "totalhotel"},
+      { text: "Total Ingresos", value: "totalgeneral"},
       { text: "Estado", value: "status" },
       { text: "Actions", value: "action", sortable: false }
       
@@ -576,7 +576,6 @@ export default {
         this.getNameHotels();
         this.getNameSegments();
         this.calculaTotal()
-        console.log('Carga de Leads completa')
       }
       if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
@@ -666,6 +665,7 @@ export default {
         this.type='success'
         this.showAlert()
 
+        this.$store.dispatch('getDashboard')
       }).catch(error => {
         console.log('Hubo un error ', error)
       }) 
@@ -709,6 +709,7 @@ export default {
         this.type='success'
         this.showAlert()
 
+        this.$store.dispatch('getDashboard')
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -767,6 +768,7 @@ export default {
         this.type='success'
         this.showAlert()
 
+        this.$store.dispatch('getDashboard')
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -776,7 +778,6 @@ export default {
     //Edita Lead Segmentos
     async editSegmentSeriesLead(){
       let monthRate = this.WatchLenght()
-      console.log(monthRate)
       var datos={
         "leadid": parseInt(this.editedItem.leadid),
         "name": this.editedItem.name,
@@ -799,17 +800,17 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      console.log(datos)
       let url = 'https://casa-andina.azurewebsites.net/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
+        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
         this.calculaTotal()
         this.type='success'
         this.showAlert()
-
+        this.$store.dispatch('getDashboard')
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -853,6 +854,8 @@ export default {
         this.calculaTotal()
         this.type='success'
         this.showAlert()
+
+        this.$store.dispatch('getDashboard')
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -914,6 +917,7 @@ export default {
         this.type='success'
         this.showAlert()
 
+        this.$store.dispatch('getDashboard')
       }).catch(error => {
         console.log('Hubo un error ', error)
       })
@@ -1063,7 +1067,6 @@ export default {
           this.editedItem.statusid=i
         }
       }
-      
       var dias=0;
       if(this.editedItem.initialBooking!=null && this.editedItem.finalBooking!=null){
       var fec1= this.editedItem.initialBooking
@@ -1140,7 +1143,9 @@ export default {
       var diff = fechaFin - fechaInicio;
       var dias = diff/(1000*60*60*24)
       if(this.editedItem.segment=='Series'){
-        return (parseInt(this.rooms)) *(parseInt(this.rateHotel)) *(parseInt(this.nights)) 
+        return ((parseInt(this.rooms)) *(parseInt(this.rateHotel)) *(parseInt(this.nights))) +
+        ( parseInt(this.month1)+parseInt(this.month2)+parseInt(this.month3)+parseInt(this.month4)+parseInt(this.month5)+parseInt(this.month6)
+        +parseInt(this.month7)+parseInt(this.month8)+parseInt(this.month9)+parseInt(this.month10)+parseInt(this.month11)+parseInt(this.month12))
       }else {
         return (parseInt(this.rooms)) *(parseInt(this.rateHotel)) * dias
       }
@@ -1172,8 +1177,22 @@ export default {
       return this.eventrevenue()+this.roomrevenue()
     },
     monthsLenght(){
+      if(this.lenghtMonth > this.editedItem.month.length){
+        this.month1 =0
+        this.month2 =0
+        this.month3 =0
+        this.month4 =0
+        this.month5 =0
+        this.month6 =0
+        this.month7 =0
+        this.month8 =0
+        this.month9 =0
+        this.month10 =0
+        this.month11 =0
+        this.month12 =0
+      }
       this.lenghtMonth = this.editedItem.month.length
-      console.log(this.editedItem.month.length)   
+
     },
     WatchLenght: function(){
       let MonthsRate = []
@@ -1211,23 +1230,40 @@ export default {
       if(this.lenghtMonth>=12){ this.month12= item.months[11].rateHotel} 
     },
     calculaTotal(){
+      try {
       var todoleads = JSON.parse(localStorage.getItem('leads'))
+      
         for(let i=0; i<todoleads.length; i++){
           let totale = 0
           let totalh = 0 
+          let totalmonths = 0
+          let formatfecha = ''
            if(todoleads[i].events.length>0){
             for(let j=0; j<todoleads[i].events.length; j++){
               totale += todoleads[i].events[j].rateEvent
             }
            }
-           totalh = todoleads[i].rateHotel * todoleads[i].rooms *  (todoleads[i].nights)
+           if(todoleads[i].months.length>0 || todoleads[i].months.length!=null){
+             for(let h=0; h<todoleads[i].months.length; h++){
+                totalmonths += todoleads[i].months[h].rateHotel
+              }
+           }
+           for(let h=0; h<19; h++){
+             let letra = todoleads[i].createDate.charAt(h)
+             if(letra==='T'){
+               formatfecha+=' '
+             }else{
+               formatfecha+=letra
+             } 
+           }
+           totalh = todoleads[i].rateHotel * todoleads[i].rooms *  (todoleads[i].nights) + totalmonths
            this.desserts.push(
              {
               account: todoleads[i].account,
               contactEmail: todoleads[i].contactEmail,
               contactName: todoleads[i].contactName,
               contactPhone: todoleads[i].contactPhone,
-              createDate: todoleads[i].createDate,
+              createDate: formatfecha,
               finalBooking: todoleads[i].finalBooking,
               hotel: todoleads[i].hotel,
               initialBooking: todoleads[i].initialBooking,
@@ -1242,9 +1278,13 @@ export default {
               user: todoleads[i].user,
               events: todoleads[i].events,
               totalevents: totale,
-              totalhotel: totalh
+              totalhotel: totalh,
+              totalgeneral: parseInt(totale)+parseInt(totalh)
              })
         }
+        } catch (error) {
+        
+      }
     }
 
 

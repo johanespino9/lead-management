@@ -40,7 +40,7 @@
                 <v-combobox :items="years" v-model="yearSelected" color="#757575" label="Seleccionar Año"></v-combobox>
                 </v-col>
                 <v-col cols="auto" style="margin-top: 12px;">
-                <v-btn color="#000000" style="color: #FAFAFA;" v-on:click="Filtro()">Filtrar Registros</v-btn>
+                <v-btn id="btn-filtro" color="#000000" style="color: #FAFAFA;" v-on:click="Filtro()">Filtrar Registros</v-btn>
                 </v-col>
             </v-row>
             </v-container>
@@ -252,14 +252,15 @@
         &lt;/div>
     </div> -->
     
-    </div>
+    
 </template>
 <script>
 import {mapState, mapActions} from 'vuex'
 import axios from 'axios'
 export default {
     data: () => ({
-        chart1: null,
+        chart: null,
+        chart2: null,
         yearSelected: "",
         monthSelected : "",
        months:['[Seleccionar todos]',
@@ -285,21 +286,22 @@ export default {
         ],
         desserts1: [],
         desserts2: [],
+        ids1: [],
+        data1: [] ,
+        data2: [],
+        ej1: [],
 
-        data1: [1300, 2300, 2000, 800, 1300, 2700] ,
-        data2: [4400, 5500, 4100, 6700, 2200, 4030],
-        ej1: ['Luis', 'Joe', 'Jake', 'Amber', 'Mary', 'Lily'],
-
-        data3: [1200, 2300, 2000, 800, 1300, 2700] ,
-        data4: [4300, 4500, 5100, 5700, 2200, 4130],
-        ej2: ['Diana', 'Sofia', 'Jake', 'Joe', 'Lily', 'Lilo']
+        ids2:[],
+        data3: [] ,
+        data4: [],
+        ej2: []
 
     }),
     computed: {
         ...mapState(['accessToken'])
     },
     mounted() {
-        try { 
+        try {
         let data = JSON.parse(localStorage.getItem('dashjefe'))
         if(JSON.parse(localStorage.getItem('yearandmonth'))==null){
         this.monthSelected = '[Seleccionar todos]'
@@ -318,10 +320,12 @@ export default {
         }
         this.fecha = yam.month + " " + yam.year
         }
+        this.cargarDataInicial()
         this.cargarAños()
-        this.graph1()
-        this.graph2()
-        this.cargarTablas()
+        this.graph1(this.chart)
+        this.graph2(this.chart2)
+        this.cargarTablas(data)
+
         if(localStorage.length>=8){
             this.$store.dispatch('stateToken')
         }
@@ -329,23 +333,28 @@ export default {
         }
    
     },
+    /* updated() {
+      let data = JSON.parse(localStorage.getItem('dashjefe'))
+      this.cargarDataInicial(data)
+    },  */
     methods: {
     ...mapActions(['stateToken']),
-    graph1(){
+    graph1(chart){
     var users = this.ej1
+    var ids = this.ids1
     try { 
         var options = {
             chart: {
-                 background: '#fff',
+                background: '#fff',
                 height: 350,
                 type: 'bar',
                 stacked: true,
                 events: {
                     click: function(chart, w, e) {
                      if(e.dataPointIndex>=0){
-                         console.log(users)
                         let user = {
                             datos:{
+                                "user_id": ids[e.dataPointIndex],
                                 "nombre": users[e.dataPointIndex],
                             },
                             leads:[],
@@ -532,18 +541,22 @@ export default {
            
           }  
         }
-        var chart = new ApexCharts(
+        chart = new ApexCharts(
             document.querySelector("#chart"),
             options
         );
         chart.render();
+        this.chart = chart
+    
+
     } catch (error) {  
     }
     },
 
-    graph2(){
+    graph2(chart2){
     try {    
     var users = this.ej2
+    var ids =  this.ids2
         var options = {
             chart: {
                  background: '#fff',
@@ -555,7 +568,7 @@ export default {
                      if(e.dataPointIndex>=0){
                         let user = {
                             datos:{
-                                /* "id": ids[e.dataPointIndex],  */
+                                "user_id": ids[e.dataPointIndex],
                                 "nombre": users[e.dataPointIndex],
                             },
                             leads:[],
@@ -737,11 +750,12 @@ export default {
            
           }  
         }
-        var chart2 = new ApexCharts(
+        chart2 = new ApexCharts(
             document.querySelector("#chart2"),
             options
         );
         chart2.render();
+        this.chart2 = chart2
 
     } catch (error) {  
     }
@@ -753,36 +767,118 @@ export default {
         this.years.push(i)
       }
     },
-    cargarDatos(data){
-    try {
-      //Rellenando arrays de rate hotel
-      let rhotel = data.dashboardRateHotel
-      this.dashboardRateHotel = rhotel 
-      for(let i = 0; i< this.dashboardRateHotel.length; i++){
-        this.ids1.push(parseInt(this.dashboardRateHotel[i].user_id))
-        this.data1_bruto.push(parseInt(this.dashboardRateHotel[i].total))
-        this.data1_concretado.push(parseInt(this.dashboardRateHotel[i].rate_hotel))
-        this.ej_d1.push(this.dashboardRateHotel[i].name+" "+this.dashboardRateHotel[i].last_name)
-      }
-      //Rellenando arrays de rate event
-      let revent = data.dashboardRateEvents
-      this.dashboardRateEvents = revent
-      for(let i = 0; i< this.dashboardRateEvents.length; i++){
-        this.ids2.push(parseInt(this.dashboardRateEvents[i].user_id))
-        this.data2_bruto.push(parseInt(this.dashboardRateEvents[i].total))
-        this.data2_concretado.push(parseInt(this.dashboardRateEvents[i].rate_events))
-        this.ej_d2.push(this.dashboardRateEvents[i].name+" "+this.dashboardRateEvents[i].last_name)
+    updateGraficos(chart, data_concretado, data_bruto, ejecutivos, ids){
+      chart.updateSeries([
+          {   
+            name: 'Monto concretado',
+            data: data_concretado  
+          },
+          {
+            name: 'Monto bruto',
+            data: data_bruto
+          }
+      ])
+      chart.updateOptions({
+        chart: {
+                background: '#fff',
+                height: 350,
+                type: 'bar',
+                stacked: true,
+                events: {
+                    click: function(chart, w, e) {
+                     if(e.dataPointIndex>=0){
+                        let user = {
+                            datos:{
+                                "user_id": ids[e.dataPointIndex],
+                                "nombre": ejecutivos[e.dataPointIndex],
+                            },
+                            leads:[],
+                        }
+                        localStorage.setItem('leads-user', JSON.stringify(user))
+                        alert("Se está dirigiendo a ver los Leads del usuario "+ejecutivos[e.dataPointIndex]+"")
+                        window.location.href = '/#/datos-lead-user'  
+                    }
+                    }
+                },
+                toolbar: {
+                    show: true
+                },
+                zoom: {
+                    enabled: true
+                }
+        },
+        xaxis: {
+            type: 'category',
+            categories: ejecutivos,
+            labels: {
+              style: {
+                fontStyle: 'arial',
+                fontSize: '14px'
+              }
+            }, 
+            labels: {
+            show: true,
+            rotate: -45,
+            rotateAlways: false,
+            hideOverlappingLabels: true,
+            showDuplicates: false,
+            trim: true,
+            minHeight: undefined,
+            maxHeight: 120,
+            style: {
+                colors: [],
+                fontSize: '12px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                cssClass: 'apexcharts-xaxis-label',
+            },
+            offsetX: 0,
+            offsetY: 0,
+            format: undefined,
+            formatter: undefined,
+            datetimeFormatter: {
+                year: 'yyyy',
+                month: "MMM 'yy",
+                day: 'dd MMM',
+                hour: 'HH:mm',
+            },
+            },
+          },
+      })
+
+    },
+   preparaFiltro(chart, data, tipo){
+     try {
+       if(data.length>0){  
+        //nombre de chart, los datos y el tipo Event o Hotel
+        let ids = []
+        let ejecutivos = []
+        let data_bruto = []
+        let data_concretado = []
+        if(tipo==1){ //hoteles
+          for(let i=0; i<data.dashboardRateHotel.length; i++){
+              ids.push(data.dashboardRateHotel[i].user_id)
+              ejecutivos.push(data.dashboardRateHotel[i].name+" "+data.dashboardRateHotel[i].last_name)
+              data_concretado.push(data.dashboardRateHotel[i].rate_hotel)
+              data_bruto.push(data.dashboardRateHotel[i].total)
+          }
+          this.updateGraficos(chart, data_concretado, data_bruto, ejecutivos, ids)
+        }else{//eventos
+          for(let i=0; i<data.dashboardRateEvents.length; i++){
+              ids.push(data.dashboardRateEvents[i].user_id)
+              ejecutivos.push(data.dashboardRateEvents[i].name+" "+data.dashboardRateEvents[i].last_name)
+              data_concretado.push(data.dashboardRateEvents[i].rate_events)
+              data_bruto.push(data.dashboardRateEvents[i].total)
+          }
+          this.updateGraficos(chart, data_concretado, data_bruto, ejecutivos, ids)
+        }
       }
     } catch (error) {
-      console.log('error cargando datos')
-    } 
-  },
-
-   Filtro(){
-      /* this.resetFiltro() */
-      this.ej1=['Luis', 'Sofi']
-      this.data1=[8000, 4000]
-      this.data2=[35100, 20000]  
+       
+    }
+   },
+   
+   async Filtro(){
+      /* this.resetFiltro()  */
       let datos = {
     		"month": this.months.indexOf(this.monthSelected),
     		"year": this.yearSelected
@@ -792,47 +888,50 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      this.cargarTablas()  
-      this.graph1()  
-      /* let url = 'https://casa-andina.azurewebsites.net/user/dashboard/jefes'
+      let url = 'https://casa-andina.azurewebsites.net/user/dashboard/jefes'
       await axios.post(url, datos, config)
-      .then(response =>{
-        let fec = {}
-        if(this.monthSelected!='[Seleccionar todos]'){
-          fec = {
-                  year:this.yearSelected,
-                  month: this.monthSelected
+      .then(response =>{ 
+        
+        if(response.data.dashboardRateEvents.length > 0 || response.data.dashboardRateHotel.length > 0){
+          
+          let fec = {}
+          if(this.monthSelected!='[Seleccionar todos]'){
+            fec = {
+                    year:this.yearSelected,
+                    month: this.monthSelected
                   }
+          }else{
+            fec = {
+                    year:this.yearSelected,
+                    month: ''
+                  }
+          } 
+          
+          this.preparaFiltro(this.chart, response.data, 1)
+          this.preparaFiltro(this.chart2, response.data, 2)
+          this.cargarTablas(response.data)
+          localStorage.setItem('dashjefe', JSON.stringify(response.data))
+          localStorage.setItem('yearandmonth', JSON.stringify(fec))
         }else{
-          fec = {
-                  year:this.yearSelected,
-                  month: ''
-                  }
-        } 
-        localStorage.setItem('dashjefe', JSON.stringify(response.data))
-        localStorage.setItem('yearandmonth', JSON.stringify(fec))
-        this.cargarDatos(JSON.parse(localStorage.getItem('dashjefe')))
-        this.modificarFecha()
-        this.graph1()
-        this.graph2()
-        this.tot()
-        location.reload() 
+          alert('No se encontraron datos en '+ this.monthSelected+ ' '+ this.yearSelected )
+        }
+        
       })
       .catch(error => {
          alert('Hubo un error Filtrando los datos')
-      }) */
+      })  
     },
     resetFiltro(){
-      /* this.total1 = 0
-      this.total2 = 0 */
-      /* this.ids1 = []
-      this.ids2 = [] */
+      this.ids1 = []
+      this.ids2 = []
       this.ej1 = []
       this.ej2 = []
       this.data1 = []
       this.data2 = []
       this.data3 = []
       this.data4 = []
+      let user = {}
+      localStorage.setItem('leads-user', JSON.stringify(user))
     },
     modificarFecha(){
       if(this.monthSelected!='[Seleccionar todos]'){
@@ -841,29 +940,63 @@ export default {
         this.fecha = this.yearSelected
       }
     },
-    cargarTablas(){
+    cargarTablas(data){
+      try {
         let array1 = []
         let array2 = []
-        for(let i=0; i< this.data1.length; i++){
-            let diff = parseInt(this.data2[i]-this.data1[i])
+        for(let i=0; i< data.dashboardRateHotel.length; i++){
+            let diff = parseInt(data.dashboardRateHotel[i].total-data.dashboardRateHotel[i].rate_hotel)
             array1.push({
-            name: this.ej1[i],
-            mbruto: this.data2[i],
-            mconcretado: this.data1[i],
+            name: data.dashboardRateHotel[i].name+' '+data.dashboardRateHotel[i].last_name,
+            mbruto: data.dashboardRateHotel[i].total,
+            mconcretado: data.dashboardRateHotel[i].rate_hotel,
             diferencia: diff
           })
         }
-        for(let i=0; i< this.data3.length; i++){
-            let diff = parseInt(this.data2[i]-this.data1[i])
+        for(let i=0; i< data.dashboardRateEvents.length; i++){
+            let diff = parseInt(data.dashboardRateEvents[i].total-data.dashboardRateEvents[i].rate_events)
             array2.push({
-            name: this.ej2[i],
-            mbruto: this.data4[i],
-            mconcretado: this.data3[i],
+            name: data.dashboardRateHotel[i].name+' '+data.dashboardRateHotel[i].last_name,
+            mbruto: data.dashboardRateEvents[i].total,
+            mconcretado: data.dashboardRateEvents[i].rate_events,
             diferencia: diff
           })
         }
+  
         this.desserts1 = array1
         this.desserts2 = array2
+      } catch (error) {
+        
+      }
+    },
+    cargarDataInicial(){
+      let data = JSON.parse(localStorage.getItem('dashjefe'))
+      try {
+        if(data!= null){
+          this.ej1 = []
+          this.ej2 = []
+          this.data1 = []
+          this.data2 = []
+          this.data3 = []
+          this.data4 = []
+          for(let i=0; i<data.dashboardRateHotel.length; i++){
+            this.ids1.push(data.dashboardRateHotel[i].user_id)
+            this.ej1.push(data.dashboardRateHotel[i].name+" "+data.dashboardRateHotel[i].last_name)
+            this.data1.push(data.dashboardRateHotel[i].rate_hotel)
+            this.data2.push(data.dashboardRateHotel[i].total)
+          }
+          for(let i=0; i<data.dashboardRateEvents.length; i++){
+            this.ids2.push(data.dashboardRateEvents[i].user_id)
+            this.ej2.push(data.dashboardRateEvents[i].name+" "+data.dashboardRateEvents[i].last_name)
+            this.data3.push(data.dashboardRateEvents[i].rate_events)
+            this.data4.push(data.dashboardRateEvents[i].total)
+          }
+        }else{
+          this.resetFiltro()
+        }
+
+      } catch (error) {    
+      }
     }
 
 

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router2 from './views/router'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
@@ -27,11 +26,9 @@ if (accessToken) {
 }
 
 new Vue({
-  router2,
   store,
   BootstrapVue,
   vuetify,
   router,
-  
   render: h => h(App)
 }).$mount('#app')
