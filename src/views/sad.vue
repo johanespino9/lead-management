@@ -50,7 +50,7 @@ import {mapState} from 'vuex'
         const password = this.password
         this.$store.dispatch('login', { username, password }).then(() => this.$router.push('/')) */ 
         
-        await axios.post("https://casa-andina.azurewebsites.net/login", { username: "robval96", password: 123456})
+        await axios.post("https://casa-andina-backend.herokuapp.com/login", { username: "robval96", password: 123456})
         .then((response)=> {
           console.log(response)
         })
@@ -72,7 +72,7 @@ import {mapState} from 'vuex'
         var config =  {
           headers: {'Authorization': this.accessToken }
         }
-        axios.get("https://casa-andina.azurewebsites.net/user/all", {
+        axios.get("https://casa-andina-backend.herokuapp.com/user/all", {
           'headers': {
             'Authorization': this.accessToken
           }

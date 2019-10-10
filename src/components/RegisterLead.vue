@@ -654,7 +654,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/leads'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
         console.log(response.data)
@@ -698,7 +698,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/leads'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
         console.log(response.data)
@@ -758,7 +758,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/leads'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
@@ -800,7 +800,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/leads'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
         console.log(response.data)
@@ -845,7 +845,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/leads'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
@@ -907,7 +907,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/leads'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))

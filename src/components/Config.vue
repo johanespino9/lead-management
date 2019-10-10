@@ -202,7 +202,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/'+this.user.userId
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/'+this.user.userId
       await axios.put(url, datos, config)
       .then(response => { 
         this.$store.commit('Users', response.data)

@@ -192,7 +192,7 @@ export default {
         }
       }
       console.log(datos)
-      let url = 'https://casa-andina.azurewebsites.net/user/dashboard'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard'
       await axios.post(url, datos, config)
       .then((res) => {
         console.log(res.data)

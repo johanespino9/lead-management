@@ -81,7 +81,7 @@ export default {
         username: this.email,
         password: this.password
       }
-      await axios.post('https://casa-andina.azurewebsites.net/login', sendData)
+      await axios.post('https://casa-andina-backend.azurewebsites.net/login', sendData)
       .then((res) => { 
         localStorage.setItem('token',res.data.token)
         this.$store.dispatch('verLogin')

@@ -207,7 +207,7 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/accounts'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/accounts'
       await axios.post(url, datos, config)
       .then(response => { 
         localStorage.setItem('accounts', JSON.stringify(response.data))
@@ -233,7 +233,7 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/accounts'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/accounts'
       await axios.put(url, datos, config)
       .then(response => { 
         localStorage.setItem('accounts', JSON.stringify(response.data))

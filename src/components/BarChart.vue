@@ -888,7 +888,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/dashboard/jefes'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/jefes'
       await axios.post(url, datos, config)
       .then(response =>{ 
         

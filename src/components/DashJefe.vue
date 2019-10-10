@@ -679,7 +679,7 @@ export default {
         }
       }
       console.log(datos)
-      let url = 'https://casa-andina.azurewebsites.net/user/dashboard/jefes'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/jefes'
       await axios.post(url, datos, config)
       .then(response =>{
         let fec = {}

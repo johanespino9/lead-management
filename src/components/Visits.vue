@@ -496,7 +496,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/dashboard/visits'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/visits'
       await axios.post(url, datos, config)
       .then((res) => {
         let array = []
@@ -526,7 +526,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user/visits'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
       await axios.post(url, datos, config)
       .then((res) => {
         this.$store.commit('Visits', res.data)

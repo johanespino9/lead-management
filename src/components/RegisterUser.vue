@@ -300,7 +300,7 @@ import { mapState, mapActions } from 'vuex';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user'
       await axios.post(url, datos, config)
       .then(response => { 
         localStorage.setItem('usuarios', JSON.stringify(response.data))
@@ -329,7 +329,7 @@ import { mapState, mapActions } from 'vuex';
           'Authorization': 'Bearer ' + this.accessToken
       }
       }
-      let url = 'https://casa-andina.azurewebsites.net/user'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user'
       await axios.put(url, datos, config)
       .then(response => {
         localStorage.setItem('usuarios', JSON.stringify(response.data))
@@ -393,7 +393,7 @@ import { mapState, mapActions } from 'vuex';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina.azurewebsites.net/role/'+(this.rol.indexOf(this.editedItem.role)) +'/manager'
+      let url = 'https://casa-andina-backend.azurewebsites.net/role/'+(this.rol.indexOf(this.editedItem.role)) +'/manager'
 
       console.log('URL', url)
       await axios.get(url, config)
