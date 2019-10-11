@@ -185,7 +185,7 @@
                     <v-text-field color="#d69c4f" v-mask="mask" v-model="rooms" label="Cantidad de Habitaciones"  >{{editedItem.rooms}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment != 'Eventos'" cols="20" sm="2" md="80" class=center  >
-                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateHotel" prefix="S/." label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateHotel" prefix="$" label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment=='Series'" cols="20" sm="2" md="80" class=center >
                     <v-text-field color="#d69c4f" v-mask="mask"  v-model="nights" label="Cantidad de Noches" >{{editedItem.nights}}</v-text-field>
@@ -305,13 +305,13 @@
                       </v-btn>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series' && sevent=='si' && name1=='Alimentos y bebidas' || name2=='Alimentos y bebidas' || name3=='Alimentos y bebidas' " cols="20" sm="2" md="80" class=center >
-                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateEvent1" prefix="S/." label="Ingresar Eventos AyB">{{editedItem.rateEvent1}}</v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateEvent1" prefix="$" label="Ingresar Eventos AyB">{{editedItem.rateEvent1}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series' && sevent=='si'  && (name1=='Equipos' || name2=='Equipos' || name3=='Equipos')" cols="20" sm="2" md="80" class=center >
-                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateEvent2"  prefix="S/." label="Ingresar Eventos Equipos">{{editedItem.rateEvent2}}</v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateEvent2"  prefix="$" label="Ingresar Eventos Equipos">{{editedItem.rateEvent2}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series' && sevent=='si'  && (name1=='Salas' || name2=='Salas' || name3=='Salas')" cols="20" sm="2" md="80" class=center >
-                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateEvent3"  prefix="S/." label="Ingresar Eventos Salas">{{editedItem.rateEvent3}}</v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateEvent3"  prefix="$" label="Ingresar Eventos Salas">{{editedItem.rateEvent3}}</v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field color="#d69c4f" v-model="editedItem.contactName" label="Nombre Contacto"></v-text-field>
