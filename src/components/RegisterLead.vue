@@ -222,40 +222,40 @@
                   </v-col>
                   <!-- MESES -->
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 1 " cols="2" sm="1"   >
-                    <v-text-field color="#d69c4f" label="S/" v-mask="mask"  v-model="month1"  ></v-text-field>
+                    <v-text-field color="#d69c4f" label="$" v-mask="mask"  v-model="month1"  ></v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 2" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f"  v-mask="mask"  v-model="month2" label="S/"  ></v-text-field>
+                    <v-text-field color="#d69c4f"  v-mask="mask"  v-model="month2" label="$"  ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 3" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f"  v-mask="mask"  v-model="month3" label="S/ " ></v-text-field>
+                    <v-text-field color="#d69c4f"  v-mask="mask"  v-model="month3" label="$" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 4" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month4" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month4" label="$" ></v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 5" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month5" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month5" label="$" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 6" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month6" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month6" label="$" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 7" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month7" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month7" label="$" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 8" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month8" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month8" label="$" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 9" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month9" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month9" label="$" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 10" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month10" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month10" label="$" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 11" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month11" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month11" label="$" ></v-text-field>
                   </v-col>  
                   <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 12" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month12" label="S/" ></v-text-field>
+                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month12" label="$" ></v-text-field>
                   </v-col>      
 
                    <!-- TERMINAN LOS MESES -->

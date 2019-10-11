@@ -104,12 +104,12 @@
               >
                 edit
               </v-icon>
-              <v-icon
+              <!-- <v-icon
                 small
                 @click="deleteItem(item)"
               >
                 delete
-              </v-icon>
+              </v-icon> -->
             </template>
             <!-- <template v-slot:no-data>
               <v-btn color="primary" @click="allItems()">Reset</v-btn>
