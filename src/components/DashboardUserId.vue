@@ -1,5 +1,32 @@
 <template>
   <div>
+        <div class="">
+        <!-- primer ROW -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="">  
+              <v-card color="#000000">
+                <v-card-title>
+                  <v-list-item two-line>
+                    <v-list-item-avatar class="ml-0" color="grey darken-3">
+                      <v-icon color="#fafafa">dashboard</v-icon>
+                    </v-list-item-avatar>
+                    <span class="title font-weight-light" color="#FAFAFA"><h3 style="color: white">Dashboard del usuario {{usuario}}</h3> </span>
+                    <v-list-item-content class="text-right" style="margin-top:5px">
+                      <v-list-item-subtitle> <strong></strong>  </v-list-item-subtitle>
+                   </v-list-item-content>
+                 </v-list-item>
+                </v-card-title>
+                <div class="position-relative mb-4" style="margin-top:0;">
+                    
+                </div>
+              </v-card>
+            </div>
+          </div>
+          </div>
+        </div>
+        
+
     <v-container class="col-md-10 ">
     <v-row justify="center">
       <v-col cols="auto">
@@ -12,7 +39,7 @@
         <v-combobox color="#d69c4f" v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
       </v-col>
       <v-col cols="auto" style="margin-top: 10px;">
-        <v-btn color="#d69c4f" style="color: #FAFAFA;" @click="FiltroDashboard()">Buscar Registros</v-btn>
+        <v-btn color="#d69c4f" style="color: #FAFAFA;" @click="getDashUserPerId()">Buscar Registros</v-btn>
       </v-col>
     </v-row>
   </v-container>  
@@ -74,6 +101,7 @@ import axios from "axios";
 import { mapState, mapActions } from 'vuex';
 export default {
   data: () => ({
+    usuario: '',
     color: '#d69c4f',
     percents: {},
     values:[],
@@ -149,6 +177,7 @@ export default {
   mounted() {  
     try {
       this.cargarAños()
+      this.cargarUser()
       this.hotelSelected = '[Seleccionar todos]'
       this.monthSelected = '[Seleccionar todos]'
       var fecha = new Date();
@@ -174,14 +203,14 @@ export default {
   methods: {
     ...mapActions(['getHotels', 'getDashboard', 'stateToken']),
     getNameHotels() {
-      var hoteless = JSON.parse(localStorage.getItem('hoteles'))
+      let hoteless = JSON.parse(localStorage.getItem('hoteles'))
       for(let i = 0; i < hoteless.length; i++){
         this.hotels.push(hoteless[i].shortName);
       }
     },
     //Filtro dashboard
     async FiltroDashboard(){
-      var datos = {
+      let datos = {
     		"hotel": this.hotelSelected,
     		"month": this.months.indexOf(this.monthSelected),
     		"year": this.yearSelected
@@ -205,12 +234,43 @@ export default {
       })
       
     },
+
+    async getDashUserPerId(){
+      let id = 2
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
+      console.log(this.accessToken)
+      await axios.post(url, config)
+      .then((res) => {
+        console.log(res.data)
+        /* this.values = res.data.table
+        this.percents = res.data.porcentajeConcrecion */
+      }) 
+      .catch((error) => {
+        console.log('Hubo un error',error)
+        /* localStorage.removeItem('token') */
+      })
+    },
+
     cargarAños(){
       var fecha = new Date();
       var año = fecha.getFullYear();
       for(var i=2018; i<=año; i++){
         this.years.push(i)
       }
+    },
+    cargarUser(){
+        try {
+            let datos = JSON.parse(localStorage.getItem('leads-user'))
+            this.datos = datos
+            this.usuario = datos.datos.nombre
+        } catch (error) {
+            
+        }
     }
 
 

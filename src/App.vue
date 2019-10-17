@@ -11,24 +11,21 @@
     <v-app v-if="accessToken!=null && (localStorageLength>=8 || lenghLS>=8 || lenghLS2>=8)"> 
       <NavBar></NavBar>
       <Menu></Menu>
-      
       <Content></Content>
       <Footer></Footer>
     </v-app>
-     <!-- <RegisterLead></RegisterLead> -->
-      <!-- <router-view></router-view> --> 
+    <!-- <RegisterLead></RegisterLead> -->
+    <!-- <router-view></router-view> --> 
    
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+
 import NavBar from './components/NavBar';
-import Menu2 from './components/Menu2';
 import Menu from './components/Menu';
 import Content from './components/Content';
 import Footer from './components/Footer';
-import DashJefe from './components/DashJefe';
 import Login2 from './components/Login2';
 import Charge from './components/Charge'
 import NotFound from './components/NotFound'
@@ -38,16 +35,13 @@ import { mapActions, mapState } from 'vuex'
 export default {
   name: 'App',
   components: {
-    HelloWorld,
     NavBar,
     Menu,
     Content,
     Footer,
-    DashJefe,
     Login2,
     Charge,
     NotFound,
-    Menu2,
   },
   data: () => ({
     lenghLS: parseInt(localStorage.getItem('objects')),

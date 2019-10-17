@@ -74,6 +74,7 @@ export default {
         'getManagers',
         'getDashboard',
         'redirigir',
+        'getTodo',
       ]),
     async login(){
       try {
@@ -87,12 +88,12 @@ export default {
         this.$store.dispatch('verLogin')
         this.$store.dispatch('getDashJefes')
         this.$store.dispatch('getHotels')
+        this.$store.dispatch('getDashboard')
+        this.$store.dispatch('getDataUser')
         this.$store.dispatch('getUsers')
         this.$store.dispatch('getAccounts')
-        this.$store.dispatch('getDashboard')
         this.$store.dispatch('getSegmentos')
         this.$store.dispatch('getManagers')
-        this.$store.dispatch('getDataUser')
         this.$store.dispatch('getAllLeads') 
         this.$store.dispatch('getCategories')
         this.$store.dispatch('getBranch') 

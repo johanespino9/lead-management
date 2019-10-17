@@ -415,7 +415,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos'
       await axios.post(url, datos, config)
       .then((res) => {
         localStorage.setItem('dashboard', JSON.stringify(res.data))
@@ -426,7 +426,7 @@ export default new Vuex.Store({
         }
       })
       .catch((error) => {
-        alert('error en Dash', error)
+        alert('Ocurrio un error cargando el Dashboard', error)
         console.log(error)
         localStorage.removeItem('token')
         localStorage.removeItem('usuarios')
@@ -709,7 +709,7 @@ export default new Vuex.Store({
         state.localStorageLength = 0
         window.location.href = '/'
       })
-    }    
+    },
 
   
   }
