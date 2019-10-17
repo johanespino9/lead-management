@@ -526,6 +526,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
+      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
       await axios.post(url, datos, config)
       .then((res) => {

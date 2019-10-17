@@ -174,7 +174,7 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="date2" scrollable>
+                      <v-date-picker v-model="date2" :min="date1" scrollable>
                         <div class="flex-grow-1"></div>
                         <v-btn text color="primary" @click="modal2 = false">Cancel</v-btn>
                         <v-btn text color="primary" @click="$refs.dialog2.save(date2)">OK</v-btn>
@@ -864,10 +864,12 @@ export default {
     async editOtherLead(){
       var rateevent =[]
       var events =[]
-      rateevent.push(this.rateEvent1, this.rateEvent2,this.rateEvent3)
-      for(let i = 0; i < this.editedItem.eventsName.length; i++){
+      if(this.editedItem.eventsName != undefined){
+        rateevent.push(this.rateEvent1, this.rateEvent2,this.rateEvent3)
+        for(let i = 0; i < this.editedItem.eventsName.length; i++){
          var obj = {name: this.editedItem.eventsName[i], rateEvent: parseInt(rateevent[i])}
          events.push(obj)
+        }
       }
       var fec1= this.date1
       var fec2= this.date2
