@@ -80,7 +80,7 @@ export default {
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
-        localStorage.removeItem('leads-user') */
+        localStorage.removeItem('leads-user')  */
   },
   destroyed() {
         localStorage.removeItem('token')

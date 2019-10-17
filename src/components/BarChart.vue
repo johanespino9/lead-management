@@ -361,7 +361,7 @@ export default {
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
                         alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
-                        window.location.href = '/#/datos-lead-user'  
+                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
                     }
                     }
                 },
@@ -575,7 +575,7 @@ export default {
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
                         alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
-                        window.location.href = '/#/datos-lead-user'  
+                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
                     }
                     }
                 },
@@ -796,7 +796,7 @@ export default {
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
                         alert("Se está dirigiendo a ver los Leads del usuario "+ejecutivos[e.dataPointIndex]+"")
-                        window.location.href = '/#/datos-lead-user'  
+                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
                     }
                     }
                 },

@@ -39,7 +39,7 @@
         <v-combobox color="#d69c4f" v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
       </v-col>
       <v-col cols="auto" style="margin-top: 10px;">
-        <v-btn color="#d69c4f" style="color: #FAFAFA;" @click="getDashUserPerId()">Buscar Registros</v-btn>
+        <v-btn color="#d69c4f" style="color: #FAFAFA;" @click="FiltroDashboardPorId(id, hotelSelected, months, yearSelected)">Buscar Registros</v-btn>
       </v-col>
     </v-row>
   </v-container>  
@@ -102,6 +102,7 @@ import { mapState, mapActions } from 'vuex';
 export default {
   data: () => ({
     usuario: '',
+    id: 0,
     color: '#d69c4f',
     percents: {},
     values:[],
@@ -192,8 +193,7 @@ export default {
       if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
       }
-      /* this.$store.dispatch('getUsers')
-        this.desserts= this.Users */
+      this.FiltroDashboardPorId(this.id, this.hotelSelected, this.months, this.yearSelected)
     }catch (error){
       console.log('Hubo un error')
     }
@@ -209,22 +209,21 @@ export default {
       }
     },
     //Filtro dashboard
-    async FiltroDashboard(){
+    async FiltroDashboardPorId(id, hotel, month, year){  
       let datos = {
-    		"hotel": this.hotelSelected,
-    		"month": this.months.indexOf(this.monthSelected),
-    		"year": this.yearSelected
+    		"hotel": hotel,
+    		"month": month.indexOf(this.monthSelected),
+    		"year": year
       }
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      console.log(datos)
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos'
+
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
       await axios.post(url, datos, config)
       .then((res) => {
-        console.log(res.data)
         this.values = res.data.table
         this.percents = res.data.porcentajeConcrecion
       }) 
@@ -233,27 +232,6 @@ export default {
         /* localStorage.removeItem('token') */
       })
       
-    },
-
-    async getDashUserPerId(){
-      let id = 2
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.accessToken
-        }
-      }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
-      console.log(this.accessToken)
-      await axios.post(url, config)
-      .then((res) => {
-        console.log(res.data)
-        /* this.values = res.data.table
-        this.percents = res.data.porcentajeConcrecion */
-      }) 
-      .catch((error) => {
-        console.log('Hubo un error',error)
-        /* localStorage.removeItem('token') */
-      })
     },
 
     cargarAños(){
@@ -268,12 +246,11 @@ export default {
             let datos = JSON.parse(localStorage.getItem('leads-user'))
             this.datos = datos
             this.usuario = datos.datos.nombre
+            this.id = datos.datos.user_id
         } catch (error) {
             
         }
     }
-
-
   },
 
 };
