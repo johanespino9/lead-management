@@ -1,5 +1,7 @@
 <template>
-  <div>
+<div>
+  
+  <div v-if="role!='Administrador'">
   <v-container class="col-md-12">
     <v-row >
         <v-col cols="auto">
@@ -233,13 +235,24 @@
 </template>
     </div>
 </div>
+
+ <div v-if="role=='Administrador'">
+   <NotFound/>
+ </div>
+
+</div>
 </template>
 
 <script>
 import axios from "axios";
+import NotFound from './NotFound'
 import { mapState, mapActions } from 'vuex';
 export default {
+  components:{
+    NotFound
+  },
   data: () => ({
+    role:'',
     yearSelected: null,
     years: [],
     horaInicio: null,
@@ -404,7 +417,8 @@ export default {
       },
   },
    mounted (){ 
-    try {  
+    try { 
+      this.verificaPermisos()
       let visitas = JSON.parse(localStorage.getItem('visitas'))
       this.cargarVisitas(visitas)
       this.listaVisitas = visitas.calendar.listVisit
@@ -420,7 +434,7 @@ export default {
       this.tablaVisitas3 = this.tablaVisitas.tableVisitsPercent
       this.cargaTable()
       } catch (error) {
-       
+       console.log('Ocurrio un error')
      }
     },
     
@@ -614,7 +628,12 @@ export default {
         this.events= array
         } catch (error) {
         }
-      }
+      },
+      verificaPermisos(){
+        this.role = JSON.parse(localStorage.getItem('usuario')).role
+        console.log(this.role)
+       },
+
 
   },
 

@@ -1,5 +1,8 @@
 <template>
 <div>
+
+<!-- Los que no son ejecutivos no tienen acceso -->
+<div v-if="role!='Ejecutivo'">
     <b-alert
       :show="dismissCountDown"
       @dismissed="dismissCountDown=0"
@@ -116,12 +119,23 @@
             </template> -->
           </v-data-table>
     </div>
+
+    <div v-if="role=='Ejecutivo'"> 
+      <NotFound/>
+    </div>
+
+</div>    
 </template>
 <script>
 import axios from "axios";
+import NotFound from './NotFound'
 import { mapState, mapActions } from 'vuex';
   export default {
+    components:{
+      NotFound
+    },
     data: () => ({
+    role:'',
     msjerror: 'Se eliminó correctamente',
     msjsuccess:'Se guardó correctamente',
     type: 'success',
@@ -227,6 +241,7 @@ import { mapState, mapActions } from 'vuex';
       if(this.desserts.length==0 && usuarios!=null){
         this.desserts = JSON.parse(localStorage.getItem('usuarios'))
       }
+      this.verificaPermisos()
       
     }catch (error){
       console.log('Hubo un error')
@@ -412,7 +427,11 @@ import { mapState, mapActions } from 'vuex';
       for(let i=0; i< this.desserts.length; i++){
         this.order.push(i)
       }
-    }
+    },
+    verificaPermisos(){
+        this.role = JSON.parse(localStorage.getItem('usuario')).role
+        console.log(this.role)
+    },
     
   },
 

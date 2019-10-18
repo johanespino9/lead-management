@@ -1,5 +1,6 @@
 <template>
 <div>
+    <div v-if="role=='Ejecutivo'">
     <b-alert
       :show="dismissCountDown"
       @dismissed="dismissCountDown=0"
@@ -368,12 +369,13 @@
 
         <!-- <v-alert type="success" v-model="snackbar" dismissible width="300" height="50" style="float: right; position:absolute">
            I'm a success alert.
-        </v-alert> -->
-       
+        </v-alert> -->   
+</div>
+<div v-if="role!='Ejecutivo'">
+  <NotFound/>
+</div>
 
-    
-    
-
+  
 </div>
 </template>
 
@@ -382,15 +384,19 @@
 <script>
 
 import axios from "axios";
+import NotFound from './NotFound'
 import {mapActions, mapState} from 'vuex'
 import { mask } from 'vue-the-mask'
 export default {
+  components:{
+    NotFound
+  },
   directives: {
       mask,
     },
   data: () => ({
+    role: '',
     sevent:"no",
-
     rateEvent1:0,
     rateEvent2:0,
     rateEvent3:0,
@@ -576,6 +582,7 @@ export default {
         this.getNameHotels();
         this.getNameSegments();
         this.calculaTotal()
+        this.verificaPermisos()
       }
       if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
@@ -1287,7 +1294,13 @@ export default {
         } catch (error) {
         
       }
+    },
+    verificaPermisos(){
+      this.role = JSON.parse(localStorage.getItem('usuario')).role
+      console.log(this.role)
     }
+
+
 
 
 

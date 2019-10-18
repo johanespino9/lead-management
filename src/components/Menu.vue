@@ -107,7 +107,7 @@
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn color="#d69c4f" class="black--text" block @click="CerrarSession()">Logout</v-btn>
+          <v-btn color="#d69c4f"  class="black--text" block @click="CerrarSession()">Logout</v-btn>
         </div>
       </template>
     </v-navigation-drawer>

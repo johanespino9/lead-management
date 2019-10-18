@@ -1,5 +1,8 @@
 <template>
-    <div>
+<div>
+
+    <!-- Los que no son ejecutivos no tienen acceso -->
+    <div v-if="role!='Ejecutivo'">
         <div class="">
         <!-- primer ROW -->
         <div class="row">
@@ -241,28 +244,26 @@
       
     </div>
     
-    
-    <!-- <div id="chart">
-    <apexchart type=bar height=350 :options="chartOptions" :series="series" />
+    <div v-if="role=='Ejecutivo'"> 
+      <NotFound/>
     </div>
-
-    <div id="html">
-        &lt;div id="chart">
-        &lt;apexchart type=bar height=350 :options="chartOptions" :series="series" />
-        &lt;/div>
-    </div> -->
     
-    
+</div> 
 </template>
 <script>
 import {mapState, mapActions} from 'vuex'
 import axios from 'axios'
+import NotFound from './NotFound'
 export default {
+  components:{
+    NotFound
+  },
     data: () => ({
-        chart: null,
-        chart2: null,
-        yearSelected: "",
-        monthSelected : "",
+      role: '',
+      chart: null,
+      chart2: null,
+      yearSelected: "",
+      monthSelected : "",
        months:['[Seleccionar todos]',
         'Enero',
         'Febrero',
@@ -325,7 +326,7 @@ export default {
         this.graph1(this.chart)
         this.graph2(this.chart2)
         this.cargarTablas(data)
-
+        this.verificaPermisos()
         if(localStorage.length>=8){
             this.$store.dispatch('stateToken')
         }
@@ -997,7 +998,11 @@ export default {
 
       } catch (error) {    
       }
-    }
+    },
+    verificaPermisos(){
+        this.role = JSON.parse(localStorage.getItem('usuario')).role
+        console.log(this.role)
+    },
 
 
     },
