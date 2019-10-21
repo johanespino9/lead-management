@@ -27,7 +27,7 @@
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="1000px" class="center">
       <template  v-slot:activator="{ on }">
-          <v-btn  style="margin-left: 11px;" dark class="mb-2" v-on="on">Registrar Nueva Visita</v-btn>
+          <v-btn  style="margin-left: 11px;" dark class="mb-2" v-on="on" @click="LimpiarCampos">Registrar Nueva Visita</v-btn>
        </template>
        <v-card >
          <v-card-title>
@@ -40,7 +40,7 @@
                     <v-text-field 
                     v-model="editedItem.name"
                     color="#d69c4f" 
-                    label="Nombre">
+                    label="Motivo">
                     </v-text-field>
                   </v-col>
                   <v-col cols="20" sm="6" md="80" class=center>
@@ -49,18 +49,18 @@
                       :items="allAccounts"
                       color="#d69c4f"
                       label="Seleccionar Empresa"
+                      id="account"
                     ></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="3" md="80" class=center>
                     <v-combobox
-                      v-model="editedItem.razon"
-                      :items="Reasons"
+                      v-model="estado" 
+                      :items="Status"
                       color="#d69c4f"
-                      label="Seleccionar razón"
+                      label="Seleccionar estado"
+                      id="status"
                     ></v-combobox>
-
                   </v-col>
-                  
                   <v-col cols="20" sm="3" md="80" class=center>
                       <v-menu
                         ref="menu"
@@ -90,7 +90,16 @@
                         </v-date-picker>
                       </v-menu>
                   </v-col>
-                  <v-col cols="12" sm="6" md="80" >
+                  <v-col cols="20" sm="6" md="80" class=center>
+                    <v-combobox
+                      v-model="editedItem.reason"
+                      :items="Reasons"
+                      color="#d69c4f"
+                      label="Seleccionar razón"
+                      id="reason"
+                    ></v-combobox>
+                  </v-col>
+                  <v-col v-if="estado != 'Cancelado'" cols="12" sm="12" md="80" >
                     <v-textarea
                       v-model="editedItem.description"
                       color="#d69c4f" 
@@ -103,11 +112,11 @@
                   
                   <v-col class="lg-offset8" md="6" lg="6">
                         <h3>Hora Inicio</h3>
-                        <v-time-picker width="250" header-color="#000000"  v-model="horaInicio" color="#d69c4f"></v-time-picker>
+                        <v-time-picker :min="HoraMin" :max="HoraMax" width="250" header-color="#000000"  v-model="horaInicio" color="#d69c4f"></v-time-picker>
                  </v-col>
                  <v-col class="lg-offset8" md="6" lg="6">
                       <h3>Hora Fin</h3>
-                       <v-time-picker width="250" header-color="#000000"  v-model="horaFin"  color="#d69c4f"></v-time-picker>
+                       <v-time-picker :min="HoraMin" :max="HoraMax" width="250" header-color="#000000"  v-model="horaFin"  color="#d69c4f"></v-time-picker>
                  </v-col>
               
             </v-row>
@@ -115,6 +124,7 @@
          </v-container>
           <v-card-actions>
                       <div class="flex-grow-1"></div>
+                      <v-btn color="#d69c4f" text @click="close">Cancel</v-btn>
                       <v-btn color="#d69c4f" text @click="save()">Save</v-btn>
             </v-card-actions>
        </v-card-text>
@@ -202,21 +212,27 @@
             <v-toolbar
               color="#d69c4f"
               dark
-            >
-              <!-- <v-btn icon @click="editItem(selectedEvent)">
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn> -->
+            > 
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <div class="flex-grow-1"></div>
-              <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
+              <v-btn  @click="CambiaColor" icon>
+                <v-icon 
+                :color="colorIcon"
+                @click:append="CambiaColor"
+                >mdi-heart</v-icon>
               </v-btn>
-              <v-btn icon>
+              <v-btn icon @click="editItem(selectedEvent)">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn> 
+              <!-- <v-btn icon>
                 <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
+              </v-btn> -->
             </v-toolbar>
             <v-card-text>
-              <span v-html="selectedEvent.description"></span>
+              <span v-html="selectedEvent.description
+                +'<br><br>Hora Inicio: '+selectedEvent.start
+                +'<br>Hora Fin: '+selectedEvent.end"
+              ></span>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -253,10 +269,14 @@ export default {
   },
   data: () => ({
     role:'',
+    colorIcon: 'white',
     yearSelected: null,
     years: [],
     horaInicio: null,
     horaFin: null,
+    HoraMin: '06:00',
+    HoraMax: '22:00',
+    Status: ['Planificado', 'Completado', 'Cancelado'],
     grow: true,
     dialog: false,
     select:'',
@@ -271,6 +291,7 @@ export default {
       },
       start: null,
       end: null,
+      estado: '',
       editedItem: {
         name: '',
         description:'',
@@ -279,6 +300,7 @@ export default {
         account: '',
         reason:'',
         razon: '',
+        status:''
       },
       defaultItem:{
         name: '',
@@ -287,7 +309,8 @@ export default {
         finish: '',
         account: '',
         reason:'',
-        razon:''
+        razon:'',
+        status:''
       },
       selectedEvent: {},
       selectedElement: null,
@@ -301,6 +324,7 @@ export default {
       events: [],
       date1: new Date().toISOString().substr(0, 10),
       date2: new Date().toISOString().substr(0, 10),
+      defaultDate: new Date().toISOString().substr(0, 10),
       menu: false,
       menu2: false,
       search: "",
@@ -540,7 +564,6 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
       await axios.post(url, datos, config)
       .then((res) => {
@@ -581,12 +604,37 @@ export default {
       this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3) 
     },
 
-/*     editItem (item) {
+     editItem (item) {
+       try {
         this.editedIndex = this.events.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
-        console.log(this.editedIndex)
-    }, */
+        let fecha= ''
+        let horai= ''
+        let horaf= ''
+        for(let i=0; i<item.start.length; i++){
+          if(item.start.charAt(i) == ' '){
+            for(let j=i+1; j<item.start.length; j++){
+              horai += item.start.charAt(j)
+            }
+            for(let h=i+1; h<item.end.length; h++){
+              horaf += item.end.charAt(h)
+            }
+            break;
+            return;
+          }else{
+            fecha += item.start.charAt(i)
+          }
+        }
+        /*ESPERAR QYE MANDE EL ESTADO this.estado = item.state */
+        this.editedItem.reason = item.reason
+        this.date1 = fecha
+        this.horaInicio = horai
+        this.horaFin = horaf
+       } catch (error) {
+         
+       }
+    }, 
     save () {
         if (this.editedIndex > -1) {
           console.log('se edito')
@@ -631,8 +679,19 @@ export default {
       },
       verificaPermisos(){
         this.role = JSON.parse(localStorage.getItem('usuario')).role
-        console.log(this.role)
        },
+       LimpiarCampos(){
+         this.editedItem = this.defaultItem
+         this.date1 = this.defaultDate
+         this.date2 = this.defaultDate
+       },
+       CambiaColor(){
+         if(this.colorIcon == 'red'){
+           this.colorIcon = 'white'
+         }else{
+           this.colorIcon = 'red'
+         }
+       }
 
 
   },

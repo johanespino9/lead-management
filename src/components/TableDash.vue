@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="contenedor">
     <v-container class="col-md-10 ">
     <v-row justify="center">
       <v-col cols="auto">
@@ -16,6 +16,37 @@
       </v-col>
     </v-row>
   </v-container>  
+
+  <v-container class="col-md-6">
+    <v-row >
+      <v-col>
+        <v-progress-circular
+        :rotate="360"
+        :size="200"
+        :width="40"
+        :value="percents.room_revenue"
+        color="orange"
+      >
+        %{{ percents.room_revenue }}
+      </v-progress-circular>
+      <h2 cols="auto">Room Revenue : {{percents.room_revenue}}%</h2>
+      </v-col>
+      <v-col>
+        <v-progress-circular
+        :rotate="360"
+        :size="200"
+        :width="40"
+        :value="percents.eventos"
+        color="green"
+      >
+        %{{ percents.eventos }}
+      </v-progress-circular>
+      <h2 cols="auto">Event Revenue : {{percents.eventos}}%</h2>
+      </v-col>
+    </v-row>
+
+  </v-container>
+
   <v-container class="col-md-12">
    <v-data-table hide-default-footer :headers="headers" :items="values">
       <template slot="headerCell" slot-scope="{ header }">
@@ -37,35 +68,41 @@
     </v-data-table>
 </v-container>
 
-<v-container class="col-md-6">
-    <v-row >
-      <v-col>
-        <v-progress-circular
-        :rotate="360"
-        :size="200"
-        :width="40"
-        :value="percents.room_revenue"
-        color="orange"
-      >
-        {{ percents.room_revenue }}
-      </v-progress-circular>
-      <h2 cols="auto">Room Revenue : {{percents.room_revenue}}%</h2>
-      </v-col>
-      <v-col>
-        <v-progress-circular
-        :rotate="360"
-        :size="200"
-        :width="40"
-        :value="percents.eventos"
-        color="green"
-      >
-        {{ percents.eventos }}
-      </v-progress-circular>
-      <h2 cols="auto">Event Revenue : {{percents.eventos}}%</h2>
-      </v-col>
-    </v-row>
+<div class="row">
+  <div class="col-lg-6">
+              <!-- SEGUNDO CARD DESDE ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
+           <div class="card"> 
+                <v-card light >
+                  <v-card-title>
+                    <span class="title font-weight-light"><strong>Visitas por realizar</strong> </span>
+                  </v-card-title>
+                  <div class="position-relative mb-4" style="margin-top:0;">
+                      <template>
+                      <v-data-table
+                          hide-default-footer
+                          color="#000000"
+                          :headers="headers"
+                          :items="values"
+                          :sort-by="['mconcretado']"
+                          :sort-desc="[true]"
+                          :items-per-page="10"
+                          :page.sync="page"
+                          @page-count="pageCount = $event"
+                          class="elevation-1"
+                      ></v-data-table>
+                  </template>
+                  </div>
+                </v-card>
+          </div> 
+  </div>
+    
 
-    </v-container>
+</div>
+
+<div id="robotin" style="margin-bottom: 30px; margin-right: 10px; display:scroll;position:fixed; bottom:0px; right:0px;cursor:pointer;max-width:120px;">
+  <a href=""> <img style="margin-bottom: 10px;" src="../assets/robotin.gif" alt="robotin"></a>
+  
+</div>
   </div>
 </template>
 
@@ -76,6 +113,8 @@ export default {
   data: () => ({
     color: '#d69c4f',
     percents: {},
+    page: 1,
+    pageCount: 0,
     values:[],
     value: 0,
     hotelSelected: null,
@@ -132,11 +171,13 @@ export default {
         sortable: false,
         text: "Confirmado",
         value: "confirmado"
-      }
+      },
+      
     ],
     items: [],
     roomRevenue: null,
-    events: null
+    events: null,
+
   }),
 
 
@@ -218,3 +259,8 @@ export default {
 
 };
 </script>
+<style >
+  #contenedor{
+    background-color: #fff;
+  }
+</style>
