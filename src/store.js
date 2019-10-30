@@ -299,7 +299,6 @@ export default new Vuex.Store({
       }
       let url = 'https://casa-andina-backend.azurewebsites.net/role/'+state.roleid+'/manager'
       //console.log('ID',id)
-      console.log('URL', url)
       await axios.get(url, config)
       .then((response) => {
         commit('Managers', response.data)
@@ -571,6 +570,7 @@ export default new Vuex.Store({
     },
 
     async getDashJefes({state, commit}){
+      let groupSegment = 'Agencias'
       let fec = new Date()
       let month = (fec.getMonth() +1) 
       let year = fec.getFullYear()

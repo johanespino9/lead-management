@@ -1,14 +1,5 @@
 <template>
   <div>
-    <b-alert
-      :show="dismissCountDown"
-      @dismissed="dismissCountDown=0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <v-alert  v-if="type=='success'" icon="mdi-shield-lock-outline" type="success" :v-show="dismissCountDown">
-           {{msjsuccess}}
-      </v-alert>
-    </b-alert> 
         <v-data-table
               :headers="headers"
               :items="desserts"
@@ -187,13 +178,6 @@ import axios from 'axios';
       allItems(){
         this.getAccount();
       },
-      countDownChanged(dismissCountDown) {
-        this.dismissCountDown = dismissCountDown
-      },
-      showAlert() {
-        this.dismissCountDown = this.dismissSecs
-      }, 
-
     //Agregrar nueva cuenta
     async addAcount(){
       var datos = {	
@@ -213,9 +197,10 @@ import axios from 'axios';
         localStorage.setItem('accounts', JSON.stringify(response.data))
         this.$store.commit('Accounts', response.data)
         this.desserts=this.Accounts
-        this.showAlert()
+        this.alerts('Se guardó correctamente', 'success')
       }).catch(error => {
         console.log('Hubo un error ', error)
+        this.alerts('Ocurrio un error y no se guardó', 'error')
       })
     }, 
 
@@ -239,9 +224,10 @@ import axios from 'axios';
         localStorage.setItem('accounts', JSON.stringify(response.data))
         this.$store.commit('Accounts', response.data)
         this.desserts=this.Accounts
-        this.showAlert()
+        this.alerts('Se guardó correctamente', 'success')
       }).catch(error => {
         console.log('Hubo un error ', error)
+        this.alerts('Ocurrio un error y no se guardó', 'error')
       })
     }, 
 
@@ -282,6 +268,35 @@ import axios from 'axios';
         }
         this.close()
       },
+
+      alerts(msj, type){
+        const msje = msj
+            if(type == 'success'){
+              toastr.success(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }else{
+              toastr.error(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }
+    },
   },
 
   }

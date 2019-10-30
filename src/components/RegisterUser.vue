@@ -3,18 +3,6 @@
 
 <!-- Los que no son ejecutivos no tienen acceso -->
 <div v-if="role!='Ejecutivo'">
-    <b-alert
-      :show="dismissCountDown"
-      @dismissed="dismissCountDown=0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <v-alert v-if="type=='error'" icon="mdi-delete" type="info" :v-show="dismissCountDown" >
-           {{msjerror}}
-      </v-alert>
-      <v-alert  v-if="type=='success'" icon="mdi-shield-lock-outline" type="success" :v-show="dismissCountDown">
-           {{msjsuccess}}
-      </v-alert>
-    </b-alert>
         <v-data-table
             :headers="headers"
             :items="desserts"
@@ -205,7 +193,6 @@ import { mapState, mapActions } from 'vuex';
       return this.editedIndex === -1 ? 'Nuevo Usuario' : 'Editar Usuario'
     },
     managerId: function (){
-      console.log(this.rol.indexOf(this.editedItem.role).toString())
       return this.rol.indexOf(this.editedItem.role).toString()
     }
   },
@@ -219,19 +206,6 @@ import { mapState, mapActions } from 'vuex';
     },
     
   },
-/* this.getManager(); */
-  /* beforeCreate() {
-    
-    try {
-      var usuarios = localStorage.getItem('usuarios')
-      this.desserts = JSON.parse(usuarios)
-      console.log('Entro')
-      console.log(JSON.parse(usuarios))
-      console.log(JSON.parse(this.desserts))
-    } catch (error) {
-      console.log('ERROR')
-    }
-  }, */
   created() {
     
   },
@@ -255,17 +229,8 @@ import { mapState, mapActions } from 'vuex';
   },
 
   methods: {
-      countDownChanged(dismissCountDown) {
-        this.dismissCountDown = dismissCountDown
-      },
-      showAlert() {
-        this.dismissCountDown = this.dismissSecs
-      }, 
-
-
       ...mapActions(['getUsers', 'editUser', 'getSegmentos', 'stateToken']),
       getUser(){
-       console.log(this.Users)
        this.desserts= this.Users
       },
     allItems(){
@@ -321,7 +286,9 @@ import { mapState, mapActions } from 'vuex';
         localStorage.setItem('usuarios', JSON.stringify(response.data))
         this.$store.commit('Users', response.data)
         this.desserts=this.Users
+        this.alerts('Se guardó correctamente', 'success')
       }).catch(error => {
+        this.alerts('Ocurrió un error guardando los datos', 'error')
         console.log('Hubo un error ', error)
       })
     }, 
@@ -350,7 +317,9 @@ import { mapState, mapActions } from 'vuex';
         localStorage.setItem('usuarios', JSON.stringify(response.data))
         this.$store.commit('Users', response.data)
         this.desserts=this.Users
+        this.alerts('Se guardó correctamente', 'success')
       }).catch(error => {
+        this.alerts('Ocurrió un error guardando los datos', 'error')
         console.log('Hubo un error ', error)
       })
     },
@@ -370,8 +339,7 @@ import { mapState, mapActions } from 'vuex';
       const index = this.desserts.indexOf(item)
       confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
       if(this.desserts.length< JSON.parse(localStorage.getItem('usuarios'))){
-        this.type='error'
-      this.showAlert()
+        this.alerts('Se eliminó correctamente', 'error')
       }
       
     },
@@ -388,14 +356,10 @@ import { mapState, mapActions } from 'vuex';
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
         this.editUser()
-        this.type='success'
-        this.showAlert()
         
       } else {
         this.addUser()
         this.close();
-        this.type='success'
-        this.showAlert()
         
         /* this.desserts.push(this.editedItem) */
       }
@@ -409,12 +373,8 @@ import { mapState, mapActions } from 'vuex';
         }
       }
       let url = 'https://casa-andina-backend.azurewebsites.net/role/'+(this.rol.indexOf(this.editedItem.role)) +'/manager'
-
-      console.log('URL', url)
       await axios.get(url, config)
       .then((response) => {
-        console.log(response.data)
-        console.log(this.groupSegment)
         this.supervisors=response.data
       })
       .catch((error) => {
@@ -430,7 +390,35 @@ import { mapState, mapActions } from 'vuex';
     },
     verificaPermisos(){
         this.role = JSON.parse(localStorage.getItem('usuario')).role
-        console.log(this.role)
+    },
+
+    alerts(msj, type){
+        const msje = msj
+            if(type == 'success'){
+              toastr.success(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }else{
+              toastr.error(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }
     },
     
   },

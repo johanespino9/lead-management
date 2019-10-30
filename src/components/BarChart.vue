@@ -37,6 +37,9 @@
             <v-container class="col-md-10">
             <v-row justify="center">
                 <v-col cols="auto">
+                <v-combobox :items="groupSegments" v-model="groupSegment" color="#757575" label="Group Segment"></v-combobox>
+                </v-col>
+                <v-col cols="auto">
                 <v-combobox :items="months" v-model="monthSelected" color="#757575" label="Seleccionar Mes"></v-combobox>
                 </v-col>
                 <v-col cols="auto">
@@ -262,6 +265,7 @@ export default {
       role: '',
       chart: null,
       chart2: null,
+      groupSegment: 'Agencias',
       yearSelected: "",
       monthSelected : "",
        months:['[Seleccionar todos]',
@@ -295,7 +299,8 @@ export default {
         ids2:[],
         data3: [] ,
         data4: [],
-        ej2: []
+        ej2: [],
+        groupSegments: ['Agencias', 'Corporativo', 'Eventos']
 
     }),
     computed: {
@@ -464,7 +469,7 @@ export default {
             {
             labels: {
             formatter: function(val, index) {
-                return "$"+val;
+                return "$"+ val;
             }
             },  
             axisBorder: {
@@ -519,7 +524,33 @@ export default {
               enabled: true,
             y: {
               formatter: function (val/* , index */) {
-                return "$" + val 
+                let num = 750000054;
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
               }
             },
             x: {
@@ -728,7 +759,34 @@ export default {
               enabled: true,
             y: {
               formatter: function (val/* , index */) {
-                return "$" + val 
+                let num = 750000054;
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                }
+                
+                return "$"+numero_separado
               }
             },
             x: {
@@ -949,8 +1007,8 @@ export default {
             let diff = parseInt(data.dashboardRateHotel[i].total-data.dashboardRateHotel[i].rate_hotel)
             array1.push({
             name: data.dashboardRateHotel[i].name+' '+data.dashboardRateHotel[i].last_name,
-            mbruto: data.dashboardRateHotel[i].total,
-            mconcretado: data.dashboardRateHotel[i].rate_hotel,
+            mbruto: this.separaNumeros(data.dashboardRateHotel[i].total),
+            mconcretado: this.separaNumeros(data.dashboardRateHotel[i].rate_hotel),
             diferencia: diff
           })
         }
@@ -958,8 +1016,8 @@ export default {
             let diff = parseInt(data.dashboardRateEvents[i].total-data.dashboardRateEvents[i].rate_events)
             array2.push({
             name: data.dashboardRateHotel[i].name+' '+data.dashboardRateHotel[i].last_name,
-            mbruto: data.dashboardRateEvents[i].total,
-            mconcretado: data.dashboardRateEvents[i].rate_events,
+            mbruto: this.separaNumeros(data.dashboardRateEvents[i].total),
+            mconcretado: this.separaNumeros(data.dashboardRateEvents[i].rate_events),
             diferencia: diff
           })
         }
@@ -999,9 +1057,40 @@ export default {
       } catch (error) {    
       }
     },
+    separaNumeros(numero){
+      try {
+        const num = numero.toFixed(2);
+        const tamaño = num.toString().length
+        let nuevo_num = ''
+        let index = 1
+        for(let i=tamaño-1; i>=0; i--){
+            if(num.toString().charAt(i)=='.'){
+                index = 1
+                nuevo_num += num.toString().charAt(i)
+            }else{
+                if(index%3==0){
+                    nuevo_num += num.toString().charAt(i)
+                    if(i>0){
+                      nuevo_num += ','
+                    }
+                    index++
+                }else{
+                    nuevo_num += num.toString().charAt(i)
+                    index++   
+                }
+            }
+        }
+        let tamaño2 = nuevo_num.length
+        let numero_separado = ''
+        for(let i=tamaño2-1; i>=0; i--){
+            numero_separado += nuevo_num.charAt(i)
+        }
+        return numero_separado;
+      } catch (error) { 
+      }
+    },
     verificaPermisos(){
         this.role = JSON.parse(localStorage.getItem('usuario')).role
-        console.log(this.role)
     },
 
 
@@ -1010,7 +1099,7 @@ export default {
 </script>
 <style>
 #chart, #chart2 {
-        max-width: 750px;
+        max-width: 600px;
         margin: 5px auto;
 }
 #chart .apexcharts-xaxis-label, #chart2 .apexcharts-xaxis-label {

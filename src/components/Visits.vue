@@ -589,10 +589,66 @@ export default {
         this.tablaVisitas1 = res.data.tableVisits.tableVisitsNumber1
         this.tablaVisitas2 = res.data.tableVisits.tableVisitsNumber2
         this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
-        this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3) 
+        this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3)
+        toastr.success('Se agregó correctamente')
       })
       .catch((error) => {
-        alert('Error agregando la visita')
+        toastr.error('Ocurrió un error agregando la visita')
+        console.log(error)
+      }) 
+      } catch (error) {
+        
+      } 
+    },
+
+    //Edit a visit
+    async editVisit(){
+      try {
+      let hour1= this.horaInicio
+      let hour2= this.horaFin
+      let datos= {
+        "name": this.editedItem.name,
+        "description": this.editedItem.description,
+        "start": this.date1+"T"+hour1+":00",
+        "finish": this.date1+"T"+hour2+":00",
+        "account": this.editedItem.account,
+        "reason": this.editedItem.razon,
+      }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
+      await axios.put(url, datos, config)
+      .then((res) => {
+        this.$store.commit('Visits', res.data)
+        localStorage.setItem('visitas', JSON.stringify(res.data))
+        let visitas = res.data.calendar.listVisit
+        let array = []
+        for(let i=0; i<visitas.length; i++){
+          array.push({
+            id: visitas[i].visitId,
+            user: visitas[i].user,
+            name: visitas[i].name,
+            description: visitas[i].description,
+            start: visitas[i].start.toString(),
+            end: visitas[i].finish.toString(),
+            account: visitas[i].account,
+            reason: visitas[i].reason,
+            color: '#d69c4f',
+          })
+        }
+        this.events = array 
+        this.values = []
+        this.tablaVisitas1 = res.data.tableVisits.tableVisitsNumber1
+        this.tablaVisitas2 = res.data.tableVisits.tableVisitsNumber2
+        this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
+        this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3)
+        toastr.success('Se agregó correctamente')
+      })
+      .catch((error) => {
+        toastr.error('Ocurrió un error agregando la visita')
         console.log(error)
       }) 
       } catch (error) {

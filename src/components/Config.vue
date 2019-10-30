@@ -1,20 +1,5 @@
 <template>
-    <div>
-      <!-- <div class="flex-grow-1"></div> -->
-      <!-- <v-dialog v-model="dialog" max-width="1000px" class="center"> -->
-<!--       <template v-slot:activator="{ on }">
-          <v-btn color="#ff4200" style="color: #FAFAFA;" dark class="mb-2" v-on="on">Editar Perfil</v-btn>
-       </template> -->
-    <b-alert
-      :show="dismissCountDown"
-      @dismissed="dismissCountDown=0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <v-alert  v-if="type=='success'" icon="mdi-shield-lock-outline" type="success" :v-show="dismissCountDown">
-           {{msjsuccess}}
-      </v-alert>
-    </b-alert> 
-      
+  <div>  
     <div>
          <v-card> 
               <v-container>
@@ -213,17 +198,49 @@ export default {
             this.user=this.User
           }
         }
-         this.showAlert()
+        this.alerts('Se guardó correctamente', 'success')
       }).catch(error => {
+        this.alerts('Ocurrió un error y no se guardó', 'error')
         console.log('Hubo un error ', error)
       })
-      }
+      },
+      alerts(msj, type){
+        const msje = msj
+            if(type == 'success'){
+              toastr.success(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }else{
+              toastr.error(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }
     },
+
+
+    },
+    
     updated() {
     if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
       }
-  },
+   },
 
 }
 </script>

@@ -186,7 +186,7 @@ export default {
       this.yearSelected = año 
       var Dash = JSON.parse(localStorage.getItem('dashboard'))
       if(this.values.length==0 && Dash!=null && this.percents!=null){
-        this.values = Dash.table
+        this.imprimeNumeros(Dash)
         this.percents = Dash.porcentajeConcrecion
         this.getNameHotels();
       }
@@ -252,6 +252,53 @@ export default {
         }
     }
   },
+  separaNumeros(numero){
+      try {
+        const num = numero.toFixed(2);
+        const tamaño = num.toString().length
+        let nuevo_num = ''
+        let index = 1
+        for(let i=tamaño-1; i>=0; i--){
+            if(num.toString().charAt(i)=='.'){
+                index = 1
+                nuevo_num += num.toString().charAt(i)
+            }else{
+                if(index%3==0){
+                    nuevo_num += num.toString().charAt(i)
+                    nuevo_num += ','
+                    index++
+                }else{
+                    nuevo_num += num.toString().charAt(i)
+                    index++   
+                }
+            }
+        }
+        let tamaño2 = nuevo_num.length
+        let numero_separado = ''
+        for(let i=tamaño2-1; i>=0; i--){
+            numero_separado += nuevo_num.charAt(i)
+        }
+        return numero_separado;
+      } catch (error) { 
+      }
+    },
+    imprimeNumeros(Dash){
+      for(let i=1; i< Dash.table.length-1; i++){
+        let num_separado1 = `$ ${this.separaNumeros(Dash.table[i].prospecto)}`
+        let num_separado2 = `$ ${this.separaNumeros(Dash.table[i].tentativo)}`
+        let num_separado3 = `$ ${this.separaNumeros(Dash.table[i].hot)}`
+        let num_separado4 = `$ ${this.separaNumeros(Dash.table[i].congelado)}`
+        let num_separado5 = `$ ${this.separaNumeros(Dash.table[i].cancelado)}`
+        let num_separado6 = `$ ${this.separaNumeros(Dash.table[i].confirmado)}`
+        Dash.table[i].prospecto = num_separado1
+        Dash.table[i].tentativo = num_separado2
+        Dash.table[i].hot = num_separado3
+        Dash.table[i].congelado = num_separado4
+        Dash.table[i].cancelado = num_separado5
+        Dash.table[i].confirmado = num_separado6
+      }
+      this.values = Dash.table
+    }
 
 };
 </script>

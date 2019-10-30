@@ -1,19 +1,6 @@
 <template>
 <div>
-    <div v-if="role=='Ejecutivo'">
-    <b-alert
-      :show="dismissCountDown"
-      @dismissed="dismissCountDown=0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <v-alert v-if="type=='error'" icon="mdi-delete" type="info" :v-show="dismissCountDown" >
-           {{msjerror}}
-      </v-alert>
-      <v-alert  v-if="type=='success'" icon="mdi-shield-lock-outline" type="success" :v-show="dismissCountDown">
-           {{msjsuccess}}
-      </v-alert>
-    </b-alert>
-
+  <div v-if="role=='Ejecutivo'">
   <v-data-table :headers="headers" :items="desserts" :search="search" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -117,16 +104,16 @@
                     <v-text-field v-model="editedItem.leadid" disabled  label="Lead ID" ></v-text-field>
                   </v-col> -->
                   <v-col cols="20" sm="4" md="80" class=center>
-                    <v-combobox color="#d69c4f" v-model="editedItem.segment" :items="segments" label="Seleccionar Segmento" ></v-combobox>
+                    <v-combobox color="#d69c4f" id="segments-id" v-model="editedItem.segment"  :items="segments" label="Seleccionar Segmento" ></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="4" md="80" class=center>
-                    <v-combobox color="#d69c4f" v-model="editedItem.account" :items="leadsAccounts" label="Seleccionar Cuenta"></v-combobox>
+                    <v-combobox color="#d69c4f" id="accounts-id" v-model="editedItem.account" :items="leadsAccounts" label="Seleccionar Cuenta"></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="4" md="80" class=center>
-                    <v-combobox color="#d69c4f" v-model="editedItem.hotel" :items="hotels" label="Seleccionar Hotel"></v-combobox>
+                    <v-combobox color="#d69c4f" id="hotels-id" v-model="editedItem.hotel" :items="hotels" label="Seleccionar Hotel"></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="4" md="80" class=center>
-                    <v-text-field color="#d69c4f"  v-model="editedItem.name" label="Nombre de Grupo"></v-text-field>
+                    <v-text-field color="#d69c4f" id="group-id" v-model="editedItem.name" label="Nombre de Grupo"></v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center>
                     <v-dialog
@@ -148,7 +135,7 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="date1" scrollable>
+                      <v-date-picker v-model="date1" :min="date" scrollable>
                         <div class="flex-grow-1"></div>
                         <v-btn text color="primary" @click="modal1 = false">Cancel</v-btn>
                         <v-btn text color="primary" @click="$refs.dialog1.save(date1)">OK</v-btn>
@@ -182,19 +169,20 @@
                       </v-date-picker>
                     </v-dialog>
                   </v-col>
-                  <v-col  v-if="editedItem.segment!='Eventos'"  cols="20" sm="2" md="80" class=center >
-                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rooms" label="Cantidad de Habitaciones"  >{{editedItem.rooms}}</v-text-field>
+                  <v-col  v-if="editedItem.segment!='Eventos' && editedItem.segment!='Series'"  cols="20" sm="2" md="80" class=center >
+                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rooms" label="Cantidad de Habitaciones"  >{{rooms}}</v-text-field>
                   </v-col>
-                  <v-col v-if="editedItem.segment != 'Eventos'" cols="20" sm="2" md="80" class=center  >
+                  <v-col v-if="editedItem.segment != 'Eventos' && editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center  >
                     <v-text-field color="#d69c4f" v-mask="mask" v-model="rateHotel" prefix="$" label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
                   </v-col>
-                  <v-col v-if="editedItem.segment=='Series'" cols="20" sm="2" md="80" class=center >
+                  <!-- <v-col v-if="editedItem.segment=='Series'" cols="20" sm="2" md="80" class=center >
                     <v-text-field color="#d69c4f" v-mask="mask"  v-model="nights" label="Cantidad de Noches" >{{editedItem.nights}}</v-text-field>
-                  </v-col>
+                  </v-col> -->
 
                   <v-col v-if="editedItem.segment =='Series'" cols="20" sm="10" md="80">
                     <v-combobox
                         color="#d69c4f" 
+                        id="selection_months"
                         v-model="editedItem.month"
                         :items="months"
                         :search-input.sync="search"
@@ -222,42 +210,43 @@
                       </v-btn>
                   </v-col>
                   <!-- MESES -->
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 1 " cols="2" sm="1"   >
-                    <v-text-field color="#d69c4f" label="$" v-mask="mask"  v-model="month1"  ></v-text-field>
-                  </v-col>
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 2" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f"  v-mask="mask"  v-model="month2" label="$"  ></v-text-field>
-                  </v-col>  
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 3" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f"  v-mask="mask"  v-model="month3" label="$" ></v-text-field>
-                  </v-col>  
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 4" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month4" label="$" ></v-text-field>
-                  </v-col>
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 5" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month5" label="$" ></v-text-field>
-                  </v-col>  
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 6" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month6" label="$" ></v-text-field>
-                  </v-col>  
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 7" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month7" label="$" ></v-text-field>
-                  </v-col>  
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 8" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month8" label="$" ></v-text-field>
-                  </v-col>  
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 9" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month9" label="$" ></v-text-field>
-                  </v-col>  
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 10" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month10" label="$" ></v-text-field>
-                  </v-col>  
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 11" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month11" label="$" ></v-text-field>
-                  </v-col>  
-                  <v-col v-if="editedItem.segment=='Series' && lenghtMonth >= 12" cols="2" sm="1"  >
-                    <v-text-field color="#d69c4f" v-mask="mask"  v-model="month12" label="$" ></v-text-field>
-                  </v-col>      
+                
+                  <MonthInput v-if="editedItem.segment =='Series' && estado1==true"  @tarifa="tarifa1 = $event" @habitaciones="habitaciones1 = $event" @noches="noches1 = $event"  
+                  :mes="mes1" :tarifa="tarifa1" :habitaciones="habitaciones1" :noches="noches1" :value="totalmeses"  :totalmes="totalmes1"/>
+                  
+
+                  <MonthInput v-if="editedItem.segment =='Series' && estado2==true " @tarifa="tarifa2 = $event" @habitaciones="habitaciones2 = $event" @noches="noches2 = $event"  
+                  :mes="mes2" :tarifa="tarifa2" :habitaciones="habitaciones2" :noches="noches2"  :totalmes="totalmes2" />
+
+                  <MonthInput v-if="editedItem.segment =='Series' && estado3==true " @tarifa="tarifa3 = $event" @habitaciones="habitaciones3 = $event" @noches="noches3 = $event" 
+                  :mes="mes3" :tarifa="tarifa3" :habitaciones="habitaciones3" :noches="noches3"  :totalmes="totalmes3" />
+
+                  <MonthInput v-if="editedItem.segment =='Series' && estado4==true " @tarifa="tarifa4 = $event" @habitaciones="habitaciones4 = $event" @noches="noches4 = $event"  
+                  :mes="mes4" :tarifa="tarifa4" :habitaciones="habitaciones4" :noches="noches4"  :totalmes="totalmes4" />
+
+                  <MonthInput v-if="editedItem.segment =='Series' && estado5==true " @tarifa="tarifa5 = $event" @habitaciones="habitaciones5 = $event" @noches="noches5 = $event" 
+                  :mes="mes5" :tarifa="tarifa5" :habitaciones="habitaciones5" :noches="noches5"  :totalmes="totalmes5" />
+
+                  <MonthInput v-if="editedItem.segment =='Series' && estado6==true " @tarifa="tarifa6 = $event" @habitaciones="habitaciones6 = $event" @noches="noches6 = $event"  
+                  :mes="mes6" :tarifa="tarifa6" :habitaciones="habitaciones6" :noches="noches6"  :totalmes="totalmes6" />
+                  
+                  <MonthInput v-if="editedItem.segment =='Series' && estado7==true " @tarifa="tarifa7 = $event" @habitaciones="habitaciones7 = $event" @noches="noches7 = $event"  
+                  :mes="mes7" :tarifa="tarifa7" :habitaciones="habitaciones7" :noches="noches7"  :totalmes="totalmes7" />
+
+                  <MonthInput v-if="editedItem.segment =='Series' && estado8==true " @tarifa="tarifa8 = $event" @habitaciones="habitaciones8 = $event" @noches="noches8 = $event"  
+                  :mes="mes8" :tarifa="tarifa8" :habitaciones="habitaciones8" :noches="noches8"  :totalmes="totalmes8" />
+
+                  <MonthInput v-if="editedItem.segment =='Series' && estado9==true " @tarifa="tarifa9 = $event" @habitaciones="habitaciones9 = $event" @noches="noches9 = $event"  
+                  :mes="mes9" :tarifa="tarifa9" :habitaciones="habitaciones9" :noches="noches9"  :totalmes="totalmes9" />
+
+                  <MonthInput v-if="editedItem.segment =='Series' && estado10==true " @tarifa="tarifa10 = $event" @habitaciones="habitaciones10 = $event" @noches="noches10 = $event"  
+                  :mes="mes10" :tarifa="tarifa10" :habitaciones="habitaciones10" :noches="noches10"  :totalmes="totalmes10" />
+
+                  <MonthInput v-if="editedItem.segment =='Series' && estado11==true " @tarifa="tarifa11 = $event" @habitaciones="habitaciones11 = $event" @noches="noches11 = $event" 
+                  :mes="mes11" :tarifa="tarifa11" :habitaciones="habitaciones11" :noches="noches11"  :totalmes="totalmes11" />
+
+                  <MonthInput v-if="editedItem.segment =='Series' && estado12==true " @tarifa="tarifa12 = $event" @habitaciones="habitaciones12 = $event" @noches="noches12 = $event"  
+                  :mes="mes12" :tarifa="tarifa12" :habitaciones="habitaciones12" :noches="noches12"  :totalmes="totalmes12" />
 
                    <!-- TERMINAN LOS MESES -->
                   
@@ -273,6 +262,7 @@
                   </v-col>
                   <v-col v-if="editedItem.segment!='Series' && sevent=='si'" cols="20" sm="4" md="80" >
                     <v-combobox
+                        id="events-id"
                         color="#d69c4f"
                         v-model="editedItem.eventsName"
                         :items="items"
@@ -327,22 +317,20 @@
                     <v-text-field color="#d69c4f" v-mask="mask"  v-model="editedItem.contactPhone" label=" Celular/Teléfono"></v-text-field>
                   </v-col>
                 </v-row>
-                <v-row>
-                  <v-col v-if="editedItem.Segment != 'Eventos'"> 
+                <v-row v-if="editedItem.segment != 'Eventos'">
+                  <v-col > 
                     <h3 style="color: #000000;"> Room Revenue: ${{roomrevenue()}} </h3>
                   </v-col> 
                 </v-row>
-                <v-row>
-                  <v-col v-if="editedItem.Segment!='Series' && editedItem.Segment!='Eventos'">
+                <v-row v-if="editedItem.segment != 'Series' ">
+                  <v-col >
                      <h3 style="color: #000000;"> Eventos: ${{eventrevenue()}} </h3>
-                  </v-col>
-                  
-                </v-row>
+                  </v-col>  
+                </v-row> 
                 <v-row>
-                <v-col v-if="editedItem.Segment!='Series' && editedItem.Segment!='Eventos'">
+                  <v-col>
                     <h3 style="color: #000000;"> <strong>TOTAL: ${{grantotal()}} </strong> </h3>
-
-                </v-col>
+                  </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -374,7 +362,6 @@
 <div v-if="role!='Ejecutivo'">
   <NotFound/>
 </div>
-
   
 </div>
 </template>
@@ -387,16 +374,22 @@ import axios from "axios";
 import NotFound from './NotFound'
 import {mapActions, mapState} from 'vuex'
 import { mask } from 'vue-the-mask'
+
+
+import MonthInput from '../components/MonthInput'
+
 export default {
   components:{
-    NotFound
+    NotFound,
+    MonthInput
   },
   directives: {
       mask,
     },
+  props: ['totalmeses'],
   data: () => ({
     role: '',
-    sevent:"no",
+    sevent: 'no',
     rateEvent1:0,
     rateEvent2:0,
     rateEvent3:0,
@@ -423,6 +416,7 @@ export default {
     model: [],
     selected:[],
     dialog: false,
+    date: '',
     date1: new Date().toISOString().substr(0, 10),
     date2: new Date().toISOString().substr(0, 10),
       menu1: false,
@@ -446,7 +440,6 @@ export default {
       { text: "Total Ingresos", value: "totalgeneral"},
       { text: "Estado", value: "status" },
       { text: "Actions", value: "action", sortable: false }
-      
     ],
     search: "",
     name1: "",
@@ -509,33 +502,88 @@ export default {
       status: '',
       statusid:0 
     },
-    rateMonths:{
-      month1:0,
-      month2:0,
-      month3:0,
-      month4:0,
-      month5:0,
-      month6:0,
-      month7:0,
-      month8:0,
-      month9:0,
-      month10:0,
-      month11:0,
-      month12:0,
-    },
-    lenghtMonth: 0,
-    month1:0,
-    month2:0,
-    month3:0,
-    month4:0,
-    month5:0,
-    month6:0,
-    month7:0,
-    month8:0,
-    month9:0,
-    month10:0,
-    month11:0,
-    month12:0,
+    
+    mes1 : 'Enero',
+    mes2 : 'Febrero',
+    mes3 : 'Marzo',
+    mes4 : 'Abril',
+    mes5 : 'Mayo',
+    mes6 : 'Junio',
+    mes7 : 'Julio',
+    mes8 : 'Agosto',
+    mes9 : 'Septiembre',
+    mes10 : 'Octubre',
+    mes11 : 'Noviembre',
+    mes12 : 'Diciembre',
+
+    tarifa1: 0,
+    tarifa2: 0,
+    tarifa3: 0,
+    tarifa4: 0,
+    tarifa5: 0,
+    tarifa6: 0,
+    tarifa7: 0,
+    tarifa8: 0,
+    tarifa9: 0,
+    tarifa10: 0,
+    tarifa11: 0,
+    tarifa12: 0,
+
+    habitaciones1: 0,
+    habitaciones2: 0,
+    habitaciones3: 0,
+    habitaciones4: 0,
+    habitaciones5: 0,
+    habitaciones6: 0,
+    habitaciones7: 0,
+    habitaciones8: 0,
+    habitaciones9: 0,
+    habitaciones10: 0,
+    habitaciones11: 0,
+    habitaciones12: 0,
+
+    noches1: 0,
+    noches2: 0,
+    noches3: 0,
+    noches4: 0,
+    noches5: 0,
+    noches6: 0,
+    noches7: 0,
+    noches8: 0,
+    noches9: 0,
+    noches10: 0,
+    noches11: 0,
+    noches12: 0,
+
+    totalmes1: 0,
+    totalmes2: 0,
+    totalmes3: 0,
+    totalmes4: 0,
+    totalmes5: 0,
+    totalmes6: 0,
+    totalmes7: 0,
+    totalmes8: 0,
+    totalmes9: 0,
+    totalmes10: 0,
+    totalmes11: 0,
+    totalmes12: 0,
+
+    estado1: false,
+    estado2: false,
+    estado3: false,
+    estado4: false,
+    estado5: false,
+    estado6: false,
+    estado7: false,
+    estado8: false,
+    estado9: false,
+    estado10: false,
+    estado11: false,
+    estado12: false,
+
+    room_revenue: 0,
+    event_revenue: 0,
+    
    
   }),
   computed: {
@@ -577,11 +625,13 @@ export default {
   },
   mounted() {
     try {
+      this.fechaActual()
+      let todoleads = JSON.parse(localStorage.getItem('leads'))
       if(this.leadsAccounts.length==0 && this.hotels.length==0 && this.segments.length==0 && this.desserts.length==0){
         this.getNameAccounts();
         this.getNameHotels();
         this.getNameSegments();
-        this.calculaTotal()
+        this.calculaTotal(todoleads)
         this.verificaPermisos()
       }
       if(localStorage.length>=8){
@@ -594,14 +644,6 @@ export default {
   
   //MÉTODOS
   methods: {
-     countDownChanged(dismissCountDown) {
-        this.dismissCountDown = dismissCountDown
-      },
-      showAlert() {
-        this.dismissCountDown = this.dismissSecs
-      }, 
-
-
     ...mapActions(['getHotels', 'getAllLeads', 'stateToken']),
     getLeads(){
       this.desserts = this.AllLeads
@@ -643,11 +685,8 @@ export default {
       let rateMonthHotel = this.WatchLenght()
       var datos={
         "name": this.editedItem.name,
-        "nights": parseInt(this.nights),
         "initialBooking": "",
         "finalBooking": "",
-        "rateHotel": parseInt(this.rateHotel),
-        "rooms": parseInt(this.rooms),
         "account": this.editedItem.account,
         "segment": this.editedItem.segment,
         "hotel": this.editedItem.hotel,
@@ -664,16 +703,14 @@ export default {
       let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
-        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
-        this.calculaTotal()
-        this.type='success'
-        this.showAlert()
-
+        this.calculaTotal(response.data)
+        this.alerts('Se guardó correctamente', 'success')
         this.$store.dispatch('getDashboard')
       }).catch(error => {
+        this.alerts('Ocurrio un error y no se guardó', 'error')
         console.log('Hubo un error ', error)
       }) 
     },
@@ -708,16 +745,14 @@ export default {
       let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
-        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
-        this.calculaTotal()
-        this.type='success'
-        this.showAlert()
-
+        this.calculaTotal(response.data)
+        this.alerts('Se guardó correctamente', 'success')
         this.$store.dispatch('getDashboard')
       }).catch(error => {
+        this.alerts('Ocurrio un error y no se guardó', 'error')
         console.log('Hubo un error ', error)
       })
     },
@@ -734,7 +769,7 @@ export default {
       var fechaInicio = new Date(f1).getTime();
       var fechaFin    =new Date(f2).getTime ();
       var diff = fechaFin - fechaInicio;
-      var noches = diff/(1000*60*60*24)
+      var noches = (diff/(1000*60*60*24))-1
 
       this.editedItem.initialdate=this.date1
       this.editedItem.finaldate=this.date2
@@ -771,13 +806,12 @@ export default {
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
-        this.calculaTotal()
-        this.type='success'
-        this.showAlert()
-
+        this.calculaTotal(response.data)
+        this.alerts('Se editó correctamente', 'success')
         this.$store.dispatch('getDashboard')
       }).catch(error => {
         console.log('Hubo un error ', error)
+        this.alerts('Ocurrio un error y no se guardó', 'error')
       })
     },
 
@@ -788,11 +822,8 @@ export default {
       var datos={
         "leadid": parseInt(this.editedItem.leadid),
         "name": this.editedItem.name,
-        "nights": parseInt(this.nights),
         "initialBooking": "",
         "finalBooking": "",
-        "rateHotel": parseInt(this.rateHotel),
-        "rooms": parseInt(this.rooms),
         "account": this.editedItem.account,
         "segment": this.editedItem.segment,
         "hotel": this.editedItem.hotel,
@@ -807,6 +838,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
+      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
@@ -814,11 +846,11 @@ export default {
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
-        this.calculaTotal()
-        this.type='success'
-        this.showAlert()
+        this.calculaTotal(response.data)
+        this.alerts('Se guardó correctamente', 'success')
         this.$store.dispatch('getDashboard')
       }).catch(error => {
+        this.alerts('Ocurrio un error y no se guardó', 'error')
         console.log('Hubo un error ', error)
       })
     },
@@ -852,18 +884,19 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
+      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
+        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
-        this.calculaTotal()
-        this.type='success'
-        this.showAlert()
-
+        this.calculaTotal(response.data)
+        this.alerts('Se guardó correctamente', 'success')
         this.$store.dispatch('getDashboard')
       }).catch(error => {
+        this.alerts('Ocurrio un error y no se guardó', 'error')
         console.log('Hubo un error ', error)
       })
     },
@@ -891,7 +924,7 @@ export default {
       var fechaInicio = new Date(f1).getTime();
       var fechaFin    =new Date(f2).getTime ();
       var diff = fechaFin - fechaInicio;
-      var noches = diff/(1000*60*60*24)
+      var noches = (diff/(1000*60*60*24))-1
       this.editedItem.initialdate=this.date1
       this.editedItem.finaldate=this.date2
       var datos={
@@ -922,12 +955,11 @@ export default {
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
-        this.calculaTotal()
-        this.type='success'
-        this.showAlert()
-
+        this.calculaTotal(response.data)
+        this.alerts('Se guardó correctamente', 'success')
         this.$store.dispatch('getDashboard')
       }).catch(error => {
+        this.alerts('Ocurrio un error y no se guardó', 'error')
         console.log('Hubo un error ', error)
       })
     },
@@ -950,8 +982,6 @@ export default {
       const index = this.desserts.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
       this.desserts.splice(index, 1);
-      this.type='error'
-      this.showAlert();
     },
 
     close() {
@@ -1013,46 +1043,162 @@ export default {
       this.name3 = ''
     },
     FiltraDatos(){
+      let groupSegment = JSON.parse(localStorage.getItem('usuario')).groupSegment
+       /* if(groupSegment === 'Eventos'){
+          console.log('si', groupSegment)
+       } */
        if(this.editedItem.segment=='Eventos'){
+        this.sevent = 'si'
         this.rateHotel = 0
+        this.editedItem.rateHotel = 0
         this.romms = 0
+        this.editedItem.rooms = 0
         this.nights = 0
+        this.editedItem.nights = 0
       }else if(this.editedItem.segment=='Series'){
         this.lenghtMonth= 0
-        this.month1 =0
-        this.month2 =0
-        this.month3 =0
-        this.month4 =0
-        this.month5 =0
-        this.month6 =0
-        this.month7 =0
-        this.month8 =0
-        this.month9 =0
-        this.month10 =0
-        this.month11 =0
-        this.month12 =0
+
+        this.tarifa1= 0;
+        this.tarifa2= 0;
+        this.tarifa3= 0;
+        this.tarifa4= 0;
+        this.tarifa5= 0;
+        this.tarifa6= 0;
+        this.tarifa7= 0;
+        this.tarifa8= 0;
+        this.tarifa9= 0;
+        this.tarifa10 = 0;
+        this.tarifa11= 0;
+        this.tarifa12= 0;
+
+        this.habitaciones1= 0;
+        this.habitaciones2= 0;
+        this.habitaciones3= 0;
+        this.habitaciones4= 0;
+        this.habitaciones5= 0;
+        this.habitaciones6= 0;
+        this.habitaciones7= 0;
+        this.habitaciones8= 0;
+        this.habitaciones9= 0;
+        this.habitaciones10= 0;
+        this.habitaciones11= 0;
+        this.habitaciones12= 0;
+
+        this.noches1= 0;
+        this.noches2= 0;
+        this.noches3= 0;
+        this.noches4= 0;
+        this.noches5= 0;
+        this.noches6= 0;
+        this.noches7= 0;
+        this.noches8= 0;
+        this.noches9= 0;
+        this.noches10= 0;
+        this.noches11= 0;
+        this.noches12= 0;
+
+        this.totalmes1= 0;
+        this.totalmes2= 0;
+        this.totalmes3= 0;
+        this.totalmes4= 0;
+        this.totalmes5= 0;
+        this.totalmes6= 0;
+        this.totalmes7= 0;
+        this.totalmes8= 0;
+        this.totalmes9= 0;
+        this.totalmes10= 0;
+        this.totalmes11= 0;
+        this.totalmes12= 0;
+
+        this.estado1= false;
+        this.estado2= false;
+        this.estado3= false;
+        this.estado4= false;
+        this.estado5= false;
+        this.estado6= false;
+        this.estado7= false;
+        this.estado8= false;
+        this.estado9= false;
+        this.estado10= false;
+        this.estado11= false;
+        this.estado12= false;
+
         this.rateEvent1 = 0
         this.rateEvent2 = 0
         this.rateEvent3 = 0
         this.editedItem.eventsName = []
       }else if(this.editedItem.segment == ''){
         this.lenghtMonth= 0
-        this.month1 =0
-        this.month2 =0
-        this.month3 =0
-        this.month4 =0
-        this.month5 =0
-        this.month6 =0
-        this.month7 =0
-        this.month8 =0
-        this.month9 =0
-        this.month10 =0
-        this.month11 =0
-        this.month12 =0
+        this.tarifa1= 0;
+        this.tarifa2= 0;
+        this.tarifa3= 0;
+        this.tarifa4= 0;
+        this.tarifa5= 0;
+        this.tarifa6= 0;
+        this.tarifa7= 0;
+        this.tarifa8= 0;
+        this.tarifa9= 0;
+        this.tarifa10 = 0;
+        this.tarifa11= 0;
+        this.tarifa12= 0;
+
+        this.habitaciones1= 0;
+        this.habitaciones2= 0;
+        this.habitaciones3= 0;
+        this.habitaciones4= 0;
+        this.habitaciones5= 0;
+        this.habitaciones6= 0;
+        this.habitaciones7= 0;
+        this.habitaciones8= 0;
+        this.habitaciones9= 0;
+        this.habitaciones10= 0;
+        this.habitaciones11= 0;
+        this.habitaciones12= 0;
+
+        this.noches1= 0;
+        this.noches2= 0;
+        this.noches3= 0;
+        this.noches4= 0;
+        this.noches5= 0;
+        this.noches6= 0;
+        this.noches7= 0;
+        this.noches8= 0;
+        this.noches9= 0;
+        this.noches10= 0;
+        this.noches11= 0;
+        this.noches12= 0;
+
+        this.totalmes1= 0;
+        this.totalmes2= 0;
+        this.totalmes3= 0;
+        this.totalmes4= 0;
+        this.totalmes5= 0;
+        this.totalmes6= 0;
+        this.totalmes7= 0;
+        this.totalmes8= 0;
+        this.totalmes9= 0;
+        this.totalmes10= 0;
+        this.totalmes11= 0;
+        this.totalmes12= 0;
+
+        this.estado1= false;
+        this.estado2= false;
+        this.estado3= false;
+        this.estado4= false;
+        this.estado5= false;
+        this.estado6= false;
+        this.estado7= false;
+        this.estado8= false;
+        this.estado9= false;
+        this.estado10= false;
+        this.estado11= false;
+        this.estado12= false;
+
         this.sevent ='no'
         this.editedItem.eventsName = []
         this.rateHotel = 0
-        this.romms = 0
+        this.rooms = 0
+        this.editedItem.rooms = 0
         this.nights =0
         this.rateEvent1 = 0
         this.rateEvent2 = 0
@@ -1138,110 +1284,250 @@ export default {
     },
     roomrevenue: function (){
       try {
-      
-      var fec1= this.date1
-      var fec2= this.date2
-      var f1= ''
-      var f2= ''
-      for(var i=0; i<10; i++){
+      let fec1= this.date1
+      let fec2= this.date2
+      let f1= ''
+      let f2= ''
+      for(let i=0; i<10; i++){
         f1+= fec1.charAt(i) 
         f2+= fec2.charAt(i) 
       }
-      var fechaInicio = new Date(f1).getTime();
-      var fechaFin    =new Date(f2).getTime ();
-      var diff = fechaFin - fechaInicio;
-      var dias = diff/(1000*60*60*24)
+      let fechaInicio = new Date(f1).getTime();
+      let fechaFin    =new Date(f2).getTime ();
+      let diff = fechaFin - fechaInicio;
+      let dias = (diff/(1000*60*60*24))-1
       if(this.editedItem.segment=='Series'){
-        return ((parseInt(this.rooms)) *(parseInt(this.rateHotel)) *(parseInt(this.nights))) +
-        ( parseInt(this.month1)+parseInt(this.month2)+parseInt(this.month3)+parseInt(this.month4)+parseInt(this.month5)+parseInt(this.month6)
-        +parseInt(this.month7)+parseInt(this.month8)+parseInt(this.month9)+parseInt(this.month10)+parseInt(this.month11)+parseInt(this.month12))
+        let mes1 = this.tarifa1 * this.habitaciones1 * this.noches1
+        let mes2 = this.tarifa2 * this.habitaciones2 * this.noches2
+        let mes3 = this.tarifa3 * this.habitaciones3 * this.noches3
+        let mes4 = this.tarifa4 * this.habitaciones4 * this.noches4
+        let mes5 = this.tarifa5 * this.habitaciones5 * this.noches5
+        let mes6 = this.tarifa6 * this.habitaciones6 * this.noches6
+        let mes7 = this.tarifa7 * this.habitaciones7 * this.noches7
+        let mes8 = this.tarifa8 * this.habitaciones8 * this.noches8
+        let mes9 = this.tarifa9 * this.habitaciones9 * this.noches9
+        let mes10 = this.tarifa10 * this.habitaciones10 * this.noches10
+        let mes11 = this.tarifa11 * this.habitaciones11 * this.noches11
+        let mes12 = this.tarifa12 * this.habitaciones12 * this.noches12
+        let revenue = ((parseInt(this.rooms)) *(parseInt(this.rateHotel)) *(parseInt(this.nights))) + 
+        mes1 + mes2 + mes3 + mes4 + mes5 + mes6 + mes7 + mes8 + mes9 + mes10 + mes11 + mes12
+        this.room_revenue = revenue
+        return this.separaNumeros(revenue)
       }else {
-        return (parseInt(this.rooms)) *(parseInt(this.rateHotel)) * dias
+        let revenue = (parseInt(this.rooms)) *(parseInt(this.rateHotel)) * dias
+        this.room_revenue = revenue
+        return this.separaNumeros(revenue)
       }
       } catch (error) {      
       }
     },
     eventrevenue: function (){
       try {
-      var fec1= this.date1
-      var fec2= this.date2
-      var f1= ''
-      var f2= ''
-      for(var i=0; i<10; i++){
+      let fec1= this.date1
+      let fec2= this.date2
+      let f1= ''
+      let f2= ''
+      for(let i=0; i<10; i++){
         f1+= fec1.charAt(i) 
         f2+= fec2.charAt(i) 
       }
-      var fechaInicio = new Date(f1).getTime();
-      var fechaFin    =new Date(f2).getTime ();
-      var diff = fechaFin - fechaInicio;
-      var dias = diff/(1000*60*60*24)
+      let fechaInicio = new Date(f1).getTime();
+      let fechaFin    =new Date(f2).getTime ();
+      let diff = fechaFin - fechaInicio;
+      let dias = diff/(1000*60*60*24)
       if(dias<=0){
         dias=1
       }
-      var event = ((parseInt(this.rateEvent1) + parseInt(this.rateEvent2)+ parseInt(this.rateEvent3))*parseInt(dias))
-      return event
+      let event = ((parseInt(this.rateEvent1) + parseInt(this.rateEvent2)+ parseInt(this.rateEvent3))*parseInt(dias))
+      this.event_revenue = event
+      return this.separaNumeros(event)
       } catch (error) {}
     },
     grantotal: function(){ 
-      return this.eventrevenue()+this.roomrevenue()
+      return this.separaNumeros(this.room_revenue + this.event_revenue)
     },
     monthsLenght(){
-      if(this.lenghtMonth > this.editedItem.month.length){
-        this.month1 =0
-        this.month2 =0
-        this.month3 =0
-        this.month4 =0
-        this.month5 =0
-        this.month6 =0
-        this.month7 =0
-        this.month8 =0
-        this.month9 =0
-        this.month10 =0
-        this.month11 =0
-        this.month12 =0
-      }
-      this.lenghtMonth = this.editedItem.month.length
+      this.total_months = []
 
+      this.estado1 = false
+      this.estado2 = false
+      this.estado3 = false
+      this.estado4 = false
+      this.estado5 = false
+      this.estado6 = false
+      this.estado7 = false
+      this.estado8 = false
+      this.estado9 = false
+      this.estado10 = false
+      this.estado1 = false
+      this.estado12 = false
+
+      for(let i =0; i< this.editedItem.month.length; i++){
+        this.total_months.push({
+          name: `${this.editedItem.month[i]}` ,
+          rateHotel: 0,
+          rooms: 0,
+          nights: 0,
+      })
+      }
+      for(let i=0; i< this.total_months.length; i++){
+        if(this.total_months[i].name == 'Enero'){this.estado1 = true}
+        else if(this.total_months[i].name== 'Febrero'){this.estado2 = true}
+        else if(this.total_months[i].name== 'Marzo'){this.estado3 = true}
+        else if(this.total_months[i].name== 'Abril'){this.estado4 = true}
+        else if(this.total_months[i].name== 'Mayo'){this.estado5 = true}
+        else if(this.total_months[i].name== 'Junio'){this.estado6 = true}
+        else if(this.total_months[i].name== 'Julio'){this.estado7 = true}
+        else if(this.total_months[i].name== 'Agosto'){this.estado8 = true}
+        else if(this.total_months[i].name== 'Septiembre'){this.estado9 = true}
+        else if(this.total_months[i].name== 'Octubre'){this.estado10 = true}
+        else if(this.total_months[i].name== 'Noviembre'){this.estado11 = true}
+        else if(this.total_months[i].name== 'Diciembre'){this.estado12 = true} 
+      }
     },
     WatchLenght: function(){
-      let MonthsRate = []
-      if(this.editedItem.month.length>=1){MonthsRate.push({"name":this.editedItem.month[0],"rateHotel": parseInt(this.month1)})}
-      if(this.editedItem.month.length>=2){MonthsRate.push({"name":this.editedItem.month[1],"rateHotel": parseInt(this.month2)})}
-      if(this.editedItem.month.length>=3){MonthsRate.push({"name":this.editedItem.month[2],"rateHotel": parseInt(this.month3)})}
-      if(this.editedItem.month.length>=4){MonthsRate.push({"name":this.editedItem.month[3],"rateHotel": parseInt(this.month4)})}
-      if(this.editedItem.month.length>=5){MonthsRate.push({"name":this.editedItem.month[4],"rateHotel": parseInt(this.month5)})}
-      if(this.editedItem.month.length>=6){MonthsRate.push({"name":this.editedItem.month[5],"rateHotel": parseInt(this.month6)})}
-      if(this.editedItem.month.length>=7){MonthsRate.push({"name":this.editedItem.month[6],"rateHotel": parseInt(this.month7)})}
-      if(this.editedItem.month.length>=8){MonthsRate.push({"name":this.editedItem.month[7],"rateHotel": parseInt(this.month8)})}
-      if(this.editedItem.month.length>=9){MonthsRate.push({"name":this.editedItem.month[8],"rateHotel": parseInt(this.month9)})}
-      if(this.editedItem.month.length>=10){MonthsRate.push({"name":this.editedItem.month[9],"rateHotel": parseInt(this.month10)})}
-      if(this.editedItem.month.length>=11){MonthsRate.push({"name":this.editedItem.month[10],"rateHotel": parseInt(this.month11)})}
-      if(this.editedItem.month.length>=12){MonthsRate.push({"name":this.editedItem.month[11],"rateHotel": parseInt(this.month12)})}
-      return MonthsRate
+      try {
+      this.monthsLenght()
+      for(let i=0; i< this.total_months.length; i++){
+        if(this.total_months[i].name == 'Enero'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa1)
+          this.total_months[i].rooms = parseInt(this.habitaciones1)
+          this.total_months[i].nights = parseInt(this.noches1)
+        }else if(this.total_months[i].name == 'Febrero'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa2)
+          this.total_months[i].rooms = parseInt(this.habitaciones2)
+          this.total_months[i].nights = parseInt(this.noches2)
+        }else if(this.total_months[i].name == 'Marzo'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa3)
+          this.total_months[i].rooms = parseInt(this.habitaciones3)
+          this.total_months[i].nights = parseInt(this.noches3)
+        }else if(this.total_months[i].name == 'Abril'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa4)
+          this.total_months[i].rooms = parseInt(this.habitaciones4)
+          this.total_months[i].nights = parseInt(this.noches4)
+        }else if(this.total_months[i].name == 'Mayo'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa5)
+          this.total_months[i].rooms = parseInt(this.habitaciones5)
+          this.total_months[i].nights = parseInt(this.noches5)
+        }else if(this.total_months[i].name == 'Junio'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa6)
+          this.total_months[i].rooms = parseInt(this.habitaciones6)
+          this.total_months[i].nights = parseInt(this.noches6)
+        }else if(this.total_months[i].name == 'Julio'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa7)
+          this.total_months[i].rooms = parseInt(this.habitaciones7)
+          this.total_months[i].nights = parseInt(this.noches7)
+        }else if(this.total_months[i].name == 'Agosto'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa8)
+          this.total_months[i].rooms = parseInt(this.habitaciones8)
+          this.total_months[i].nights = parseInt(this.noches8)
+        }else if(this.total_months[i].name == 'Septiembre'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa9)
+          this.total_months[i].rooms = parseInt(this.habitaciones9)
+          this.total_months[i].nights = parseInt(this.noches9)
+        }else if(this.total_months[i].name == 'Octubre'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa10)
+          this.total_months[i].rooms = parseInt(this.habitaciones10)
+          this.total_months[i].nights = parseInt(this.noches10)
+        }else if(this.total_months[i].name == 'Noviembre'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa11)
+          this.total_months[i].rooms = parseInt(this.habitaciones11)
+          this.total_months[i].nights = parseInt(this.noches11)
+        }else if(this.total_months[i].name == 'Diciembre'){
+          this.total_months[i].rateHotel = parseInt(this.tarifa12)
+          this.total_months[i].rooms = parseInt(this.habitaciones12)
+          this.total_months[i].nights = parseInt(this.noches12)
+        }
+      }
+      return this.total_months
+      } catch (error) {
+        
+      }
     },
+
     SeparaMesyRate(item){
       this.lenghtMonth = item.months.length
       this.editedItem.month = []
       for(let i=0; i<item.months.length; i++){
         this.editedItem.month.push(item.months[i].name)
+        if(item.months[i].name == 'Enero'){
+          this.tarifa1 = item.months[i].rateHotel
+          this.habitaciones1 = item.months[i].rooms
+          this.noches1 = item.months[i].nights
+          this.estado1 = true
+          this.totalmes1 = parseInt(item.months[i].rateHotel) * parseInt(item.months[i].rooms) * parseInt(item.months[i].nights)  
+        }
+        else if(item.months[i].name == 'Febrero'){
+          this.tarifa2 = item.months[i].rateHotel
+          this.habitaciones2 = item.months[i].rooms
+          this.noches2 = item.months[i].nights
+          this.estado2 = true
+        }
+        else if(item.months[i].name == 'Marzo'){
+          this.tarifa3 = item.months[i].rateHotel
+          this.habitaciones3 = item.months[i].rooms
+          this.noches3 = item.months[i].nights
+          this.estado3 = true
+        } 
+        else if(item.months[i].name == 'Abril'){
+          this.tarifa4 = item.months[i].rateHotel
+          this.habitaciones4 = item.months[i].rooms
+          this.noches4 = item.months[i].nights
+          this.estado4 = true
+        } 
+        else if(item.months[i].name == 'Mayo'){
+          this.tarifa5 = item.months[i].rateHotel
+          this.habitaciones5 = item.months[i].rooms
+          this.noches5 = item.months[i].nights
+          this.estado5 = true
+        } 
+        else if(item.months[i].name == 'Junio'){
+          this.tarifa6 = item.months[i].rateHotel
+          this.habitaciones6 = item.months[i].rooms
+          this.noches6 = item.months[i].nights
+          this.estado6 = true
+        } 
+        else if(item.months[i].name == 'Julio'){
+          this.tarifa7 = item.months[i].rateHotel
+          this.habitaciones7 = item.months[i].rooms
+          this.noches7 = item.months[i].nights
+          this.estado7 = true
+        } 
+        else if(item.months[i].name == 'Agosto'){
+          this.tarifa8 = item.months[i].rateHotel
+          this.habitaciones8 = item.months[i].rooms
+          this.noches8 = item.months[i].nights
+          this.estado8 = true
+        } 
+        else if(item.months[i].name == 'Septiembre'){
+          this.tarifa9 = item.months[i].rateHotel
+          this.habitaciones9 = item.months[i].rooms
+          this.noches9 = item.months[i].nights
+          this.estado9 = true
+        } 
+        else if(item.months[i].name == 'Octubre'){
+          this.tarifa10 = item.months[i].rateHotel
+          this.habitaciones10 = item.months[i].rooms
+          this.noches10 = item.months[i].nights
+          this.estado10 = true
+        } 
+        else if(item.months[i].name == 'Noviembre'){
+          this.tarifa11 = item.months[i].rateHotel
+          this.habitaciones11 = item.months[i].rooms
+          this.noches11 = item.months[i].nights
+          this.estado11 = true
+        } 
+        else if(item.months[i].name == 'Diciembre'){
+          this.tarifa12 = item.months[i].rateHotel
+          this.habitaciones12 = item.months[i].rooms
+          this.noches12 = item.months[i].nights
+          this.estado12 = true
+        }
       }
-      if(this.lenghtMonth>=1){ this.month1= item.months[0].rateHotel}
-      if(this.lenghtMonth>=2){ this.month2= item.months[1].rateHotel}
-      if(this.lenghtMonth>=3){ this.month3= item.months[2].rateHotel}
-      if(this.lenghtMonth>=4){ this.month4= item.months[3].rateHotel}
-      if(this.lenghtMonth>=5){ this.month5= item.months[4].rateHotel}
-      if(this.lenghtMonth>=6){ this.month6= item.months[5].rateHotel}
-      if(this.lenghtMonth>=7){ this.month7= item.months[6].rateHotel}
-      if(this.lenghtMonth>=8){ this.month8= item.months[7].rateHotel}
-      if(this.lenghtMonth>=9){ this.month9= item.months[8].rateHotel}
-      if(this.lenghtMonth>=10){ this.month10= item.months[9].rateHotel}
-      if(this.lenghtMonth>=11){ this.month11= item.months[10].rateHotel}
-      if(this.lenghtMonth>=12){ this.month12= item.months[11].rateHotel} 
     },
-    calculaTotal(){
+    calculaTotal(todoleads){
       try {
-      var todoleads = JSON.parse(localStorage.getItem('leads'))
-      
+     /*  var todoleads = JSON.parse(localStorage.getItem('leads')) */
         for(let i=0; i<todoleads.length; i++){
           let totale = 0
           let totalh = 0 
@@ -1254,7 +1540,7 @@ export default {
            }
            if(todoleads[i].months.length>0 || todoleads[i].months.length!=null){
              for(let h=0; h<todoleads[i].months.length; h++){
-                totalmonths += todoleads[i].months[h].rateHotel
+                totalmonths += todoleads[i].months[h].rateHotel * todoleads[i].months[h].nights *todoleads[i].months[h].rooms
               }
            }
            for(let h=0; h<19; h++){
@@ -1286,25 +1572,94 @@ export default {
               status: todoleads[i].status,
               user: todoleads[i].user,
               events: todoleads[i].events,
-              totalevents: totale,
-              totalhotel: totalh,
-              totalgeneral: parseInt(totale)+parseInt(totalh)
+              totalevents: this.separaNumeros(totale),
+              totalhotel: this.separaNumeros(totalh),
+              totalgeneral: this.separaNumeros(parseInt(totale)+parseInt(totalh))
              })
         }
         } catch (error) {
         
       }
     },
+    separaNumeros(numero){
+      try {
+        const num = numero.toFixed(2);
+        const tamaño = num.toString().length
+        let nuevo_num = ''
+        let index = 1
+        for(let i=tamaño-1; i>=0; i--){
+            if(num.toString().charAt(i)=='.'){
+                index = 1
+                nuevo_num += num.toString().charAt(i)
+            }else{
+                if(index%3==0){
+                    nuevo_num += num.toString().charAt(i)
+                    if(i>0){
+                      nuevo_num += ','
+                    }
+                    index++
+                }else{
+                    nuevo_num += num.toString().charAt(i)
+                    index++   
+                }
+            }
+        }
+        let tamaño2 = nuevo_num.length
+        let numero_separado = ''
+        for(let i=tamaño2-1; i>=0; i--){
+            numero_separado += nuevo_num.charAt(i)
+        }
+        return numero_separado;
+      } catch (error) { 
+      }
+    },
+    fechaActual(){
+      let fecha = new Date()
+      if((fecha.getMonth()+1)<10){
+        let fechaConcat1 =  fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+        this.date1 = fechaConcat1
+        return this.date = fechaConcat1
+      }else{
+        let fechaConcat2 =  fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+        this.date1 = fechaConcat2
+        return this.date = fechaConcat2
+      }
+      /* this.date = fechaConcat */
+    },
+    alerts(msj, type){
+        const msje = msj
+            if(type == 'success'){
+              toastr.success(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }else{
+              toastr.error(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }
+    },
     verificaPermisos(){
       this.role = JSON.parse(localStorage.getItem('usuario')).role
-      console.log(this.role)
-    }
-
-
-
-
-
+    },
+ 
   },
+
 
 }
 </script>

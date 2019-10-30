@@ -1,8 +1,11 @@
 <template>
-  <div id="login">
+  <div id="login" class="container-fluid">
   <br><br><br>
-  <v-card
-      class="mx-auto"
+  <div class="container "> 
+      <div id="card">
+      <v-card
+      id="card"
+      class="card mx-auto"
       :flat="flat"
       :loading="loading"
       :outlined="outlined"
@@ -11,13 +14,16 @@
       max-width="450"
       :height="height"
     >
-      <v-img
+      <!-- <v-img
         v-if="media"
-        class="white--text"
+        class="img-fluid white-text"
         height="343px"
         src="../assets/casa-andina.png"
       >
-      </v-img>  
+      </v-img>   -->
+      <img class="img-fluid white-text"
+        height="343px"
+        src="../assets/casa-andina.png">
        <v-form>
         <v-col cols="12">
             <v-text-field color="#d69c4f" v-model="email" label="Usuario" required></v-text-field>
@@ -39,6 +45,12 @@
         </v-col>
     </v-form>
     </v-card>
+    </div>
+  </div>
+  
+
+    
+
 	</div>
 </template>
 
@@ -107,14 +119,24 @@ export default {
 }
 </script>
 <style scoped>
-  .v-input__slider {
-    width: 100%;
-  }
   #login{
+    width: 100%;
     height: 100%;
     /* background-color: #000000; */
     /* background-image: url('~@/assets/casa-andina-fondo.jpg'); */
     background-image: -webkit-linear-gradient(to right, rgb(34, 34, 34), rgb(68, 68, 68), #3A1C71);
     background-image: linear-gradient(to right, rgb(0, 0, 0), rgb(36, 36, 36), rgb(46, 24, 0));
   }
+
+  .card{
+		border:1px solid #808080;
+		padding:5px;
+	}
+  .img-fluid {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ 
 </style>
