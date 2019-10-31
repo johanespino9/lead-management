@@ -17,7 +17,7 @@
               class="elevation-1"
               :page.sync="page"
               :items-per-page="itemsPerPage"
-              hide-default-footer
+              
               @page-count="pageCount = $event"
             >
             

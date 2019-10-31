@@ -26,6 +26,7 @@
           </div>
         </div>
         
+        
 
     <v-container class="col-md-10 ">
     <v-row justify="center">
@@ -42,29 +43,9 @@
         <v-btn color="#d69c4f" style="color: #FAFAFA;" @click="FiltroDashboardPorId(id, hotelSelected, months, yearSelected)">Buscar Registros</v-btn>
       </v-col>
     </v-row>
-  </v-container>  
-  <v-container class="col-md-12">
-   <v-data-table hide-default-footer :headers="headers" :items="values">
-      <template slot="headerCell" slot-scope="{ header }">
-        <span
-          class="subheading font-weight-light text-success text--darken-3"
-          v-text="header.text"
-        />
-      </template>
-      <template slot="items" slot-scope="{ item }">
-        <td><strong> {{ item.lead }}</strong> </td>
-        <td>{{ item.prospecto }}</td>
-        <td>{{ item.tentativo }}</td>
-        <td>{{ item.hot }}</td>
-        <td>{{ item.congelado }}</td>
-        <td>{{ item.cancelado }}</td>
-        <td>{{ item.confirmado }}</td>
-        <td class="text-xs-right">{{ item.salary }}</td>
-      </template>
-    </v-data-table>
-</v-container>
+  </v-container> 
 
-<v-container class="col-md-6">
+  <v-container class="col-md-6">
     <v-row >
       <v-col>
         <v-progress-circular
@@ -93,6 +74,29 @@
     </v-row>
 
     </v-container>
+
+  <v-container class="col-md-12">
+   <v-data-table hide-default-footer :headers="headers" :items="values">
+      <template slot="headerCell" slot-scope="{ header }">
+        <span
+          class="subheading font-weight-light text-success text--darken-3"
+          v-text="header.text"
+        />
+      </template>
+      <template slot="items" slot-scope="{ item }">
+        <td><strong> {{ item.lead }}</strong> </td>
+        <td>{{ item.prospecto }}</td>
+        <td>{{ item.tentativo }}</td>
+        <td>{{ item.hot }}</td>
+        <td>{{ item.congelado }}</td>
+        <td>{{ item.cancelado }}</td>
+        <td>{{ item.confirmado }}</td>
+        <td class="text-xs-right">{{ item.salary }}</td>
+      </template>
+    </v-data-table>
+</v-container>
+
+
   </div>
 </template>
 
@@ -224,6 +228,7 @@ export default {
       let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
       await axios.post(url, datos, config)
       .then((res) => {
+        console.log(res)
         this.values = res.data.table
         this.percents = res.data.porcentajeConcrecion
       }) 
@@ -233,6 +238,7 @@ export default {
       })
       
     },
+    
 
     cargarAños(){
       var fecha = new Date();

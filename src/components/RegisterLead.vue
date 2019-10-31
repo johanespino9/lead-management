@@ -805,6 +805,7 @@ export default {
       let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
+        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
@@ -1535,6 +1536,7 @@ export default {
           let totalh = 0 
           let totalmonths = 0
           let formatfecha = ''
+
            if(todoleads[i].events.length>0){
             for(let j=0; j<todoleads[i].events.length; j++){
               totale += todoleads[i].events[j].rateEvent
@@ -1580,7 +1582,7 @@ export default {
              })
         }
         } catch (error) {
-        
+          console.log('Hubo un error')
       }
     },
     separaNumeros(numero){

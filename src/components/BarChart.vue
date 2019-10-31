@@ -177,6 +177,35 @@
             <div class="card"> 
               <v-card light >
                 <v-card-title>
+                  <v-list-item two-line>
+                    <v-list-item-avatar class="ml-0" color="grey darken-3">
+                      <v-img
+                        class="elevation-6"
+                        src="../assets/hotel-2-64.png"
+                      ></v-img>
+                    </v-list-item-avatar>
+                    <span class="title font-weight-light"><strong>Visitas</strong> </span>
+                    <v-list-item-content class="text-right" style="margin-top:5px">
+                      <v-list-item-subtitle> <strong></strong>  </v-list-item-subtitle>
+                   </v-list-item-content>
+                 </v-list-item>
+
+                </v-card-title>
+                <div class="position-relative mb-4" style="margin-top:0;">
+                  <div id="chart3"></div>
+                </div>
+              </v-card>
+            </div>
+   
+          </div>
+          <!-- /.card -->
+          <!-- HASTA ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
+          
+          <div class="col-lg-6">
+            <!-- SEGUNDO CARD DESDE ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
+            <div class="card"> 
+              <v-card light >
+                <v-card-title>
                   <span class="title font-weight-light"><strong>Ejecutivos Hoteles</strong> </span>
                 </v-card-title>
                 <div class="position-relative mb-4" style="margin-top:0;">
@@ -187,36 +216,20 @@
                         :items="desserts1"
                         :sort-by="['mconcretado']"
                         :sort-desc="[true]"
-                        :items-per-page="5"
+                        :items-per-page="3"
                         class="elevation-1"
+                        hide-default-footer
+                        :page.sync="page"
+                        @page-count="pageCount = $event"
                     ></v-data-table>
+                    <div class="text-center pt-2">
+                      <v-pagination v-model="page" :length="pageCount"></v-pagination>
+                    </div>
                 </template>
                 </div>
-
-                <!-- <v-card-actions style="margin-top:0px;">
-                  <v-list-item class="grow">
-                    <v-list-item-avatar color="grey darken-3">
-                      <v-img
-                        class="elevation-6"
-                        src="../assets/avatar2.jpg"
-                      ></v-img>
-                    </v-list-item-avatar>
-
-                    <v-list-item-content>
-                      <v-list-item-title><a class="link" href="#">Luis</a></v-list-item-title>
-                      <v-list-item-subtitle>$500000</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item> 
-
-                </v-card-actions>  -->
               </v-card>
             </div>
-          </div>
-          <!-- /.card -->
-          <!-- HASTA ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
-          
-          <div class="col-lg-6">
-            <!-- SEGUNDO CARD DESDE ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
+
             <div class="card"> 
               <v-card light >
                 <v-card-title>
@@ -230,9 +243,15 @@
                         :items="desserts2"
                         :sort-by="['mconcretado']"
                         :sort-desc="[true]"
-                        :items-per-page="5"
+                        :items-per-page="4"
                         class="elevation-1"
+                        hide-default-footer
+                        :page.sync="page2"
+                        @page-count="pageCount2 = $event"
                     ></v-data-table>
+                    <div class="text-center pt-2">
+                      <v-pagination v-model="page" :length="pageCount"></v-pagination>
+                    </div>
                 </template>
                 </div>
               </v-card>
@@ -264,6 +283,7 @@ export default {
       role: '',
       chart: null,
       chart2: null,
+      chart3: null,
       groupSegment: 'Agencias',
       yearSelected: "",
       monthSelected : "",
@@ -299,7 +319,11 @@ export default {
         data3: [] ,
         data4: [],
         ej2: [],
-        groupSegments: ['Agencias', 'Corporativo', 'Eventos']
+        groupSegments: ['[Seleccionar todos]','Agencias', 'Corporativo', 'Eventos'],
+        page: 1,
+        pageCount: 0,
+        page2: 1,
+        pageCount2: 0,
 
     }),
     computed: {
@@ -329,6 +353,7 @@ export default {
         this.cargarAños()
         this.graph1(this.chart)
         this.graph2(this.chart2)
+        this.graph3(this.chart3)
         this.cargarTablas(data)
         this.verificaPermisos()
         if(localStorage.length>=8){
@@ -354,6 +379,10 @@ export default {
                 height: 350,
                 type: 'bar',
                 stacked: true,
+                
+                zoom: {
+                    enabled: false
+                },
                 events: {
                     click: function(chart, w, e) {
                      if(e.dataPointIndex>=0){
@@ -365,6 +394,7 @@ export default {
                             leads:[],
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
+                        console.log(ids[e.dataPointIndex])
                         alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
                         window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
                     }
@@ -818,6 +848,247 @@ export default {
     } catch (error) {  
     }
     },
+
+    graph3(chart){
+    var users = this.ej1
+    var ids = this.ids1
+    try { 
+        var options = {
+            chart: {
+                background: '#fff',
+                height: 350,
+                type: 'bar',
+                stacked: true,
+                events: {
+                    click: function(chart, w, e) {
+                     if(e.dataPointIndex>=0){
+                        let user = {
+                            datos:{
+                                "user_id": ids[e.dataPointIndex],
+                                "nombre": users[e.dataPointIndex],
+                            },
+                            leads:[],
+                        }
+                        localStorage.setItem('leads-user', JSON.stringify(user))
+                        alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
+                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
+                    }
+                    }
+                },
+                toolbar: {
+                    show: true
+                },
+                zoom: {
+                    enabled: true
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            plotOptions: {
+            bar: {
+              horizontal: false,
+              columnWidth: '40%',
+                }
+            },
+            colors: ['#ff4200', '#F5F5F5'],
+            series: [
+                {
+                name: 'Monto concretado',
+                data: this.data1
+                },
+                {
+                name: 'Monto bruto',
+                data: this.data2
+                },
+            ],
+            legend: {
+                offsetY: 0,
+                showForSingleSeries: false,
+                showForNullSeries: true,
+                showForZeroSeries: true,
+                position: 'top',
+                horizontalAlign: 'center', 
+                floating: false,
+                fontSize: '14px',
+                fontFamily: 'Helvetica, Arial',
+                markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 0,
+                    strokeColor: '#fff',
+                    radius: 12,
+                    customHTML: undefined,
+                    onClick: undefined,
+                    offsetX: 0,
+                    offsetY: 0
+                },
+            },
+            xaxis: {
+            type: 'category',
+            categories: this.ej1,
+            labels: {
+              style: {
+                fontStyle: 'arial',
+                fontSize: '14px'
+              }
+            }, 
+            labels: {
+            show: true,
+            rotate: -45,
+            rotateAlways: false,
+            hideOverlappingLabels: true,
+            showDuplicates: false,
+            trim: true,
+            minHeight: undefined,
+            maxHeight: 120,
+            style: {
+                colors: [],
+                fontSize: '12px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                cssClass: 'apexcharts-xaxis-label',
+            },
+            offsetX: 0,
+            offsetY: 0,
+            format: undefined,
+            formatter: undefined,
+            datetimeFormatter: {
+                year: 'yyyy',
+                month: "MMM 'yy",
+                day: 'dd MMM',
+                hour: 'HH:mm',
+            },
+        },
+
+
+          },
+         yaxis:[
+            {
+            labels: {
+            formatter: function(val, index) {
+                return "$"+ val;
+            }
+            },  
+            axisBorder: {
+              show: false
+            },
+            /*  title: {
+              text: 'Montos'
+            },  */
+            axisTicks: {
+              show: false,
+            },
+          },  
+
+          ],
+          responsive: [{
+            breakpoint: 480,
+            options: {
+              legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+              }
+            }
+          }],
+            
+          fill: {
+            opacity: 1,
+            colors: ['#ff4200', '#F5F5F5'],
+            gradient: {
+              shade: 'light',
+              type: "horizontal",
+              shadeIntensity: 0.25,
+              gradientToColors: undefined,
+              inverseColors: true,
+              opacityFrom: 1,
+              opacityTo: 1,
+              stops: [50, 0, 100, 100]
+            },
+          },
+          dataLabels: {
+            enabled: false,
+            formatter: function (val) {
+              return "$"+val ;
+            },
+            offsetY: 0,
+            style: {
+              fontSize: '10px',
+              colors: ["#FAFAFA"]
+            }
+          },
+          tooltip: {
+              enabled: true,
+            y: {
+              formatter: function (val/* , index */) {
+                let num = 750000054;
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
+              }
+            },
+            x: {
+            show: true,
+            format: 'dd MMM',
+            formatter: undefined,
+            },
+            
+            shared: true,
+            inverseOrder: false,
+            enabledOnSeries: undefined,
+            followCursor: true,
+            style: {
+            fontSize: '13px',
+            fontFamily: undefined
+            },
+            onDatasetHover: {
+                highlightDataSeries: true,
+            },
+           
+          }  
+        }
+        chart = new ApexCharts(
+            document.querySelector("#chart3"),
+            options
+        );
+        chart.render();
+        this.chart3 = chart
+    
+
+    } catch (error) {  
+    }
+    },
+
     cargarAños(){
       var fecha = new Date();
       var año = fecha.getFullYear();
@@ -949,7 +1220,7 @@ export default {
       let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/jefes'
       await axios.post(url, datos, config)
       .then(response =>{ 
-        
+        console.log(response.data)
         if(response.data.dashboardRateEvents.length > 0 || response.data.dashboardRateHotel.length > 0){
           
           let fec = {}
@@ -1097,11 +1368,11 @@ export default {
 }
 </script>
 <style>
-#chart, #chart2 {
+#chart, #chart2, #chart3 {
         max-width: 600px;
         margin: 5px auto;
 }
-#chart .apexcharts-xaxis-label, #chart2 .apexcharts-xaxis-label {
+#chart .apexcharts-xaxis-label, #chart2 .apexcharts-xaxis-label , #chart3 .apexcharts-xaxis-label {
     font-weight: bold;
 }
 
@@ -1114,7 +1385,7 @@ body {
     background: #f9f9f9;
 }
 
-#chart, #chart2, .chart-box {
+#chart, #chart2, #chart3, .chart-box {
     padding-top: 0px;
     padding-left: 0px;
     background: #fff;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="navbar">
     <v-app-bar
       app
       clipped-left
@@ -16,3 +16,8 @@ export default {
   
 };
 </script>
+<style>
+  #navbar{
+    z-index: 10;
+  }
+</style>
