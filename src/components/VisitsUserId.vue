@@ -162,7 +162,7 @@
           <v-card-actions>
                       <div class="flex-grow-1"></div>
                       <v-btn color="#d69c4f" text @click="close">Cancel</v-btn>
-                      <v-btn color="#d69c4f" text @click="save()">Save</v-btn>
+                      <!-- <v-btn color="#d69c4f" text @click="save()">Save</v-btn> -->
             </v-card-actions>
        </v-card-text>
        </v-card>         

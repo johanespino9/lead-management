@@ -590,6 +590,7 @@ export default new Vuex.Store({
         'Diciembre'
         ]
       let datos = {
+        "groupSegment": '[Seleccionar todos]',
     		"month": month,
     		"year": year
       }

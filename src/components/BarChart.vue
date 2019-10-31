@@ -399,12 +399,12 @@ export default {
         this.fecha = yam.month + " " + yam.year
         }
         this.cargarDataInicial()
+        this.verificaPermisos()
         this.cargarAños()
         this.graph1(this.chart)
         this.graph2(this.chart2)
         this.graph3(this.chart3)
         this.cargarTablas(data)
-        this.verificaPermisos()
         if(localStorage.length>=8){
             this.$store.dispatch('stateToken')
         }
