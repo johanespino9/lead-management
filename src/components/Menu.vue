@@ -54,7 +54,7 @@
               </v-list-item>
             <v-list-item color="#d69c4f" v-if="role=='Ejecutivo'" to="/register-lead">
               <v-list-item-action>
-                <v-icon>event</v-icon>
+                <v-icon>mdi-briefcase-plus-outline</v-icon>
               </v-list-item-action>
               <v-list-item-content>
             <v-list-item-title>Gestión de Leads</v-list-item-title>
@@ -62,7 +62,7 @@
         </v-list-item>
         <v-list-item color="#d69c4f" v-if="role=='Administrador'" to="/register-user">
           <v-list-item-action>
-            <v-icon>event</v-icon>
+            <v-icon>mdi-account-plus</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Gestión de Usuarios</v-list-item-title>
@@ -70,7 +70,7 @@
         </v-list-item>
         <v-list-item color="#d69c4f" v-if="role=='Ejecutivo' || role=='Supervisor de Segmento'" to="/register-account">
           <v-list-item-action>
-            <v-icon>event</v-icon>
+            <v-icon>mdi-briefcase-plus-outline</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Gestión de Cuentas</v-list-item-title>
@@ -78,7 +78,7 @@
         </v-list-item>
         <v-list-item v-if="role=='Ejecutivo' && groupS != 'Eventos'" color="#d69c4f" to="/visits">
           <v-list-item-action>
-            <v-icon>notification_important</v-icon>
+            <v-icon>mdi-calendar-edit</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Visitas</v-list-item-title>
