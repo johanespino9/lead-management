@@ -332,7 +332,7 @@ export default {
         years: [],
         headers: [
           { text: 'Nombre', align: 'left', value: 'name',},
-          { text: 'Monto bruto $', sortable: true, value: 'mbruto' },
+          { text: 'Total $', sortable: true, value: 'mbruto' },
           { text: 'Concretado $', sortable: true, value: 'mconcretado' },
           { text: 'Diferencia $', sortable: true, value: 'diferencia' },
         ],
@@ -479,7 +479,7 @@ export default {
                 data: this.data1
                 },
                 {
-                name: 'Monto bruto',
+                name: 'Total',
                 data: this.data2
                 },
             ],
@@ -719,7 +719,7 @@ export default {
                 data: this.data3
                 },
                 {
-                name: 'Monto bruto',
+                name: 'Total',
                 data: this.data4
                 },
             ],
@@ -1213,7 +1213,7 @@ export default {
               data_concretado.push(data.dashboardRateHotel[i].rate_hotel)
               data_bruto.push(data.dashboardRateHotel[i].total)
           }
-          this.updateGraficos(chart,"Monto concretado","Monto bruto", data_concretado, data_bruto, ejecutivos, ids)
+          this.updateGraficos(chart,"Monto concretado","Total", data_concretado, data_bruto, ejecutivos, ids)
         }else if(tipo==2){//eventos
           for(let i=0; i<data.dashboardRateEvents.length; i++){
               ids.push(data.dashboardRateEvents[i].user_id)
@@ -1221,7 +1221,7 @@ export default {
               data_concretado.push(data.dashboardRateEvents[i].rate_events)
               data_bruto.push(data.dashboardRateEvents[i].total)
           }
-          this.updateGraficos(chart,"Monto concretado","Monto bruto",  data_concretado, data_bruto, ejecutivos, ids)
+          this.updateGraficos(chart,"Monto concretado","Total",  data_concretado, data_bruto, ejecutivos, ids)
         }else{
           for(let i=0; i<data.tableVisitInt.length; i++){
               ids.push(data.tableVisitInt[i].user_Id)
