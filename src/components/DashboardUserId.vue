@@ -96,6 +96,12 @@
     </v-data-table>
 </v-container>
 
+<v-container fluid class="text-right">
+  <v-btn color="#d69c4f" style="color: white;" @click="cambiaVisitas">
+    IR A VISITAS
+  </v-btn>
+</v-container>
+
 
   </div>
 </template>
@@ -185,19 +191,20 @@ export default {
       this.cargarUser()
       this.hotelSelected = '[Seleccionar todos]'
       this.monthSelected = '[Seleccionar todos]'
-      var fecha = new Date();
-      var año = fecha.getFullYear();
+      let fecha = new Date();
+      let año = fecha.getFullYear();
       this.yearSelected = año 
-      var Dash = JSON.parse(localStorage.getItem('dashboard'))
+      this.getNameHotels();
+      this.FiltroDashboardPorId(this.id, this.hotelSelected, this.months, this.yearSelected)
+      let Dash = JSON.parse(localStorage.getItem('dashboard'))
       if(this.values.length==0 && Dash!=null && this.percents!=null){
-        this.imprimeNumeros(Dash)
+        /* this.imprimeNumeros(Dash) */
         this.percents = Dash.porcentajeConcrecion
         this.getNameHotels();
       }
       if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
       }
-      this.FiltroDashboardPorId(this.id, this.hotelSelected, this.months, this.yearSelected)
     }catch (error){
       console.log('Hubo un error')
     }
@@ -228,9 +235,11 @@ export default {
       let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
       await axios.post(url, datos, config)
       .then((res) => {
-        console.log(res)
-        this.values = res.data.table
+        let array= []
+        array = res.data.table
+        this.values = array
         this.percents = res.data.porcentajeConcrecion
+        this.imprimeNumeros(res.data)
       }) 
       .catch((error) => {
         console.log('Hubo un error',error)
@@ -251,7 +260,6 @@ export default {
       let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
       await axios.post(url, datos, config)
       .then((res) => {
-        console.log(res)
         this.values = res.data.table
         this.percents = res.data.porcentajeConcrecion
       }) 
@@ -279,9 +287,8 @@ export default {
         } catch (error) {
             
         }
-    }
-  },
-  separaNumeros(numero){
+    },
+    separaNumeros(numero){
       try {
         const num = numero.toFixed(2);
         const tamaño = num.toString().length
@@ -294,7 +301,9 @@ export default {
             }else{
                 if(index%3==0){
                     nuevo_num += num.toString().charAt(i)
-                    nuevo_num += ','
+                    if(i>0){
+                      nuevo_num += ','
+                    }
                     index++
                 }else{
                     nuevo_num += num.toString().charAt(i)
@@ -312,22 +321,35 @@ export default {
       }
     },
     imprimeNumeros(Dash){
-      for(let i=1; i< Dash.table.length-1; i++){
-        let num_separado1 = `$ ${this.separaNumeros(Dash.table[i].prospecto)}`
-        let num_separado2 = `$ ${this.separaNumeros(Dash.table[i].tentativo)}`
-        let num_separado3 = `$ ${this.separaNumeros(Dash.table[i].hot)}`
-        let num_separado4 = `$ ${this.separaNumeros(Dash.table[i].congelado)}`
-        let num_separado5 = `$ ${this.separaNumeros(Dash.table[i].cancelado)}`
-        let num_separado6 = `$ ${this.separaNumeros(Dash.table[i].confirmado)}`
-        Dash.table[i].prospecto = num_separado1
-        Dash.table[i].tentativo = num_separado2
-        Dash.table[i].hot = num_separado3
-        Dash.table[i].congelado = num_separado4
-        Dash.table[i].cancelado = num_separado5
-        Dash.table[i].confirmado = num_separado6
+        try {
+        let array = []
+        for(let i=1; i< Dash.table.length-1; i++){
+          let num_separado1 = `$ ${this.separaNumeros(Dash.table[i].prospecto)}`
+          let num_separado2 = `$ ${this.separaNumeros(Dash.table[i].tentativo)}`
+          let num_separado3 = `$ ${this.separaNumeros(Dash.table[i].hot)}`
+          let num_separado4 = `$ ${this.separaNumeros(Dash.table[i].congelado)}`
+          let num_separado5 = `$ ${this.separaNumeros(Dash.table[i].cancelado)}`
+          let num_separado6 = `$ ${this.separaNumeros(Dash.table[i].confirmado)}`
+          Dash.table[i].prospecto = num_separado1
+          Dash.table[i].tentativo = num_separado2
+          Dash.table[i].hot = num_separado3
+          Dash.table[i].congelado = num_separado4
+          Dash.table[i].cancelado = num_separado5
+          Dash.table[i].confirmado = num_separado6
+        }
+      } catch (error) {
+        
       }
-      this.values = Dash.table
+      this.values = Dash.table 
+    },
+    cambiaVisitas(){
+      window.location.href = '/#/dashboard_jefes/visits-user/id'
     }
+
+
+  },
+  
+    
 
 };
 </script>

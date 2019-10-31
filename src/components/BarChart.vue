@@ -243,7 +243,7 @@
                         :items="desserts2"
                         :sort-by="['mconcretado']"
                         :sort-desc="[true]"
-                        :items-per-page="4"
+                        :items-per-page="3"
                         class="elevation-1"
                         hide-default-footer
                         :page.sync="page2"
@@ -256,6 +256,34 @@
                 </div>
               </v-card>
             </div>
+
+            <div class="card"> 
+              <v-card light >
+                <v-card-title>
+                  <span class="title font-weight-light"><strong>Visitas</strong> </span>
+                </v-card-title>
+                <div class="position-relative mb-4" style="margin-top:0;">
+                    <template>
+                    <v-data-table
+                        color="#000000"
+                        :headers="headers_visits"
+                        :items="desserts3"
+                        :sort-by="['mconcretado']"
+                        :sort-desc="[true]"
+                        :items-per-page="4"
+                        class="elevation-1"
+                        hide-default-footer
+                        :page.sync="page3"
+                        @page-count="pageCount3 = $event"
+                    ></v-data-table>
+                    <div class="text-center pt-2">
+                      <v-pagination v-model="page" :length="pageCount"></v-pagination>
+                    </div>
+                </template>
+                </div>
+              </v-card>
+            </div>
+
           </div>
         </div>
 
@@ -284,7 +312,7 @@ export default {
       chart: null,
       chart2: null,
       chart3: null,
-      groupSegment: 'Agencias',
+      groupSegment: '[Seleccionar todos]',
       yearSelected: "",
       monthSelected : "",
        months:['[Seleccionar todos]',
@@ -308,8 +336,18 @@ export default {
           { text: 'Concretado $', sortable: true, value: 'mconcretado' },
           { text: 'Diferencia $', sortable: true, value: 'diferencia' },
         ],
+        headers_visits: [
+          { text: 'Nombre', align: 'left', value: 'name',},
+          { text: 'Nº Visitas', sortable: true, value: 'number_Of_Visits' },
+          /* { text: 'Visitas Hechas', sortable: true, value: 'hechas' },
+          { text: 'Restante', sortable: true, value: 'restante' }, */
+          { text: '% Nº Visitas', sortable: true, value: 'pbruto' },
+          { text: '% Visitas Hechas', sortable: true, value: 'pconcretado' },
+          { text: '% Restante', sortable: true, value: 'diferencia' },
+        ],
         desserts1: [],
         desserts2: [],
+        desserts3: [],
         ids1: [],
         data1: [] ,
         data2: [],
@@ -330,6 +368,8 @@ export default {
         pageCount: 0,
         page2: 1,
         pageCount2: 0,
+        page3: 1,
+        pageCount3: 0,
 
     }),
     computed: {
@@ -340,13 +380,15 @@ export default {
         let data = JSON.parse(localStorage.getItem('dashjefe'))
         if(JSON.parse(localStorage.getItem('yearandmonth'))==null){
         this.monthSelected = '[Seleccionar todos]'
-        var fecha = new Date();
-        var año = fecha.getFullYear();
+        this.groupSegment = '[Seleccionar todos]'
+        let fecha = new Date();
+        let año = fecha.getFullYear();
         this.yearSelected = año
+        this.monthSelected = ( this.months[fecha.getMonth()+1] )
         this.modificarFecha();
-        
         }else {
         let yam = JSON.parse(localStorage.getItem('yearandmonth'))
+        this.groupSegment = yam.groups
         if(yam.month==''){
             this.monthSelected='[Seleccionar todos]'
             this.yearSelected = yam.year
@@ -366,6 +408,7 @@ export default {
         if(localStorage.length>=8){
             this.$store.dispatch('stateToken')
         }
+        console.clear()
         } catch (error) {
         }
    
@@ -401,7 +444,6 @@ export default {
                             leads:[],
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
-                        console.log(ids[e.dataPointIndex])
                         alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
                         window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
                     }
@@ -1077,14 +1119,14 @@ export default {
         this.years.push(i)
       }
     },
-    updateGraficos(chart, data_concretado, data_bruto, ejecutivos, ids){
+    updateGraficos(chart, name1, name2, data_concretado, data_bruto, ejecutivos, ids){
       chart.updateSeries([
           {   
-            name: 'Monto concretado',
+            name: name1,
             data: data_concretado  
           },
           {
-            name: 'Monto bruto',
+            name: name2,
             data: data_bruto
           }
       ])
@@ -1171,16 +1213,24 @@ export default {
               data_concretado.push(data.dashboardRateHotel[i].rate_hotel)
               data_bruto.push(data.dashboardRateHotel[i].total)
           }
-          this.updateGraficos(chart, data_concretado, data_bruto, ejecutivos, ids)
-        }else{//eventos
+          this.updateGraficos(chart,"Monto concretado","Monto bruto", data_concretado, data_bruto, ejecutivos, ids)
+        }else if(tipo==2){//eventos
           for(let i=0; i<data.dashboardRateEvents.length; i++){
               ids.push(data.dashboardRateEvents[i].user_id)
               ejecutivos.push(data.dashboardRateEvents[i].name+" "+data.dashboardRateEvents[i].last_name)
               data_concretado.push(data.dashboardRateEvents[i].rate_events)
               data_bruto.push(data.dashboardRateEvents[i].total)
           }
-          this.updateGraficos(chart, data_concretado, data_bruto, ejecutivos, ids)
-        }
+          this.updateGraficos(chart,"Monto concretado","Monto bruto",  data_concretado, data_bruto, ejecutivos, ids)
+        }else{
+          for(let i=0; i<data.tableVisitInt.length; i++){
+              ids.push(data.tableVisitInt[i].user_Id)
+              ejecutivos.push(data.tableVisitInt[i].name+" "+data.tableVisitInt[i].last_Name)
+              data_concretado.push(data.tableVisitInt[i].suma)
+              data_bruto.push(data.tableVisitInt[i].number_Of_Visits)
+          }
+          this.updateGraficos(chart,"% Visitas concretada","% Total", data_concretado, data_bruto, ejecutivos, ids)
+        } 
       }
     } catch (error) {
        
@@ -1190,6 +1240,7 @@ export default {
    async Filtro(){
       /* this.resetFiltro()  */
       let datos = {
+        "groupSegment": this.groupSegment,
     		"month": this.months.indexOf(this.monthSelected),
     		"year": this.yearSelected
       }
@@ -1201,17 +1252,16 @@ export default {
       let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/jefes'
       await axios.post(url, datos, config)
       .then(response =>{ 
-        console.log(response.data)
-        if(response.data.dashboardRateEvents.length > 0 || response.data.dashboardRateHotel.length > 0){
-          
           let fec = {}
-          if(this.monthSelected!='[Seleccionar todos]'){
+          if(this.monthSelected!='[Seleccionar todos]' || this.groupSegment != '[Seleccionar todos]'){
             fec = {
+                    groups: this.groupSegment,
                     year:this.yearSelected,
                     month: this.monthSelected
                   }
           }else{
             fec = {
+                    groups: this.groupSegment,
                     year:this.yearSelected,
                     month: ''
                   }
@@ -1219,12 +1269,12 @@ export default {
           
           this.preparaFiltro(this.chart, response.data, 1)
           this.preparaFiltro(this.chart2, response.data, 2)
+          this.preparaFiltro(this.chart3, response.data, 3)
           this.cargarTablas(response.data)
           localStorage.setItem('dashjefe', JSON.stringify(response.data))
           localStorage.setItem('yearandmonth', JSON.stringify(fec))
-        }else{
-          alert('No se encontraron datos en '+ this.monthSelected+ ' '+ this.yearSelected )
-        }
+          setTimeout(function(){ location.reload(); }, 1000);
+        
         
       })
       .catch(error => {
@@ -1254,6 +1304,7 @@ export default {
       try {
         let array1 = []
         let array2 = []
+        let array3 = []
         for(let i=0; i< data.dashboardRateHotel.length; i++){
             let diff = parseInt(data.dashboardRateHotel[i].total-data.dashboardRateHotel[i].rate_hotel)
             array1.push({
@@ -1272,11 +1323,22 @@ export default {
             diferencia: this.separaNumeros(diff)
           })
         }
+        for(let i=0; i< data.tableVisitInt.length; i++){
+            array3.push({
+            name: data.tableVisitInt[i].name+' '+data.tableVisitInt[i].last_Name,
+            number_Of_Visits: data.tableVisitInt[i].number_Of_Visits,
+            pbruto: 100 +"%",
+            pconcretado:  data.tableVisitInt[i].suma +"%",
+            diferencia: (100 -parseInt( data.tableVisitInt[i].suma))+"%"
+          })
+          
+        }
   
         this.desserts1 = array1
         this.desserts2 = array2
+        this.desserts3 = array3
       } catch (error) {
-        
+        console.log('Ocurrio un error')
       }
     },
     cargarDataInicial(){
@@ -1356,30 +1418,7 @@ export default {
 
 
 
-    async FiltroVisitas(id){  
-      let datos = {
-    		"year": 2019
-      }
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.accessToken
-        }
-      }
-      
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
-      await axios.post(url, datos, config)
-      .then((res) => {
-        console.log(res.data)
-        /* this.values = res.data.table
-        this.percents = res.data.porcentajeConcrecion */
-      }) 
-      .catch((error) => {
-        console.log('Hubo un error',error)
-        /* localStorage.removeItem('token') */
-      })
-      
-    },
-
+  
 
     },
 }

@@ -2,6 +2,32 @@
 <div>
   
   <div v-if="groupSG != 'Eventos' ||  role!='Administrador'">
+  <div class="">
+        <!-- primer ROW -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="">  
+              <v-card color="#000000">
+                <v-card-title>
+                  <v-list-item two-line>
+                    <v-list-item-avatar class="ml-0" color="grey darken-3">
+                      <v-icon color="#fafafa">dashboard</v-icon>
+                    </v-list-item-avatar>
+                    <span class="title font-weight-light" color="#FAFAFA"><h3 style="color: white">Visitas del usuario {{usuario}}</h3> </span>
+                    <v-list-item-content class="text-right" style="margin-top:5px">
+                      <v-list-item-subtitle> <strong></strong>  </v-list-item-subtitle>
+                   </v-list-item-content>
+                 </v-list-item>
+                </v-card-title>
+                <div class="position-relative mb-4" style="margin-top:0;">
+                    
+                </div>
+              </v-card>
+            </div>
+          </div>
+          </div>
+        </div>
+
   <v-container class="col-md-12">
     <v-row >
         <v-col cols="auto">
@@ -31,7 +57,7 @@
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="1000px" class="center">
       <template  v-slot:activator="{ on }">
-          <v-btn  style="margin-left: 11px;" dark class="mb-2" v-on="on" @click="LimpiarCampos()">Registrar Nueva Visita</v-btn>
+          <!-- <v-btn  style="margin-left: 11px;" dark class="mb-2" v-on="on" @click="LimpiarCampos()">Registrar Nueva Visita</v-btn> -->
       </template>
        <v-card >
          <v-card-title>
@@ -49,6 +75,7 @@
                   </v-col> -->
                   <v-col cols="20" sm="6" md="80" class=center>
                     <v-combobox
+                     disabled
                       v-model="editedItem.reason"
                       :items="razones"
                       color="#d69c4f"
@@ -58,6 +85,7 @@
                   </v-col>
                   <v-col cols="20" sm="6" md="80" class=center>
                     <v-combobox
+                      disabled
                       v-model="editedItem.account"
                       :items="allAccounts"
                       color="#d69c4f"
@@ -67,6 +95,7 @@
                   </v-col>
                   <v-col cols="20" sm="3" md="80" class=center>
                     <v-combobox
+                      disabled
                       @change="cambiaTextA()"
                       v-model="status" 
                       :items="Status"
@@ -89,6 +118,7 @@
                       >
                         <template v-slot:activator="{ on }">
                           <v-text-field
+                            disabled
                             color="#d69c4f"
                             v-model="date1"
                             label="Fecha de Visita"
@@ -97,10 +127,10 @@
                             v-on="on"
                           ></v-text-field>
                         </template>
-                        <v-date-picker :min="defaultDate" v-model="date1" no-title scrollable color="#000000">
+                        <v-date-picker disabled :min="defaultDate" v-model="date1" no-title scrollable color="#000000">
                           <div class="flex-grow-1"></div>
                           <v-btn text color="#d69c4f" @click="menu = false">Cancel</v-btn>
-                          <v-btn text color="#d69c4f" @click="$refs.menu.save(date1)">OK</v-btn>
+                          <!-- <v-btn text color="#d69c4f" @click="$refs.menu.save(date1)">OK</v-btn> -->
                         </v-date-picker>
                       </v-menu>
                   </v-col>
@@ -119,11 +149,11 @@
                   
                   <v-col class="lg-offset8" md="6" lg="6">
                         <h3>Hora Inicio</h3>
-                        <v-time-picker :min="HoraMin" :max="HoraMax" width="250" header-color="#000000"  v-model="horaInicio" color="#d69c4f"></v-time-picker>
+                        <v-time-picker disabled :min="HoraMin" :max="HoraMax" width="250" header-color="#000000"  v-model="horaInicio" color="#d69c4f"></v-time-picker>
                  </v-col>
                  <v-col class="lg-offset8" md="6" lg="6">
                       <h3>Hora Fin</h3>
-                       <v-time-picker :min="HoraMin" :max="HoraMax" width="250" header-color="#000000"  v-model="horaFin"  color="#d69c4f"></v-time-picker>
+                       <v-time-picker disabled :min="HoraMin" :max="HoraMax" width="250" header-color="#000000"  v-model="horaFin"  color="#d69c4f"></v-time-picker>
                  </v-col>
               
             </v-row>
@@ -250,7 +280,7 @@
               <div class="flex-grow-1"></div>
               
               <v-btn icon @click="editItem(selectedEvent)">
-                <v-icon>mdi-pencil</v-icon>
+                <v-icon>mdi-details</v-icon>
               </v-btn> 
               <v-btn  @click="CambiaColor" icon>
                 <v-icon 
@@ -305,6 +335,8 @@ export default {
   },
   data: () => ({
     role:'',
+    usuario: '',
+    id: 0,
     groupSG: '',
     colorIcon: 'white',
     yearSelected: null,
@@ -493,17 +525,21 @@ export default {
   },
    mounted (){ 
     try { 
+      var fecha = new Date();
+      var año = fecha.getFullYear();
+      this.yearSelected = año 
       this.verificaPermisos()
+      this.cargarUser()
+      this.getVisits()
+      
+      
+      this.cargarAños()
+      /* this.$store.dispatch('getReasons') */
+ /*      this.getNameAccounts() */
       let visitas = JSON.parse(localStorage.getItem('visitas'))
       this.cargarVisitas(visitas)
       this.listaVisitas = visitas.calendar.listVisit
       this.tablaVisitas = visitas.tableVisits 
-      var fecha = new Date();
-      var año = fecha.getFullYear();
-      this.yearSelected = año 
-      this.cargarAños()
-      /* this.$store.dispatch('getReasons') */
-      this.getNameAccounts()
       this.tablaVisitas1 = this.tablaVisitas.tableVisitsNumber1
       this.tablaVisitas2 = this.tablaVisitas.tableVisitsNumber2
       this.tablaVisitas3 = this.tablaVisitas.tableVisitsPercent
@@ -577,7 +613,7 @@ export default {
           : ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][d % 10]
       },
 
-      async getVisits(){
+      /* async getVisits(){
       let datos= {
         "year": this.yearSelected
       }
@@ -598,92 +634,33 @@ export default {
         alert('Error obteniendo las visitas del año '+ this.yearSelected)
         console.log(error)
       })
+    }, */
+    cargarUser(){
+        try {
+            let datos = JSON.parse(localStorage.getItem('leads-user'))
+            this.datos = datos
+            this.usuario = datos.datos.nombre
+            this.id = datos.datos.user_id
+        } catch (error) {
+            
+        }
     },
     
-    //AGREGAR UNA VISITA
-    async addVisit(){
-      try {
-      let hour1= this.horaInicio
-      let hour2= this.horaFin
+    //GET  VISITAs
+    
+    async getVisits(){
+    try {
       let datos= {
-        "description": this.editedItem.description,
-        "start": this.date1+"T"+hour1+":00",
-        "finish": this.date1+"T"+hour2+":00",
-        "account": this.editedItem.account,
-        "reason": this.editedItem.reason,
-        "status": this.status,
+         "year": this.yearSelected
       }
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      console.log(datos)
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/visits/'+this.id
       await axios.post(url, datos, config)
       .then((res) => {
-        console.log(res.data)
-        this.$store.commit('Visits', res.data)
-        localStorage.setItem('visitas', JSON.stringify(res.data))
-        let visitas = res.data.calendar.listVisit
-        let array = []
-        for(let i=0; i<visitas.length; i++){
-          array.push({
-            id: visitas[i].visitId,
-            user: visitas[i].user,
-            /* name: visitas[i].name, */
-            description: visitas[i].description,
-            start: visitas[i].start.toString(),
-            end: visitas[i].finish.toString(),
-            account: visitas[i].account,
-            name: visitas[i].reason,
-            reason: visitas[i].reason,
-            status: visitas[i].status,
-            color: '#d69c4f',
-          })
-        }
-        this.events = array 
-        this.values = []
-        this.tablaVisitas1 = res.data.tableVisits.tableVisitsNumber1
-        this.tablaVisitas2 = res.data.tableVisits.tableVisitsNumber2
-        this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
-        this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3)
-        this.cargaOlvidados(res.data.tableOlvidadosInt)
-        toastr.success('Se guardó correctamente')
-      })
-      .catch((error) => {
-        toastr.error('Ocurrió un error agregando la visita')
-        console.log(error)
-      }) 
-      } catch (error) {
-        
-      } 
-    },
-
-    //Edit a visit
-    async editVisit(){
-      try {
-      let hour1= this.horaInicio
-      let hour2= this.horaFin
-      let datos= {
-        "visitId": this.editedItem.id,
-        "description": this.editedItem.description,
-        "start": this.date1+"T"+hour1+":00",
-        "finish": this.date1+"T"+hour2+":00",
-        "account": this.editedItem.account,
-        "status": this.status,
-        "reason": this.editedItem.reason,
-      }
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.accessToken
-        }
-      }
-      console.log(datos)
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
-      await axios.put(url, datos, config)
-      .then((res) => {
-        console.log(res.data)
         this.$store.commit('Visits', res.data)
         localStorage.setItem('visitas', JSON.stringify(res.data))
         let visitas = res.data.calendar.listVisit
@@ -709,7 +686,6 @@ export default {
         this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
         this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3)
         this.cargaOlvidados(res.data.tableOlvidadosInt)
-        toastr.success('Se guardó correctamente')
       })
       .catch((error) => {
         toastr.error('Ocurrió un error agregando la visita')

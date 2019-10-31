@@ -12,6 +12,7 @@ import Login2 from './components/Login2'
 import NotFound from './components/NotFound'
 import Config from './components/Config'
 import Visits from './components/Visits'
+import VisitsUserId from './components/VisitsUserId'
 import DashboardUserId from './components/DashboardUserId'
 
 Vue.use(Router)
@@ -73,6 +74,11 @@ const routerEjecutivo = new Router({
       path: '/dashboard_jefes/dashboard-user/id',
       name: 'dashboard-user',
       component: DashboardUserId
+    },
+    {
+      path: '/dashboard_jefes/visits-user/id',
+      name: 'visits-user',
+      component: VisitsUserId
     },
     {
       path: '*',
