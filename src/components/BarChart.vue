@@ -472,7 +472,7 @@ export default {
               columnWidth: '40%',
                 }
             },
-            colors: ['#ff4200', '#F5F5F5'],
+            colors: ['#ff4200', '#000000'],
             series: [
                 {
                 name: 'Monto concretado',
@@ -575,7 +575,7 @@ export default {
             
           fill: {
             opacity: 1,
-            colors: ['#ff4200', '#F5F5F5'],
+            colors: ['#ff4200', '#000000'],
             gradient: {
               shade: 'light',
               type: "horizontal",
@@ -712,7 +712,7 @@ export default {
               columnWidth: '40%',
                 }
             },
-            colors: ['#ff4200', '#F5F5F5'],
+            colors: ['#ff4200', '#000000'],
             series: [
                 {
                 name: 'Monto concretado',
@@ -810,7 +810,7 @@ export default {
             
           fill: {
             opacity: 1,
-            colors: ['#ff4200', '#F5F5F5'],
+            colors: ['#ff4200', '#000000'],
             gradient: {
               shade: 'light',
               type: "horizontal",
@@ -947,7 +947,7 @@ export default {
               columnWidth: '40%',
                 }
             },
-            colors: ['#ff4200', '#F5F5F5'],
+            colors: ['#ff4200', '#000000'],
             series: [
                 {
                 name: '% Visitas concretada',
@@ -1050,7 +1050,7 @@ export default {
             
           fill: {
             opacity: 1,
-            colors: ['#ff4200', '#F5F5F5'],
+            colors: ['#ff4200', '#000000'],
             gradient: {
               shade: 'light',
               type: "horizontal",

@@ -595,6 +595,7 @@ export default new Vuex.Store({
     		"year": year
       }
       let fecha = {
+        "groups": '[Seleccionar todos]',
         "year": year,
         "month": months[month]
       }
