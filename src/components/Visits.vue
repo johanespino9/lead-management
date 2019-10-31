@@ -97,7 +97,7 @@
                             v-on="on"
                           ></v-text-field>
                         </template>
-                        <v-date-picker v-model="date1" no-title scrollable color="#000000">
+                        <v-date-picker :min="defaultDate" v-model="date1" no-title scrollable color="#000000">
                           <div class="flex-grow-1"></div>
                           <v-btn text color="#d69c4f" @click="menu = false">Cancel</v-btn>
                           <v-btn text color="#d69c4f" @click="$refs.menu.save(date1)">OK</v-btn>
@@ -224,6 +224,7 @@
           :event-margin-bottom="3"
           :now="today"
           :type="type"
+          
           @click:event="showEvent"
           @click:more="viewDay"
           @click:date="viewDay"

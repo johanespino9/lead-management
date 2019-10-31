@@ -319,6 +319,12 @@ export default {
         data3: [] ,
         data4: [],
         ej2: [],
+
+        ids3:[],
+        data5: [],
+        data5:[],
+        ej3: [],
+
         groupSegments: ['[Seleccionar todos]','Agencias', 'Corporativo', 'Eventos'],
         page: 1,
         pageCount: 0,
@@ -338,6 +344,7 @@ export default {
         var año = fecha.getFullYear();
         this.yearSelected = año
         this.modificarFecha();
+        
         }else {
         let yam = JSON.parse(localStorage.getItem('yearandmonth'))
         if(yam.month==''){
@@ -553,7 +560,7 @@ export default {
               enabled: true,
             y: {
               formatter: function (val/* , index */) {
-                let num = 750000054;
+                let num = val;
                 let tamaño = num.toString().length
                 let nuevo_num = ''
                 let index = 1
@@ -788,7 +795,7 @@ export default {
               enabled: true,
             y: {
               formatter: function (val/* , index */) {
-                let num = 750000054;
+                let num = val;
                 let tamaño = num.toString().length
                 let nuevo_num = ''
                 let index = 1
@@ -850,8 +857,8 @@ export default {
     },
 
     graph3(chart){
-    var users = this.ej1
-    var ids = this.ids1
+    var users = this.ej3
+    var ids = this.ids3
     try { 
         var options = {
             chart: {
@@ -901,12 +908,12 @@ export default {
             colors: ['#ff4200', '#F5F5F5'],
             series: [
                 {
-                name: 'Monto concretado',
-                data: this.data1
+                name: '% Visitas concretada',
+                data: this.data5
                 },
                 {
-                name: 'Monto bruto',
-                data: this.data2
+                name: '% Total',
+                data: this.data6
                 },
             ],
             legend: {
@@ -933,7 +940,7 @@ export default {
             },
             xaxis: {
             type: 'category',
-            categories: this.ej1,
+            categories: this.ej3,
             labels: {
               style: {
                 fontStyle: 'arial',
@@ -973,7 +980,7 @@ export default {
             {
             labels: {
             formatter: function(val, index) {
-                return "$"+ val;
+                return  val+"%";
             }
             },  
             axisBorder: {
@@ -1016,7 +1023,7 @@ export default {
           dataLabels: {
             enabled: false,
             formatter: function (val) {
-              return "$"+val ;
+              return val+"%" ;
             },
             offsetY: 0,
             style: {
@@ -1028,33 +1035,7 @@ export default {
               enabled: true,
             y: {
               formatter: function (val/* , index */) {
-                let num = 750000054;
-                let tamaño = num.toString().length
-                let nuevo_num = ''
-                let index = 1
-                for(let i=tamaño-1; i>=0; i--){
-                    if(num.toString().charAt(i)=='.'){
-                        index = 1
-                        nuevo_num += num.toString().charAt(i)
-                    }else{
-                        if(index%3==0){
-                            nuevo_num += num.toString().charAt(i)
-                            if(i>0){
-                              nuevo_num += ','
-                            }
-                            index++
-                        }else{
-                            nuevo_num += num.toString().charAt(i)
-                            index++   
-                        }
-                    }
-                }
-                let tamaño2 = nuevo_num.length
-                let numero_separado = ''
-                for(let i=tamaño2-1; i>=0; i--){
-                    numero_separado += nuevo_num.charAt(i)
-                } 
-                return "$"+numero_separado
+                return val+"%"
               }
             },
             x: {
@@ -1279,7 +1260,7 @@ export default {
             name: data.dashboardRateHotel[i].name+' '+data.dashboardRateHotel[i].last_name,
             mbruto: this.separaNumeros(data.dashboardRateHotel[i].total),
             mconcretado: this.separaNumeros(data.dashboardRateHotel[i].rate_hotel),
-            diferencia: diff
+            diferencia: this.separaNumeros(diff)
           })
         }
         for(let i=0; i< data.dashboardRateEvents.length; i++){
@@ -1288,7 +1269,7 @@ export default {
             name: data.dashboardRateHotel[i].name+' '+data.dashboardRateHotel[i].last_name,
             mbruto: this.separaNumeros(data.dashboardRateEvents[i].total),
             mconcretado: this.separaNumeros(data.dashboardRateEvents[i].rate_events),
-            diferencia: diff
+            diferencia: this.separaNumeros(diff)
           })
         }
   
@@ -1304,10 +1285,13 @@ export default {
         if(data!= null){
           this.ej1 = []
           this.ej2 = []
+          this.ej3 = []
           this.data1 = []
           this.data2 = []
           this.data3 = []
           this.data4 = []
+          this.data5 = []
+          this.data6 = []
           for(let i=0; i<data.dashboardRateHotel.length; i++){
             this.ids1.push(data.dashboardRateHotel[i].user_id)
             this.ej1.push(data.dashboardRateHotel[i].name+" "+data.dashboardRateHotel[i].last_name)
@@ -1319,6 +1303,12 @@ export default {
             this.ej2.push(data.dashboardRateEvents[i].name+" "+data.dashboardRateEvents[i].last_name)
             this.data3.push(data.dashboardRateEvents[i].rate_events)
             this.data4.push(data.dashboardRateEvents[i].total)
+          }
+          for(let i=0; i<data.tableVisitInt.length; i++){
+            this.ids3.push(data.tableVisitInt[i].user_Id)
+            this.ej3.push(data.tableVisitInt[i].name+" "+data.tableVisitInt[i].last_Name)
+            this.data5.push(parseInt(data.tableVisitInt[i].suma))
+            this.data6.push(100)
           }
         }else{
           this.resetFiltro()
@@ -1361,6 +1351,33 @@ export default {
     },
     verificaPermisos(){
         this.role = JSON.parse(localStorage.getItem('usuario')).role
+    },
+
+
+
+
+    async FiltroVisitas(id){  
+      let datos = {
+    		"year": 2019
+      }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
+      await axios.post(url, datos, config)
+      .then((res) => {
+        console.log(res.data)
+        /* this.values = res.data.table
+        this.percents = res.data.porcentajeConcrecion */
+      }) 
+      .catch((error) => {
+        console.log('Hubo un error',error)
+        /* localStorage.removeItem('token') */
+      })
+      
     },
 
 

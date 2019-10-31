@@ -238,6 +238,29 @@ export default {
       })
       
     },
+    async FiltroVisitas(id, year){  
+      let datos = {
+    		"year": year
+      }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
+      await axios.post(url, datos, config)
+      .then((res) => {
+        console.log(res)
+        this.values = res.data.table
+        this.percents = res.data.porcentajeConcrecion
+      }) 
+      .catch((error) => {
+        console.log('Hubo un error',error)
+        /* localStorage.removeItem('token') */
+      })
+      
+    },
     
 
     cargarAños(){

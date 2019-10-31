@@ -11,6 +11,7 @@
               </v-row>
         </v-container>
         <v-data-table
+              :search="search"
               :headers="headers"
               :items="desserts"
               sort-by="phone"
