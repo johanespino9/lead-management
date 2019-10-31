@@ -76,7 +76,7 @@
             <v-list-item-title>Gestión de Cuentas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="role=='Ejecutivo'" color="#d69c4f" to="/visits">
+        <v-list-item v-if="role=='Ejecutivo' && groupS != 'Eventos'" color="#d69c4f" to="/visits">
           <v-list-item-action>
             <v-icon>notification_important</v-icon>
           </v-list-item-action>
@@ -92,6 +92,10 @@
             <v-list-item-title>Mi Perfil</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        
+        <div id="robotin" style="margin-bottom: 30px; margin-right: 10px; display:scroll;position:fixed; bottom:0px; left:55px;cursor:pointer;max-width:120px;">
+        <a href=""> <img style="margin-bottom: 10px;" src="../assets/robotin.gif" alt="robotin"></a>
+        </div>
         
         <!-- <v-list-item to="">
           <v-list-item-action>
@@ -128,7 +132,8 @@ export default {
       mini: true,
       email: 'user@casa-andina.com',
       usern:'',
-      role:''
+      role:'',
+      groupS: ''
     }),
     computed: {
       ...mapState(['username', 'User'])
@@ -147,10 +152,12 @@ export default {
         this.usern = this.User.username
         this.email = this.User.email
         this.role = this.User.role
+        this.groupS = this.User.groupSegment
       }else{
         this.usern = this.User.username
         this.email = this.User.email
         this.role = this.User.role
+        this.groupS = this.User.groupSegment
       }
       
     } catch (error) {
@@ -164,6 +171,8 @@ export default {
     this.usern = this.User.username
     this.email = this.User.email
     this.role = this.User.role
+    this.groupS = this.User.groupSegment
+
     if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
     }

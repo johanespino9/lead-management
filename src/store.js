@@ -546,6 +546,7 @@ export default new Vuex.Store({
       })
       .catch((error) => {
         console.log('Error obteniendo Categories', error)
+        console.clear()
         /* console.log(error)
         localStorage.removeItem('token')
         localStorage.removeItem('usuarios')

@@ -285,7 +285,7 @@
                         </template>
                       </v-combobox>
                   </v-col>
-                  <v-col v-if="sevent=='si'" cols="20" sm="2" md="80" style="margin-top=15px;">
+                  <v-col v-if="sevent=='si' && editedItem.segment!='Series'" cols="20" sm="2" md="80" style="margin-top=15px;">
                     <!-- <v-btn-toggle color="primary">
                       <v-btn @click="cantTfield()" text value="si">
                         Ingresar Costos
@@ -667,7 +667,9 @@ export default {
     getNameAccounts(accounts) {
       var todoaccounts = JSON.parse(localStorage.getItem('accounts'))
       for (let i = 0; i < todoaccounts.length; i++) {
-        this.leadsAccounts.push(todoaccounts[i].name);
+        if(todoaccounts[i].edit == true || todoaccounts[i].groupSegment== 'Eventos'){
+          this.leadsAccounts.push(todoaccounts[i].name);
+        }
       }
     },
 
@@ -1194,7 +1196,7 @@ export default {
         this.estado11= false;
         this.estado12= false;
 
-        this.sevent ='no'
+        this.sevent ='si'
         this.editedItem.eventsName = []
         this.rateHotel = 0
         this.rooms = 0
@@ -1338,7 +1340,7 @@ export default {
       if(dias<=0){
         dias=1
       }
-      let event = ((parseInt(this.rateEvent1) + parseInt(this.rateEvent2)+ parseInt(this.rateEvent3))*parseInt(dias))
+      let event = ((parseInt(this.rateEvent1) + parseInt(this.rateEvent2)+ parseInt(this.rateEvent3)) /* *parseInt(dias) */ )
       this.event_revenue = event
       return this.separaNumeros(event)
       } catch (error) {}

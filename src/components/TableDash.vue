@@ -68,36 +68,7 @@
     </v-data-table>
 </v-container>
 
-<div class="row">
-  <div class="col-lg-6">
-              <!-- SEGUNDO CARD DESDE ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
-           <div class="card"> 
-                <v-card light >
-                  <v-card-title>
-                    <span class="title font-weight-light"><strong>Visitas por realizar</strong> </span>
-                  </v-card-title>
-                  <div class="position-relative mb-4" style="margin-top:0;">
-                      <template>
-                      <v-data-table
-                          hide-default-footer
-                          color="#000000"
-                          :headers="header_visits"
-                          :items="visitas"
-                          :sort-by="['mconcretado']"
-                          :sort-desc="[true]"
-                          :items-per-page="5"
-                          :page.sync="page"
-                          @page-count="pageCount = $event"
-                          class="elevation-1"
-                      ></v-data-table>
-                  </template>
-                  </div>
-                </v-card>
-          </div> 
-  </div>
-    
 
-</div>
 
 
   </div>
@@ -171,13 +142,7 @@ export default {
       },
       
     ],
-    header_visits: [
-          {text: 'Cuenta', align: 'left', value: 'name',},
-          {text: 'Categoria', align: 'left', value: 'name',},
-          {text: 'Lógica', align: 'left', value: 'name',},
-          {text: 'Última visita', align: 'left', value: 'name',},
-          {text: 'Dias sin visita', align: 'left', value: 'name',}
-    ],
+   
     items: [],
     visitas: [],
     roomRevenue: null,
@@ -227,7 +192,7 @@ export default {
     },
     //Filtro dashboard
     async FiltroDashboard(){
-      var datos = {
+      let datos = {
     		"hotel": this.hotelSelected,
     		"month": this.months.indexOf(this.monthSelected),
     		"year": this.yearSelected
@@ -240,7 +205,7 @@ export default {
       let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos'
       await axios.post(url, datos, config)
       .then((res) => {
-        this.imprimeNumeros(Dash)
+        this.imprimeNumeros(res.data)
         this.percents = res.data.porcentajeConcrecion
       }) 
       .catch((error) => {

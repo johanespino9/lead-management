@@ -32,7 +32,6 @@
         <!-- COMIENZAN LOS CARDS -->
     <div class="wrapper">
       
-
         <div class="card" style="background: #FFF; margin-top: 0px; margin-bottom: 10px; border-radius: 5px;">
             <v-container class="col-md-10">
             <v-row justify="center">

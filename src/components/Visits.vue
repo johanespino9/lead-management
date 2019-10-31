@@ -1,7 +1,7 @@
 <template>
 <div>
   
-  <div v-if="role!='Administrador'">
+  <div v-if="groupSG != 'Eventos' ||  role!='Administrador'">
   <v-container class="col-md-12">
     <v-row >
         <v-col cols="auto">
@@ -22,13 +22,17 @@
         </v-data-table>
       </template>
 </v-container>
+
+<v-container fluid>
+<v-row>
+<v-col cols="auto" sm="4" md="80">
 <template>
     <div>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="1000px" class="center">
       <template  v-slot:activator="{ on }">
-          <v-btn  style="margin-left: 11px;" dark class="mb-2" v-on="on" @click="LimpiarCampos">Registrar Nueva Visita</v-btn>
-       </template>
+          <v-btn  style="margin-left: 11px;" dark class="mb-2" v-on="on" @click="LimpiarCampos()">Registrar Nueva Visita</v-btn>
+      </template>
        <v-card >
          <v-card-title>
               <span class="headline"><strong> Gestión de visitas</strong></span>
@@ -36,12 +40,21 @@
        <v-card-text >
          <v-container>
               <v-row>
-                <v-col cols="20" sm="6" md="80" class=center >
+                <!-- <v-col cols="20" sm="6" md="80" class=center >
                     <v-text-field 
                     v-model="editedItem.name"
                     color="#d69c4f" 
                     label="Motivo">
                     </v-text-field>
+                  </v-col> -->
+                  <v-col cols="20" sm="6" md="80" class=center>
+                    <v-combobox
+                      v-model="editedItem.reason"
+                      :items="razones"
+                      color="#d69c4f"
+                      label="Seleccionar motivo"
+                      id="reason"
+                    ></v-combobox>
                   </v-col>
                   <v-col cols="20" sm="6" md="80" class=center>
                     <v-combobox
@@ -54,7 +67,8 @@
                   </v-col>
                   <v-col cols="20" sm="3" md="80" class=center>
                     <v-combobox
-                      v-model="estado" 
+                      @change="cambiaTextA()"
+                      v-model="status" 
                       :items="Status"
                       color="#d69c4f"
                       label="Seleccionar estado"
@@ -90,16 +104,8 @@
                         </v-date-picker>
                       </v-menu>
                   </v-col>
-                  <v-col cols="20" sm="6" md="80" class=center>
-                    <v-combobox
-                      v-model="editedItem.reason"
-                      :items="Reasons"
-                      color="#d69c4f"
-                      label="Seleccionar razón"
-                      id="reason"
-                    ></v-combobox>
-                  </v-col>
-                  <v-col v-if="estado != 'Cancelado'" cols="12" sm="12" md="80" >
+                  
+                  <v-col v-if="status == 'Cancelado'" cols="12" sm="6" md="80" >
                     <v-textarea
                       v-model="editedItem.description"
                       color="#d69c4f" 
@@ -109,6 +115,7 @@
                       label="Descripción"
                     ></v-textarea>
                   </v-col>
+                  <v-col v-if="status != 'Cancelado'" cols="12" sm="6" md="80" ></v-col>
                   
                   <v-col class="lg-offset8" md="6" lg="6">
                         <h3>Hora Inicio</h3>
@@ -134,10 +141,35 @@
 
     </div>
     </template>
+  </v-col>
+  <v-col cols="20" sm="8" md="80">
+      <template>
+        <v-data-table
+           
+          :headers="header_visita"
+          :items="tableOlvidadosInt"
+          multi-sort
+          class="elevation-1"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
+          @page-count="pageCount = $event"
+          :page.sync="page"
+        >
+        </v-data-table>
+        <div class="text-center pt-2">
+          <v-pagination v-model="page" :length="pageCount"></v-pagination>
+        </div>
+      </template>
+    </v-col>    
+</v-row>
 
-    <div class="container">
+</v-container>
+
+
+
+
+<div >
         
-
 
  <template>
   <v-row class="fill-height">
@@ -215,15 +247,16 @@
             > 
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <div class="flex-grow-1"></div>
+              
+              <v-btn icon @click="editItem(selectedEvent)">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn> 
               <v-btn  @click="CambiaColor" icon>
                 <v-icon 
                 :color="colorIcon"
                 @click:append="CambiaColor"
                 >mdi-heart</v-icon>
               </v-btn>
-              <v-btn icon @click="editItem(selectedEvent)">
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn> 
               <!-- <v-btn icon>
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn> -->
@@ -249,10 +282,12 @@
     </v-col>
   </v-row>
 </template>
+
+
     </div>
 </div>
 
- <div v-if="role=='Administrador'">
+ <div v-if="role=='Administrador' || groupSG == 'Eventos'">
    <NotFound/>
  </div>
 
@@ -269,6 +304,7 @@ export default {
   },
   data: () => ({
     role:'',
+    groupSG: '',
     colorIcon: 'white',
     yearSelected: null,
     years: [],
@@ -293,6 +329,7 @@ export default {
       end: null,
       estado: '',
       editedItem: {
+        visitId: '',
         name: '',
         description:'',
         start: '',
@@ -300,7 +337,7 @@ export default {
         account: '',
         reason:'',
         razon: '',
-        status:''
+        
       },
       defaultItem:{
         name: '',
@@ -312,6 +349,7 @@ export default {
         razon:'',
         status:''
       },
+      status:'',
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
@@ -404,6 +442,18 @@ export default {
       }
     ],
     items: [],
+    razones: ['Mantenimiento', 'Negociacion', 'Capacitacion', 'Reclamo', 'Otros'],
+    header_visita: [
+      {text: "Cuenta", value:"account"},
+      {text: "Categoria", value:"category"},
+      {text: "Última visita", value:"date"},
+      {text: "Dias sin visita", value:"days"},
+    ],
+    tableOlvidadosInt: [],
+    itemsPerPage: 4,
+    pageCount: 0,
+    page: 1,
+    
   }),
   computed: {
     ...mapState(['Accounts', 'Reasons', 'accessToken', 'Visits']),
@@ -451,12 +501,13 @@ export default {
       var año = fecha.getFullYear();
       this.yearSelected = año 
       this.cargarAños()
-      this.$store.dispatch('getReasons')
+      /* this.$store.dispatch('getReasons') */
       this.getNameAccounts()
       this.tablaVisitas1 = this.tablaVisitas.tableVisitsNumber1
       this.tablaVisitas2 = this.tablaVisitas.tableVisitsNumber2
       this.tablaVisitas3 = this.tablaVisitas.tableVisitsPercent
       this.cargaTable()
+      this.cargaOlvidados(visitas.tableOlvidadosInt)
       } catch (error) {
        console.log('Ocurrio un error')
      }
@@ -540,6 +591,7 @@ export default {
         let array = []
         array.push(res.data.tableVisits.tableVisitsNumber1, res.data.tableVisits.tableVisitsNumber1, res.data.tableVisits.tableVisitsPercent)
         this.values= array
+        this.cargaOlvidados(res.data.tableOlvidadosInt)
       })
       .catch((error) => {
         alert('Error obteniendo las visitas del año '+ this.yearSelected)
@@ -552,21 +604,23 @@ export default {
       let hour1= this.horaInicio
       let hour2= this.horaFin
       let datos= {
-        "name": this.editedItem.name,
         "description": this.editedItem.description,
         "start": this.date1+"T"+hour1+":00",
         "finish": this.date1+"T"+hour2+":00",
         "account": this.editedItem.account,
-        "reason": this.editedItem.razon,
+        "reason": this.editedItem.reason,
+        "status": this.status,
       }
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
+      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
       await axios.post(url, datos, config)
       .then((res) => {
+        console.log(res.data)
         this.$store.commit('Visits', res.data)
         localStorage.setItem('visitas', JSON.stringify(res.data))
         let visitas = res.data.calendar.listVisit
@@ -575,12 +629,14 @@ export default {
           array.push({
             id: visitas[i].visitId,
             user: visitas[i].user,
-            name: visitas[i].name,
+            /* name: visitas[i].name, */
             description: visitas[i].description,
             start: visitas[i].start.toString(),
             end: visitas[i].finish.toString(),
             account: visitas[i].account,
+            name: visitas[i].reason,
             reason: visitas[i].reason,
+            status: visitas[i].status,
             color: '#d69c4f',
           })
         }
@@ -590,7 +646,8 @@ export default {
         this.tablaVisitas2 = res.data.tableVisits.tableVisitsNumber2
         this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
         this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3)
-        toastr.success('Se agregó correctamente')
+        this.cargaOlvidados(res.data.tableOlvidadosInt)
+        toastr.success('Se guardó correctamente')
       })
       .catch((error) => {
         toastr.error('Ocurrió un error agregando la visita')
@@ -607,21 +664,24 @@ export default {
       let hour1= this.horaInicio
       let hour2= this.horaFin
       let datos= {
-        "name": this.editedItem.name,
+        "visitId": this.editedItem.id,
         "description": this.editedItem.description,
         "start": this.date1+"T"+hour1+":00",
         "finish": this.date1+"T"+hour2+":00",
         "account": this.editedItem.account,
-        "reason": this.editedItem.razon,
+        "status": this.status,
+        "reason": this.editedItem.reason,
       }
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
+      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
       await axios.put(url, datos, config)
       .then((res) => {
+        console.log(res.data)
         this.$store.commit('Visits', res.data)
         localStorage.setItem('visitas', JSON.stringify(res.data))
         let visitas = res.data.calendar.listVisit
@@ -630,12 +690,13 @@ export default {
           array.push({
             id: visitas[i].visitId,
             user: visitas[i].user,
-            name: visitas[i].name,
+            name: visitas[i].reason,
             description: visitas[i].description,
             start: visitas[i].start.toString(),
             end: visitas[i].finish.toString(),
             account: visitas[i].account,
             reason: visitas[i].reason,
+            status: visitas[i].status,
             color: '#d69c4f',
           })
         }
@@ -645,7 +706,8 @@ export default {
         this.tablaVisitas2 = res.data.tableVisits.tableVisitsNumber2
         this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
         this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3)
-        toastr.success('Se agregó correctamente')
+        this.cargaOlvidados(res.data.tableOlvidadosInt)
+        toastr.success('Se guardó correctamente')
       })
       .catch((error) => {
         toastr.error('Ocurrió un error agregando la visita')
@@ -656,6 +718,12 @@ export default {
       } 
     },
 
+    /* RECURSIVIDAD */
+    cambiaTextA(){
+      if(this.status != 'Cancelado'){
+        this.editedItem.description = ''
+      } 
+    },
     cargaTable(){
       this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3) 
     },
@@ -664,6 +732,7 @@ export default {
        try {
         this.editedIndex = this.events.indexOf(item)
         this.editedItem = Object.assign({}, item)
+        this.status = item.status
         this.dialog = true
         let fecha= ''
         let horai= ''
@@ -682,7 +751,7 @@ export default {
             fecha += item.start.charAt(i)
           }
         }
-        /*ESPERAR QYE MANDE EL ESTADO this.estado = item.state */
+        this.editedItem.status = item.status
         this.editedItem.reason = item.reason
         this.date1 = fecha
         this.horaInicio = horai
@@ -694,7 +763,7 @@ export default {
     save () {
         if (this.editedIndex > -1) {
           console.log('se edito')
-         
+          this.editVisit()
         } else {
           console.log('se añadio')
           this.addVisit()
@@ -719,11 +788,12 @@ export default {
           array.push({
             id: visitas[i].visitId,
             user: visitas[i].user,
-            name: visitas[i].name,
+            name: visitas[i].reason,
             description: visitas[i].description,
             start: visitas[i].start.toString(),
             end: visitas[i].finish.toString(),
             account: visitas[i].account,
+            status: visitas[i].status,
             reason: visitas[i].reason,
             color: '#d69c4f',
           })
@@ -733,11 +803,42 @@ export default {
         } catch (error) {
         }
       },
+      separaFecha: function(cadena){
+        let formatfecha = ''
+        for(let h=0; h<19; h++){
+             let letra = cadena.charAt(h)
+             if(letra==='T'){
+               formatfecha+=' '
+             }else{
+               formatfecha+=letra
+             } 
+        }
+        return formatfecha
+      },
+      cargaOlvidados(tableOlvidadosInt){
+        try {
+          let array = tableOlvidadosInt
+          for(let i=0; i< array.length; i++){
+            array[i].date = this.separaFecha(array[i].date.toString())
+          }
+          this.tableOlvidadosInt = array
+        } catch (error) {
+          
+        }
+      },
       verificaPermisos(){
         this.role = JSON.parse(localStorage.getItem('usuario')).role
+        this.groupSG = JSON.parse(localStorage.getItem('usuario')).groupSegment
        },
        LimpiarCampos(){
-         this.editedItem = this.defaultItem
+         this.status = ''
+         this.editedItem.reason = ''
+         this.editedItem.account = ''
+         this.date1 = this.defaultDate
+         this.editedItem.description = ''
+         this.horaInicio = null
+         this.horaFin = null
+         this.reason = ''
          this.date1 = this.defaultDate
          this.date2 = this.defaultDate
        },
