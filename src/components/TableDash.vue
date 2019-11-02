@@ -18,7 +18,7 @@
   </v-container>  
 
   <v-container class="col-md-6">
-    <v-row >
+    <v-row class="ml-4">
       <v-col>
         <v-progress-circular
         :rotate="360"
@@ -29,7 +29,8 @@
       >
         %{{ percents.room_revenue }}
       </v-progress-circular>
-      <h2 cols="auto">Room Revenue : {{percents.room_revenue}}%</h2>
+      <h3 class="text-left mt-4" cols="auto">% de concreción <!-- {{percents.room_revenue}}% --></h3>
+      <h3 cols="auto">Room Revenue : {{percents.room_revenue}}%</h3>
       </v-col>
       <v-col>
         <v-progress-circular
@@ -41,7 +42,9 @@
       >
         %{{ percents.eventos }}
       </v-progress-circular>
-      <h2 cols="auto">Event Revenue : {{percents.eventos}}%</h2>
+      <h3 class="text-left mt-4" cols="auto">% de concreción <!-- {{percents.room_revenue}}% --></h3>
+      <h3 cols="auto">Event Revenue : {{percents.eventos}}%</h3>
+
       </v-col>
     </v-row>
 

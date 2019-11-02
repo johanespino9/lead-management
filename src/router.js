@@ -7,6 +7,7 @@ import RegisterLead from './components/RegisterLead'
 import RegisterUser from './components/RegisterUser'
 import RegisterAccount from './components/RegisterAccount'
 import DashJefe from './components/BarChart'
+import DashGerente from './components/DashboardJefes'
 import ModalEdit from './components/ModalEdit'
 import Login2 from './components/Login2'
 import NotFound from './components/NotFound'
@@ -22,6 +23,11 @@ const routerEjecutivo = new Router({
       path: '/dashboard_jefes',
       name: 'dashboard_jefes',
       component: DashJefe, 
+    },
+    {
+      path: '/dashboard_gerentes',
+      name: 'dashboard_gerentes',
+      component: DashGerente, 
     },
     {
       path: '/dashboard-ejecutivos',

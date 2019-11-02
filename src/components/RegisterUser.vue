@@ -4,6 +4,7 @@
 <!-- Los que no son ejecutivos no tienen acceso -->
 <div v-if="role!='Ejecutivo'">
         <v-data-table
+            :search="search"
             :headers="headers"
             :items="desserts"
             sort-by="userId"
@@ -63,14 +64,14 @@
                                 ></v-text-field>
                               </v-col>
                               <v-col cols="20" sm="10" md="80" class=center>
-                                <v-combobox color="#d69c4f" v-model="editedItem.role" :items="rol" label="Seleccionar Rol"></v-combobox>
-          
+                                <v-combobox color="#d69c4f" @change="getManagers()" v-model="editedItem.role" :items="rol" label="Seleccionar Rol"></v-combobox>
                               </v-col>
-                          <v-col v-if="editedItem.role=='Ejecutivo'" cols="20" sm="10" md="80" class=center>
-                            <v-combobox color="#d69c4f" v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
+                          <v-col v-if="editedItem.role=='Ejecutivo' || editedItem.role == 'Supervisor de Segmento'" cols="20" sm="10" md="80" class=center>
+                            <v-combobox color="#d69c4f" @change="filtraSupervisors()" v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
                           </v-col>
-                          <v-col v-if="editedItem.role!='Administrador'" cols="20" sm="10" md="80" class=center>
-                            <v-combobox color="#d69c4f" v-model="editedItem.manager" :items="supervisors" @focus="getManagers()" label="Supervisores"></v-combobox>
+       
+                          <v-col v-if="editedItem.role=='Ejecutivo' || editedItem.role == 'Supervisor de Segmento'" cols="20" sm="10" md="80" class=center>
+                            <v-combobox color="#d69c4f" v-model="editedItem.manager" :items="supervisors"  label="Supervisores"></v-combobox>
                           </v-col>
                           <v-col cols="20" sm="10" md="80" class=center><v-switch color="#d69c4f" v-model="editedItem.active" :label="`Activo ${editedItem.active.toString()}`"></v-switch></v-col>
                         </v-row>
@@ -151,6 +152,7 @@ import { mapState, mapActions } from 'vuex';
     rol: ['Ejecutivo', 'Supervisor de Segmento', 'Gerente de ventas', 'Administrador'],
     groupSegment: ['Agencias', 'Corporativo', 'Eventos'],
     supervisors: [],
+    managers: [],
     search: "",
     desserts: [],
     editedIndex: -1,
@@ -375,13 +377,49 @@ import { mapState, mapActions } from 'vuex';
       let url = 'https://casa-andina-backend.azurewebsites.net/role/'+(this.rol.indexOf(this.editedItem.role)) +'/manager'
       await axios.get(url, config)
       .then((response) => {
-        this.supervisors=response.data
+        this.supervisors = []
+        this.managers = response.data
+        for(let i=0; i<response.data.length; i++){
+          this.supervisors.push(response.data[i].fullName)
+        } 
       })
       .catch((error) => {
         console.log(error)
         /* localStorage.removeItem('token')
         location.reload(); */
       })
+    },
+    filtraSupervisors(){
+      let gs = this.editedItem.groupSegment
+      if(this.editedItem.role == 'Ejecutivo'){
+        this.supervisors = []
+        this.editedItem.manager = ''
+        if(gs == 'Agencias'){
+          for(let i=0; i<this.managers.length; i++){
+            let gsegment = this.managers[i].groupSegment
+            if(gsegment == 'Agencias'){
+              this.supervisors.push(this.managers[i].fullName)
+            }
+          }
+        }else if(gs == 'Corporativo'){
+          for(let i=0; i<this.managers.length; i++){
+            let gsegment = this.managers[i].groupSegment
+            if(gsegment == 'Corporativo'){
+              this.supervisors.push(this.managers[i].fullName)
+            }
+          }
+          console.log('eres corporativo')
+        }else{
+          for(let i=0; i<this.managers.length; i++){
+            let gsegment = this.managers[i].groupSegment
+            if(gsegment == 'Eventos'){
+              this.supervisors.push(this.managers[i].fullName)
+            }
+          }
+        }
+      }
+      
+
     },
     Ordenamiento(){
       for(let i=0; i< this.desserts.length; i++){

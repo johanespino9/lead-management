@@ -1297,8 +1297,8 @@ export default {
       }
       let fechaInicio = new Date(f1).getTime();
       let fechaFin    =new Date(f2).getTime ();
-      let diff = fechaFin - fechaInicio;
-      let dias = (diff/(1000*60*60*24))-1
+      let diff = fechaFin - fechaInicio; 
+      let dias = (diff/(1000*60*60*24))
       if(this.editedItem.segment=='Series'){
         let mes1 = this.tarifa1 * this.habitaciones1 * this.noches1
         let mes2 = this.tarifa2 * this.habitaciones2 * this.noches2
@@ -1317,7 +1317,7 @@ export default {
         this.room_revenue = revenue
         return this.separaNumeros(revenue)
       }else {
-        let revenue = (parseInt(this.rooms)) *(parseInt(this.rateHotel)) * dias
+        let revenue = (parseInt(this.rooms)) * (parseInt(this.rateHotel)) * dias
         this.room_revenue = revenue
         return this.separaNumeros(revenue)
       }
@@ -1544,7 +1544,7 @@ export default {
            }
            if(todoleads[i].months.length>0 || todoleads[i].months.length!=null){
              for(let h=0; h<todoleads[i].months.length; h++){
-                totalmonths += todoleads[i].months[h].rateHotel * todoleads[i].months[h].nights *todoleads[i].months[h].rooms
+                totalmonths += todoleads[i].months[h].rateHotel * todoleads[i].months[h].nights * todoleads[i].months[h].rooms
               }
            }
            for(let h=0; h<19; h++){
@@ -1555,7 +1555,7 @@ export default {
                formatfecha+=letra
              } 
            }
-           totalh = todoleads[i].rateHotel * todoleads[i].rooms *  (todoleads[i].nights) + totalmonths
+           totalh = todoleads[i].rateHotel * todoleads[i].rooms *  (todoleads[i].nights+1) + totalmonths
            this.desserts.push(
              {
               account: todoleads[i].account,

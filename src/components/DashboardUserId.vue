@@ -190,10 +190,8 @@ export default {
       this.cargarAños()
       this.cargarUser()
       this.hotelSelected = '[Seleccionar todos]'
-      this.monthSelected = '[Seleccionar todos]'
-      let fecha = new Date();
-      let año = fecha.getFullYear();
-      this.yearSelected = año 
+      this.monthSelected = JSON.parse(localStorage.getItem('yearandmonth')).month
+      this.yearSelected =  JSON.parse(localStorage.getItem('yearandmonth')).year
       this.getNameHotels();
       this.FiltroDashboardPorId(this.id, this.hotelSelected, this.months, this.yearSelected)
       let Dash = JSON.parse(localStorage.getItem('dashboard'))
@@ -220,7 +218,7 @@ export default {
       }
     },
     //Filtro dashboard
-    async FiltroDashboardPorId(id, hotel, month, year){  
+    async FiltroDashboardPorId(id, hotel, month, year){ 
       let datos = {
     		"hotel": hotel,
     		"month": month.indexOf(this.monthSelected),

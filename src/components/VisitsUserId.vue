@@ -293,6 +293,7 @@
               </v-btn> -->
             </v-toolbar>
             <v-card-text>
+              <span v-html="selectedEvent.account"></span>
               <span v-html="selectedEvent.description
                 +'<br><br>Hora Inicio: '+selectedEvent.start
                 +'<br>Hora Fin: '+selectedEvent.end"
@@ -525,9 +526,7 @@ export default {
   },
    mounted (){ 
     try { 
-      var fecha = new Date();
-      var año = fecha.getFullYear();
-      this.yearSelected = año 
+      this.yearSelected = JSON.parse(localStorage.getItem('yearandmonth')).year
       this.verificaPermisos()
       this.cargarUser()
       this.getVisits()
@@ -669,7 +668,7 @@ export default {
           array.push({
             id: visitas[i].visitId,
             user: visitas[i].user,
-            name: visitas[i].reason,
+            name: visitas[i].reason+'<br>'+ visitas[i].account,
             description: visitas[i].description,
             start: visitas[i].start.toString(),
             end: visitas[i].finish.toString(),

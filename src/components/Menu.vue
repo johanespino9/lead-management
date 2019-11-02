@@ -36,7 +36,15 @@
       <v-list dense>
         <v-list-item-group >
 
-        <v-list-item color="#d69c4f" v-if="role!='Ejecutivo'" to="/dashboard_jefes">       
+        <v-list-item color="#d69c4f" v-if="role=='Supervisor de Segmento'" to="/dashboard_jefes">       
+          <v-list-item-action>
+            <v-icon>dashboard</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title> Dashboard Jefes </v-list-item-title>
+          </v-list-item-content>     
+       </v-list-item>
+       <v-list-item color="#d69c4f" v-if="role!='Ejecutivo' && role!='Supervisor de Segmento'" to="/dashboard_gerentes">       
           <v-list-item-action>
             <v-icon>dashboard</v-icon>
           </v-list-item-action>

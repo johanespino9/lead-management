@@ -263,6 +263,7 @@
               </v-btn> -->
             </v-toolbar>
             <v-card-text>
+              <span v-html="selectedEvent.account"></span>
               <span v-html="selectedEvent.description
                 +'<br><br>Hora Inicio: '+selectedEvent.start
                 +'<br>Hora Fin: '+selectedEvent.end"
@@ -636,7 +637,7 @@ export default {
             start: visitas[i].start.toString(),
             end: visitas[i].finish.toString(),
             account: visitas[i].account,
-            name: visitas[i].reason,
+            name: visitas[i].reason+'<br>'+ visitas[i].account,
             reason: visitas[i].reason,
             status: visitas[i].status,
             color: '#d69c4f',
@@ -692,7 +693,7 @@ export default {
           array.push({
             id: visitas[i].visitId,
             user: visitas[i].user,
-            name: visitas[i].reason,
+            name: visitas[i].reason+'<br>'+ visitas[i].account,
             description: visitas[i].description,
             start: visitas[i].start.toString(),
             end: visitas[i].finish.toString(),
@@ -790,7 +791,7 @@ export default {
           array.push({
             id: visitas[i].visitId,
             user: visitas[i].user,
-            name: visitas[i].reason,
+            name: visitas[i].reason+'<br>'+ visitas[i].account,
             description: visitas[i].description,
             start: visitas[i].start.toString(),
             end: visitas[i].finish.toString(),

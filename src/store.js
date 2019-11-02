@@ -368,8 +368,10 @@ export default new Vuex.Store({
         commit('tipoUser', user.role)
         if(user.role =='Ejecutivo'){
           router.push({path: '/dashboard-ejecutivos', name: 'dashboard-ejecutivos',})
-        }else{
+        }else if(user.role =='Supervisor de Segmento'){
           router.push({path: '/dashboard_jefes', name: 'dashboard_jefes'})
+        }else{
+          router.push({path: '/dashboard_gerentes', name: 'dashboard_gerentes'})
         }
       })
       .catch((error) => {

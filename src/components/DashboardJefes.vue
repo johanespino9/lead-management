@@ -1,6 +1,5 @@
 <template>
 <div>
-
     <!-- Los que no son ejecutivos no tienen acceso -->
     <div v-if="role!='Ejecutivo'">
         <div class="">
@@ -14,7 +13,7 @@
                     <v-list-item-avatar class="ml-0" color="grey darken-3">
                       <v-icon color="#fafafa">dashboard</v-icon>
                     </v-list-item-avatar>
-                    <span class="title font-weight-light" color="#FAFAFA"><h3 style="color: white">Dashboard</h3> </span>
+                    <span class="title font-weight-light" color="#FAFAFA"><h3 style="color: white">Dashboard Gerentes</h3> </span>
                     <v-list-item-content class="text-right" style="margin-top:5px">
                       <v-list-item-subtitle> <strong></strong>  </v-list-item-subtitle>
                    </v-list-item-content>
@@ -35,9 +34,9 @@
         <div class="card" style="background: #FFF; margin-top: 0px; margin-bottom: 10px; border-radius: 5px;">
             <v-container class="col-md-10">
             <v-row justify="center">
-                <v-col cols="auto">
+                <!-- <v-col cols="auto">
                 <v-combobox :items="groupSegments" v-model="groupSegment" color="#757575" label="Group Segment"></v-combobox>
-                </v-col>
+                </v-col> -->
                 <v-col cols="auto">
                 <v-combobox :items="months" v-model="monthSelected" color="#757575" label="Seleccionar Mes"></v-combobox>
                 </v-col>
@@ -71,40 +70,10 @@
                    </v-list-item-content>
                  </v-list-item>
 
-                  <!-- <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title class="headline">$</v-list-item-title>
-                      <v-list-item-subtitle><strong>Monto bruto total </strong> </v-list-item-subtitle>
-                    </v-list-item-content>
-                    <v-list-item-content class="text-right">
-                       <v-list-item-subtitle > 
-                        <v-list-item-title class="headline" style="color: black;">$</v-list-item-title>
-                        <v-list-item-subtitle><strong>Monto concretado </strong> </v-list-item-subtitle>
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item> -->
-
                 </v-card-title>
                 <div class="position-relative mb-4" style="margin-top:0;">
                   <div id="chart"></div>
                 </div>
-
-                <!-- <v-card-actions style="margin-top:0px;">
-                  <v-list-item class="grow">
-                    <v-list-item-avatar color="grey darken-3">
-                      <v-img
-                        class="elevation-6"
-                        src="../assets/avatar2.jpg"
-                      ></v-img>
-                    </v-list-item-avatar>
-
-                    <v-list-item-content>
-                      <v-list-item-title><a class="link" href="#">Luis</a></v-list-item-title>
-                      <v-list-item-subtitle>$500000</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item> 
-
-                </v-card-actions>  -->
               </v-card>
             </div>
           </div>
@@ -129,40 +98,11 @@
                    </v-list-item-content>
                  </v-list-item>
 
-                  <!-- <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title class="headline">$</v-list-item-title>
-                      <v-list-item-subtitle><strong>Monto bruto total </strong> </v-list-item-subtitle>
-                    </v-list-item-content>
-                    <v-list-item-content class="text-right">
-                       <v-list-item-subtitle > 
-                        <v-list-item-title class="headline" style="color: black;">$</v-list-item-title>
-                        <v-list-item-subtitle><strong>Monto concretado </strong> </v-list-item-subtitle>
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item> -->
-
                 </v-card-title>
                 <div class="position-relative mb-4" style="margin-top:0;">
                   <div id="chart2"></div>
                 </div>
 
-                <!-- <v-card-actions style="margin-top:0px;">
-                  <v-list-item class="grow">
-                    <v-list-item-avatar color="grey darken-3">
-                      <v-img
-                        class="elevation-6"
-                        src="../assets/avatar2.jpg"
-                      ></v-img>
-                    </v-list-item-avatar>
-
-                    <v-list-item-content>
-                      <v-list-item-title><a class="link" href="#">Luis</a></v-list-item-title>
-                      <v-list-item-subtitle>$500000</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item> 
-
-                </v-card-actions>  -->
               </v-card>
             </div>
           </div>
@@ -412,7 +352,7 @@ export default {
         if(localStorage.length>=8){
             this.$store.dispatch('stateToken')
         }
-        console.clear() 
+        /* console.clear() */
         } catch (error) {
         }
    
@@ -1218,10 +1158,17 @@ export default {
         let data_concretado = []
         if(tipo==1){ //hoteles
           for(let i=0; i<data.dashboardRateHotel.length; i++){
-              ids.push(data.dashboardRateHotel[i].user_id)
+              if(data.dashboardRateHotel[i].group_segment == 'Corporativo'){
+                
+                ids.push(data.dashboardRateHotel[i].user_id)
+                ejecutivos.push('Corporativo')
+                data_concretado.push(data.dashboardRateHotel[i].rate_hotel)
+                data_bruto.push(data.dashboardRateHotel[i].total)
+              }
+              /* ids.push(data.dashboardRateHotel[i].user_id)
               ejecutivos.push(data.dashboardRateHotel[i].name+" "+data.dashboardRateHotel[i].last_name)
               data_concretado.push(data.dashboardRateHotel[i].rate_hotel)
-              data_bruto.push(data.dashboardRateHotel[i].total)
+              data_bruto.push(data.dashboardRateHotel[i].total) */
           }
           this.updateGraficos(chart,"Monto concretado","Total", data_concretado, data_bruto, ejecutivos, ids)
         }else if(tipo==2){//eventos
@@ -1232,7 +1179,7 @@ export default {
               data_bruto.push(data.dashboardRateEvents[i].total)
           }
           this.updateGraficos(chart,"Monto concretado","Total",  data_concretado, data_bruto, ejecutivos, ids)
-        }else{
+        }else{//visitas
           for(let i=0; i<data.tableVisitInt.length; i++){
               ids.push(data.tableVisitInt[i].user_Id)
               ejecutivos.push(data.tableVisitInt[i].name+" "+data.tableVisitInt[i].last_Name)
@@ -1250,7 +1197,7 @@ export default {
    async Filtro(){
       /* this.resetFiltro()  */
       let datos = {
-        "groupSegment": this.groupSegment,
+        /* "groupSegment": this.groupSegment, */
     		"month": this.months.indexOf(this.monthSelected),
     		"year": this.yearSelected
       }
@@ -1259,24 +1206,24 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/jefes'
+      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/gerentes'
       await axios.post(url, datos, config)
       .then(response =>{ 
           let fec = {}
+          console.log(response.data)
           if(this.monthSelected!='[Seleccionar todos]' || this.groupSegment != '[Seleccionar todos]'){
             fec = {
-                    groups: this.groupSegment,
+                    /* groups: this.groupSegment, */
                     year:this.yearSelected,
                     month: this.monthSelected
                   }
           }else{
             fec = {
-                    groups: this.groupSegment,
+                    /* groups: this.groupSegment, */
                     year:this.yearSelected,
                     month: ''
                   }
           } 
-          
           this.preparaFiltro(this.chart, response.data, 1)
           this.preparaFiltro(this.chart2, response.data, 2)
           this.preparaFiltro(this.chart3, response.data, 3)
@@ -1315,31 +1262,115 @@ export default {
         let array1 = []
         let array2 = []
         let array3 = []
+        let rate1 = 0, rate2 = 0, rate3 =0
+        let total1 = 0, total2 = 0, total3 = 0
+        let taux = 0, taux2 = 0, taux3 = 0
+        //HOTELES
         for(let i=0; i< data.dashboardRateHotel.length; i++){
-            let diff = (parseInt(data.dashboardRateHotel[i].rate_hotel)*100)/parseInt(data.dashboardRateHotel[i].total)
-            if(data.dashboardRateHotel[i].total == 0){
-              diff = 0
+            if(data.dashboardRateHotel[i].group_segment == 'Agencias'){
+                rate1 += data.dashboardRateHotel[i].rate_hotel
+                total1 +=  data.dashboardRateHotel[i].total
+
+            }else if(data.dashboardRateHotel[i].group_segment == 'Corporativo'){
+                rate2 += data.dashboardRateHotel[i].rate_hotel
+                total2 +=  data.dashboardRateHotel[i].total
+            }else{
             }
-            array1.push({
-            name: data.dashboardRateHotel[i].name+' '+data.dashboardRateHotel[i].last_name,
-            mbruto: this.separaNumeros(data.dashboardRateHotel[i].total),
-            mconcretado: this.separaNumeros(data.dashboardRateHotel[i].rate_hotel),
-            diferencia: this.separaNumeros(diff)+"%"
-          })
         }
+        if(total1==0){total1=1}
+        if(total2==0){total2=1}
+        if(total3==0){total3=1}
+        array1.push({
+            name: 'Agencias',
+            mbruto: this.separaNumeros(total1),
+            mconcretado: this.separaNumeros(rate1),
+            diferencia: this.separaNumeros((rate1/total1)*100)+"%"
+        },{
+            name: 'Corporativo',
+            mbruto: this.separaNumeros(total2),
+            mconcretado: this.separaNumeros(rate2),
+            diferencia: this.separaNumeros((rate2/total2)*100)+"%"
+        })
+        //EVENTOS
+        rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
         for(let i=0; i< data.dashboardRateEvents.length; i++){
-            let diff = (parseInt(data.dashboardRateEvents[i].rate_events)*100)/parseInt(data.dashboardRateEvents[i].total)
-            if(data.dashboardRateEvents[i].total == 0){
-              diff = 0
+            if(data.dashboardRateEvents[i].group_segment == 'Agencias'){
+                rate1 += data.dashboardRateEvents[i].rate_events
+                total1 +=  data.dashboardRateEvents[i].total
+
+            }else if(data.dashboardRateEvents[i].group_segment == 'Corporativo'){
+                rate2 += data.dashboardRateEvents[i].rate_events
+                total2 +=  data.dashboardRateEvents[i].total
+            }else{
+                rate3 += data.dashboardRateEvents[i].rate_events
+                total3 +=  data.dashboardRateEvents[i].total
             }
-            array2.push({
-            name: data.dashboardRateHotel[i].name+' '+data.dashboardRateHotel[i].last_name,
-            mbruto: this.separaNumeros(data.dashboardRateEvents[i].total),
-            mconcretado: this.separaNumeros(data.dashboardRateEvents[i].rate_events),
-            diferencia: this.separaNumeros(diff)+"%"
-          })
         }
+        if(total1==0){total1=1}
+        if(total2==0){total2=1}
+        if(total3==0){total3=1}
+        array2.push({
+            name: 'Agencias',
+            mbruto: this.separaNumeros(total1),
+            mconcretado: this.separaNumeros(rate1),
+            diferencia: this.separaNumeros((rate1/total1)*100)+"%"
+        },{
+            name: 'Corporativo',
+            mbruto: this.separaNumeros(total2),
+            mconcretado: this.separaNumeros(rate2),
+            diferencia: this.separaNumeros((rate2/total2)*100)+"%"
+        },
+        {
+            name: 'Eventos',
+            mbruto: this.separaNumeros(total3),
+            mconcretado: this.separaNumeros(rate3),
+            diferencia: this.separaNumeros((rate3/total2)*100)+"%"
+        })
+        //VISITAS
+        rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
+        let visit1=0, visit2=0, visit3=0
         for(let i=0; i< data.tableVisitInt.length; i++){
+            if(data.tableVisitInt[i].group_segment == 'Agencias'){
+                rate1 += data.tableVisitInt[i].suma
+                total1 +=  100
+                visit1 += data.tableVisitInt[i].number_Of_Visits
+            }else if(data.tableVisitInt[i].group_segment == 'Corporativo'){
+                rate2 += data.tableVisitInt[i].suma
+                total2 +=  100
+                visit3 += data.tableVisitInt[i].number_Of_Visits
+            }else{
+                rate3 += data.tableVisitInt[i].suma
+                total3 +=  100
+                visit3 += data.tableVisitInt[i].number_Of_Visits
+            }
+        }
+        if(total1==0){total1=1}
+        if(total2==0){total2=1}
+        if(total3==0){total3=1}
+        array3.push({
+            name: 'Agencias',
+            number_Of_Visits: visit1,
+            pbruto: this.separaNumeros(total1)+"%",
+            pconcretado: this.separaNumeros(rate1)+"%",
+            diferencia: this.separaNumeros((rate1/total1)*100)+"%"
+        },{
+            name: 'Corporativo',
+            number_Of_Visits: visit2,
+            pbruto: this.separaNumeros(total2)+"%",
+            pconcretado: this.separaNumeros(rate2)+"%",
+            diferencia: this.separaNumeros((rate2/total2)*100)+"%"
+        },
+        {
+            name: 'Eventos',
+            number_Of_Visits: visit3,
+            pbruto: this.separaNumeros(total3)+"%",
+            pconcretado: this.separaNumeros(rate3)+"%",
+            diferencia: this.separaNumeros((rate3/total2)*100)+"%"
+        })
+
+
+ 
+       /*  for(let i=0; i< data.tableVisitInt.length; i++){
             array3.push({
             name: data.tableVisitInt[i].name+' '+data.tableVisitInt[i].last_Name,
             number_Of_Visits: data.tableVisitInt[i].number_Of_Visits,
@@ -1349,7 +1380,7 @@ export default {
           })
           
         }
-  
+   */
         this.desserts1 = array1
         this.desserts2 = array2
         this.desserts3 = array3
@@ -1373,37 +1404,126 @@ export default {
           this.aux1 = []
           this.aux2 = []
           this.aux3 = []
+          let rate1 = 0, rate2 = 0, rate3 =0
+          let total1 = 0, total2 = 0, total3 = 0
+          let taux = 0, taux2 = 0, taux3 = 0
+          //Hoteles
           for(let i=0; i<data.dashboardRateHotel.length; i++){
-            this.ids1.push(data.dashboardRateHotel[i].user_id)
-            this.ej1.push(data.dashboardRateHotel[i].name+" "+data.dashboardRateHotel[i].last_name)
-            this.data1.push(data.dashboardRateHotel[i].rate_hotel)
-            if(data.dashboardRateHotel[i].total < data.dashboardRateHotel[i].rate_hotel){
-              this.data2.push(data.dashboardRateHotel[i].total)
-              this.aux1.push(data.dashboardRateHotel[i].total)
+            if(data.dashboardRateHotel[i].group_segment == 'Agencias'){
+                rate1 += data.dashboardRateHotel[i].rate_hotel
+                taux += data.dashboardRateHotel[i].total
+                if(data.dashboardRateHotel[i].total<data.dashboardRateHotel[i].rate_hotel){
+                    total1 +=  data.dashboardRateHotel[i].total
+                }else{
+                    total1 += (data.dashboardRateHotel[i].total-data.dashboardRateHotel[i].rate_hotel)
+                }
+            }else if(data.dashboardRateHotel[i].group_segment == 'Corporativo'){
+                rate2 += data.dashboardRateHotel[i].rate_hotel
+                taux2 += data.dashboardRateHotel[i].total
+                if(data.dashboardRateHotel[i].total<data.dashboardRateHotel[i].rate_hotel){
+                    total2 +=  data.dashboardRateHotel[i].total
+                }else{
+                    total2 += (data.dashboardRateHotel[i].total-data.dashboardRateHotel[i].rate_hotel)
+                }  
             }else{
-              this.data2.push(data.dashboardRateHotel[i].total-data.dashboardRateHotel[i].rate_hotel)
-              this.aux1.push(data.dashboardRateHotel[i].total)
+                console.log('no habia')
             }
           }
-          for(let i=0; i<data.dashboardRateEvents.length; i++){
-            this.ids2.push(data.dashboardRateEvents[i].user_id)
-            this.ej2.push(data.dashboardRateEvents[i].name+" "+data.dashboardRateEvents[i].last_name)
-            this.data3.push(data.dashboardRateEvents[i].rate_events)
-            if(data.dashboardRateEvents[i].total < data.dashboardRateEvents[i].rate_events){
-              this.data4.push(data.dashboardRateEvents[i].total)
-              this.aux2.push(data.dashboardRateEvents[i].total)
-            }else{
-              this.data4.push(data.dashboardRateEvents[i].total-data.dashboardRateEvents[i].rate_events)
-              this.aux2.push(data.dashboardRateEvents[i].total)
-            }
-          }
+          /* if(rate1>0 || total1>0){
+            this.ej1.push('Agencias')
+            this.data1.push(rate1)
+            this.data2.push(total1)
+            this.aux1.push(taux)
+          }else if(rate2>0 || total2>0){
+            this.ej1.push('Corporativo')
+            this.data1.push(rate2)
+            this.data2.push(total2)
+            this.aux1.push(taux2)
+          } */
+
+            this.ej1.push('Agencias','Corporativo')
+            this.data1.push(rate1,rate2)
+            this.data2.push(total1,total2)
+            this.aux1.push(taux,taux2)
+          
+          //VISITAS
+          rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
+          let c1=0,c2=0,c3=0
           for(let i=0; i<data.tableVisitInt.length; i++){
-            this.ids3.push(data.tableVisitInt[i].user_Id)
-            this.ej3.push(data.tableVisitInt[i].name+" "+data.tableVisitInt[i].last_Name)
-            this.data5.push(parseInt(data.tableVisitInt[i].suma))
-            this.data6.push(100-data.tableVisitInt[i].suma)
-            this.aux3.push(100)
+            if(data.tableVisitInt[i].group_segment == 'Agencias'){
+                rate1 += data.tableVisitInt[i].suma
+                c1++     
+            }else if(data.tableVisitInt[i].group_segment == 'Corporativo'){
+                rate2 += data.tableVisitInt[i].suma
+                c2++
+            }else{
+                rate3 += data.tableVisitInt[i].suma
+                c3++            
+            }
           }
+          taux = 100
+          let percent1= ((rate1/(c1*100))*100)
+          let percent2= ((rate2/(c2*100))*100)
+          let percent3= ((rate3/(c3*100))*100)
+          if(c1==0){percent1=0}
+          if(c2==0){percent2=0}
+          if(c3==0){percent3=0}
+          this.ej3.push('Agencias', 'Corporativo', 'Eventos')
+          this.data5.push(percent1, percent2, percent3)
+          this.data6.push((100-percent1), (100-percent2), (100-percent3))
+          this.aux3.push(taux, taux, taux)
+          //Eventos
+          rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
+          for(let i=0; i<data.dashboardRateEvents.length; i++){
+            if(data.dashboardRateEvents[i].group_segment == 'Agencias'){
+                rate1 += data.dashboardRateEvents[i].rate_events
+                taux += data.dashboardRateEvents[i].total
+                if(data.dashboardRateEvents[i].total<data.dashboardRateEvents[i].rate_events){
+                    total1 +=  data.dashboardRateEvents[i].total
+                }else{
+                    total1 += (data.dashboardRateEvents[i].total-data.dashboardRateEvents[i].rate_events)
+                }       
+            }else if(data.dashboardRateEvents[i].group_segment == 'Corporativo'){
+                rate2 += data.dashboardRateEvents[i].rate_events
+                taux2 += data.dashboardRateEvents[i].total
+                if(data.dashboardRateEvents[i].total<data.dashboardRateEvents[i].rate_events){
+                    total2 +=  data.dashboardRateEvents[i].total
+                }else{
+                    total2 += (data.dashboardRateEvents[i].total-data.dashboardRateEvents[i].rate_events)
+                }            
+            }else{
+                rate3 += data.dashboardRateEvents[i].rate_events
+                taux3 += data.dashboardRateEvents[i].total
+                if(data.dashboardRateEvents[i].total<data.dashboardRateEvents[i].rate_events){
+                    total3 +=  data.dashboardRateEvents[i].total
+                }else{
+                    total3 += (data.dashboardRateEvents[i].total-data.dashboardRateEvents[i].rate_events)
+                }             
+            }
+          }
+          /* if(total1>0 || rate1>0){
+            this.ej2.push('Agencias')
+            this.data3.push(rate1)
+            this.data4.push(total1)
+            this.aux2.push(taux)
+         }else if(total2>0 || rate2>0){
+            this.ej2.push('Corporativo')
+            this.data3.push(rate2)
+            this.data4.push(total2)
+            this.aux2.push(taux2)
+         }else if(total3>0 || rate3>0){
+            this.ej2.push('Eventos')
+            this.data3.push(rate3)
+            this.data4.push(total3)
+            this.aux2.push(taux3)
+         } */
+
+            this.ej2.push('Agencias', 'Corporativo', 'Eventos')
+            this.data3.push(rate1, rate2, rate3)
+            this.data4.push(total1, total2, total3)
+            this.aux2.push(taux, taux2, taux3)
+         
+          
         }else{
           this.resetFiltro()
         }
