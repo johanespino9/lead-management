@@ -27,7 +27,7 @@
           </div>
           </div>
         </div>
-        
+     
         <!-- COMIENZAN LOS CARDS -->
     <div class="wrapper">
       
@@ -72,7 +72,8 @@
 
                 </v-card-title>
                 <div class="position-relative mb-4" style="margin-top:0;">
-                  <div id="chart"></div>
+                  <div id="chart">
+                  </div>
                 </div>
               </v-card>
             </div>
@@ -226,11 +227,203 @@
 
           </div>
         </div>
-
-
-
       </div>
+
+      <v-btn id="btn-modal1" color="#000000" style="display:none;" dark @click="abreModalHoteles()">Abrir Modal</v-btn>
+      <v-btn id="btn-modal2" color="#000000" style="display:none;" dark @click="abreModalEventos()">Abrir Modal</v-btn>
+      <v-btn id="btn-modal3" color="#000000" style="display:none;" dark @click="abreModalVisitas()">Abrir Modal</v-btn>
+
+      <v-dialog v-model="dialog" persistent max-width="1200px" hide-overlay transition="dialog-bottom-transition">   
+            <!-- <template v-slot:activator="{ on }">
+                <v-btn color="#000000" dark v-on="on">Nueva Reserva</v-btn>
+            </template> -->
       
+         <v-card>
+                <!-- <v-toolbar dark color="#000000">
+                <v-btn icon dark @click="dialog = false">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>
+                  <v-container>
+                    Ejecutivos del Grupo de Segmento {{dataModal.groupSegment}}-
+                  </v-container>
+                </v-toolbar-title>
+                <v-toolbar-title class="text-right">Hoteles</v-toolbar-title>
+                <div class="flex-grow-1"></div>
+                <v-toolbar-items>
+                    
+                </v-toolbar-items>
+                </v-toolbar> -->
+                <v-card color="#000000" >
+                <v-card-title>
+                  <v-list-item two-line>
+                    <v-list-item-avatar class="ml-0" color="grey darken-3">
+                      <v-btn icon dark @click="dialog = false">
+                          <v-icon>mdi-close</v-icon>
+                      </v-btn>
+                    </v-list-item-avatar>
+                    <span class="title font-weight-light" color="#FAFAFA"><h5 style="color: white"> Ejecutivos del Grupo de Segmento {{dataModal.groupSegment}} - {{dataModal.type}}</h5> </span>
+                    <v-list-item-content class="text-right" style="margin-top:5px">
+                      <v-list-item-subtitle> <strong>Hoteles</strong>  </v-list-item-subtitle>
+                   </v-list-item-content>
+                 </v-list-item>
+                </v-card-title>
+                <div class="position-relative mb-4" style="margin-top:0;">
+                    
+                </div>
+              </v-card>
+                <v-list three-line subheader>
+                <v-list-item>
+                  <v-container justify-center>
+                      <div id="div1" class="position-relative mb-4 text-center" style="margin-top:0;">
+                        <div id="chart4"></div>
+                      </div>
+                  </v-container>
+                  
+                    <!-- <v-list-item-content>
+                    <v-list-item-title>Filtrar por:</v-list-item-title>
+                    <v-list-item-subtitle>
+                        <v-row>
+                            <v-col cols="12" sm="2">
+                                <v-combobox
+                                :items="items"
+                                label="Elija la clase de auto"
+                                ></v-combobox>
+                            </v-col>
+                            <v-col cols="12" sm="2">
+                                <v-combobox
+                                :items="autos2"
+                                label="Elija el modelo de auto"
+                                ></v-combobox>
+                            </v-col>
+                            <v-col cols="12" sm="2">
+                                <v-menu
+                                v-model="menu1"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                max-width="290px"
+                                min-width="290px"
+                                >
+                                <template v-slot:activator="{ on }">
+                                    <v-text-field
+                                    v-model="date"
+                                    label="Fecha Inicio"
+                                    hint="YYYY/MM/DD"
+                                    persistent-hint
+                                    prepend-icon="event"
+                                    @blur="date = parseDate(dateFormatted)"
+                                    v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
+                                </v-menu>
+                            </v-col>
+
+                            <v-col cols="12" sm="2">
+                                <v-menu
+                                v-model="menu2"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                max-width="290px"
+                                min-width="290px"
+                                >
+                                <template v-slot:activator="{ on }">
+                                    <v-text-field
+                                    v-model="date2"
+                                    label="Fecha fin"
+                                    hint="YYYY/MM/DD"
+                                    persistent-hint
+                                    prepend-icon="event"
+                                    @blur="date = parseDate(dateFormatted2)"
+                                    v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker v-model="date2" no-title @input="menu2 = false"></v-date-picker>
+                                </v-menu>
+                            </v-col>
+                            <v-col cols="12" sm="4">
+                                <v-combobox
+                                :items="ciudades"
+                                label="Elija la ciudad"
+                                ></v-combobox>
+                            </v-col>
+                        </v-row>
+                    </v-list-item-subtitle>
+                    </v-list-item-content> -->
+                </v-list-item>
+                </v-list>
+                <v-divider></v-divider>
+
+                <v-data-table
+                    :headers="headers_usersg"
+                    :items="groups_user"
+                    
+                    item-key="name"
+                    
+                    :items-per-page="5"
+                    class="elevation-1"
+                >
+                    <template v-slot:expanded-item="{ headers }">
+                        <div class="container">
+                        <v-row >
+                            <v-col >
+                              <!-- <img src="../assets/toyota-yaris-fg.jpg" alt="">   -->
+                              <v-btn color="#000000" style="color: white;" >Elegir este Vehículo</v-btn>
+                            </v-col>
+                            <v-col >
+                                <p>Marca: Toyota</p>
+                                <p>Modelo: Yaris</p>
+                                <p>Año: 2005</p>
+                                <p>Motor: B10SWR20KASA</p>                                
+                            </v-col>
+                            <v-col >
+                                <p>Placa: XCS-587</p>
+                                <p>Chasis: AYTEJDL</p>
+                                <p>Tipo: Mecánico</p>
+                                <p>Asientos: 4</p>                                
+                            </v-col> 
+                            <v-col >
+                                <p>Costo x dia: S/ 80.00</p>
+                                <p>Fecha I: 10/11/2019</p>
+                                <p>Fecha Fin: 10/12/2019</p>   
+                                <p>Total: S/ 2400.00</p>                             
+                            </v-col>
+                            
+                        </v-row>
+                        </div>
+                    </template>
+                    <template v-slot:item.action="{ item }">
+                    <!-- <v-icon
+                      small
+                      class="mr-2"
+                      @click="editItem(item)"
+                    >
+                      edit
+                    </v-icon> -->
+                    <v-btn @click="visitarUsuario(item)">
+                      Visitar perfil
+                      <v-icon > supervised_user_circle</v-icon>
+                      </v-btn>
+                    <!-- <v-icon
+                      small
+                      @click="deleteItem(item)"
+                    >
+                      delete
+                    </v-icon> -->
+                  </template>
+                </v-data-table>
+
+            </v-card>
+            </v-dialog>
+
+           
+
+      
+
     </div>
     
     <div v-if="role=='Ejecutivo'"> 
@@ -248,10 +441,51 @@ export default {
     NotFound
   },
     data: () => ({
+      /* elimiar luego desde aca */
+      ciudades:[
+            'Santiago de surco',
+            'Lima'
+        ],
+        search: '',
+        date: new Date().toISOString().substr(0, 10),
+        date2: new Date().toISOString().substr(0, 10),
+      autos:[
+            {
+             name:'Toyota Yaris - First generation',
+             tipo: 'Básico',
+             modelo: 'Yaris', 
+             año: '2005',
+             ciudad: 'Santiago de surco'    
+            },
+            {
+             name:'Toyota Corolla Base aut',
+             tipo: 'Básico',
+             modelo: 'Corolla', 
+              año: '2008',  
+             ciudad: 'Santiago de surco'      
+            },
+                 
+        ],
+        dialog: false,
+        notifications: false,
+        sound: true,
+        widgets: false,
+        menu1: false,  
+        menu2: false,
+        select: 'Básico',
+        expanded: [],
+        singleExpand: false,
+
+        /* HASTA ACA */
+      dataModal:{
+        groupSegment: '',
+        type: ''
+      },
       role: '',
       chart: null,
       chart2: null,
       chart3: null,
+      chart4: null,
       groupSegment: '[Seleccionar todos]',
       yearSelected: "",
       monthSelected : "",
@@ -275,6 +509,13 @@ export default {
           { text: 'Total $', sortable: true, value: 'mbruto' },
           { text: 'Concretado $', sortable: true, value: 'mconcretado' },
           { text: '% de Concreción', sortable: true, value: 'diferencia' },
+        ],
+        headers_usersg: [
+          { text: 'Nombre', align: 'left', value: 'name',},
+          { text: 'Total $', sortable: true, value: 'mbruto' },
+          { text: 'Concretado $', sortable: true, value: 'mconcretado' },
+          { text: '% de Concreción', sortable: true, value: 'diferencia' },
+          { text: 'Actions', value: 'action', sortable: false },
         ],
         headers_visits: [
           { text: 'Nombre', align: 'left', value: 'name',},
@@ -300,8 +541,13 @@ export default {
 
         ids3:[],
         data5: [],
-        data5:[],
+        data6:[],
         ej3: [],
+
+        ids4:[],
+        data7: [],
+        data8:[],
+        ej4: [],
 
         aux1: [],
         aux2: [],
@@ -314,14 +560,16 @@ export default {
         pageCount2: 0,
         page3: 1,
         pageCount3: 0,
+        groups_user:[],
 
+        auxiliarg4:[],
     }),
     computed: {
-        ...mapState(['accessToken'])
+        ...mapState(['accessToken']),
     },
     mounted() {
         try {
-        let data = JSON.parse(localStorage.getItem('dashjefe'))
+        let data = JSON.parse(localStorage.getItem('dashgerente'))
         if(JSON.parse(localStorage.getItem('yearandmonth'))==null){
         this.monthSelected = '[Seleccionar todos]'
         this.groupSegment = '[Seleccionar todos]'
@@ -348,20 +596,712 @@ export default {
         this.graph1(this.chart)
         this.graph2(this.chart2)
         this.graph3(this.chart3)
+        this.graph4(this.chart4)
         this.cargarTablas(data)
         if(localStorage.length>=8){
             this.$store.dispatch('stateToken')
         }
-        /* console.clear() */
+        console.clear() 
         } catch (error) {
+
         }
    
     },
     /* updated() {
-      let data = JSON.parse(localStorage.getItem('dashjefe'))
+      let data = JSON.parse(localStorage.getItem('dashgerente'))
       this.cargarDataInicial(data)
     },  */
     methods: {
+    abreModalHoteles(){
+      try {
+        this.groups_user = []
+        let {nombre} =  JSON.parse(localStorage.getItem('leads-user')).datos
+        let {dashboardRateHotel} = JSON.parse(localStorage.getItem('dashgerente'))
+        let aux = []
+        let mbruto = []
+        let mconcretado = []
+        let ejecutivos = []
+        let ids = []
+        this.auxiliarg4 = []
+        var array = dashboardRateHotel.map( item => { 
+          let temporal = ((item.rate_hotel*100) /item.total)
+          let montoB = item.total
+          let concretado = item.rate_hotel
+          let names = item.name+" "+item.last_name
+          delete item.porcentaje_concrecion;
+          delete item.rate_hotel;
+          delete item.total;
+          delete item.last_name;
+          item.name = names
+          item.diferencia = temporal.toFixed(2)+'%';
+          item.mbruto = this.separaNumeros(montoB)
+          item.mconcretado = this.separaNumeros(concretado)
+          item.concretado = concretado
+          item.bruto = montoB
+          if(item.group_segment == nombre){
+            this.dataModal.groupSegment = item.group_segment
+            this.dataModal.type = 'Hoteles'
+            mbruto.push(parseInt(montoB)-parseInt(item.concretado))
+            mconcretado.push(parseInt(item.concretado))
+            ejecutivos.push(item.name)
+            this.auxiliarg4.push(parseInt(item.bruto))
+            ids.push(parseInt(item.user_id))
+            return aux.push(item)
+          }else{
+            return
+          }
+        });
+        this.chart4 = null
+        this.data7 = mbruto
+        this.data8 = mconcretado
+        this.ej4 = ejecutivos
+        this.ids4 = ids
+        let auxiliar = this.auxiliarg4
+        setTimeout(() => {
+          let aux = this.auxiliarg4
+          this.graph4(this.chart4)
+          this.chart4.updateSeries([
+              {
+                name: 'Monto concretado',
+                data: mconcretado
+              },{   
+                name: 'Monto total',
+                data: mbruto
+              },
+          ])
+        this.chart4.updateOptions({
+        chart: {
+                background: '#fff',
+                height: 350,
+                type: 'bar',
+                stacked: true,
+                events: {
+                    click: function(chart, w, e) {
+                     if(e.dataPointIndex>=0){
+                        let user = {
+                            datos:{
+                                "user_id": ids[e.dataPointIndex],
+                                "nombre": ejecutivos[e.dataPointIndex],
+                            },
+                            leads:[],
+                        }
+                        localStorage.setItem('leads-user', JSON.stringify(user))
+                        swal({
+                          title: `Seguro que deseas visitar el dashboard del ejecutivo ${ejecutivos[e.dataPointIndex]}?`,
+                          text: "La siguiente accion redireccionara la pagina!",
+                          icon: "warning",
+                          buttons: true,
+                          dangerMode: false,
+                        })
+                        .then((willDelete) => {
+                          if (willDelete) {
+                            window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+                          } 
+                        }); 
+                        
+                    }
+                    }
+                },
+                toolbar: {
+                    show: true
+                },
+                zoom: {
+                    enabled: true
+                }
+        },
+        xaxis: {
+            type: 'category',
+            categories: ejecutivos,
+            labels: {
+              style: {
+                fontStyle: 'arial',
+                fontSize: '14px'
+              }
+            }, 
+            labels: {
+            show: true,
+            rotate: -45,
+            rotateAlways: false,
+            hideOverlappingLabels: true,
+            showDuplicates: false,
+            trim: true,
+            minHeight: undefined,
+            maxHeight: 120,
+            style: {
+                colors: [],
+                fontSize: '12px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                cssClass: 'apexcharts-xaxis-label',
+            },
+            offsetX: 0,
+            offsetY: 0,
+            format: undefined,
+            formatter: undefined,
+            datetimeFormatter: {
+                year: 'yyyy',
+                month: "MMM 'yy",
+                day: 'dd MMM',
+                hour: 'HH:mm',
+            },
+            },
+          },
+          yaxis:[
+            {
+            labels: {
+            formatter: function(val, e) {
+                let num = val.toFixed(2);; 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
+            }
+            },  
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false,
+            },
+          },  
+
+          ],
+          tooltip: {
+              enabled: true,
+            y: {
+              formatter: function (val, e){
+                e.series[1][e.dataPointIndex] = auxiliar[e.dataPointIndex]
+                let num = val.toFixed(2) 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
+              }
+            },
+            x: {
+            show: true,
+            format: 'dd MMM',
+            formatter: undefined,
+            },
+          }  
+      })
+        }, 500);
+        this.groups_user = aux
+        this.dialog = true
+        console.clear() 
+        } catch (error) {  
+        }
+    },
+    abreModalEventos(){
+      try {
+        this.groups_user = []
+        let {nombre} =  JSON.parse(localStorage.getItem('leads-user')).datos
+        let {dashboardRateEvents} = JSON.parse(localStorage.getItem('dashgerente'))
+        let aux = []
+        let mbruto = []
+        let mconcretado = []
+        let ejecutivos = []
+        let ids = []
+        this.auxiliarg4 = []
+        var array = dashboardRateEvents.map( item => { 
+          let temporal = ((item.rate_events*100) /item.total)
+          let montoB = item.total
+          let concretado = item.rate_events
+          let names = item.name+" "+item.last_name
+          delete item.porcentaje_concrecion;
+          delete item.rate_events;
+          delete item.total;
+          delete item.last_name;
+          item.name = names
+          item.diferencia = temporal.toFixed(2)+'%';
+          item.mbruto = this.separaNumeros(montoB)
+          item.mconcretado = this.separaNumeros(concretado)
+          item.concretado = concretado
+          item.bruto = montoB
+          if(item.group_segment == nombre){
+            this.dataModal.groupSegment = item.group_segment
+            this.dataModal.type = 'Eventos'
+            mbruto.push(parseInt(montoB)-parseInt(item.concretado))
+            mconcretado.push(parseInt(item.concretado))
+            ejecutivos.push(item.name)
+            this.auxiliarg4.push(parseInt(item.bruto))
+            ids.push(parseInt(item.user_id))
+            return aux.push(item)
+          }else{
+            return
+          }
+        });
+        this.chart4 = null
+        this.data7 = mbruto
+        this.data8 = mconcretado
+        this.ej4 = ejecutivos
+        this.ids4 = ids
+        let auxiliar = this.auxiliarg4
+        setTimeout(() => {
+          let aux = this.auxiliarg4
+          this.graph4(this.chart4)
+          this.chart4.updateSeries([
+              {
+                name: 'Monto concretado',
+                data: mconcretado
+              },{   
+                name: 'Monto total',
+                data: mbruto
+              },
+          ])
+        this.chart4.updateOptions({
+        chart: {
+                background: '#fff',
+                height: 350,
+                type: 'bar',
+                stacked: true,
+                events: {
+                    click: function(chart, w, e) {
+                     if(e.dataPointIndex>=0){
+                       console.log(ids[e.dataPointIndex])
+                        let user = {
+                            datos:{
+                                "user_id": ids[e.dataPointIndex],
+                                "nombre": ejecutivos[e.dataPointIndex],
+                            },
+                            leads:[],
+                        }
+                        localStorage.setItem('leads-user', JSON.stringify(user))
+                        swal({
+                          title: `Seguro que deseas visitar el dashboard del ejecutivo ${ejecutivos[e.dataPointIndex]}?`,
+                          text: "La siguiente accion redireccionara la pagina!",
+                          icon: "warning",
+                          buttons: true,
+                          dangerMode: false,
+                        })
+                        .then((willDelete) => {
+                          if (willDelete) {
+                            window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+                          } 
+                        }); 
+                    }
+                    }
+                },
+                toolbar: {
+                    show: true
+                },
+                zoom: {
+                    enabled: true
+                }
+        },
+        xaxis: {
+            type: 'category',
+            categories: ejecutivos,
+            labels: {
+              style: {
+                fontStyle: 'arial',
+                fontSize: '14px'
+              }
+            }, 
+            labels: {
+            show: true,
+            rotate: -45,
+            rotateAlways: false,
+            hideOverlappingLabels: true,
+            showDuplicates: false,
+            trim: true,
+            minHeight: undefined,
+            maxHeight: 120,
+            style: {
+                colors: [],
+                fontSize: '12px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                cssClass: 'apexcharts-xaxis-label',
+            },
+            offsetX: 0,
+            offsetY: 0,
+            format: undefined,
+            formatter: undefined,
+            datetimeFormatter: {
+                year: 'yyyy',
+                month: "MMM 'yy",
+                day: 'dd MMM',
+                hour: 'HH:mm',
+            },
+            },
+          },
+          yaxis:[
+            {
+            labels: {
+            formatter: function(val, e) {
+                let num = val.toFixed(2);; 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
+            }
+            },  
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false,
+            },
+          },  
+
+          ],
+          tooltip: {
+              enabled: true,
+            y: {
+              formatter: function (val, e){
+                e.series[1][e.dataPointIndex] = auxiliar[e.dataPointIndex]
+                let num = val.toFixed(2) 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
+              }
+            },
+            x: {
+            show: true,
+            format: 'dd MMM',
+            formatter: undefined,
+            },
+          }  
+      })
+      }, 500);
+      this.groups_user = aux
+      this.dialog = true
+      console.clear() 
+      } catch (error) {  
+      }
+    },
+    abreModalVisitas(){
+      try {
+        this.groups_user = []
+        let {nombre} =  JSON.parse(localStorage.getItem('leads-user')).datos
+        let {tableVisitInt} = JSON.parse(localStorage.getItem('dashgerente'))
+        let aux = []
+        let mbruto = []
+        let mconcretado = []
+        let ejecutivos = []
+        let ids = []
+        this.auxiliarg4 = []
+        var array = tableVisitInt.map( item => { 
+          let temporal =  item.suma
+          let montoB = 100
+          let concretado = item.suma
+          let names = item.name+" "+item.last_Name
+          delete item.last_name;
+          item.name = names
+          item.diferencia = temporal.toFixed(2)+'%';
+          item.mbruto = this.separaNumeros(montoB)
+          item.mconcretado = this.separaNumeros(concretado)
+          item.concretado = concretado
+          item.bruto = montoB
+          if(item.group_segment == nombre){
+            this.dataModal.groupSegment = item.group_segment
+            this.dataModal.type = 'Visitas'
+            mbruto.push(100-parseInt(item.concretado))
+            mconcretado.push(parseInt(item.concretado))
+            ejecutivos.push(item.name)
+            this.auxiliarg4.push(100)
+            ids.push(parseInt(item.user_id))
+            return aux.push(item)
+          }else{
+            return
+          }
+        });
+        this.chart4 = null
+        this.data7 = mbruto
+        this.data8 = mconcretado
+        this.ej4 = ejecutivos
+        this.ids4 = ids
+        let auxiliar = this.auxiliarg4
+        setTimeout(() => {
+          let aux = this.auxiliarg4
+          this.graph4(this.chart4)
+          this.chart4.updateSeries([
+              {
+                name: 'Monto concretado',
+                data: mconcretado
+              },{   
+                name: 'Monto total',
+                data: mbruto
+              },
+          ])
+        this.chart4.updateOptions({
+        chart: {
+                background: '#fff',
+                height: 350,
+                type: 'bar',
+                stacked: true,
+                events: {
+                    click: function(chart, w, e) {
+                     if(e.dataPointIndex>=0){
+                       console.log(ids[e.dataPointIndex])
+                        let user = {
+                            datos:{
+                                "user_id": ids[e.dataPointIndex],
+                                "nombre": ejecutivos[e.dataPointIndex],
+                            },
+                            leads:[],
+                        }
+                        localStorage.setItem('leads-user', JSON.stringify(user))
+                        swal({
+                          title: `Seguro que deseas visitar el dashboard del ejecutivo ${ejecutivos[e.dataPointIndex]}?`,
+                          text: "La siguiente accion redireccionara la pagina!",
+                          icon: "warning",
+                          buttons: true,
+                          dangerMode: false,
+                        })
+                        .then((willDelete) => {
+                          if (willDelete) {
+                            window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+                          } 
+                        }); 
+                    }
+                    }
+                },
+                toolbar: {
+                    show: true
+                },
+                zoom: {
+                    enabled: true
+                }
+        },
+        xaxis: {
+            type: 'category',
+            categories: ejecutivos,
+            labels: {
+              style: {
+                fontStyle: 'arial',
+                fontSize: '14px'
+              }
+            }, 
+            labels: {
+            show: true,
+            rotate: -45,
+            rotateAlways: false,
+            hideOverlappingLabels: true,
+            showDuplicates: false,
+            trim: true,
+            minHeight: undefined,
+            maxHeight: 120,
+            style: {
+                colors: [],
+                fontSize: '12px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                cssClass: 'apexcharts-xaxis-label',
+            },
+            offsetX: 0,
+            offsetY: 0,
+            format: undefined,
+            formatter: undefined,
+            datetimeFormatter: {
+                year: 'yyyy',
+                month: "MMM 'yy",
+                day: 'dd MMM',
+                hour: 'HH:mm',
+            },
+            },
+        },
+        yaxis:[
+            {
+            labels: {
+            formatter: function(val, e) {
+                let num = val.toFixed(2);; 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return numero_separado+"%"
+            }
+            },  
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false,
+            },
+          },  
+
+        ],
+          tooltip: {
+              enabled: true,
+            y: {
+              formatter: function (val, e){
+                e.series[1][e.dataPointIndex] = auxiliar[e.dataPointIndex]
+                let num = val.toFixed(2) 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return numero_separado+"%"
+              }
+            },
+            x: {
+            show: true,
+            format: 'dd MMM',
+            formatter: undefined,
+            },
+          }  
+      })
+      }, 500);
+      this.groups_user = aux
+      this.dialog = true
+      console.clear() 
+      } catch (error) {  
+      }
+    },
+    visitarUsuario(item){
+      swal({
+        title: `Seguro que deseas visitar el dashboard del ejecutivo ${item.name}?`,
+        text: "La siguiente accion redireccionara la pagina!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: false,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          let user = JSON.parse(localStorage.getItem('leads-user'))
+          user.datos.nombre = item.name
+          user.datos.user_id = item.user_id
+          localStorage.setItem('leads-user', JSON.stringify(user))
+          window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+          /* swal("Vista cargada correctamente"); */
+          /* swal("Poof! Your imaginary file has been deleted!", {
+            icon: "success",
+          }); */
+        } /* else {
+          swal("Your imaginary file is safe!");
+        } */
+      });  
+    },
     ...mapActions(['stateToken']),
     graph1(chart){
     var users = this.ej1
@@ -389,10 +1329,12 @@ export default {
                             leads:[],
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
-                        alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
-                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
+                        setTimeout(function(){ 
+                          let btn = document.getElementById('btn-modal1')
+                          btn.click()
+                        }, 1000);
                     }
-                    }
+                    },
                 },
                 toolbar: {
                     show: true
@@ -491,8 +1433,34 @@ export default {
          yaxis:[
             {
             labels: {
-            formatter: function(val, index) {
-                return "$"+ val;
+            formatter: function(val, e) {
+                let num = val.toFixed(2);; 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
             }
             },  
             axisBorder: {
@@ -506,7 +1474,7 @@ export default {
             },
           },  
 
-          ],
+        ],
           responsive: [{
             breakpoint: 480,
             options: {
@@ -631,10 +1599,12 @@ export default {
                             leads:[],
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
-                        alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
-                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
+                        setTimeout(function(){ 
+                          let btn = document.getElementById('btn-modal2')
+                          btn.click()
+                          }, 1000);
                     }
-                    }
+                    },
                 },
                 toolbar: {
                     show: true
@@ -731,8 +1701,34 @@ export default {
          yaxis:[
             {
             labels: {
-            formatter: function(val, index) {
-                return "$"+val;
+            formatter: function(val, e) {
+                let num = val.toFixed(2);; 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
             }
             },  
             axisBorder: {
@@ -863,15 +1859,17 @@ export default {
                         let user = {
                             datos:{
                                 "user_id": ids[e.dataPointIndex],
-                                "nombre": users[e.dataPointIndex],
+                                "segmento": users[e.dataPointIndex],
                             },
                             leads:[],
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
-                        alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
-                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
+                        setTimeout(function(){ 
+                          let btn = document.getElementById('btn-modal3')
+                          btn.click()
+                          }, 1000);
                     }
-                    }
+                    },
                 },
                 toolbar: {
                     show: true
@@ -1062,6 +2060,230 @@ export default {
     }
     },
 
+    graph4(chart){
+    var users = this.ej4
+    var ids = this.ids4
+    var auxiliar = this.aux4
+    
+    try { 
+        var options = {
+            chart: {
+                background: '#fff',
+                height: 350,
+                type: 'bar',
+                stacked: true,
+                
+                zoom: {
+                    enabled: false
+                },
+                events: {
+                    click: function(chart, w, e) {
+                     if(e.dataPointIndex>=0){
+                        let user = {
+                            datos:{
+                                "user_id": ids[e.dataPointIndex],
+                                "nombre": users[e.dataPointIndex],
+                            },
+                            leads:[],
+                        }
+                        localStorage.setItem('leads-user', JSON.stringify(user))
+                        setTimeout(function(){ 
+                          let btn = document.getElementById('btn-modal1')
+                          btn.click()
+                        }, 1000);
+                    }
+                    },
+                },
+                toolbar: {
+                    show: true
+                },
+                zoom: {
+                    enabled: true
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            plotOptions: {
+            bar: {
+              horizontal: false,
+              columnWidth: '40%',
+                }
+            },
+            colors: ['#ff4200', '#000000'],
+            series: [
+                {
+                name: 'Monto concretado',
+                data: this.data7
+                },
+                {
+                name: 'Total',
+                data: this.data8
+                },
+            ],
+            legend: {
+                offsetY: 0,
+                showForSingleSeries: false,
+                showForNullSeries: true,
+                showForZeroSeries: true,
+                position: 'top',
+                horizontalAlign: 'center', 
+                floating: false,
+                fontSize: '14px',
+                fontFamily: 'Helvetica, Arial',
+                markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 0,
+                    strokeColor: '#fff',
+                    radius: 12,
+                    customHTML: undefined,
+                    onClick: undefined,
+                    offsetX: 0,
+                    offsetY: 0
+                },
+            },
+            xaxis: {
+            type: 'category',
+            categories: this.ej4,
+            labels: {
+              style: {
+                fontStyle: 'arial',
+                fontSize: '14px'
+              }
+            }, 
+
+          },
+         yaxis:[
+            {
+            labels: {
+            formatter: function(val, e) {
+                return val
+            }
+            },  
+            axisBorder: {
+              show: false
+            },
+            /*  title: {
+              text: 'Montos'
+            },  */
+            axisTicks: {
+              show: false,
+            },
+          },  
+
+          ],
+          responsive: [{
+            breakpoint: 480,
+            options: {
+              legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+              }
+            }
+          }],
+            
+          fill: {
+            opacity: 1,
+            colors: ['#ff4200', '#000000'],
+            gradient: {
+              shade: 'light',
+              type: "horizontal",
+              shadeIntensity: 0.25,
+              gradientToColors: undefined,
+              inverseColors: true,
+              opacityFrom: 1,
+              opacityTo: 1,
+              stops: [50, 0, 100, 100]
+            },
+          },
+          dataLabels: {
+            enabled: false,
+            formatter: function (val) {
+              return "$"+val ;
+            },
+            offsetY: 0,
+            style: {
+              fontSize: '10px',
+              colors: ["#FAFAFA"]
+            }
+          },
+          tooltip: {
+              enabled: true,
+            y: {
+              formatter: function (val, e){
+                e.series[1][e.dataPointIndex] = auxiliar[e.dataPointIndex]
+                let num = val.toFixed(2);; 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
+              }
+            },
+            x: {
+            show: true,
+            format: 'dd MMM',
+            formatter: undefined,
+            },
+            
+            shared: true,
+            inverseOrder: false,
+            enabledOnSeries: undefined,
+            followCursor: true,
+            style: {
+            fontSize: '13px',
+            fontFamily: undefined
+            },
+            onDatasetHover: {
+                highlightDataSeries: true,
+            },
+           
+          }  
+        }
+        chart = new ApexCharts(
+            document.querySelector("#chart4"),
+            options
+        );
+        chart.render();
+        this.chart4 = chart
+        console.clear() 
+    } catch (error) {  
+    }
+    },
+    updated() {
+      console.clear() 
+    },
+
     cargarAños(){
       var fecha = new Date();
       var año = fecha.getFullYear();
@@ -1092,13 +2314,13 @@ export default {
                         let user = {
                             datos:{
                                 "user_id": ids[e.dataPointIndex],
-                                "nombre": ejecutivos[e.dataPointIndex],
+                                "segmento": ejecutivos[e.dataPointIndex],
                             },
                             leads:[],
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
-                        alert("Se está dirigiendo a ver los Leads del usuario "+ejecutivos[e.dataPointIndex]+"")
-                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
+                        /* alert("Se está dirigiendo a ver los Leads del usuario "+ejecutivos[e.dataPointIndex]+"")
+                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'   */
                     }
                     }
                 },
@@ -1146,8 +2368,9 @@ export default {
             },
           },
       })
-
     },
+
+    
    preparaFiltro(chart, data, tipo){
      try {
        if(data.length>0){  
@@ -1228,7 +2451,7 @@ export default {
           this.preparaFiltro(this.chart2, response.data, 2)
           this.preparaFiltro(this.chart3, response.data, 3)
           this.cargarTablas(response.data)
-          localStorage.setItem('dashjefe', JSON.stringify(response.data))
+          localStorage.setItem('dashgerente', JSON.stringify(response.data))
           localStorage.setItem('yearandmonth', JSON.stringify(fec))
           setTimeout(function(){ location.reload(); }, 1000);
         
@@ -1389,7 +2612,7 @@ export default {
       }
     },
     cargarDataInicial(){
-      let data = JSON.parse(localStorage.getItem('dashjefe'))
+      let data = JSON.parse(localStorage.getItem('dashgerente'))
       try {
         if(data!= null){
           this.ej1 = []
@@ -1565,7 +2788,9 @@ export default {
     },
     verificaPermisos(){
         this.role = JSON.parse(localStorage.getItem('usuario')).role
+        window.scrollTo(500, 0);
     },
+    
 
 
 

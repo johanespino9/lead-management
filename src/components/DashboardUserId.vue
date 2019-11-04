@@ -96,6 +96,11 @@
     </v-data-table>
 </v-container>
 
+ <v-overlay v-if="overlay==true" >
+        <v-progress-circular color="#d69c4f" indeterminate size="70"></v-progress-circular>
+        <h5>Cargando..</h5>
+ </v-overlay>
+
 <v-container fluid class="text-right">
   <v-btn color="#d69c4f" style="color: white;" @click="cambiaVisitas">
     IR A VISITAS
@@ -111,6 +116,7 @@ import axios from "axios";
 import { mapState, mapActions } from 'vuex';
 export default {
   data: () => ({
+    overlay: false,
     usuario: '',
     id: 0,
     color: '#d69c4f',
@@ -189,6 +195,7 @@ export default {
     try {
       this.cargarAños()
       this.cargarUser()
+      this.overlay = true
       this.hotelSelected = '[Seleccionar todos]'
       this.monthSelected = JSON.parse(localStorage.getItem('yearandmonth')).month
       this.yearSelected =  JSON.parse(localStorage.getItem('yearandmonth')).year
@@ -203,6 +210,7 @@ export default {
       if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
       }
+      window.scrollTo(500, 0);
     }catch (error){
       console.log('Hubo un error')
     }
@@ -234,6 +242,7 @@ export default {
       await axios.post(url, datos, config)
       .then((res) => {
         let array= []
+        this.overlay = false
         array = res.data.table
         this.values = array
         this.percents = res.data.porcentajeConcrecion
@@ -280,6 +289,7 @@ export default {
         try {
             let datos = JSON.parse(localStorage.getItem('leads-user'))
             this.datos = datos
+            /* this.usuario = datos.datos.nombre */
             this.usuario = datos.datos.nombre
             this.id = datos.datos.user_id
         } catch (error) {
@@ -341,8 +351,14 @@ export default {
       this.values = Dash.table 
     },
     cambiaVisitas(){
-      window.location.href = '/#/dashboard_jefes/visits-user/id'
-    }
+      let {role} = JSON.parse(localStorage.getItem('usuario')) 
+      if(role == 'Supervisor de Segmento'){
+        window.location.href = '/#/dashboard_jefes/visits-user/id'
+      }else{
+        window.location.href = '/#/dashboard_gerentes/visits-user/id'
+      } 
+    },
+   
 
 
   },

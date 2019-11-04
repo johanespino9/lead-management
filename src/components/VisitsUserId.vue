@@ -2,7 +2,7 @@
 <div>
   
   <div v-if="groupSG != 'Eventos' ||  role!='Administrador'">
-  <div class="">
+  <div id="div-visitas">
         <!-- primer ROW -->
         <div class="row">
           <div class="col-lg-12">
@@ -319,7 +319,25 @@
     </div>
 </div>
 
- <div v-if="role=='Administrador' || groupSG == 'Eventos'">
+
+<v-container fluid >
+  <v-row>
+    <v-col class="text-left">
+      <v-btn color="#d69c4f" style="color: white;" @click="retornarAnterior">
+      Anterior
+    </v-btn>
+    </v-col>
+    <v-col class="text-right">
+      <v-btn color="#d69c4f" style="color: white;" @click="retornar">
+      Volver al inicio
+    </v-btn>
+    </v-col>
+  </v-row>
+  
+</v-container>
+
+
+ <div v-if="groupSG == 'Eventos'">
    <NotFound/>
  </div>
 
@@ -530,8 +548,6 @@ export default {
       this.verificaPermisos()
       this.cargarUser()
       this.getVisits()
-      
-      
       this.cargarAños()
       /* this.$store.dispatch('getReasons') */
  /*      this.getNameAccounts() */
@@ -806,6 +822,7 @@ export default {
       verificaPermisos(){
         this.role = JSON.parse(localStorage.getItem('usuario')).role
         this.groupSG = JSON.parse(localStorage.getItem('usuario')).groupSegment
+        window.scrollTo(500, 0);
        },
        LimpiarCampos(){
          this.status = ''
@@ -825,7 +842,23 @@ export default {
          }else{
            this.colorIcon = 'red'
          }
-       }
+       },
+      retornar(){
+        let {role} = JSON.parse(localStorage.getItem('usuario')) 
+        if(role == 'Supervisor de Segmento'){
+          window.location.href = '/#/dashboard_jefes'
+        }else{
+          window.location.href = '/#/dashboard_gerentes'
+        } 
+    },
+    retornarAnterior(){
+      let {role} = JSON.parse(localStorage.getItem('usuario')) 
+        if(role == 'Supervisor de Segmento'){
+          window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+        }else{
+          window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+        } 
+    },
 
 
   },

@@ -16,6 +16,7 @@
     "fusioncharts": "^3.14.0-sr.1",
     "hchs-vue-charts": "^1.2.8",
     "roboto-fontface": "*",
+    "sweetalert": "^2.1.2",
     "vue": "^2.6.10",
     "vue-chartjs": "^3.4.2",
     "vue-fusioncharts": "^3.0.4",

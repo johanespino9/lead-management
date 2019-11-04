@@ -150,6 +150,7 @@ export default {
     visitas: [],
     roomRevenue: null,
     events: null,
+    role: ''
 
   }),
 
@@ -178,6 +179,8 @@ export default {
       if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
       }
+      this.verificaPermisos()
+      console.clear()
       /* this.$store.dispatch('getUsers')
         this.desserts= this.Users */
     }catch (error){
@@ -272,8 +275,13 @@ export default {
         Dash.table[i].confirmado = num_separado6
       }
       this.values = Dash.table
-    }
-
+    },
+    verificaPermisos(){
+      this.role = JSON.parse(localStorage.getItem('usuario')).role
+      if(this.role == 'Ejecutivo' || this.role == 'Supervisor de Segmento'){
+        localStorage.removeItem('dashgerente')
+      }
+    },
 
   },
 

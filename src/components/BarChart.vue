@@ -412,15 +412,13 @@ export default {
         if(localStorage.length>=8){
             this.$store.dispatch('stateToken')
         }
+        window.scrollTo(500, 0);
         console.clear() 
         } catch (error) {
         }
    
     },
-    /* updated() {
-      let data = JSON.parse(localStorage.getItem('dashjefe'))
-      this.cargarDataInicial(data)
-    },  */
+    
     methods: {
     ...mapActions(['stateToken']),
     graph1(chart){
@@ -449,8 +447,18 @@ export default {
                             leads:[],
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
-                        alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
-                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
+                        swal({
+                          title: `Seguro que deseas visitar el dashboard del ejecutivo ${users[e.dataPointIndex]}?`,
+                          text: "La siguiente accion redireccionara la pagina!",
+                          icon: "warning",
+                          buttons: true,
+                          dangerMode: false,
+                        })
+                        .then((willDelete) => {
+                          if (willDelete) {
+                            window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+                          } 
+                        }); 
                     }
                     }
                 },
@@ -551,8 +559,34 @@ export default {
          yaxis:[
             {
             labels: {
-            formatter: function(val, index) {
-                return "$"+ val;
+            formatter: function(val, e) {
+                let num = val.toFixed(2);; 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
             }
             },  
             axisBorder: {
@@ -691,8 +725,18 @@ export default {
                             leads:[],
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
-                        alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
-                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
+                        swal({
+                          title: `Seguro que deseas visitar el dashboard del ejecutivo ${users[e.dataPointIndex]}?`,
+                          text: "La siguiente accion redireccionara la pagina!",
+                          icon: "warning",
+                          buttons: true,
+                          dangerMode: false,
+                        })
+                        .then((willDelete) => {
+                          if (willDelete) {
+                            window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+                          } 
+                        });  
                     }
                     }
                 },
@@ -791,8 +835,34 @@ export default {
          yaxis:[
             {
             labels: {
-            formatter: function(val, index) {
-                return "$"+val;
+            formatter: function(val, e) {
+                let num = val.toFixed(2);; 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return "$"+numero_separado
             }
             },  
             axisBorder: {
@@ -928,8 +998,18 @@ export default {
                             leads:[],
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
-                        alert("Se está dirigiendo a ver los Leads del usuario "+users[e.dataPointIndex]+"")
-                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
+                        swal({
+                          title: `Seguro que deseas visitar el dashboard del ejecutivo ${users[e.dataPointIndex]}?`,
+                          text: "La siguiente accion redireccionara la pagina!",
+                          icon: "warning",
+                          buttons: true,
+                          dangerMode: false,
+                        })
+                        .then((willDelete) => {
+                          if (willDelete) {
+                            window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+                          } 
+                        });  
                     }
                     }
                 },
@@ -1030,8 +1110,34 @@ export default {
          yaxis:[
             {
             labels: {
-            formatter: function(val, index) {
-                return  val+"%";
+            formatter: function(val, e) {
+                let num = val.toFixed(2);; 
+                let tamaño = num.toString().length
+                let nuevo_num = ''
+                let index = 1
+                for(let i=tamaño-1; i>=0; i--){
+                    if(num.toString().charAt(i)=='.'){
+                        index = 1
+                        nuevo_num += num.toString().charAt(i)
+                    }else{
+                        if(index%3==0){
+                            nuevo_num += num.toString().charAt(i)
+                            if(i>0){
+                              nuevo_num += ','
+                            }
+                            index++
+                        }else{
+                            nuevo_num += num.toString().charAt(i)
+                            index++   
+                        }
+                    }
+                }
+                let tamaño2 = nuevo_num.length
+                let numero_separado = ''
+                for(let i=tamaño2-1; i>=0; i--){
+                    numero_separado += nuevo_num.charAt(i)
+                } 
+                return numero_separado+"%"
             }
             },  
             axisBorder: {
@@ -1157,8 +1263,18 @@ export default {
                             leads:[],
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
-                        alert("Se está dirigiendo a ver los Leads del usuario "+ejecutivos[e.dataPointIndex]+"")
-                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'  
+                        swal({
+                          title: `Seguro que deseas visitar el dashboard del ejecutivo ${users[e.dataPointIndex]}?`,
+                          text: "La siguiente accion redireccionara la pagina!",
+                          icon: "warning",
+                          buttons: true,
+                          dangerMode: false,
+                        })
+                        .then((willDelete) => {
+                          if (willDelete) {
+                            window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+                          } 
+                        }); 
                     }
                     }
                 },
@@ -1445,6 +1561,9 @@ export default {
     },
     verificaPermisos(){
         this.role = JSON.parse(localStorage.getItem('usuario')).role
+        if(this.role == 'Ejecutivo' || this.role == 'Supervisor de Segmento'){
+          localStorage.removeItem('dashgerente')
+        }
     },
 
 

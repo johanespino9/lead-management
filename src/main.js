@@ -9,6 +9,7 @@ import "chart.js";
 import "hchs-vue-charts";
 import Axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
+import swal from 'sweetalert';
 
 
 
@@ -30,5 +31,6 @@ new Vue({
   BootstrapVue,
   vuetify,
   router,
+  swal,
   render: h => h(App)
 }).$mount('#app')

@@ -1,6 +1,6 @@
 <template>
   <div>
-        <v-container class="col-lg-6" >
+      <v-container class="col-lg-6" >
               <v-row justify="center">
                 <v-col cols="6">
                   <v-combobox @change="FiltraCuentas()" color="#d69c4f"  v-model="filtroSelected" :items="filtro" label="Selecciona un elemento"></v-combobox>
@@ -250,9 +250,11 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
+      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/accounts'
       await axios.post(url, datos, config)
       .then(response => { 
+        console.log(response.data)
         localStorage.setItem('accounts', JSON.stringify(response.data))
         this.$store.commit('Accounts', response.data)
         this.desserts=this.Accounts
@@ -278,6 +280,7 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
+      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/accounts'
       await axios.put(url, datos, config)
       .then(response => { 
@@ -336,9 +339,11 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
+      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/account/jefes'
       await axios.post(url, datos, config)
       .then(response => { 
+        console.log(response.data)
         localStorage.setItem('accounts', JSON.stringify(response.data))
         this.$store.commit('Accounts', response.data)
         this.desserts=this.Accounts
@@ -347,7 +352,7 @@ import axios from 'axios';
       }).catch(error => {
         console.log('Hubo un error ', error)
         this.alerts('Ocurrio un error y no se guardó', 'error')
-      })
+      }) 
     }, 
     async editAccountJefes(){
       let datos = {	

@@ -62,7 +62,7 @@ export default {
       var user = JSON.parse(localStorage.getItem('usuario'))
       this.usuario= user.role
     } catch (error) {
-      console.log('vacio')
+
     }
   },
  created() {
@@ -80,7 +80,8 @@ export default {
         localStorage.removeItem('dashjefe')
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
-        localStorage.removeItem('leads-user')  */
+        localStorage.removeItem('leads-user')
+        localStorage.removeItem('dashgerente')  */
   },
   destroyed() {
         localStorage.removeItem('token')
@@ -98,6 +99,7 @@ export default {
          localStorage.removeItem('visitas')
          localStorage.removeItem('yearandmonth')
         localStorage.removeItem('leads-user')
+        localStorage.removeItem('dashgerente')
   },
   beforeDestroy() {
         localStorage.removeItem('token')
@@ -115,6 +117,7 @@ export default {
         localStorage.removeItem('visitas')
         localStorage.removeItem('yearandmonth')
         localStorage.removeItem('leads-user')
+        localStorage.removeItem('dashgerente')
   },
 
 };

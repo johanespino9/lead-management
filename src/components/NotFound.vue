@@ -37,9 +37,11 @@ export default {
             if(role=='Ejecutivo'){
                 /* window.location.href = '/#/dashboard-ejecutivos' */
                this.$router.push("/dashboard-ejecutivos"); 
-            }else{
+            }else if(role == 'Supervisor de Segmento'){
                 /* window.location.href = '/#/dashboard_jefes' */
                 this.$router.push("/dashboard_jefes");
+            }else{
+                this.$router.push("/dashboard_gerentes");
             }
         }
     }

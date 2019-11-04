@@ -76,6 +76,14 @@
             <v-list-item-title>Gestión de Usuarios</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item color="#d69c4f" v-if="role=='Administrador'"  to="/register-hotel">
+          <v-list-item-action>
+            <v-icon>mdi-briefcase-plus-outline</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Gestión de Hoteles</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item color="#d69c4f" v-if="role=='Ejecutivo' || role=='Supervisor de Segmento'" to="/register-account">
           <v-list-item-action>
             <v-icon>mdi-briefcase-plus-outline</v-icon>
@@ -167,7 +175,6 @@ export default {
         this.role = this.User.role
         this.groupS = this.User.groupSegment
       }
-      
     } catch (error) {
       console.log('Hubo un error')
     }
@@ -176,6 +183,7 @@ export default {
   updated() {
     /* var user = JSON.parse(localStorage.getItem('usuario'))
     this.$store.commit('User', user) */
+    console.clear()
     this.usern = this.User.username
     this.email = this.User.email
     this.role = this.User.role
@@ -184,7 +192,8 @@ export default {
     if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
     }
-    /* console.log(this.User) */
+    console.log(window.location.hash)
+    
   },
   /* beforeUpdate() {
     console.log('desde before u')

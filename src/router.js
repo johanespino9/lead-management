@@ -15,6 +15,7 @@ import Config from './components/Config'
 import Visits from './components/Visits'
 import VisitsUserId from './components/VisitsUserId'
 import DashboardUserId from './components/DashboardUserId'
+import Hotels from './components/RegisterHotel'
 
 Vue.use(Router)
 const routerEjecutivo = new Router({
@@ -75,6 +76,11 @@ const routerEjecutivo = new Router({
         name: 'visits',
         component: Visits
     },
+    {
+      path : '/register-hotel',
+      name: 'register-hotel',
+      component: Hotels
+  },
 
     {
       path: '/dashboard_jefes/dashboard-user/id',
@@ -82,8 +88,18 @@ const routerEjecutivo = new Router({
       component: DashboardUserId
     },
     {
+      path: '/dashboard_gerentes/dashboard-user/id',
+      name: 'dashboard-user-gerente',
+      component: DashboardUserId
+    },
+    {
       path: '/dashboard_jefes/visits-user/id',
       name: 'visits-user',
+      component: VisitsUserId
+    },
+    {
+      path: '/dashboard_gerentes/visits-user/id',
+      name: 'visits-user-gerente',
       component: VisitsUserId
     },
     {

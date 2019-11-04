@@ -5,7 +5,7 @@
     <v-overlay :value="true">
         <v-progress-circular color="#d69c4f" indeterminate size="80"></v-progress-circular>
         <h5>Cargando</h5>
-      </v-overlay>
+    </v-overlay>
   </div>
 </template>
 <script>

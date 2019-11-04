@@ -26,11 +26,12 @@
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
-              <v-stepper  v-model="editedItem.statusid"  non-linear >
+              <v-stepper  v-model="editedItem.statusid" @change="cambiaRazones()"  non-linear >
                       <v-stepper-header>
                         <v-stepper-step
                           color="#d69c4f"
                           editable
+                          
                           :complete="editedItem.statusid>0"
                           step="1"
                         >
@@ -43,6 +44,7 @@
                           color="#d69c4f"
                           v-if="editedIndex>-1" 
                           editable
+                          
                           :complete="editedItem.statusid>1"
                           step="2"
                         >
@@ -57,6 +59,7 @@
                           :complete="editedItem.statusid>2"
                           step="3"
                           editable
+                          
                         >
                           Hot
                         </v-stepper-step>
@@ -68,6 +71,7 @@
                           :complete="editedItem.statusid>3"
                           step="4"
                           editable
+                          
                         >
                           Congelado
                         </v-stepper-step>
@@ -79,6 +83,7 @@
                           :complete="editedItem.statusid>4"
                           step="5"
                           editable
+                      
                         >
                           Cancelado
                         </v-stepper-step>
@@ -91,6 +96,7 @@
                           :complete="editedItem.statusid>5"
                           step="6"
                           editable
+    
                         >
                           Confirmado
                         </v-stepper-step>
@@ -103,6 +109,15 @@
                   <!-- <v-col v-if="editedIndex>-1" cols="20" sm="12" md="80" class=center >
                     <v-text-field v-model="editedItem.leadid" disabled  label="Lead ID" ></v-text-field>
                   </v-col> -->
+                  <v-col v-if="razon==4" cols="20" sm="4" md="80" class=center>
+                    <v-combobox color="#d69c4f" id="segments-id" v-model="editedItem.razon"  :items="razones" label="Seleccionar Motivo" ></v-combobox>
+                  </v-col>
+                  <v-col v-if="razon==5" cols="20" sm="4" md="80" class=center>
+                    <v-combobox color="#d69c4f" id="segments-id" v-model="editedItem.razon"  :items="razones" label="Seleccionar Motivo" ></v-combobox>
+                  </v-col>
+                  <v-col v-if="editedItem.statusid==4" cols="20" sm="8" md="80" class=center></v-col>
+                  <v-col v-if="editedItem.statusid==5" cols="20" sm="8" md="80" class=center></v-col>
+
                   <v-col cols="20" sm="4" md="80" class=center>
                     <v-combobox color="#d69c4f" id="segments-id" v-model="editedItem.segment"  :items="segments" label="Seleccionar Segmento" ></v-combobox>
                   </v-col>
@@ -483,8 +498,10 @@ export default {
       status: 0,
       statusid:0 ,
       tarifaneta: 0,
+      razon: 0
       
     },
+    razon: 0,
     defaultItem: {
       segment: '',
       name: "",
@@ -502,6 +519,9 @@ export default {
       status: '',
       statusid:0 
     },
+
+    razones:[],
+    todoRazones: [],
     
     mes1 : 'Enero',
     mes2 : 'Febrero',
@@ -637,6 +657,7 @@ export default {
       if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
       }
+      this.getRazones()
     }catch (error){
       console.log('Hubo un error')
     }
@@ -671,6 +692,23 @@ export default {
           this.leadsAccounts.push(todoaccounts[i].name);
         }
       }
+    },
+    cambiaRazones(){
+      let reasons = this.todoRazones
+      let razon = parseInt(this.editedItem.statusid)
+      this.razones = []
+      this.razon = razon
+      /* this.editedItem.razon = '' */
+       for(let i=0; i<reasons.length; i++){
+        if(razon == 4 && reasons[i].status == 'Congelado'){
+          this.razones.push(reasons[i].reason)
+        }else if(razon == 5 && reasons[i].status == "Cancelado"){
+          this.razones.push(reasons[i].reason)
+        }else{
+          this.editedItem.razon = ''
+          return
+        }
+      } 
     },
 
     //POST LEADS
@@ -805,7 +843,6 @@ export default {
       let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
-        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
@@ -835,17 +872,16 @@ export default {
         "contactEmail": this.editedItem.contactEmail,
         "status": this.allstatus[this.editedItem.statusid],
         "months": monthRate,
+        "reason": this.editedItem.razon
       }
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
-        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
@@ -881,17 +917,16 @@ export default {
         "contactEmail": this.editedItem.contactEmail,
         "status": this.allstatus[this.editedItem.statusid],
         "events": events,
+        "reason": this.editedItem.razon
       }
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
-        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
@@ -945,7 +980,8 @@ export default {
         "contactPhone": parseInt(this.editedItem.contactPhone),
         "contactEmail": this.editedItem.contactEmail,
         "status": this.allstatus[this.editedItem.statusid],
-        "events": events
+        "events": events,
+        "reason": this.editedItem.razon
       }
       let config = {
         headers: {
@@ -966,6 +1002,26 @@ export default {
         console.log('Hubo un error ', error)
       })
     },
+    
+
+    async getRazones() {
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.accessToken
+        }
+      }
+      await axios.get('https://casa-andina-backend.azurewebsites.net/lead/reason', config)
+      .then(response =>{
+        this.razones = []
+        console.log(response.data)
+        for(let i=0; i< response.data.length; i++){
+          this.razones.push(response.data[i].reason)
+        }
+        this.todoRazones = response.data
+      }).catch(error =>{
+        console.log(error)
+      }); 
+    },
 
     //MODALS
     editItem(item) {
@@ -973,10 +1029,21 @@ export default {
       this.editedIndex=-1
       this.editedIndex = this.desserts.indexOf(item);
       this.dialog = true;
+      if(item.status == 'Congelado'){
+        this.editedItem.statusid = 4
+        this.razon = 4
+        this.cambiaRazones()
+      }else if(item.status == 'Cancelado'){
+        this.editedItem.statusid = 5
+        this.razon = 5
+        this.cambiaRazones()
+      }
         if(this.editedIndex>=0){
           this.editedItem = Object.assign({}, item);
           this.SeparaMesyRate(item)
           this.EditMesyEvents()
+          this.editedItem.razon = item.reason
+          
         }else{
         }
     },
@@ -1572,6 +1639,7 @@ export default {
               nights: todoleads[i].nights,
               rateHotel: todoleads[i].rateHotel,
               rooms: todoleads[i].rooms,
+              reason: todoleads[i].reason,
               segment: todoleads[i].segment,
               status: todoleads[i].status,
               user: todoleads[i].user,

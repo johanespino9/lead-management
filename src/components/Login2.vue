@@ -39,7 +39,7 @@
               counter
             ></v-text-field>
             <div class="text-center" style="margin-top: 30px;">
-              <v-btn color="#000000" class="white--text" @click="login()">Ingresar</v-btn>
+              <v-btn color="#000000" class="white--text" @click="Ingresar()">Ingresar</v-btn>
             </div>
             <br>
         </v-col>
@@ -88,6 +88,14 @@ export default {
         'redirigir',
         'getTodo',
       ]),
+    Ingresar(){
+      if(this.email.length==0 || this.password.length==0) {
+        swal ( "Rellene todos los campos" ,  "Debes rellenar todos los campos" ,  "error" )
+      } else{
+        this.login()
+      }
+      
+    },
     async login(){
       try {
       var sendData = {
@@ -102,6 +110,7 @@ export default {
         this.$store.dispatch('getHotels')
         this.$store.dispatch('getDashboard')
         this.$store.dispatch('getDataUser')
+        this.$store.dispatch('getDashGerentes')
         this.$store.dispatch('getUsers')
         this.$store.dispatch('getAccounts')
         this.$store.dispatch('getSegmentos')
@@ -112,7 +121,7 @@ export default {
         this.$store.dispatch('getVisits')
       })
       } catch (error) { 
-          alert('No tienes acceso')
+          swal ( "Usuario y/o contraseña incorrectos" ,  "No tienes acceso!" ,  "error" )
       }
     }
   }
