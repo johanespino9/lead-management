@@ -702,7 +702,7 @@ export default {
        for(let i=0; i<reasons.length; i++){
         if(razon == 4 && reasons[i].status == 'Congelado'){
           this.razones.push(reasons[i].reason)
-        }else if(razon == 5 && reasons[i].status == "Cancelado"){
+        }else if(razon == 5){
           this.razones.push(reasons[i].reason)
         }else{
           this.editedItem.razon = ''
