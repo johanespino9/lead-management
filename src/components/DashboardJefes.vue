@@ -279,81 +279,6 @@
                         <div id="chart4"></div>
                       </div>
                   </v-container>
-                  
-                    <!-- <v-list-item-content>
-                    <v-list-item-title>Filtrar por:</v-list-item-title>
-                    <v-list-item-subtitle>
-                        <v-row>
-                            <v-col cols="12" sm="2">
-                                <v-combobox
-                                :items="items"
-                                label="Elija la clase de auto"
-                                ></v-combobox>
-                            </v-col>
-                            <v-col cols="12" sm="2">
-                                <v-combobox
-                                :items="autos2"
-                                label="Elija el modelo de auto"
-                                ></v-combobox>
-                            </v-col>
-                            <v-col cols="12" sm="2">
-                                <v-menu
-                                v-model="menu1"
-                                :close-on-content-click="false"
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                max-width="290px"
-                                min-width="290px"
-                                >
-                                <template v-slot:activator="{ on }">
-                                    <v-text-field
-                                    v-model="date"
-                                    label="Fecha Inicio"
-                                    hint="YYYY/MM/DD"
-                                    persistent-hint
-                                    prepend-icon="event"
-                                    @blur="date = parseDate(dateFormatted)"
-                                    v-on="on"
-                                    ></v-text-field>
-                                </template>
-                                <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
-                                </v-menu>
-                            </v-col>
-
-                            <v-col cols="12" sm="2">
-                                <v-menu
-                                v-model="menu2"
-                                :close-on-content-click="false"
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                max-width="290px"
-                                min-width="290px"
-                                >
-                                <template v-slot:activator="{ on }">
-                                    <v-text-field
-                                    v-model="date2"
-                                    label="Fecha fin"
-                                    hint="YYYY/MM/DD"
-                                    persistent-hint
-                                    prepend-icon="event"
-                                    @blur="date = parseDate(dateFormatted2)"
-                                    v-on="on"
-                                    ></v-text-field>
-                                </template>
-                                <v-date-picker v-model="date2" no-title @input="menu2 = false"></v-date-picker>
-                                </v-menu>
-                            </v-col>
-                            <v-col cols="12" sm="4">
-                                <v-combobox
-                                :items="ciudades"
-                                label="Elija la ciudad"
-                                ></v-combobox>
-                            </v-col>
-                        </v-row>
-                    </v-list-item-subtitle>
-                    </v-list-item-content> -->
                 </v-list-item>
                 </v-list>
                 <v-divider></v-divider>
@@ -361,41 +286,15 @@
                 <v-data-table
                     :headers="headers_usersg"
                     :items="groups_user"
-                    
-                    item-key="name"
-                    
+                     item-key="name"
                     :items-per-page="5"
                     class="elevation-1"
                 >
-                    <template v-slot:expanded-item="{ headers }">
+                    <!-- <template v-slot:expanded-item="{ headers }">
                         <div class="container">
-                        <v-row >
-                            <v-col >
-                              <!-- <img src="../assets/toyota-yaris-fg.jpg" alt="">   -->
-                              <v-btn color="#000000" style="color: white;" >Elegir este Vehículo</v-btn>
-                            </v-col>
-                            <v-col >
-                                <p>Marca: Toyota</p>
-                                <p>Modelo: Yaris</p>
-                                <p>Año: 2005</p>
-                                <p>Motor: B10SWR20KASA</p>                                
-                            </v-col>
-                            <v-col >
-                                <p>Placa: XCS-587</p>
-                                <p>Chasis: AYTEJDL</p>
-                                <p>Tipo: Mecánico</p>
-                                <p>Asientos: 4</p>                                
-                            </v-col> 
-                            <v-col >
-                                <p>Costo x dia: S/ 80.00</p>
-                                <p>Fecha I: 10/11/2019</p>
-                                <p>Fecha Fin: 10/12/2019</p>   
-                                <p>Total: S/ 2400.00</p>                             
-                            </v-col>
-                            
-                        </v-row>
+                        
                         </div>
-                    </template>
+                    </template> -->
                     <template v-slot:item.action="{ item }">
                     <!-- <v-icon
                       small
@@ -447,32 +346,12 @@ export default {
             'Lima'
         ],
         search: '',
-        date: new Date().toISOString().substr(0, 10),
-        date2: new Date().toISOString().substr(0, 10),
-      autos:[
-            {
-             name:'Toyota Yaris - First generation',
-             tipo: 'Básico',
-             modelo: 'Yaris', 
-             año: '2005',
-             ciudad: 'Santiago de surco'    
-            },
-            {
-             name:'Toyota Corolla Base aut',
-             tipo: 'Básico',
-             modelo: 'Corolla', 
-              año: '2008',  
-             ciudad: 'Santiago de surco'      
-            },
-                 
-        ],
+
         dialog: false,
         notifications: false,
         sound: true,
         widgets: false,
-        menu1: false,  
-        menu2: false,
-        select: 'Básico',
+
         expanded: [],
         singleExpand: false,
 
@@ -614,6 +493,13 @@ export default {
     methods: {
     abreModalHoteles(){
       try {
+        this.headers_usersg = [
+          { text: 'Nombre', align: 'left', value: 'name',},
+          { text: 'Total $', sortable: true, value: 'mbruto' },
+          { text: 'Concretado $', sortable: true, value: 'mconcretado' },
+          { text: '% de Concreción', sortable: true, value: 'diferencia' },
+          { text: 'Actions', value: 'action', sortable: false },
+        ]
         this.groups_user = []
         let {nombre} =  JSON.parse(localStorage.getItem('leads-user')).datos
         let {dashboardRateHotel} = JSON.parse(localStorage.getItem('dashgerente'))
@@ -837,6 +723,13 @@ export default {
     },
     abreModalEventos(){
       try {
+        this.headers_usersg = [
+          { text: 'Nombre', align: 'left', value: 'name',},
+          { text: 'Total $', sortable: true, value: 'mbruto' },
+          { text: 'Concretado $', sortable: true, value: 'mconcretado' },
+          { text: '% de Concreción', sortable: true, value: 'diferencia' },
+          { text: 'Actions', value: 'action', sortable: false },
+        ]
         this.groups_user = []
         let {nombre} =  JSON.parse(localStorage.getItem('leads-user')).datos
         let {dashboardRateEvents} = JSON.parse(localStorage.getItem('dashgerente'))
@@ -1060,15 +953,24 @@ export default {
     },
     abreModalVisitas(){
       try {
+        this.headers_usersg = [
+          { text: 'Nombre', align: 'left', value: 'name',},
+          { text: 'Total visitas', sortable: true, value: 'mbruto' },
+          { text: 'Total %', sortable: true, value: 'ptotal' },
+          { text: '% de Concreción', sortable: true, value: 'diferencia' },
+          { text: 'Actions', value: 'action', sortable: false },
+        ]
         this.groups_user = []
         let {nombre} =  JSON.parse(localStorage.getItem('leads-user')).datos
+        console.log(nombre)
         let {tableVisitInt} = JSON.parse(localStorage.getItem('dashgerente'))
         let aux = []
-        let mbruto = []
-        let mconcretado = []
+        let vbruto = []
+        let vconcretado = []
         let ejecutivos = []
         let ids = []
         this.auxiliarg4 = []
+        
         var array = tableVisitInt.map( item => { 
           let temporal =  item.suma
           let montoB = 100
@@ -1077,26 +979,28 @@ export default {
           delete item.last_name;
           item.name = names
           item.diferencia = temporal.toFixed(2)+'%';
-          item.mbruto = this.separaNumeros(montoB)
-          item.mconcretado = this.separaNumeros(concretado)
+          item.mbruto = item.number_Of_Visits
+          item.mconcretado = this.separaNumeros(concretado)+"%"
+          item.ptotal = this.separaNumeros(100)+"%"
           item.concretado = concretado
           item.bruto = montoB
-          if(item.group_segment == nombre){
-            this.dataModal.groupSegment = item.group_segment
+          if(item.group_Segment == nombre){
+            this.dataModal.groupSegment = item.group_Segment
             this.dataModal.type = 'Visitas'
-            mbruto.push(100-parseInt(item.concretado))
-            mconcretado.push(parseInt(item.concretado))
+            vbruto.push(100-parseInt(item.concretado))
+            vconcretado.push(parseInt(item.concretado)+"%")
             ejecutivos.push(item.name)
             this.auxiliarg4.push(100)
-            ids.push(parseInt(item.user_id))
+            ids.push(parseInt(item.user_Id))
             return aux.push(item)
           }else{
             return
           }
         });
+        
         this.chart4 = null
-        this.data7 = mbruto
-        this.data8 = mconcretado
+        this.data7 = vbruto
+        this.data8 = vconcretado
         this.ej4 = ejecutivos
         this.ids4 = ids
         let auxiliar = this.auxiliarg4
@@ -1106,10 +1010,10 @@ export default {
           this.chart4.updateSeries([
               {
                 name: 'Monto concretado',
-                data: mconcretado
+                data: vconcretado
               },{   
                 name: 'Monto total',
-                data: mbruto
+                data: vbruto
               },
           ])
         this.chart4.updateOptions({
@@ -1307,6 +1211,8 @@ export default {
     var users = this.ej1
     var ids = this.ids1
     var auxiliar1 = this.aux1
+    let data1 = this.data1
+    let data2 = this.data2
     try { 
         var options = {
             chart: {
@@ -1859,7 +1765,7 @@ export default {
                         let user = {
                             datos:{
                                 "user_id": ids[e.dataPointIndex],
-                                "segmento": users[e.dataPointIndex],
+                                "nombre": users[e.dataPointIndex],
                             },
                             leads:[],
                         }
@@ -2281,7 +2187,7 @@ export default {
     }
     },
     updated() {
-      console.clear() 
+      /* console.clear() */ 
     },
 
     cargarAños(){
@@ -2547,24 +2453,26 @@ export default {
             name: 'Eventos',
             mbruto: this.separaNumeros(total3),
             mconcretado: this.separaNumeros(rate3),
-            diferencia: this.separaNumeros((rate3/total2)*100)+"%"
+            diferencia: this.separaNumeros((rate3/total3)*100)+"%"
         })
         //VISITAS
         rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
         let visit1=0, visit2=0, visit3=0
         for(let i=0; i< data.tableVisitInt.length; i++){
-            if(data.tableVisitInt[i].group_segment == 'Agencias'){
+            if(data.tableVisitInt[i].group_Segment == 'Agencias'){
                 rate1 += data.tableVisitInt[i].suma
                 total1 +=  100
                 visit1 += data.tableVisitInt[i].number_Of_Visits
-            }else if(data.tableVisitInt[i].group_segment == 'Corporativo'){
+            }else if(data.tableVisitInt[i].group_Segment == 'Corporativo'){
                 rate2 += data.tableVisitInt[i].suma
                 total2 +=  100
-                visit3 += data.tableVisitInt[i].number_Of_Visits
-            }else{
+                visit2 += data.tableVisitInt[i].number_Of_Visits
+            }else if(data.tableVisitInt[i].group_Segment == 'Eventos'){
                 rate3 += data.tableVisitInt[i].suma
                 total3 +=  100
                 visit3 += data.tableVisitInt[i].number_Of_Visits
+            }else{
+              return
             }
         }
         if(total1==0){total1=1}
@@ -2663,20 +2571,20 @@ export default {
             this.data2.push(total2)
             this.aux1.push(taux2)
           } */
-
+          if(data.dashboardRateHotel.length > 0){
             this.ej1.push('Agencias','Corporativo')
             this.data1.push(rate1,rate2)
             this.data2.push(total1,total2)
             this.aux1.push(taux,taux2)
-          
+          } 
           //VISITAS
           rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
           let c1=0,c2=0,c3=0
           for(let i=0; i<data.tableVisitInt.length; i++){
-            if(data.tableVisitInt[i].group_segment == 'Agencias'){
+            if(data.tableVisitInt[i].group_Segment == 'Agencias'){
                 rate1 += data.tableVisitInt[i].suma
                 c1++     
-            }else if(data.tableVisitInt[i].group_segment == 'Corporativo'){
+            }else if(data.tableVisitInt[i].group_Segment == 'Corporativo'){
                 rate2 += data.tableVisitInt[i].suma
                 c2++
             }else{
@@ -2691,10 +2599,12 @@ export default {
           if(c1==0){percent1=0}
           if(c2==0){percent2=0}
           if(c3==0){percent3=0}
-          this.ej3.push('Agencias', 'Corporativo', 'Eventos')
-          this.data5.push(percent1, percent2, percent3)
-          this.data6.push((100-percent1), (100-percent2), (100-percent3))
-          this.aux3.push(taux, taux, taux)
+          if(data.tableVisitInt.length > 0){
+            this.ej3.push('Agencias', 'Corporativo', 'Eventos')
+            this.data5.push(rate1, rate2, rate3)
+            this.data6.push((100-percent1), (100-percent2), (100-percent3))
+            this.aux3.push(taux, taux, taux)
+          }
           //Eventos
           rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
           for(let i=0; i<data.dashboardRateEvents.length; i++){
@@ -2724,28 +2634,12 @@ export default {
                 }             
             }
           }
-          /* if(total1>0 || rate1>0){
-            this.ej2.push('Agencias')
-            this.data3.push(rate1)
-            this.data4.push(total1)
-            this.aux2.push(taux)
-         }else if(total2>0 || rate2>0){
-            this.ej2.push('Corporativo')
-            this.data3.push(rate2)
-            this.data4.push(total2)
-            this.aux2.push(taux2)
-         }else if(total3>0 || rate3>0){
-            this.ej2.push('Eventos')
-            this.data3.push(rate3)
-            this.data4.push(total3)
-            this.aux2.push(taux3)
-         } */
-
+          if(data.dashboardRateEvents.length > 0){
             this.ej2.push('Agencias', 'Corporativo', 'Eventos')
             this.data3.push(rate1, rate2, rate3)
             this.data4.push(total1, total2, total3)
             this.aux2.push(taux, taux2, taux3)
-         
+          }
           
         }else{
           this.resetFiltro()
