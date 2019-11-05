@@ -25,7 +25,7 @@
                   <template v-slot:activator="{ on }">
                     <v-btn color="#d69c4f" style="color: #FAFAFA;" dark class="mb-2" v-on="on">Añadir Nuevo Usuario</v-btn>
                   </template>
-                  <v-card>
+                  <v-card >
                     <v-card-title>
                       <span class="headline">{{ formTitle }}</span>
                     </v-card-title>
@@ -135,7 +135,7 @@ import { mapState, mapActions } from 'vuex';
     segments:[],
     order:[],
     headers: [
-      /* {text: 'ID', value: 'userId'}, */
+      {text: 'ID', value: 'userId'},
       {
         text: 'Name',
         align: 'left',

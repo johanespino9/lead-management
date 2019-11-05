@@ -5,13 +5,13 @@
         <v-input v-model="mes" :success-messages="['rellene los campos']" success disabled>Mes de {{mes}}</v-input>
     </v-col>
     <v-col  cols="20" sm="2"  md="80"  >
-        <v-text-field color="#d69c4f" label="$ Tarifa Neta" id="tarifa" v-mask="mask" :value="tarifa" @input="UpdateTarifa" >{{tarifa}}</v-text-field>
+        <v-text-field color="#d69c4f" label="$ Tarifa Neta"  v-mask="mask" :value="tarifa" @input="UpdateTarifa" >{{tarifa}}</v-text-field>
     </v-col>
     <v-col  cols="20" sm="2"  md="80"  >
-        <v-text-field color="#d69c4f" label="Habitaciones" id="habitacion" v-mask="mask" :value="habitaciones"  @input="UpdateHabitaciones">{{habitaciones}}</v-text-field>
+        <v-text-field color="#d69c4f" label="Habitaciones" v-mask="mask" :value="habitaciones"  @input="UpdateHabitaciones">{{habitaciones}}</v-text-field>
     </v-col>
     <v-col  cols="20" sm="2"   md="80" >
-        <v-text-field color="#d69c4f" label="Noches" id="noche" v-mask="mask"  :value="noches" @input="UpdateNoches">{{noches}}</v-text-field>
+        <v-text-field color="#d69c4f" label="Noches"  v-mask="mask"  :value="noches" @input="UpdateNoches">{{noches}}</v-text-field>
     </v-col>
     <!-- <v-col  cols="20" sm="3"  md="80" >
         <v-input v-model="totalmes1" :success-messages="[`total del mes Enero`]" success disabled>$</v-input>

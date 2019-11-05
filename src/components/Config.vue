@@ -4,14 +4,17 @@
          <v-card> 
               <v-container>
                 <v-row>
-                    <v-col cols="1" md="2" sm="12">
-                        <v-avatar size="150">
+                    <v-col cols="12" md="3" sm="80">
+                        <v-layout column align-center>
+                        <v-flex class="mt-5">
+                          <v-avatar size="200">
                             <img
-                                src="https://cdn.vuetifyjs.com/images/john.jpg"
-                                alt="John"
+                              src="../assets/sideral.jpg"
+                              alt="Cucho"
                             >
-                         </v-avatar>
-                         
+                          </v-avatar>
+                        </v-flex>
+                      </v-layout>
                     </v-col>
                   <v-col cols="20" sm="3" md="80" class=center>
                     <v-text-field

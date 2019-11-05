@@ -18,7 +18,7 @@
   </v-container>  
 
   <v-container class="col-md-6">
-    <v-row class="ml-4">
+    <v-row class="ml-9">
       <v-col>
         <v-progress-circular
         :rotate="360"

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div v-if="role!='Ejecutivo'">
         <div class="">
         <!-- primer ROW -->
         <div class="row">
@@ -108,13 +109,24 @@
 </v-container>
 
 
-  </div>
+
+</div>
+
+<div v-if="role=='Ejecutivo'"> 
+      <NotFound/>
+</div>
+
+</div>
 </template>
 
 <script>
 import axios from "axios";
 import { mapState, mapActions } from 'vuex';
+import NotFound from './NotFound'
 export default {
+  components:{
+      NotFound
+  },
   data: () => ({
     overlay: false,
     usuario: '',
@@ -181,7 +193,8 @@ export default {
     ],
     items: [],
     roomRevenue: null,
-    events: null
+    events: null,
+    role: ''
   }),
 
 
@@ -210,6 +223,7 @@ export default {
       if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
       }
+      this.verificaPermisos()
       window.scrollTo(500, 0);
     }catch (error){
       console.log('Hubo un error')
@@ -224,6 +238,9 @@ export default {
       for(let i = 0; i < hoteless.length; i++){
         this.hotels.push(hoteless[i].shortName);
       }
+    },
+    verificaPermisos(){
+      this.role = JSON.parse(localStorage.getItem('usuario')).role
     },
     //Filtro dashboard
     async FiltroDashboardPorId(id, hotel, month, year){ 

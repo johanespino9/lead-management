@@ -10,7 +10,7 @@
     </v-app> 
     <v-app v-if="accessToken!=null && (localStorageLength>=8 || lenghLS>=8 || lenghLS2>=8)"> 
       <NavBar></NavBar>
-      <Menu></Menu>
+      <!-- <Menu></Menu> -->
       <Content></Content>
       <Footer></Footer>
     </v-app>
@@ -23,7 +23,7 @@
 <script>
 
 import NavBar from './components/NavBar';
-import Menu from './components/Menu';
+/* import Menu from './components/Menu'; */
 import Content from './components/Content';
 import Footer from './components/Footer';
 import Login2 from './components/Login2';
@@ -36,7 +36,7 @@ export default {
   name: 'App',
   components: {
     NavBar,
-    Menu,
+    /* Menu, */
     Content,
     Footer,
     Login2,

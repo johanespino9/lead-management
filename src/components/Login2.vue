@@ -120,8 +120,9 @@ export default {
         this.$store.dispatch('getBranch') 
         this.$store.dispatch('getVisits')
       })
-      } catch (error) { 
-          swal ( "Usuario y/o contraseña incorrectos" ,  "No tienes acceso!" ,  "error" )
+      } catch (error) {
+          console.log(error) 
+          swal ( "Usuario y/o contraseña incorrectos" ,  `${error}` ,  "error" )
       }
     }
   }

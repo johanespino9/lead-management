@@ -1,13 +1,6 @@
 <template>
     <div>
         <div v-if="role == 'Administrador'">
-        <!-- <v-container class="col-lg-6" >
-              <v-row justify="center">
-                <v-col cols="6">
-                  <v-combobox @change="FiltraCuentas()" color="#d69c4f"  v-model="filtroSelected" :items="filtro" label="Selecciona un elemento"></v-combobox>
-                </v-col>
-              </v-row>
-        </v-container> -->
         <v-data-table
               :search="search"
               :headers="headers"
@@ -22,7 +15,7 @@
             
               <template v-slot:top>
                 <v-toolbar flat color="white">
-                  <v-toolbar-title>Gestión de Cuentas</v-toolbar-title>
+                  <v-toolbar-title>Gestión de Hoteles</v-toolbar-title>
                   <v-divider
                     class="mx-4"
                     inset
@@ -33,12 +26,13 @@
                   <div class="flex-grow-1"></div>
                   <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on }">
-                      <v-btn @click="rellenadatos()" color="#d69c4f" dark class="mb-2" v-on="on">Añadir Nuevo Hotel</v-btn>
+                      <v-btn @click="vaciaDatos()" color="#d69c4f" dark class="mb-2" v-on="on">Añadir Nuevo Hotel</v-btn>
                     </template>
                       <!-- CARD ADD AND EDIT -->
-                      <v-card>
+                      <v-card >
                       <v-card-title>
                         <span class="headline">{{ formTitle }}</span>
+                        <!-- <v-container><span class="headline">{{ formTitle }}</span></v-container> -->
                       </v-card-title>
           
                       <v-card-text>
@@ -47,32 +41,31 @@
                             <!-- <v-col v-if="editedIndex>-1" cols="12" sm="6" md="12">
                               <v-text-field disabled color="#ff4200" v-model="editedItem.accountId" label="Account Id"></v-text-field>
                             </v-col> -->
-                            <v-col cols="12" sm="6" md="12">
-                              <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="name-id" required disabled color="#d69c4f" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
-                              <v-text-field v-else required color="#d69c4f" id="name-id" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
+                            <v-col cols="20" sm="12" md="80">
+                              <v-text-field v-if="role=='Administrador'" id="name-id"   color="#d69c4f" v-model="editedItem.shortName" label="Nombre del Hotel"></v-text-field>
                             </v-col>
-                            <v-col cols="auto">
-                              <v-combobox color="#d69c4f" id="sector-id" required v-if="editedIndex>=0  && editedItem.edit==false && role=='Ejecutivo'" disabled v-model="editedItem.branch" :items="branchs" label="Seleccionar Sector"></v-combobox>
-                              <v-combobox color="#d69c4f" id="sector-id" required v-else v-model="editedItem.branch" :items="branchs" label="Seleccionar Sector"></v-combobox>
+                            <v-col cols="20" sm="8" md="80">
+                              <v-combobox color="#d69c4f"  v-if="role=='Administrador'" id="category-id"  v-model="editedItem.typeHotel" :items="types" label="Seleccionar Categoria"></v-combobox>
                             </v-col>
-
-                            <v-col cols="auto">
-                              <v-combobox color="#d69c4f" required v-if="editedIndex>=0  && editedItem.edit==false && role=='Ejecutivo'" id="category-id" disabled v-model="editedItem.category" :items="categories" label="Seleccionar Categoria"></v-combobox>
-                              <v-combobox color="#d69c4f" required v-else  v-model="editedItem.category" id="category-id" :items="categories" label="Seleccionar Categoria"></v-combobox>
+                            <v-col cols="20" sm="8" md="80">
+                              <v-combobox color="#d69c4f" id="sector-id"  v-if="role=='Administrador'"  v-model="editedItem.region" :items="regions" label="Seleccionar Region"></v-combobox>
+                  
                             </v-col>
 
-                            <v-col cols="auto" v-if="role=='Supervisor de Segmento'" >
+                            
+
+                            <!-- <v-col cols="auto" v-if="role=='Administrador'" >
                                <v-combobox color="#d69c4f" @change="cambiaGS()"  v-model="editedItem.user" @focus="getEjecutivos()" :items="misEjecutivos" label="Seleccionar Ejecutivo"></v-combobox>
                             </v-col>
 
-                            <v-col v-if="role == 'Ejecutivo'"  cols="12" sm="6" md="6">
+                            <v-col v-if="role == 'Administrador'"  cols="12" sm="6" md="6">
                               <v-text-field color="#d69c4f" id="gs-id" required disabled v-model="editedItem.groupSegment" label="Group Segment"></v-text-field>
                             </v-col>
                             
-                            <v-col v-if="role == 'Supervisor de Segmento'" cols="12" sm="6" md="6">
+                            <v-col v-if="role == 'Administrador'" cols="12" sm="6" md="6">
                               <v-text-field color="#d69c4f" id="gs-id" required disabled v-model="editedItem.groupSegment" label="Group Segment"></v-text-field>
                             </v-col>
-
+ -->
                           </v-row>
                         </v-container>
                       </v-card-text>
@@ -80,29 +73,17 @@
                       <v-card-actions>
                         <div class="flex-grow-1"></div>
                         <v-btn color="#d69c4f" text @click="close">Cancel</v-btn>
-                        <v-btn v-if="editedIndex==-1 || editedItem.edit == true " color="#d69c4f" text @click="save">Save</v-btn>
+                        <v-btn color="#d69c4f" text @click="save">Save</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
                 </v-toolbar>
               </template> 
 
-              <template v-slot:item.edit="{ item }">
-                <!-- <v-chip :color="getEstado(item.edit)" dark>{{ item.edit }}</v-chip>
-                <v-chip v-if="item.edit == true" :color="getEstado(item.edit)" dark>Puedes editar</v-chip> -->
+             <template v-slot:item.action="{ item }">
+                <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
                 
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-icon v-if="item.edit == false" v-on="on"  small class="mr-2" @click="editItem(item)">mdi-account-details</v-icon>
-                  </template>
-                  <span>Detalles</span>
-                </v-tooltip>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-icon v-if="item.edit == true" v-on="on" small class="mr-2" @click="editItem(item)">edit</v-icon>
-                  </template>
-                  <span>Editar</span>
-                </v-tooltip>
+              <!--  <v-icon small @click="deleteItem(item)">delete</v-icon> -->
               </template>
         </v-data-table>
         <div class="text-center pt-2">
@@ -110,6 +91,9 @@
       </div>
     </div>
 
+    <div v-if="role!='Administrador'"> 
+      <NotFound/>
+    </div>
 
   </div>
 </template>
@@ -117,7 +101,11 @@
 import { mask } from 'vue-the-mask';
 import {mapState, mapActions} from 'vuex'
 import axios from 'axios';
+import NotFound from './NotFound'
 export default {
+    components:{
+      NotFound
+    },
     directives: {
       mask,
     },
@@ -126,15 +114,15 @@ export default {
     role: '',
     select: '',
       headers: [
-        /* { text: 'Sector', value: 'accountId' }, */
+        { text: 'Hotel ID', value: 'hotelId' }, 
         {
           text: 'Nombre del Hotel',
           align: 'left',
-          value: 'name',
+          value: 'shortName',
         },
-        { text: 'Estado', value: 'groupSegment' },
-        { text: 'Actions', value: 'edit' },
-        /* { text: 'Actions', value: 'action', sortable: false }, */
+        { text: 'Región', value: 'region' },
+        { text: 'Tipo de Hotel', value: 'typeHotel' },
+        { text: 'Actions', value: 'action', sortable: false }, 
       ],
       search: "",
       desserts: [],
@@ -142,32 +130,20 @@ export default {
       editedIndex: -1,
       gsegment: JSON.parse(localStorage.getItem('usuario')).groupSegment,
       editedItem: {
-        accountId: 0,
-        name: '',
-        branch: '',
-        category: '',
-        groupSegment: JSON.parse(localStorage.getItem('usuario')).groupSegment,
-        edit: false,
-        user: ''
+        hotelId: 0,
+        shortName: '',
+        region: '',
+        typeHotel: ''
       },
       defaultItem: {
-        name: '',
-        branch: '',
-        category: '',
-        groupsegment: '',
-        user: ''
+        hotelId: 0,
+        shortName: '',
+        region: '',
+        type: ''
       },
-      categories:[],
-      branchs:[],
-      msjsuccess:'Se guardó correctamente',
-      type: 'success',
-      dismissCountDown: 0,
-      dismissSecs: 2,
-      role: '',
-      misEjecutivos: [],
-      gruposDeUsuarios:[],
-      groupSegmentSelected: '',
-      ejecutivoSelected: '',
+      types: [],
+      regions:[],
+
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
@@ -175,13 +151,159 @@ export default {
       filtroSelected: 'Todas las cuentas',
       cuentasTemporal: []
     }),
+    computed: {
+      ...mapState(['Hoteles', 'accessToken']),
+      formTitle() {
+      return this.editedIndex === -1 ? "Nuevo Hotel" : "Editar Hotel";
+      },
+    },
+    watch: {
+      dialog(val) {
+        val || this.close();
+      },
+    },
     mounted() {
+        this.rellenadatos()
         this.verificaPermisos()
         console.clear()
     },
     methods:{
         verificaPermisos(){
             this.role = JSON.parse(localStorage.getItem('usuario')).role
+        },
+        async getRegions(){
+          let config = {
+            headers: {
+              'Authorization': 'Bearer ' + this.accessToken
+            }  
+          }
+          let url = 'https://casa-andina-backend.azurewebsites.net/region'
+          await axios.get(url, config)
+          .then(response => { 
+            this.regions = response.data
+          }).catch(error => {
+            console.log('Hubo un error ', error)
+          }) 
+        },
+        async getTipoHoteles(){
+          let config = {
+            headers: {
+              'Authorization': 'Bearer ' + this.accessToken
+            }  
+          }
+          let url = 'https://casa-andina-backend.azurewebsites.net/type_hotel'
+          await axios.get(url, config)
+          .then(response => { 
+            this.types = response.data
+          }).catch(error => {
+            console.log('Hubo un error ', error)
+          }) 
+        },
+        async addHotels(){
+          const datos = {
+            "shortName": this.editedItem.shortName,
+            "region": this.editedItem.region,
+            "typeHotel": this.editedItem.typeHotel
+          }
+          let config = {
+            headers: {
+              'Authorization': 'Bearer ' + this.accessToken
+            }  
+          }
+          let url = 'https://casa-andina-backend.azurewebsites.net/hotels'
+          await axios.post(url, datos, config)
+          .then(response => { 
+            localStorage.setItem('hoteles', JSON.stringify(response.data))
+            this.desserts = response.data
+            toastr.success('Se guardó correctamente', {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+          }).catch(error => {
+            /* this.alerts('Ocurrio un error y no se guardó', 'error') */
+            console.log('Hubo un error ', error)
+            toastr["error"]("Ocurrió un error y no se guardó")
+          }) 
+        },
+        async editHotels(){
+          const datos = {
+            "hotelId": this.editedItem.hotelId,
+            "shortName": this.editedItem.shortName,
+            "region": this.editedItem.region,
+            "typeHotel": this.editedItem.typeHotel
+          }
+          let config = {
+            headers: {
+              'Authorization': 'Bearer ' + this.accessToken
+            }  
+          }
+          let url = 'https://casa-andina-backend.azurewebsites.net/hotels'
+          await axios.put(url, datos, config)
+          .then(response => { 
+            console.log(response.data)
+            localStorage.setItem('hoteles', JSON.stringify(response.data))
+            this.desserts = response.data
+            toastr.success('Se guardó correctamente', {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+            })
+          }).catch(error => {
+            /* this.alerts('Ocurrio un error y no se guardó', 'error') */
+            console.log('Hubo un error ', error)
+            toastr["error"]("Ocurrió un error y no se guardó")
+          }) 
+        },
+        rellenadatos(){
+          this.getRegions()
+          this.getTipoHoteles()
+          let hoteles = JSON.parse(localStorage.getItem('hoteles'))
+          this.desserts = hoteles
+        },
+        vaciaDatos(){
+          this.editedItem = {}
+        },
+        editItem(item) {
+          this.editedIndex=-1
+          this.editedIndex = this.desserts.indexOf(item);
+          this.editedIndex = this.desserts.indexOf(item);
+          this.dialog = true;
+            if(this.editedIndex>=0){
+              this.editedItem = Object.assign({}, item);
+            }else{
+            }
+        },
+        close() {
+          this.dialog = false;
+          setTimeout(() => {
+            this.editedItem = Object.assign({}, this.defaultItem);
+            this.editedIndex = -1;
+          }, 300);
+        },
+        save(){
+          if (this.editedIndex > -1) {
+            //editando hotel
+            this.editHotels()
+          } else {
+            //editar hotel
+            console.log('agregando')
+            this.addHotels()
+            
+          } 
+          this.close();
         },
     }
 }

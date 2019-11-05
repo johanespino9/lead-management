@@ -3,8 +3,10 @@
     <v-content>   
       <v-container
         fluid
+        class="mt-12"
+        
       > 
-          <v-flex shrink>
+          <v-flex shrink class="mt-4">
               <router-view> 
               </router-view>
           </v-flex>

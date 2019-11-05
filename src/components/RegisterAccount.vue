@@ -223,6 +223,7 @@ import axios from 'axios';
      if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
      }
+     window.scrollTo(500, 0);
    },
     methods: {
       ...mapActions(['stateToken']), 
@@ -250,7 +251,6 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/accounts'
       await axios.post(url, datos, config)
       .then(response => { 

@@ -110,7 +110,7 @@
         </v-list-item>
         
         <div id="robotin" style="margin-bottom: 30px; margin-right: 10px; display:scroll;position:fixed; bottom:0px; left:55px;cursor:pointer;max-width:120px;">
-        <a href=""> <img style="margin-bottom: 10px;" src="../assets/robotin.gif" alt="robotin"></a>
+          <a  @click="abreModalSugestion()"> <img style="margin-bottom: 10px;" src="../assets/robotin.gif" alt="robotin"></a>
         </div>
         
         <!-- <v-list-item to="">
@@ -121,6 +121,53 @@
             <v-list-item-title>Settings</v-list-item-title>
           </v-list-item-content>
         </v-list-item>  -->
+
+        
+        
+
+      <v-dialog v-model="dialog" persistent max-width="1200px" hide-overlay transition="dialog-bottom-transition">   
+        <v-overlay v-if="dialog==true" > 
+               
+         <v-card>
+
+                <v-card color="#000000" >
+                <v-card-title>
+                  <v-list-item two-line>
+                    
+                    <span class="title font-weight-light" color="#FAFAFA"><h5 style="color: white">Hola {{User.name}}, como puedo ayudarte</h5> </span>
+                    <v-list-item-avatar class="mr-0" color="grey darken-3">
+                      <v-btn icon dark @click="dialog = false">
+                          <v-icon>mdi-close</v-icon>
+                      </v-btn>
+                    </v-list-item-avatar>
+                    <!-- <v-list-item-content class="text-right" style="margin-top:5px">
+                      <v-list-item-subtitle> <strong>Hoteles</strong>  </v-list-item-subtitle>
+                   </v-list-item-content> -->
+                 </v-list-item>
+                </v-card-title>
+                <div class="position-relative mb-4" style="margin-top:0;">
+                    
+                </div>
+              </v-card>
+                <v-list three-line subheader>
+                <v-list-item>
+                  <v-container justify-center>
+                      <div id="div1" class="position-relative mb-4 text-center" style="margin-top:0;">
+                        <div id="chart4"></div>
+                      </div>
+                  </v-container>
+                </v-list-item>
+                </v-list>
+                <v-divider></v-divider>
+
+              
+
+            </v-card>
+
+             </v-overlay>
+            </v-dialog>
+
+
 
         </v-list-item-group>
 
@@ -149,7 +196,8 @@ export default {
       email: 'user@casa-andina.com',
       usern:'',
       role:'',
-      groupS: ''
+      groupS: '',
+      dialog: false,
     }),
     computed: {
       ...mapState(['username', 'User'])
@@ -158,6 +206,12 @@ export default {
       ...mapActions(['Logout']),
       CerrarSession(){
         this.Logout()
+      },
+      abreModalSugestion(){
+        console.log(this.User)
+
+        this.mini = true
+        this.dialog = true
       }
     },
     mounted(){
@@ -183,7 +237,7 @@ export default {
   updated() {
     /* var user = JSON.parse(localStorage.getItem('usuario'))
     this.$store.commit('User', user) */
-    console.clear()
+    /* console.clear() */
     this.usern = this.User.username
     this.email = this.User.email
     this.role = this.User.role

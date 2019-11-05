@@ -1,7 +1,7 @@
 <template>
 <div>
-  
-  <div v-if="groupSG != 'Eventos' ||  role!='Administrador'">
+  <div v-if="role!='Ejecutivo'">
+  <div >
   <div id="div-visitas">
         <!-- primer ROW -->
         <div class="row">
@@ -335,9 +335,9 @@
   </v-row>
   
 </v-container>
+</div>
 
-
- <div v-if="groupSG == 'Eventos'">
+ <div v-if="groupSG == 'Eventos' || this.role == 'Ejecutivo'">
    <NotFound/>
  </div>
 

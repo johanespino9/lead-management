@@ -110,10 +110,10 @@
                     <v-text-field v-model="editedItem.leadid" disabled  label="Lead ID" ></v-text-field>
                   </v-col> -->
                   <v-col v-if="razon==4" cols="20" sm="4" md="80" class=center>
-                    <v-combobox color="#d69c4f" id="segments-id" v-model="editedItem.razon"  :items="razones" label="Seleccionar Motivo" ></v-combobox>
+                    <v-combobox color="#d69c4f" id="segments-id1" v-model="editedItem.razon"  :items="razones" label="Seleccionar Motivo" ></v-combobox>
                   </v-col>
                   <v-col v-if="razon==5" cols="20" sm="4" md="80" class=center>
-                    <v-combobox color="#d69c4f" id="segments-id" v-model="editedItem.razon"  :items="razones" label="Seleccionar Motivo" ></v-combobox>
+                    <v-combobox color="#d69c4f" id="segments-id2" v-model="editedItem.razon"  :items="razones2" label="Seleccionar Motivo" ></v-combobox>
                   </v-col>
                   <v-col v-if="editedItem.statusid==4" cols="20" sm="8" md="80" class=center></v-col>
                   <v-col v-if="editedItem.statusid==5" cols="20" sm="8" md="80" class=center></v-col>
@@ -185,10 +185,10 @@
                     </v-dialog>
                   </v-col>
                   <v-col  v-if="editedItem.segment!='Eventos' && editedItem.segment!='Series'"  cols="20" sm="2" md="80" class=center >
-                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rooms" label="Cantidad de Habitaciones"  >{{rooms}}</v-text-field>
+                    <v-text-field id="habitation-id" color="#d69c4f" v-mask="mask" v-model="rooms" label="Cantidad de Habitaciones"  >{{rooms}}</v-text-field>
                   </v-col>
                   <v-col v-if="editedItem.segment != 'Eventos' && editedItem.segment!='Series'" cols="20" sm="2" md="80" class=center  >
-                    <v-text-field color="#d69c4f" v-mask="mask" v-model="rateHotel" prefix="$" label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
+                    <v-text-field  id="tarifa-id" color="#d69c4f" v-mask="mask" v-model="rateHotel" prefix="$" label="Ingresar Tarifa Neta">{{editedItem.rateHotel}}</v-text-field>
                   </v-col>
                   <!-- <v-col v-if="editedItem.segment=='Series'" cols="20" sm="2" md="80" class=center >
                     <v-text-field color="#d69c4f" v-mask="mask"  v-model="nights" label="Cantidad de Noches" >{{editedItem.nights}}</v-text-field>
@@ -521,6 +521,7 @@ export default {
     },
 
     razones:[],
+    razones2:[],
     todoRazones: [],
     
     mes1 : 'Enero',
@@ -698,17 +699,17 @@ export default {
       let razon = parseInt(this.editedItem.statusid)
       this.razones = []
       this.razon = razon
-      /* this.editedItem.razon = '' */
-       for(let i=0; i<reasons.length; i++){
-        if(razon == 4 && reasons[i].status == 'Congelado'){
-          this.razones.push(reasons[i].reason)
-        }else if(razon == 5){
-          this.razones.push(reasons[i].reason)
-        }else{
-          this.editedItem.razon = ''
-          return
+      this.editedItem.razon = ''
+      for(let i=0; i< reasons.length; i++){
+          if(reasons[i].status == 'Cancelado'){ 
+            this.razones2.push(reasons[i].reason)
+          }
         }
-      } 
+        for(let i=0; i<reasons.length; i++){
+          if(reasons[i].status == 'Congelado'){ 
+            this.razones.push(reasons[i].reason)
+          }
+        }
     },
 
     //POST LEADS
@@ -1013,9 +1014,17 @@ export default {
       await axios.get('https://casa-andina-backend.azurewebsites.net/lead/reason', config)
       .then(response =>{
         this.razones = []
-        console.log(response.data)
+        this.razones2=[]
         for(let i=0; i< response.data.length; i++){
-          this.razones.push(response.data[i].reason)
+          if(response.data[i].status == 'Cancelado'){ 
+            this.razones2.push(response.data[i].reason)
+          }
+        }
+        for(let i=0; i<response.data.length; i++){
+          if(response.data[i].status == 'Congelado'){ 
+            this.razones.push(response.data[i].reason)
+            
+          }
         }
         this.todoRazones = response.data
       }).catch(error =>{

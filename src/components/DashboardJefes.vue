@@ -233,28 +233,35 @@
       <v-btn id="btn-modal2" color="#000000" style="display:none;" dark @click="abreModalEventos()">Abrir Modal</v-btn>
       <v-btn id="btn-modal3" color="#000000" style="display:none;" dark @click="abreModalVisitas()">Abrir Modal</v-btn>
 
-      <v-dialog v-model="dialog" persistent max-width="1200px" hide-overlay transition="dialog-bottom-transition">   
+      <v-dialog  fullscreen   v-model="dialog" persistent max-width="1000px" hide-overlay transition="dialog-bottom-transition">   
             <!-- <template v-slot:activator="{ on }">
                 <v-btn color="#000000" dark v-on="on">Nueva Reserva</v-btn>
             </template> -->
       
          <v-card>
-                <!-- <v-toolbar dark color="#000000">
-                <v-btn icon dark @click="dialog = false">
+                <v-toolbar dark >
+                <!-- <v-btn icon dark @click="dialog = false">
                     <v-icon>mdi-close</v-icon>
-                </v-btn>
+                </v-btn> -->
                 <v-toolbar-title>
                   <v-container>
-                    Ejecutivos del Grupo de Segmento {{dataModal.groupSegment}}-
+                    Ejecutivos del Grupo de Segmento {{dataModal.groupSegment}} -
                   </v-container>
                 </v-toolbar-title>
-                <v-toolbar-title class="text-right">Hoteles</v-toolbar-title>
-                <div class="flex-grow-1"></div>
+                <v-toolbar-title class="text-right">{{dataModal.type}}</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                  <v-btn icon dark @click="dialog = false">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+                </v-toolbar-items>
+
                 <v-toolbar-items>
                     
                 </v-toolbar-items>
-                </v-toolbar> -->
-                <v-card color="#000000" >
+                </v-toolbar> 
+
+               <!--  <v-card color="#000000" >
                 <v-card-title>
                   <v-list-item two-line>
                     <v-list-item-avatar class="ml-0" color="grey darken-3">
@@ -263,6 +270,9 @@
                       </v-btn>
                     </v-list-item-avatar>
                     <span class="title font-weight-light" color="#FAFAFA"><h5 style="color: white"> Ejecutivos del Grupo de Segmento {{dataModal.groupSegment}} - {{dataModal.type}}</h5> </span>
+                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                  
                     <v-list-item-content class="text-right" style="margin-top:5px">
                       <v-list-item-subtitle> <strong>Hoteles</strong>  </v-list-item-subtitle>
                    </v-list-item-content>
@@ -271,7 +281,7 @@
                 <div class="position-relative mb-4" style="margin-top:0;">
                     
                 </div>
-              </v-card>
+              </v-card> -->
                 <v-list three-line subheader>
                 <v-list-item>
                   <v-container justify-center>
