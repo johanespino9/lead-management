@@ -9,7 +9,7 @@
                         <v-flex class="mt-5">
                           <v-avatar size="200">
                             <img
-                              src="../assets/sideral.jpg"
+                              src="https://github.com/github.png?size=300"
                               alt="Cucho"
                             >
                           </v-avatar>

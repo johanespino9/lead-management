@@ -85,7 +85,8 @@
       <v-flex class="mt-12">
         <v-avatar size="100">
           <img
-             src="../assets/sideral.jpg"
+             id="img"
+             src="../assets/chupetin.jpg"
              alt="Cuchito"
           >
         </v-avatar>
@@ -199,46 +200,117 @@
         
         
 
-      <v-dialog v-model="dialog" persistent max-width="1200px" hide-overlay transition="dialog-bottom-transition">   
-        <v-overlay v-if="dialog==true" > 
-               
+      <v-dialog v-model="dialog"  max-width="650px" hide-overlay transition="dialog-bottom-transition">   
+            
          <v-card>
-
-                <v-card color="#000000" >
-                <v-card-title>
-                  <v-list-item two-line>
-                    
-                    <span class="title font-weight-light" color="#FAFAFA"><h5 style="color: white">Hola {{User.name}}, ¿Cómo puedo ayudarte?</h5> </span>
-                    <v-list-item-avatar class="mr-0" color="grey darken-3">
-                      <v-btn icon dark @click="dialog = false">
-                          <v-icon>mdi-close</v-icon>
-                      </v-btn>
-                    </v-list-item-avatar>
+              <v-card-title>
+                 <!--  <v-list-item two-line> -->
+                   
+                    <span class="title font-weight-light"><h5 style="color: #000">{{msj}}</h5> </span>
+                   
                     <!-- <v-list-item-content class="text-right" style="margin-top:5px">
                       <v-list-item-subtitle> <strong>Hoteles</strong>  </v-list-item-subtitle>
                    </v-list-item-content> -->
-                 </v-list-item>
+                <!--  </v-list-item> -->
                 </v-card-title>
-                <div class="position-relative mb-4" style="margin-top:0;">
-                    
-                </div>
-              </v-card>
-                <v-list three-line subheader>
-                <v-list-item>
-                  <v-container justify-center>
-                      <div id="div1" class="position-relative mb-4 text-center" style="margin-top:0;">
-                        <div id="chart4"></div>
-                      </div>
+                <v-card-text>
+                   <small>*Acciones que puedes realizar en esta ruta </small> <span class="h5">{{url}}</span> <br>
+
+                  <div id="guia">
+
+                  <v-container >
+
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-btn
+                          color="primary"
+                          dark
+                          
+                        >
+                          Editar tus datos
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-btn
+                          color="primary"
+                          dark
+                          
+                        >
+                          Editar
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          label="Legal last name*"
+                          hint="example of persistent helper text"
+                          persistent-hint
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <!-- <v-text-field label="Email*" required></v-text-field> -->
+                      </v-col>
+                      <v-col cols="12">
+                        <!-- <v-text-field label="Password*" type="password" required></v-text-field> -->
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <v-select
+                          :items="['0-17', '18-29', '30-54', '54+']"
+                          label="Age*"
+                          required
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <v-autocomplete
+                          :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                          label="Interests"
+                          multiple
+                        ></v-autocomplete>
+                      </v-col>
+                    </v-row>
                   </v-container>
-                </v-list-item>
-                </v-list>
-                <v-divider></v-divider>
+                </div>
+
+                </v-card-text>
+                
+
+               <v-card-actions>
+                  <v-btn
+                    color="primary"
+                    text
+                    @click="dialog = false"
+                  >
+                    Close
+                  </v-btn>
+              </v-card-actions>
 
               
 
             </v-card>
 
-             </v-overlay>
+            
+            </v-dialog>
+
+
+            <v-dialog
+              v-model="dialog2"
+              hide-overlay
+              persistent
+              width="300"
+            >
+              <v-card
+                color="primary"
+                dark
+              >
+                <v-card-text>
+                  Por favor, espere un momento
+                  <v-progress-linear
+                    indeterminate
+                    color="white"
+                    class="mb-0"
+                  ></v-progress-linear>
+                </v-card-text>
+              </v-card>
             </v-dialog>
 
 
@@ -286,9 +358,20 @@ export default {
       role:'',
       groupS: '',
       dialog: false,
+      url: "",
+      msj: '',
+      dialog2: false,
+      cuerpo: ''
     }),
     computed: {
       ...mapState(['username', 'User'])
+    },
+    watch: {
+      dialog (val) {
+        if (!val) return
+
+        setTimeout(() => (this.dialog2 = false), 4000)
+      },
     },
     methods: {
       ...mapActions(['Logout']),
@@ -297,7 +380,9 @@ export default {
       }, */
       abreModalSugestion(){
         console.log(this.User)
-
+        console.log(window.location.hash)
+        this.msj = `Hola ${this.User.name}, ¿Cómo puedo ayudarte?`
+        this.url = window.location.hash
         this.mini = true
         this.dialog = true
       },
@@ -314,10 +399,14 @@ export default {
           this.Logout()
         } 
         }); 
+      },
+      cambiarImagen(name, lastName){
+        document.getElementById("img").src="https://www.gravatar.com/avatar/EMAIL_MD5?d=https%3A%2F%2Fui-avatars.com%2Fapi%2F/"+name.substr(0, 1) +""+ lastName.substr(0, 1)+"+/200";
       }
     },
     mounted(){
     try {
+      this.dialog2 = true
       if( Object.keys(this.User).length === 0){
         let user = JSON.parse(localStorage.getItem('usuario'))
         this.$store.commit('User', user)
@@ -325,16 +414,18 @@ export default {
         this.email = this.User.email
         this.role = this.User.role
         this.groupS = this.User.groupSegment
+        this.cambiarImagen(user.name, user.lastName)
       }else{
         this.usern = this.User.username
         this.email = this.User.email
         this.role = this.User.role
         this.groupS = this.User.groupSegment
+        this.cambiarImagen(this.User.name, this.User.lastName)
       }
       setTimeout(function(){
         let btn = document.getElementById('btn-hambuger')
         btn.click()
-      },1500) 
+      },1600) 
     } catch (error) {
       console.log('Hubo un error')
     }
@@ -351,8 +442,7 @@ export default {
     if(localStorage.length>=8){
       this.$store.dispatch('stateToken')
     }
-    /* console.clear() */
-    console.log(window.location.hash)
+    console.clear() 
   },
 }
 </script>
@@ -368,5 +458,12 @@ export default {
   position: fixed;
   width: 100%;
   z-index: 10;
+}
+#guia{
+  background-image: url("../assets/guia.png");
+  display: block;
+  max-width: 100%; 
+  height: 400px;
+  /* background: linear-gradient(to bottom, rgba(url("../assets/guia.png"), 0.0), rgba(url("../assets/guia.png"), 1.0)); */
 }
 </style>
