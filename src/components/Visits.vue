@@ -510,6 +510,7 @@ export default {
       this.tablaVisitas3 = this.tablaVisitas.tableVisitsPercent
       this.cargaTable()
       this.cargaOlvidados(visitas.tableOlvidadosInt)
+      this.fechaActual()
       } catch (error) {
        console.log('Ocurrio un error')
      }
@@ -851,7 +852,31 @@ export default {
          }else{
            this.colorIcon = 'red'
          }
-       }
+       },
+       fechaActual(){
+        let fecha = new Date()
+        if((fecha.getMonth()+1)<10){
+          if(fecha.getDate()<10){
+            this.today = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+            this.defaultDate = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+            return  this.date1 = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+          }else{
+            this.today = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+            this.defaultDate = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+            return  this.date1 = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+          }
+        }else{
+          if(fecha.getDate()<10){
+            this.today = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+            this.defaultDate = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+            return  this.date1 = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+          }else{
+            this.today = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+            this.defaultDate = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+            return  this.date1 = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+          }
+        }
+      },
 
 
   },

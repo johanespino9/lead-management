@@ -674,24 +674,26 @@ export default {
       console.log('ESTA SELECCIONANDO')
     },
     getNameSegments(segmentos){ 
-      var todosegmento = JSON.parse(localStorage.getItem('segmentos'))
+      let todosegmento = JSON.parse(localStorage.getItem('segmentos'))
         for (let i = 0; i < todosegmento.length; i++) {
         this.segments.push(todosegmento[i].name);
       }
     },
     getNameHotels(hoteles) {
-      var todohotels = JSON.parse(localStorage.getItem('hoteles'))
+      let todohotels = JSON.parse(localStorage.getItem('hoteles'))
       for (let i = 0; i < todohotels.length; i++) {
         this.hotels.push(todohotels[i].shortName);
       }
     },
 
     getNameAccounts(accounts) {
-      var todoaccounts = JSON.parse(localStorage.getItem('accounts'))
+      let todoaccounts = JSON.parse(localStorage.getItem('accounts'))
+      let {groupSegment} = JSON.parse(localStorage.getItem('usuario'))
       for (let i = 0; i < todoaccounts.length; i++) {
-        if(todoaccounts[i].edit == true || todoaccounts[i].groupSegment== 'Eventos'){
-          this.leadsAccounts.push(todoaccounts[i].name);
-        }
+        // agregar esto a la condicional de abajo si se quiere traer solo las cuentas de su grupo de segmento
+        /* if(todoaccounts[i].edit == true || todoaccounts[i].groupSegment== groupSegment){ 
+        } */
+        this.leadsAccounts.push(todoaccounts[i].name);
       }
     },
     cambiaRazones(){
@@ -810,7 +812,7 @@ export default {
       var fechaInicio = new Date(f1).getTime();
       var fechaFin    =new Date(f2).getTime ();
       var diff = fechaFin - fechaInicio;
-      var noches = (diff/(1000*60*60*24))-1
+      var noches = (diff/(1000*60*60*24))
 
       this.editedItem.initialdate=this.date1
       this.editedItem.finaldate=this.date2
@@ -848,7 +850,7 @@ export default {
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
         this.calculaTotal(response.data)
-        this.alerts('Se editó correctamente', 'success')
+        this.alerts('Se guardó correctamente', 'success')
         this.$store.dispatch('getDashboard')
       }).catch(error => {
         console.log('Hubo un error ', error)
@@ -963,7 +965,7 @@ export default {
       var fechaInicio = new Date(f1).getTime();
       var fechaFin    =new Date(f2).getTime ();
       var diff = fechaFin - fechaInicio;
-      var noches = (diff/(1000*60*60*24))-1
+      var noches = (diff/(1000*60*60*24))
       this.editedItem.initialdate=this.date1
       this.editedItem.finaldate=this.date2
       var datos={
@@ -1046,13 +1048,14 @@ export default {
         this.editedItem.statusid = 5
         this.razon = 5
         this.cambiaRazones()
+      }else{
+        this.razon = 0
       }
         if(this.editedIndex>=0){
           this.editedItem = Object.assign({}, item);
           this.SeparaMesyRate(item)
           this.EditMesyEvents()
-          this.editedItem.razon = item.reason
-          
+          this.editedItem.razon = item.reason 
         }else{
         }
     },
@@ -1289,6 +1292,7 @@ export default {
       }else{
         this.nights=1
       }
+      this.fechaActual()
     },
     EditMesyEvents(){
       try {
@@ -1376,18 +1380,43 @@ export default {
       let diff = fechaFin - fechaInicio; 
       let dias = (diff/(1000*60*60*24))
       if(this.editedItem.segment=='Series'){
-        let mes1 = this.tarifa1 * this.habitaciones1 * this.noches1
-        let mes2 = this.tarifa2 * this.habitaciones2 * this.noches2
-        let mes3 = this.tarifa3 * this.habitaciones3 * this.noches3
-        let mes4 = this.tarifa4 * this.habitaciones4 * this.noches4
-        let mes5 = this.tarifa5 * this.habitaciones5 * this.noches5
-        let mes6 = this.tarifa6 * this.habitaciones6 * this.noches6
-        let mes7 = this.tarifa7 * this.habitaciones7 * this.noches7
-        let mes8 = this.tarifa8 * this.habitaciones8 * this.noches8
-        let mes9 = this.tarifa9 * this.habitaciones9 * this.noches9
-        let mes10 = this.tarifa10 * this.habitaciones10 * this.noches10
-        let mes11 = this.tarifa11 * this.habitaciones11 * this.noches11
-        let mes12 = this.tarifa12 * this.habitaciones12 * this.noches12
+        let mes1 = 0, mes2=0, mes3=0, mes4=0, mes5=0, mes6=0, mes7=0, mes8=0, mes9=0, mes10=0, mes11=0, mes12=0
+        if(this.estado1 == true){
+          mes1 = this.tarifa1 * this.habitaciones1 * this.noches1
+        }
+        if(this.estado2 == true){
+          mes2 = this.tarifa2 * this.habitaciones2 * this.noches2
+        } 
+        if(this.estado3 == true){
+          mes3 = this.tarifa3 * this.habitaciones3 * this.noches3
+        } 
+        if(this.estado4 == true){
+          mes4 = this.tarifa4 * this.habitaciones4 * this.noches4
+        } 
+        if(this.estado5 == true){
+          mes5 = this.tarifa5 * this.habitaciones5 * this.noches5
+        } 
+        if(this.estado6 == true){
+          mes6 = this.tarifa6 * this.habitaciones6 * this.noches6
+        } 
+        if(this.estado7 == true){
+          mes7 = this.tarifa7 * this.habitaciones7 * this.noches7
+        } 
+        if(this.estado8 == true){
+          mes8 = this.tarifa8 * this.habitaciones8 * this.noches8
+        } 
+        if(this.estado9 == true){
+          mes9 = this.tarifa9 * this.habitaciones9 * this.noches9
+        } 
+        if(this.estado10 == true){
+          mes10 = this.tarifa10 * this.habitaciones10 * this.noches10
+        } 
+        if(this.estado11 == true){
+          mes11 = this.tarifa11 * this.habitaciones11 * this.noches11
+        } 
+        if(this.estado12 == true){
+          mes12 = this.tarifa12 * this.habitaciones12 * this.noches12
+        }
         let revenue = ((parseInt(this.rooms)) *(parseInt(this.rateHotel)) *(parseInt(this.nights))) + 
         mes1 + mes2 + mes3 + mes4 + mes5 + mes6 + mes7 + mes8 + mes9 + mes10 + mes11 + mes12
         this.room_revenue = revenue
@@ -1631,7 +1660,7 @@ export default {
                formatfecha+=letra
              } 
            }
-           totalh = todoleads[i].rateHotel * todoleads[i].rooms *  (todoleads[i].nights+1) + totalmonths
+           totalh = todoleads[i].rateHotel * todoleads[i].rooms *  (todoleads[i].nights) + totalmonths
            this.desserts.push(
              {
               account: todoleads[i].account,
@@ -1697,15 +1726,26 @@ export default {
     fechaActual(){
       let fecha = new Date()
       if((fecha.getMonth()+1)<10){
-        let fechaConcat1 =  fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-"+fecha.getDate()
-        this.date1 = fechaConcat1
-        return this.date = fechaConcat1
+        if(fecha.getDate()<10){
+           this.date = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+           this.date2 = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+           return  this.date1 = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+        }else{
+          this.date = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+          this.date2 = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+          return  this.date1 = fecha.getFullYear()+"-0"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+        }
       }else{
-        let fechaConcat2 =  fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-"+fecha.getDate()
-        this.date1 = fechaConcat2
-        return this.date = fechaConcat2
+        if(fecha.getDate()<10){
+           this.date = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+           this.date2 = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+           return  this.date1 = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-0"+fecha.getDate()
+        }else{
+          this.date = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+          this.dat2 = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+          return  this.date1 = fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-"+fecha.getDate()
+        }
       }
-      /* this.date = fechaConcat */
     },
     alerts(msj, type){
         const msje = msj

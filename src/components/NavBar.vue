@@ -439,8 +439,9 @@ export default {
     this.role = this.User.role
     this.groupS = this.User.groupSegment
 
+    this.$store.dispatch('stateToken')
     if(localStorage.length>=8){
-      this.$store.dispatch('stateToken')
+      
     }
     console.clear() 
   },
