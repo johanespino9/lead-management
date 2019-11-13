@@ -47,8 +47,8 @@
   </v-container> 
 
   <v-container class="col-md-6">
-    <v-row >
-      <v-col>
+    <v-row class="ml-9">
+      <v-col  md="80">
         <v-progress-circular
         :rotate="360"
         :size="200"
@@ -61,7 +61,7 @@
       <h3 class="text-left mt-4" cols="auto">% de concreción <!-- {{percents.room_revenue}}% --></h3>
       <h3 cols="auto">Room Revenue : {{percents.room_revenue}}%</h3>
       </v-col>
-      <v-col>
+      <v-col  md="80">
         <v-progress-circular
         :rotate="360"
         :size="200"
@@ -78,7 +78,7 @@
 
     </v-container>
 
-  <v-container class="col-md-12">
+  <v-container class="col-md-12"> 
    <v-data-table hide-default-footer :headers="headers" :items="values">
       <template slot="headerCell" slot-scope="{ header }">
         <span
@@ -86,17 +86,38 @@
           v-text="header.text"
         />
       </template>
-      <template slot="items" slot-scope="{ item }">
+      
+      <!-- <template slot="items" slot-scope="{ item }">
         <td><strong> {{ item.lead }}</strong> </td>
         <td>{{ item.prospecto }}</td>
         <td>{{ item.tentativo }}</td>
         <td>{{ item.hot }}</td>
         <td>{{ item.congelado }}</td>
         <td>{{ item.cancelado }}</td>
-        <td>{{ item.confirmado }}</td>
+        <td> {{ item.confirmado }}</td>
         <td class="text-xs-right">{{ item.salary }}</td>
-      </template>
+      </template> -->
     </v-data-table>
+    <template>
+        <v-simple-table
+          hide-default-header
+          hide-default-footer
+        >
+          <template v-slot:default>
+            <tbody>
+              <tr v-for="item in values2" :key="item.dato">
+                <td>{{ item.dato }}</td>
+                <td><v-btn class="mx-2" @click="verNoAtendidos(item.prospecto, 'Prospecto',months, yearSelected)" fab dark small color="primary">{{ item.prospecto }}</v-btn> </td>
+                <td><v-btn class="mx-2" @click="verNoAtendidos(item.tentativo, 'Tentativo',months, yearSelected)" fab dark small color="primary">{{ item.tentativo }}</v-btn></td>
+                <td><v-btn class="mx-2" @click="verNoAtendidos(item.hot, 'hot',months, yearSelected)" fab dark small color="primary">{{ item.hot }}</v-btn></td>
+                <td><v-btn class="mx-2" @click="verNoAtendidos(item.congelado, 'Congelado',months, yearSelected)" fab dark small color="primary">{{ item.congelado }}</v-btn></td>
+                <td><v-btn class="mx-2" @click="verNoAtendidos(item.cancelado, 'Cancelado',months, yearSelected)" fab dark small color="primary">{{ item.cancelado }}</v-btn></td>
+                <td><v-btn class="mx-2" @click="verNoAtendidos(item.confirmado, 'Confirmado',months, yearSelected)" fab dark small color="primary">{{ item.confirmado}}</v-btn></td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+    </template>
 </v-container>
 
  <v-overlay v-if="overlay==true" >
@@ -104,15 +125,28 @@
         <h5>Cargando..</h5>
  </v-overlay>
 
-<v-container fluid class="text-right">
-  <v-btn color="#d69c4f" style="color: white;" @click="cambiaVisitas">
-    IR A VISITAS
-  </v-btn>
+  <v-container fluid >
+  <v-row>
+    <v-col class="text-left">
+      <v-btn color="#d69c4f" style="color: white;" class="mr-3" @click="anterior">
+        Anterior
+      </v-btn>
+    </v-col>
+    <v-col class="text-right">
+      <v-btn color="#d69c4f" style="color: white;" class="mr-3" @click="cambiaLeads(months, yearSelected)">
+          Ver Leads
+      </v-btn>
+      <v-btn color="#d69c4f" style="color: white;" @click="cambiaVisitas">
+        IR A VISITAS
+      </v-btn>
+    </v-col>
+  </v-row>
+  
 </v-container>
 
 
-
 </div>
+  
 
 <div v-if="role=='Ejecutivo'"> 
       <NotFound/>
@@ -196,7 +230,8 @@ export default {
     items: [],
     roomRevenue: null,
     events: null,
-    role: ''
+    role: '',
+    values2: []
   }),
 
 
@@ -245,7 +280,23 @@ export default {
       this.role = JSON.parse(localStorage.getItem('usuario')).role
     },
     //Filtro dashboard
-    async FiltroDashboardPorId(id, hotel, month, year){ 
+    async FiltroDashboardPorId(id, hotel, month, year){
+      let datos_user = JSON.parse(localStorage.getItem('leads-user')).datos
+      let fecha = this.monthSelected+' '+year
+      let filtro = 0
+      if(month.indexOf(this.monthSelected)<10){
+        filtro = year+'-0'+month.indexOf(this.monthSelected)
+      }else{
+        filtro = year+'-'+month.indexOf(this.monthSelected)
+      } 
+      let dataLS = {
+        datos: datos_user,
+        leads: [],
+        fecha: fecha,
+        filtro: filtro,
+        hotel: this.hotelSelected
+      }
+      localStorage.setItem('leads-user', JSON.stringify(dataLS))
       let datos = {
     		"hotel": hotel,
     		"month": month.indexOf(this.monthSelected),
@@ -266,6 +317,16 @@ export default {
         this.values = array
         this.percents = res.data.porcentajeConcrecion
         this.imprimeNumeros(res.data)
+        let array2 = []
+        for(let i=3; i<array.length; i++){
+          array2.push(array[i]);
+        }
+        this.values2 = array2
+        let array3 = []
+        for(let i=0; i<array.length-1; i++){
+          array3.push(array[i])
+        }
+        this.values = array3
       }) 
       .catch((error) => {
         console.log('Hubo un error',error)
@@ -288,6 +349,7 @@ export default {
       .then((res) => {
         this.values = res.data.table
         this.percents = res.data.porcentajeConcrecion
+        
       }) 
       .catch((error) => {
         console.log('Hubo un error',error)
@@ -377,6 +439,64 @@ export default {
         window.location.href = '/#/dashboard_gerentes/visits-user/id'
       } 
     },
+    cambiaLeads(month, year){
+      let datos_user = JSON.parse(localStorage.getItem('leads-user')).datos
+      let fecha = this.monthSelected+' '+year
+      let filtro = 0
+      if(month.indexOf(this.monthSelected)<10){
+        filtro = year+'-0'+month.indexOf(this.monthSelected)
+      }else{
+        filtro = year+'-'+month.indexOf(this.monthSelected)
+      } 
+      let dataLS = {
+        datos: datos_user,
+        leads: [],
+        fecha: fecha,
+        filtro: filtro,
+        hotel: this.hotelSelected,
+      }
+
+      let {role} = JSON.parse(localStorage.getItem('usuario')) 
+      if(role == 'Administrador' || role == 'Gerente de ventas'){
+        window.location.href = '/#/dashboard_gerentes/leads-user/id'
+      }else{
+        window.location.href = '/#/dashboard_jefes/leads-user/id'
+      }  
+    },
+    anterior(){
+      let {role} = JSON.parse(localStorage.getItem('usuario')) 
+      if(role == 'Administrador' || role == 'Gerente de ventas'){
+        window.location.href = '/#/dashboard_gerentes'
+      }else{
+        window.location.href = '/#/dashboard_jefes'
+      }  
+    },
+    verNoAtendidos(item, valor, month, year){
+      let datos_user = JSON.parse(localStorage.getItem('leads-user')).datos
+      let fecha = this.monthSelected+' '+year
+      let filtro = 0
+      if(month.indexOf(this.monthSelected)<10){
+        filtro = year+'-0'+month.indexOf(this.monthSelected)
+      }else{
+        filtro = year+'-'+month.indexOf(this.monthSelected)
+      } 
+      let dataLS = {
+        datos: datos_user,
+        leads: [],
+        fecha: fecha,
+        filtro: filtro,
+        hotel: this.hotelSelected,
+        status: valor
+      }
+      localStorage.setItem('leads-user', JSON.stringify(dataLS))
+      console.log(item, valor)
+      let {role} = JSON.parse(localStorage.getItem('usuario')) 
+      if(role == 'Administrador' || role == 'Gerente de ventas'){
+        window.location.href = '/#/dashboard_gerentes/leads-user/id'
+      }else{
+        window.location.href = '/#/dashboard_jefes/leads-user/id'
+      }  
+    }
    
 
 

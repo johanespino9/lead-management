@@ -23,7 +23,7 @@
                 <div class="flex-grow-1"></div>
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on }">
-                    <v-btn color="#d69c4f" style="color: #FAFAFA;" dark class="mb-2" v-on="on">Añadir Nuevo Usuario</v-btn>
+                    <v-btn color="#d69c4f"  style="color: #FAFAFA;" dark class="mb-2" v-on="on">Añadir Nuevo Usuario</v-btn>
                   </template>
                   <v-card >
                     <v-card-title>
@@ -67,7 +67,7 @@
                                 <v-combobox color="#d69c4f" @change="getManagers()" v-model="editedItem.role" :items="rol" label="Seleccionar Rol"></v-combobox>
                               </v-col>
                           <v-col v-if="editedItem.role=='Ejecutivo' || editedItem.role == 'Supervisor de Segmento'" cols="20" sm="10" md="80" class=center>
-                            <v-combobox color="#d69c4f" @change="filtraSupervisors()" v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
+                            <v-combobox color="#d69c4f"  @change="filtraSupervisors()" v-model="editedItem.groupSegment" :items="groupSegment" label="Group Segment"></v-combobox>
                           </v-col>
        
                           <v-col v-if="editedItem.role=='Ejecutivo' || editedItem.role == 'Supervisor de Segmento'" cols="20" sm="10" md="80" class=center>
@@ -334,7 +334,14 @@ import { mapState, mapActions } from 'vuex';
       this.editedIndex = this.desserts.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.password = this.editedItem.password
-      this.dialog = true
+      let role = item.role
+      if(this.editedIndex >-1){
+        if(role == 'Ejecutivo' || role == 'Supervisor de Segmento'){
+          this.getManagers()
+          
+        }
+        this.dialog = true
+      }
     },
 
     deleteItem (item) {
@@ -369,31 +376,34 @@ import { mapState, mapActions } from 'vuex';
     },
     //Obteniendo Managers
     async getManagers(){
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.accessToken
+        if(this.editedItem.role=='Ejecutivo' || this.editedItem.role=='Supervisor de Segmento'){
+          let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+          }
         }
+        let url = 'https://casa-andina-backend.azurewebsites.net/role/'+(this.rol.indexOf(this.editedItem.role)) +'/manager'
+        await axios.get(url, config)
+        .then((response) => {
+          this.supervisors = []
+          this.managers = response.data
+          for(let i=0; i<response.data.length; i++){
+            this.supervisors.push(response.data[i].fullName)
+          }
+          this.filtraSupervisors() 
+        })
+        .catch((error) => {
+          console.log(error)
+          /* localStorage.removeItem('token')
+          location.reload(); */
+        })
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/role/'+(this.rol.indexOf(this.editedItem.role)) +'/manager'
-      await axios.get(url, config)
-      .then((response) => {
-        this.supervisors = []
-        this.managers = response.data
-        for(let i=0; i<response.data.length; i++){
-          this.supervisors.push(response.data[i].fullName)
-        } 
-      })
-      .catch((error) => {
-        console.log(error)
-        /* localStorage.removeItem('token')
-        location.reload(); */
-      })
     },
     filtraSupervisors(){
       let gs = this.editedItem.groupSegment
       if(this.editedItem.role == 'Ejecutivo'){
         this.supervisors = []
-        this.editedItem.manager = ''
+        
         if(gs == 'Agencias'){
           for(let i=0; i<this.managers.length; i++){
             let gsegment = this.managers[i].groupSegment
@@ -408,7 +418,6 @@ import { mapState, mapActions } from 'vuex';
               this.supervisors.push(this.managers[i].fullName)
             }
           }
-          console.log('eres corporativo')
         }else{
           for(let i=0; i<this.managers.length; i++){
             let gsegment = this.managers[i].groupSegment

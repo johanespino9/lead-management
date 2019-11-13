@@ -16,6 +16,7 @@ import Visits from './components/Visits'
 import VisitsUserId from './components/VisitsUserId'
 import DashboardUserId from './components/DashboardUserId'
 import Hotels from './components/RegisterHotel'
+import LeadsUserId from './components/LeadsUserId'
 
 Vue.use(Router)
 const routerEjecutivo = new Router({
@@ -96,6 +97,16 @@ const routerEjecutivo = new Router({
       path: '/dashboard_jefes/visits-user/id',
       name: 'visits-user',
       component: VisitsUserId
+    },
+    {
+      path: '/dashboard_jefes/leads-user/id',
+      name: 'leads-user',
+      component: LeadsUserId
+    }, 
+    {
+      path: '/dashboard_gerentes/leads-user/id',
+      name: 'leads-user-gerente',
+      component: LeadsUserId
     },
     {
       path: '/dashboard_gerentes/visits-user/id',
