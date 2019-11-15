@@ -1,6 +1,21 @@
 <template>
     <div>
         <div v-if="role == 'Administrador'">
+        <form @submit.prevent="FileUpload()" enctype="multipart/form-data">
+        <v-row class="mb-4">
+          <v-col cols="20" sm="9" md="80"> 
+            <template>
+              <v-file-input  label="Subir archivo" v-model="file_upload" outlined dense placeholder="Selecciona un documento .xlsx"></v-file-input>
+              <!-- <input type="file" ref="file"> -->
+            </template>
+          </v-col>
+          <v-col cols="20" sm="3" md="80" class="text-center"> 
+            <template>
+              <v-btn type="submit" x-large color="primary" dark>Subir Hoteles</v-btn>
+            </template>
+          </v-col>
+        </v-row>
+      </form>
         <v-data-table
               :search="search"
               :headers="headers"
@@ -149,7 +164,8 @@ export default {
       itemsPerPage: 10,
       filtro: [],
       filtroSelected: 'Todas las cuentas',
-      cuentasTemporal: []
+      cuentasTemporal: [],
+      file_upload: null,
     }),
     computed: {
       ...mapState(['Hoteles', 'accessToken']),
@@ -205,32 +221,36 @@ export default {
             "region": this.editedItem.region,
             "typeHotel": this.editedItem.typeHotel
           }
-          let config = {
-            headers: {
-              'Authorization': 'Bearer ' + this.accessToken
-            }  
+          if(!this.verificarNombre()){
+            let config = {
+              headers: {
+                'Authorization': 'Bearer ' + this.accessToken
+              }  
+            }
+            let url = 'https://casa-andina-backend.azurewebsites.net/hotels'
+            await axios.post(url, datos, config)
+            .then(response => { 
+              localStorage.setItem('hoteles', JSON.stringify(response.data))
+              this.desserts = response.data
+              toastr.success('Se guardó correctamente', {
+                  "closeButton": true,
+                  "debug": false,
+                  "newestOnTop": false,
+                  "progressBar": false,
+                  "positionClass": "toast-top-right",
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "5000",
+              })
+            }).catch(error => {
+              /* this.alerts('Ocurrio un error y no se guardó', 'error') */
+              console.log('Hubo un error ', error)
+              toastr["error"]("Ocurrió un error y no se guardó")
+            }) 
+          }else{
+            toastr.error('El nombre de hotel ya se encuentra registrado.')
           }
-          let url = 'https://casa-andina-backend.azurewebsites.net/hotels'
-          await axios.post(url, datos, config)
-          .then(response => { 
-            localStorage.setItem('hoteles', JSON.stringify(response.data))
-            this.desserts = response.data
-            toastr.success('Se guardó correctamente', {
-                "closeButton": true,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": false,
-                "positionClass": "toast-top-right",
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-            })
-          }).catch(error => {
-            /* this.alerts('Ocurrio un error y no se guardó', 'error') */
-            console.log('Hubo un error ', error)
-            toastr["error"]("Ocurrió un error y no se guardó")
-          }) 
         },
         async editHotels(){
           const datos = {
@@ -247,7 +267,6 @@ export default {
           let url = 'https://casa-andina-backend.azurewebsites.net/hotels'
           await axios.put(url, datos, config)
           .then(response => { 
-            console.log(response.data)
             localStorage.setItem('hoteles', JSON.stringify(response.data))
             this.desserts = response.data
             toastr.success('Se guardó correctamente', {
@@ -266,6 +285,35 @@ export default {
             console.log('Hubo un error ', error)
             toastr["error"]("Ocurrió un error y no se guardó")
           }) 
+        },
+        async FileUpload(){
+          let archivo = this.file_upload;
+          if(archivo!=null){
+            let extension = archivo.name.substring(archivo.name.length-4 ,archivo.name.length).toLowerCase();
+            if(extension == 'xlsx'){
+                const formData = new FormData();
+                formData.append('file', archivo);
+                let config = {
+                  headers: {
+                    'Authorization': 'Bearer ' + this.accessToken
+                  }
+                }
+                let url = 'https://casa-andina-backend.azurewebsites.net/file/upload/hotels'
+                await axios.post(url, formData, config)
+                .then(response => { 
+                  toastr.success('Se subió el archivo correctamente')
+                  this.file_upload = null
+                  localStorage.setItem('hoteles', JSON.stringify(response.data))
+                  this.desserts = response.data
+                }).catch(error => {
+                  toastr.error('El modelo de archivo es erroneo')
+                });
+            }else{
+              toastr.warning('Debes seleccionar un archivo Excel .xlsx')
+            } 
+          }else{
+            toastr.error('Selecciona un archivo primero')
+          }
         },
         rellenadatos(){
           this.getRegions()
@@ -297,13 +345,27 @@ export default {
           if (this.editedIndex > -1) {
             //editando hotel
             this.editHotels()
+            this.close()
           } else {
             //editar hotel
-            console.log('agregando')
             this.addHotels()
-            
-          } 
-          this.close();
+            if(!this.verificarNombre()){
+              this.close();
+            }
+          }   
+        },
+
+        verificarNombre(){
+          try {
+              let nombre = document.getElementById('name-id').value
+              for(let i=0; i<this.desserts.length; i++){
+                if(nombre.toLowerCase() == (this.desserts[i].shortName.toLowerCase())){
+                  return true;
+                }
+              } 
+              return false;
+          } catch (error) { 
+          }
         },
     }
 }

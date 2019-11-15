@@ -1,21 +1,23 @@
 <template>
 <div>
   <div>
-        
-        <!-- <v-container fluid class="text-right">
-            
-                   <v-combobox @change="FiltraCuentas()" color="#d69c4f"  v-model="filtroSelected" :items="filtro" label="Selecciona un elemento"></v-combobox>
-                
-            
-        </v-container> -->
-       <!--  <v-container fluid class="text-right">
-              <v-row>
-                <v-col cols="4">
-                  <v-combobox @change="FiltraCuentas()" color="#d69c4f"  v-model="filtroSelected" :items="filtro" label="Selecciona un elemento"></v-combobox>
-                </v-col>
-              </v-row>
-        </v-container> -->
-        <v-container fluid class="mb-0 pb-0">
+        <form @submit.prevent="FileUpload()" enctype="multipart/form-data">
+        <v-row class="mb-4">
+          <v-col cols="20" sm="9" md="80"> 
+            <template>
+              <v-file-input  label="Subir archivo" v-model="file_upload" outlined dense placeholder="Selecciona un documento .xlsx"></v-file-input>
+              <!-- <input type="file" ref="file"> -->
+            </template>
+          </v-col>
+          <v-col cols="20" sm="3" md="80" class="text-center"> 
+            <template>
+              <v-btn type="submit" x-large color="primary" dark >Subir Cuentas</v-btn>
+            </template>
+          </v-col>
+        </v-row>
+      </form>
+
+        <v-container fluid class="mb-0 pb-0 mt-0 pt-0">
                       <v-card id="card" style="border-radius: 0px;">
                           <v-card-title >
                               <v-row>
@@ -35,7 +37,7 @@
                           </v-card-title>
                 </v-card>
         </v-container>
-        <v-container class="mt-0 pt-0">
+        <v-container fluid>
         <v-data-table
               :search="search"
               :headers="headers"
@@ -89,7 +91,7 @@
                             </v-col> -->
                             <v-col cols="12" sm="12" md="12">
                               <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="name-id" required disabled color="#d69c4f" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
-                              <v-text-field v-else required color="#d69c4f" id="name-id" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
+                              <v-text-field v-else required color="#d69c4f" id="name-account" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                             </v-col>
                             <v-col cols="auto">
                               <v-combobox color="#d69c4f" id="sector-id" required v-if="editedIndex>=0  && editedItem.edit==false && role=='Ejecutivo'" disabled v-model="editedItem.branch" :items="branchs" label="Seleccionar Sector"></v-combobox>
@@ -212,7 +214,8 @@ import axios from 'axios';
       itemsPerPage: 10,
       filtro: [],
       filtroSelected: 'Todas las cuentas',
-      cuentasTemporal: []
+      cuentasTemporal: [],
+      file_upload: null
     }),
 
     computed: {
@@ -321,25 +324,27 @@ import axios from 'axios';
           "groupSegment": this.editedItem.groupSegment,
           "user": this.editedItem.user
       }
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.accessToken
+      if(!this.verificarNombre()){
+        let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+          }
         }
+        let url = 'https://casa-andina-backend.azurewebsites.net/account/jefes'
+        await axios.post(url, datos, config)
+        .then(response => { 
+          localStorage.setItem('accounts', JSON.stringify(response.data))
+          this.$store.commit('Accounts', response.data)
+          this.desserts=this.Accounts
+          this.FiltrarCuentas(response.data)
+          this.alerts('Se guardó correctamente', 'success')
+        }).catch(error => {
+          console.log('Hubo un error ', error)
+          this.alerts('Ocurrio un error y no se guardó', 'error')
+        }) 
+      }else{
+        toastr.error('Ya existe una cuenta con ese nombre')
       }
-      console.log('add jefes',datos)
-      let url = 'https://casa-andina-backend.azurewebsites.net/account/jefes'
-      await axios.post(url, datos, config)
-      .then(response => { 
-        console.log(response.data)
-        localStorage.setItem('accounts', JSON.stringify(response.data))
-        this.$store.commit('Accounts', response.data)
-        this.desserts=this.Accounts
-        this.FiltrarCuentas(response.data)
-        this.alerts('Se guardó correctamente', 'success')
-      }).catch(error => {
-        console.log('Hubo un error ', error)
-        this.alerts('Ocurrio un error y no se guardó', 'error')
-      }) 
     }, 
     async editAccountJefes(){
       let datos = {	
@@ -355,7 +360,6 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      console.log('edit jefes', datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/account/jefes'
       await axios.put(url, datos, config)
       .then(response => { 
@@ -479,6 +483,37 @@ import axios from 'axios';
       } */
       
     },
+    //subir varias cuentas a la vez con excel
+    async FileUpload(){
+        let archivo = this.file_upload;
+        if(archivo!=null){
+          let extension = archivo.name.substring(archivo.name.length-4 ,archivo.name.length).toLowerCase();
+          if(extension == 'xlsx'){
+                const formData = new FormData();
+                formData.append('file', archivo);
+                let config = {
+                  headers: {
+                    'Authorization': 'Bearer ' + this.accessToken
+                  }
+                }
+                let url = 'https://casa-andina-backend.azurewebsites.net/file/upload/accounts'
+                await axios.post(url, formData, config)
+                .then(response => { 
+                  toastr.success('Se subió el archivo correctamente')
+                  this.file_upload = null
+                  localStorage.setItem('accounts', JSON.stringify(response.data))
+                  this.desserts = response.data
+                }).catch(error => {
+                  toastr.error('El modelo de archivo es erroneo')
+                });
+          }else{
+              toastr.warning('Debes seleccionar un archivo Excel .xlsx')
+          } 
+        }else{
+            toastr.error('Selecciona un archivo primero')
+        }
+    },
+
       rellenadatos(){
         this.dialog = true
         var user = JSON.parse(localStorage.getItem('usuario'))
@@ -512,10 +547,14 @@ import axios from 'axios';
       save () {
         if (this.editedIndex > -1) {
             this.editAccountJefes()
+            this.close()
         } else {
             this.addAcountJefes()
+            if(!this.verificarNombre()){
+              this.close()
+            }
         }
-        this.close()
+        
       },
 
       alerts(msj, type){
@@ -548,6 +587,18 @@ import axios from 'axios';
     },
     verificaPermisos(){
       this.role = JSON.parse(localStorage.getItem('usuario')).role
+    },
+    verificarNombre(){
+          try {
+              let nombre = document.getElementById('name-account').value
+              for(let i=0; i<this.desserts.length; i++){
+                if(nombre.toLowerCase() == (this.desserts[i].name.toLowerCase())){
+                  return true;
+                }
+              } 
+              return false;
+          } catch (error) { 
+          }
     },
   },
 

@@ -243,6 +243,7 @@ export default {
     if(localStorage.length>=8){
         this.$store.dispatch('stateToken')
       }
+      console.clear()
    },
 
 }

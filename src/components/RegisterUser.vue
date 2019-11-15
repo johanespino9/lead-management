@@ -3,6 +3,22 @@
 
 <!-- Los que no son ejecutivos no tienen acceso -->
 <div v-if="role!='Ejecutivo'">
+      <form @submit.prevent="FileUpload()" enctype="multipart/form-data">
+        <v-row class="mb-4">
+          <v-col cols="20" sm="9" md="80"> 
+            <template>
+              <v-file-input  label="Subir archivo" v-model="file_upload" outlined dense placeholder="Selecciona un documento .xlsx"></v-file-input>
+              <!-- <input type="file" ref="file"> -->
+            </template>
+          </v-col>
+          <v-col cols="20" sm="3" md="80" class="text-center"> 
+            <template>
+              <v-btn type="submit" x-large color="primary" dark>Subir usuarios</v-btn>
+            </template>
+          </v-col>
+        </v-row>
+      </form>
+
         <v-data-table
             :search="search"
             :headers="headers"
@@ -37,13 +53,13 @@
                             <v-text-field color="#d69c4f" cols="12" disabled  v-if="editedIndex>-1" v-model="editedItem.userId" label="ID"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
-                            <v-text-field color="#d69c4f" v-model="editedItem.name" label="Name"></v-text-field>
+                            <v-text-field color="#d69c4f" id="nombre" :onkeyup="verificarNombre()"  v-model="editedItem.name" label="Name"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="8" >
-                            <v-text-field color="#d69c4f" v-model="editedItem.lastName" label="Last Name"></v-text-field>
+                            <v-text-field color="#d69c4f" id="apellido" v-model="editedItem.lastName" label="Last Name"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
-                            <v-text-field color="#d69c4f" v-model="editedItem.username" label="Username"></v-text-field>
+                            <v-text-field color="#d69c4f" id="username" :onkeyup="verificaUsername()" v-model="editedItem.username" label="Username"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="8">
                             <v-text-field color="#d69c4f" v-model="editedItem.email" label="E-mail"></v-text-field>
@@ -156,6 +172,7 @@ import { mapState, mapActions } from 'vuex';
     search: "",
     desserts: [],
     editedIndex: -1,
+    file_upload: null,
     editedItem: {
       userId: '',
       active: true,
@@ -178,7 +195,7 @@ import { mapState, mapActions } from 'vuex';
       username: '',
       groupsegment: '',
       role: '',
-      manager: null
+      manager: null,
     },
     show1: false,
     password: 'Password',
@@ -218,7 +235,6 @@ import { mapState, mapActions } from 'vuex';
         this.desserts = JSON.parse(localStorage.getItem('usuarios'))
       }
       this.verificaPermisos()
-      
     }catch (error){
       console.log('Hubo un error')
     }
@@ -241,32 +257,9 @@ import { mapState, mapActions } from 'vuex';
     vaciaPass(){
       this.password=''
     },
-    /* async getManager(){
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
-      // Supersivor = 1 +1 = 2
-      //let id = this.rol.indexOf(this.editedItem.role).toString()
-      //console.log('SIN + 1', id)
-      console.log(this.managerId)
-      let url = 'https://casa-andina.azurewebsites.net/user/manager/role/'+this.managerId
-      //console.log('ID',id)
-      console.log('URL', url)
-      await axios.get(url, config)
-      .then((response) => {
-        console.log(response.data)
-        this.supervisors = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-        
-      })
-    }, */
    //Agregrar usuarios
    async addUser(){
-      var datos = {	
+      const datos = {	
           "active": this.editedItem.active.toString(),
           "email": this.editedItem.email,
           "lastName": this.editedItem.lastName,
@@ -277,22 +270,28 @@ import { mapState, mapActions } from 'vuex';
           "groupSegment": this.editedItem.groupSegment,
           "role": this.editedItem.role
       }
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.accessToken
+      if(!this.verificarNombre() && !this.verificaUsername()){
+        let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+          }
         }
+        let url = 'https://casa-andina-backend.azurewebsites.net/user'
+        await axios.post(url, datos, config)
+        .then(response => { 
+          localStorage.setItem('usuarios', JSON.stringify(response.data))
+          this.$store.commit('Users', response.data)
+          this.desserts=this.Users
+          this.alerts('Se guardó correctamente', 'success')
+          return true;
+        }).catch(error => {
+          this.alerts('Ocurrió un error guardando los datos', 'error')
+          console.log('Hubo un error ', error)
+        })
+      }else{ 
+         toastr.error( "Ejecutivo y/o username ya se encuentran registrado")
+         return false;
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user'
-      await axios.post(url, datos, config)
-      .then(response => { 
-        localStorage.setItem('usuarios', JSON.stringify(response.data))
-        this.$store.commit('Users', response.data)
-        this.desserts=this.Users
-        this.alerts('Se guardó correctamente', 'success')
-      }).catch(error => {
-        this.alerts('Ocurrió un error guardando los datos', 'error')
-        console.log('Hubo un error ', error)
-      })
     }, 
     //Editar usuarios
     async editUser(){
@@ -365,14 +364,15 @@ import { mapState, mapActions } from 'vuex';
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
         this.editUser()
-        
+        this.close()
       } else {
         this.addUser()
-        this.close();
-        
+        if(!this.verificarNombre() && !this.verificaUsername()){    
+          this.close()
+        }
         /* this.desserts.push(this.editedItem) */
       }
-      this.close()
+      /* this.close() */
     },
     //Obteniendo Managers
     async getManagers(){
@@ -427,9 +427,38 @@ import { mapState, mapActions } from 'vuex';
           }
         }
       }
-      
-
     },
+    //UPLOAD USERS DESDE EXCEL
+    async FileUpload(){
+      let archivo = this.file_upload;
+      if(archivo!=null){
+        let extension = archivo.name.substring(archivo.name.length-4 ,archivo.name.length).toLowerCase();
+        if(extension == 'xlsx'){
+            const formData = new FormData();
+            formData.append('file', archivo);
+            let config = {
+              headers: {
+                'Authorization': 'Bearer ' + this.accessToken
+              }
+            }
+            let url = 'https://casa-andina-backend.azurewebsites.net/file/upload/users'
+            await axios.post(url, formData, config)
+            .then(response => { 
+              this.alerts('Se subió el archivo correctamente', 'success')
+              this.file_upload = null
+              this.desserts = response.data
+              localStorage.setItem('usuarios', JSON.stringify(response.data))
+            }).catch(error => {
+              this.alerts('El modelo de archivo es erroneo', 'error')
+            });
+        }else{
+          toastr.warning('Debes seleccionar un archivo Excel .xlsx')
+        } 
+      }else{
+        toastr.error('Selecciona un archivo primero')
+      }
+    },
+
     Ordenamiento(){
       for(let i=0; i< this.desserts.length; i++){
         this.order.push(i)
@@ -467,7 +496,34 @@ import { mapState, mapActions } from 'vuex';
             })
             }
     },
-    
+    verificarNombre(){
+      try {
+          let nombre = document.getElementById('nombre').value
+          let apellido = document.getElementById('apellido').value
+          let nombre_completo = nombre+' '+apellido
+          for(let i=0; i<this.desserts.length; i++){
+            if(nombre_completo.toLowerCase() == (this.desserts[i].name+' '+this.desserts[i].lastName).toLowerCase()){
+              return true;
+            }
+          } 
+          return false;
+  
+      } catch (error) { 
+      }
+    },
+    verificaUsername(){
+      try {
+          let username = document.getElementById('username').value
+          for(let i=0; i<this.desserts.length; i++){
+              if(username == this.desserts[i].username){
+                return true;
+              }
+          }
+          return false; 
+      } catch (error) {
+        
+      }
+    } 
   },
 
 

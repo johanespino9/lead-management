@@ -50,8 +50,8 @@
                               <v-text-field disabled color="#ff4200" v-model="editedItem.accountId" label="Account Id"></v-text-field>
                             </v-col> -->
                             <v-col cols="12" sm="6" md="12">
-                              <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="name-id" required disabled color="#d69c4f" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
-                              <v-text-field v-else required color="#d69c4f" id="name-id" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
+                              <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="name-account" required disabled color="#d69c4f" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
+                              <v-text-field v-else required color="#d69c4f" id="name-account" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                             </v-col>
                             <v-col cols="auto">
                               <v-combobox color="#d69c4f" id="sector-id" required v-if="editedIndex>=0  && editedItem.edit==false && role=='Ejecutivo'" disabled v-model="editedItem.branch" :items="branchs" label="Seleccionar Sector"></v-combobox>
@@ -246,24 +246,28 @@ import axios from 'axios';
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment
       }
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.accessToken
+      if(!this.verificarNombre()){
+        let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+          }
         }
+        let url = 'https://casa-andina-backend.azurewebsites.net/user/accounts'
+        await axios.post(url, datos, config)
+        .then(response => { 
+          console.log(response.data)
+          localStorage.setItem('accounts', JSON.stringify(response.data))
+          this.$store.commit('Accounts', response.data)
+          this.desserts=this.Accounts
+          this.FiltrarCuentas(response.data)
+          this.alerts('Se guardó correctamente', 'success')
+        }).catch(error => {
+          console.log('Hubo un error ', error)
+          this.alerts('Ocurrio un error y no se guardó', 'error')
+        })
+      }else{
+        toastr.error('Ya existe una cuenta con ese nombre')
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/accounts'
-      await axios.post(url, datos, config)
-      .then(response => { 
-        console.log(response.data)
-        localStorage.setItem('accounts', JSON.stringify(response.data))
-        this.$store.commit('Accounts', response.data)
-        this.desserts=this.Accounts
-        this.FiltrarCuentas(response.data)
-        this.alerts('Se guardó correctamente', 'success')
-      }).catch(error => {
-        console.log('Hubo un error ', error)
-        this.alerts('Ocurrio un error y no se guardó', 'error')
-      })
     }, 
 
     //Editar cuenta ejecutivos
@@ -334,25 +338,29 @@ import axios from 'axios';
           "groupSegment": this.editedItem.groupSegment,
           "user": this.editedItem.user
       }
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.accessToken
+      if(!this.verificarNombre()){
+        let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+          }
         }
+        console.log(datos)
+        let url = 'https://casa-andina-backend.azurewebsites.net/account/jefes'
+        await axios.post(url, datos, config)
+        .then(response => { 
+          console.log(response.data)
+          localStorage.setItem('accounts', JSON.stringify(response.data))
+          this.$store.commit('Accounts', response.data)
+          this.desserts=this.Accounts
+          this.FiltrarCuentas(response.data)
+          this.alerts('Se guardó correctamente', 'success')
+        }).catch(error => {
+          console.log('Hubo un error ', error)
+          this.alerts('Ocurrio un error y no se guardó', 'error')
+        }) 
+      }else{
+        toastr.error('Ya existe una cuenta con ese nombre.')
       }
-      console.log(datos)
-      let url = 'https://casa-andina-backend.azurewebsites.net/account/jefes'
-      await axios.post(url, datos, config)
-      .then(response => { 
-        console.log(response.data)
-        localStorage.setItem('accounts', JSON.stringify(response.data))
-        this.$store.commit('Accounts', response.data)
-        this.desserts=this.Accounts
-        this.FiltrarCuentas(response.data)
-        this.alerts('Se guardó correctamente', 'success')
-      }).catch(error => {
-        console.log('Hubo un error ', error)
-        this.alerts('Ocurrio un error y no se guardó', 'error')
-      }) 
     }, 
     async editAccountJefes(){
       let datos = {	
@@ -381,9 +389,7 @@ import axios from 'axios';
         this.alerts('Ocurrio un error y no se guardó', 'error')
       })
     }, 
-
-
-
+    
     /* RECURSIVIDAD */
     getNameEjecutivos(data){
       for(let i= 0; i < data.length; i++){
@@ -524,19 +530,25 @@ import axios from 'axios';
           /* console.log('se edito') */
           if(this.role== 'Ejecutivo'){
             this.editAccount()
+            this.close()
           }else{
             this.editAccountJefes()
+            this.close()
           }
-          
         } else {
           /* console.log('se añadio') */
           if(this.role == 'Ejecutivo'){
             this.addAcount()
+            if(!this.verificarNombre()){
+              this.close()
+            }
           }else{
             this.addAcountJefes()
+            if(!this.verificarNombre()){
+              this.close()
+            }
           }
         }
-        this.close()
       },
 
       alerts(msj, type){
@@ -569,6 +581,18 @@ import axios from 'axios';
     },
     verificaPermisos(){
       this.role = JSON.parse(localStorage.getItem('usuario')).role
+    },
+     verificarNombre(){
+          try {
+              let nombre = document.getElementById('name-account').value
+              for(let i=0; i<this.desserts.length; i++){
+                if(nombre.toLowerCase() == (this.desserts[i].name.toLowerCase())){
+                  return true;
+                }
+              } 
+              return false;
+          } catch (error) { 
+          }
     },
   },
 
