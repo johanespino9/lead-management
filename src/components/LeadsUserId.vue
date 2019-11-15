@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div v-if="role!='Ejecutivo'">
+  <div >
   <v-data-table :headers="headers" :items="desserts" :search="search" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -359,6 +359,7 @@
             <v-card-actions>
               <div class="flex-grow-1"></div>
               <v-btn color="#d69c4f" text @click="close">CERRAR</v-btn>
+              <v-btn v-if="role == 'Ejecutivo'" color="#d69c4f" text @click="atender">Atender</v-btn>
              <!--  <v-btn color="#d69c4f" text @click="save()">Guardar</v-btn> -->
             </v-card-actions>
           </v-card>
@@ -367,25 +368,15 @@
     </template>
     <template v-slot:item.action="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">details</v-icon>
-      
-     <!--  <v-icon small @click="deleteItem(item)">delete</v-icon> -->
     </template>
-    <!-- <template v-slot:no-data>
-      <v-btn color="primary" @click="allItems()">Reset</v-btn>
-    </template> -->
   </v-data-table>
-
-
-        <!-- <v-alert type="success" v-model="snackbar" dismissible width="300" height="50" style="float: right; position:absolute">
-           I'm a success alert.
-        </v-alert> -->   
 </div>
 <v-container fluid class="text-left">
   <v-btn color="#d69c4f" style="color: white;" class="mr-3" @click="regresa()">
     Anterior
   </v-btn>
 </v-container>
-<div v-if="role=='Ejecutivo' || role=='Supervisor de Segmento'">
+<div v-if="role=='Supervisor de Segmento'">
   <NotFound/>
 </div>
   
@@ -661,7 +652,12 @@ export default {
       this.getUserLeads()
       this.fecha = JSON.parse(localStorage.getItem('leads-user')).fecha
       this.name_user = JSON.parse(localStorage.getItem('leads-user')).datos.nombre
-      this.search = JSON.parse(localStorage.getItem('leads-user')).filtro
+      let mes = parseInt(JSON.parse(localStorage.getItem('leads-user')).filtro.substring(5,7))
+      if(mes == 0){
+        this.search = JSON.parse(localStorage.getItem('leads-user')).filtro.substring(0,5)
+      }else{
+        this.search = JSON.parse(localStorage.getItem('leads-user')).filtro
+      } 
     }catch (error){
       console.log('Hubo un error')
     }
@@ -724,13 +720,30 @@ export default {
       }
       await axios.get('https://casa-andina-backend.azurewebsites.net/user/'+user_id+'/leads', config)
       .then((res) => {
+        let role = JSON.parse(localStorage.getItem('usuario')).role
+        this.role = role
         let hotel = JSON.parse(localStorage.getItem('leads-user')).hotel
+        let status = JSON.parse(localStorage.getItem('leads-user')).status
         localStorage.setItem('leads', JSON.stringify(res.data))
         this.$store.commit('AllLeads', res.data)
         this.desserts = []
         let leads = []
-        let status = JSON.parse(localStorage.getItem('leads-user')).status
-        if(status == undefined){
+        if(role == 'Ejecutivo'){
+            if(hotel == '[Seleccionar todos]'){
+                for(let i=0; i<res.data.length; i++){
+                    if((res.data[i].noAttend == true) && (status == res.data[i].status)){
+                        leads.push(res.data[i])   
+                    }  
+                }
+            }else{
+                for(let i=0; i<res.data.length; i++){
+                    if((hotel == res.data[i].hotel) && (res.data[i].noAttend == true) && (status == res.data[i].status)){
+                        leads.push(res.data[i])
+                    }
+                }
+            }
+        }else{
+          if(status == undefined){
             if(hotel == '[Seleccionar todos]'){
                 for(let i=0; i<res.data.length; i++){
                     leads.push(res.data[i])
@@ -742,7 +755,7 @@ export default {
                     }
                 }
             }
-        }else{
+          }else{
             let status = JSON.parse(localStorage.getItem('leads-user')).status
             if(hotel == '[Seleccionar todos]'){
                 for(let i=0; i<res.data.length; i++){
@@ -757,16 +770,13 @@ export default {
                     }
                 }
             }
+          }
         }
-        
         this.calculaTotal(leads)
       }).catch(error =>{
         console.log(error)
       })
     },
-
-
-
 
      //EDITAR Lead de eventos
     async editEventLead(){
@@ -946,23 +956,12 @@ export default {
       }, 300);
 
     },
-    save(){
+    atender(){
       if (this.editedIndex > -1) {
-        if(this.editedItem.segment=='Series'){
-          this.editSegmentSeriesLead()
-        }else if(this.editedItem.segment=='Eventos'){
-          this.editEventLead()
-        }else{
-          this.editOtherLead()
-        }
-      } else {
-        if(this.editedItem.segment=='Series'){
-          this.addSegmentSeriesLead()
-        }else if(this.editedItem.segment=='Eventos'){
-          this.addEventLead()
-        }else{
-          this.addOtherLead()
-        }
+        let datos = JSON.parse(localStorage.getItem('leads-user'))
+        datos.search = this.editedItem.createDate
+        localStorage.setItem('leads-user', JSON.stringify(datos))
+        window.location.href = '/#/register-lead'
       } 
       this.close();
     },
@@ -1654,9 +1653,11 @@ export default {
         let {role} = JSON.parse(localStorage.getItem('usuario')) 
         if(role == 'Administrador' || role == 'Gerente de ventas'){
             window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
-        }else{
+        }else if(role == 'Supervisor de Segmento'){
             window.location.href = '/#/dashboard_jefes/dashboard-user/id'
-        }  
+        }else{
+           window.location.href = '/#/dashboard-ejecutivos'
+        }
 
     },
  

@@ -167,6 +167,14 @@
             <v-list-item-title>Gestión de Cuentas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item color="#d69c4f" v-if="role=='Administrador'" to="/register-account-add">
+          <v-list-item-action>
+            <v-icon>mdi-briefcase-plus-outline</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Gestión de Cuentas</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item v-if="role=='Ejecutivo' && groupS != 'Eventos'" color="#d69c4f" to="/visits">
           <v-list-item-action>
             <v-icon>mdi-calendar-edit</v-icon>
@@ -184,9 +192,9 @@
           </v-list-item-content>
         </v-list-item>
         
-        <div id="robotin" style="margin-bottom: 5px; margin-top:20px; margin-right: 10px; display:scroll;position:fixed; bottom:0px; left:55px;cursor:pointer; max-width:60px;">
+      <!--   <div id="robotin" style="margin-bottom: 5px; margin-top:20px; margin-right: 10px; display:scroll;position:fixed; bottom:0px; left:55px;cursor:pointer; max-width:60px;">
           <a  @click="abreModalSugestion()"> <img style="margin-bottom: 10px;" src="../assets/robotin.gif" alt="robotin"></a>
-        </div>
+        </div> -->
         
         <!-- <v-list-item to="">
           <v-list-item-action>
@@ -200,18 +208,12 @@
         
         
 
-      <v-dialog v-model="dialog"  max-width="650px" hide-overlay transition="dialog-bottom-transition">   
+      <!-- <v-dialog v-model="dialog"  max-width="650px" hide-overlay transition="dialog-bottom-transition">   
             
          <v-card>
               <v-card-title>
-                 <!--  <v-list-item two-line> -->
-                   
                     <span class="title font-weight-light"><h5 style="color: #000">{{msj}}</h5> </span>
-                   
-                    <!-- <v-list-item-content class="text-right" style="margin-top:5px">
-                      <v-list-item-subtitle> <strong>Hoteles</strong>  </v-list-item-subtitle>
-                   </v-list-item-content> -->
-                <!--  </v-list-item> -->
+    
                 </v-card-title>
                 <v-card-text>
                    <small>*Acciones que puedes realizar en esta ruta </small> <span class="h5">{{url}}</span> <br>
@@ -248,10 +250,9 @@
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
-                        <!-- <v-text-field label="Email*" required></v-text-field> -->
                       </v-col>
                       <v-col cols="12">
-                        <!-- <v-text-field label="Password*" type="password" required></v-text-field> -->
+
                       </v-col>
                       <v-col cols="12" sm="6">
                         <v-select
@@ -283,13 +284,8 @@
                     Close
                   </v-btn>
               </v-card-actions>
-
-              
-
-            </v-card>
-
-            
-            </v-dialog>
+            </v-card>  
+            </v-dialog> -->
 
 
             <v-dialog
@@ -369,8 +365,7 @@ export default {
     watch: {
       dialog (val) {
         if (!val) return
-
-        setTimeout(() => (this.dialog2 = false), 4000)
+        setTimeout(() => (this.dialog2 = false), 4500)
       },
     },
     methods: {
@@ -379,8 +374,6 @@ export default {
         this.Logout()
       }, */
       abreModalSugestion(){
-        console.log(this.User)
-        console.log(window.location.hash)
         this.msj = `Hola ${this.User.name}, ¿Cómo puedo ayudarte?`
         this.url = window.location.hash
         this.mini = true
@@ -443,7 +436,7 @@ export default {
     if(localStorage.length>=8){
       
     }
-    console.clear() 
+    console.clear()
   },
 }
 </script>

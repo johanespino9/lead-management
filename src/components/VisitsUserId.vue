@@ -50,9 +50,67 @@
 </v-container>
 
 <v-container fluid>
-<v-row>
-<v-col cols="auto" sm="4" md="80">
-<template>
+  <v-row>
+  <v-col cols="20" sm="6" md="80">
+      <template>
+         <v-card class="mb-0" style="border-radius: 0px;">
+            <v-card-text style="marging-top:0; padding-top:0;">
+                <v-row>
+                  <v-col cols="20" sm="8" md="80">
+                    <v-text-field
+                      color="#d69c4f"
+                      class="text-xs-center"
+                      v-model="search"
+                      append-icon="search"
+                      label="Búsqueda"
+                      single-line
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="20" sm="4" md="80">
+                    <v-combobox id="mes-selected" color="#d69c4f" @change="cambiaTableVisits(monthSelected)" class="text-xs-center"  v-model="monthSelected" :items="months" label="Seleccionar Mes" single-line hide-details></v-combobox>
+                  </v-col> 
+              </v-row>
+            
+            </v-card-text>
+          </v-card>
+        <v-data-table
+          :search="search"
+          :headers="header_tvisitas"
+          :items="tableVisits"
+          multi-sort
+          class="elevation-1 mt-0"
+          :items-per-page="itemsPerPage2"
+          @page-count="pageCount2 = $event"
+          :page.sync="page2"
+        >        
+        </v-data-table>
+        <div class="text-center pt-2">
+          <v-pagination v-model="page2" :length="pageCount2"></v-pagination>
+        </div>
+      </template>
+  </v-col> 
+
+  <v-col cols="20" sm="6" md="80">
+      <template>
+        <v-data-table
+          :headers="header_visita"
+          :items="tableOlvidadosInt"
+          multi-sort
+          class="elevation-1"
+          :items-per-page="itemsPerPage"
+         
+          @page-count="pageCount = $event"
+          :page.sync="page"
+        >
+        </v-data-table>
+        <div class="text-center pt-2">
+          <v-pagination v-model="page" :length="pageCount"></v-pagination>
+        </div>
+      </template>
+    </v-col>    
+    <v-col cols="auto" sm="4" md="80">
+  <template>
     <div>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="1000px" class="center">
@@ -172,27 +230,7 @@
     </div>
     </template>
   </v-col>
-  <v-col cols="20" sm="8" md="80">
-      <template>
-        <v-data-table
-           
-          :headers="header_visita"
-          :items="tableOlvidadosInt"
-          multi-sort
-          class="elevation-1"
-          :items-per-page="itemsPerPage"
-          hide-default-footer
-          @page-count="pageCount = $event"
-          :page.sync="page"
-        >
-        </v-data-table>
-        <div class="text-center pt-2">
-          <v-pagination v-model="page" :length="pageCount"></v-pagination>
-        </div>
-      </template>
-    </v-col>    
 </v-row>
-
 </v-container>
 
 
@@ -401,6 +439,7 @@ export default {
         razon:'',
         status:''
       },
+      monthSelected: '',
       status:'',
       selectedEvent: {},
       selectedElement: null,
@@ -502,9 +541,23 @@ export default {
       {text: "Dias sin visita", value:"days"},
     ],
     tableOlvidadosInt: [],
-    itemsPerPage: 4,
+    itemsPerPage: 5,
     pageCount: 0,
     page: 1,
+    itemsPerPage2: 4,
+    pageCount2: 0,
+    page2: 1,
+    search: '',
+    months: ['[Seleccionar todos]', 'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'],
+    tableVisits: [],
+    header_tvisitas: [
+      {text: "Cuenta", value:"account"},
+      {text: "Usuario", value:"user"},
+      {text: "Fecha", value:"finish"},
+      {text: "H. Inicio", value:"start2"},
+      {text: "H. Fin", value:"finish2"},
+      {text: "Estatus", value:"status"},
+    ],
     
   }),
   computed: {
@@ -701,6 +754,7 @@ export default {
         this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
         this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3)
         this.cargaOlvidados(res.data.tableOlvidadosInt)
+        this.cargaTablaVisitas(res.data, this.monthSelected)
       })
       .catch((error) => {
         toastr.error('Ocurrió un error agregando la visita')
@@ -709,6 +763,32 @@ export default {
       } catch (error) {
         
       } 
+    },
+    cargaTablaVisitas(data, type){
+      let calendar = data.calendar.listVisit;
+      let arrayVisits = []
+      for(let i=0; i<calendar.length; i++){
+        let num_mes = parseInt(calendar[i].start.substring(5, 7))
+        let nombre_mes = this.months[num_mes]
+        if(type === '[Seleccionar todos]' || type === ''){
+          calendar[i].start2 = calendar[i].start.substring(11, 16)
+          calendar[i].finish2 = calendar[i].finish.substring(11, 16)
+          calendar[i].finish = calendar[i].start.substring(0, 10)
+          arrayVisits.push(calendar[i])
+        }else{
+          if(nombre_mes === type){
+            calendar[i].start2 = calendar[i].start.substring(11, 16)
+            calendar[i].finish2 = calendar[i].finish.substring(11, 16)
+            calendar[i].finish = calendar[i].start.substring(0, 10)
+            arrayVisits.push(calendar[i])
+          }
+        }
+      }
+      this.tableVisits = arrayVisits
+    },
+    cambiaTableVisits(mes){
+      let data = JSON.parse(localStorage.getItem('visitas'))
+      this.cargaTablaVisitas(data, mes)
     },
 
     /* RECURSIVIDAD */
@@ -755,10 +835,8 @@ export default {
     }, 
     save () {
         if (this.editedIndex > -1) {
-          console.log('se edito')
           this.editVisit()
         } else {
-          console.log('se añadio')
           this.addVisit()
         }
         this.close()

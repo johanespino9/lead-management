@@ -69,6 +69,26 @@
         <td class="text-xs-right">{{ item.salary }}</td>
       </template>
     </v-data-table>
+    <template>
+        <v-simple-table
+          hide-default-header
+          hide-default-footer
+        >
+          <template v-slot:default>
+            <tbody>
+              <tr v-for="item in values2" :key="item.dato">
+                <td>{{ item.dato }}</td>
+                <td class="text-left"><v-btn  @click="verNoAtendidos(item.prospecto, 'Prospecto',months, yearSelected)" fab dark small color="primary">{{ item.prospecto }}</v-btn> </td>
+                <td class="text-left"><v-btn  @click="verNoAtendidos(item.tentativo, 'Tentativo',months, yearSelected)" fab dark small color="primary">{{ item.tentativo }}</v-btn></td>
+                <td class="text-left"><v-btn  @click="verNoAtendidos(item.hot, 'Hot',months, yearSelected)" fab dark small color="primary">{{ item.hot }}</v-btn></td>
+                <td class="text-left"><v-btn  disabled @click="verNoAtendidos(item.congelado, 'Congelado',months, yearSelected)" fab  small color="primary" style="color: #000;" >{{ item.congelado }}</v-btn></td>
+                <td class="text-left"><v-btn  disabled @click="verNoAtendidos(item.cancelado, 'Cancelado',months, yearSelected)" fab  small color="primary" style="color: #000;" >{{ item.cancelado }}</v-btn></td>
+                <td class="text-left"><v-btn  disabled @click="verNoAtendidos(item.confirmado, 'Confirmado',months, yearSelected)" fab  small color="primary" style="color: #000;" >{{ item.confirmado}}</v-btn></td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+    </template>
 </v-container>
 
 
@@ -150,8 +170,8 @@ export default {
     visitas: [],
     roomRevenue: null,
     events: null,
-    role: ''
-
+    role: '',
+    values2: []
   }),
 
 
@@ -172,8 +192,9 @@ export default {
       var Dash = JSON.parse(localStorage.getItem('dashboard'))
       var Dash = JSON.parse(localStorage.getItem('dashboard'))
       if(this.values.length==0 && Dash!=null && this.percents!=null){ 
-        this.imprimeNumeros(Dash)
-        this.percents = Dash.porcentajeConcrecion
+        /* this.imprimeNumeros(Dash) */
+        this.FiltroDashboard()
+        /* this.percents = Dash.porcentajeConcrecion */
         this.getNameHotels();
       }
       if(localStorage.length>=8){
@@ -213,6 +234,17 @@ export default {
       .then((res) => {
         this.imprimeNumeros(res.data)
         this.percents = res.data.porcentajeConcrecion
+        let array = res.data.table
+        let array2 = []
+        for(let i=3; i<array.length; i++){
+          array2.push(array[i]);
+        }
+        this.values2 = array2
+        let array3 = []
+        for(let i=0; i<array.length-1; i++){
+          array3.push(array[i])
+        }
+        this.values = array3
       }) 
       .catch((error) => {
         console.log('Hubo un error',error)
@@ -220,6 +252,36 @@ export default {
       })
       
     },
+    verNoAtendidos(item, valor, month, year){
+      let fecha = this.monthSelected+' '+year
+      let filtro = 0
+      if(month.indexOf(this.monthSelected)<10){
+        filtro = year+'-0'+month.indexOf(this.monthSelected)
+      }else{
+        filtro = year+'-'+month.indexOf(this.monthSelected)
+      } 
+      let dataLS = {
+        datos: {
+          user_id: JSON.parse(localStorage.getItem('usuario')).userId
+        },
+        search: '',
+        fecha: fecha,
+        filtro: filtro,
+        hotel: this.hotelSelected,
+        status: valor
+      }
+      localStorage.setItem('leads-user', JSON.stringify(dataLS))
+      window.location.href = '/#/dashboard-ejecutivos/leads-user/id'
+      /* localStorage.setItem('leads-user', JSON.stringify(dataLS))
+      console.log(item, valor)
+      let {role} = JSON.parse(localStorage.getItem('usuario')) 
+      if(role == 'Administrador' || role == 'Gerente de ventas'){
+        window.location.href = '/#/dashboard_gerentes/leads-user/id'
+      }else{
+        window.location.href = '/#/dashboard_jefes/leads-user/id'
+      }  */ 
+    },
+
     cargarAños(){
       var fecha = new Date();
       var año = fecha.getFullYear();

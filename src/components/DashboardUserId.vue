@@ -86,17 +86,6 @@
           v-text="header.text"
         />
       </template>
-      
-      <!-- <template slot="items" slot-scope="{ item }">
-        <td><strong> {{ item.lead }}</strong> </td>
-        <td>{{ item.prospecto }}</td>
-        <td>{{ item.tentativo }}</td>
-        <td>{{ item.hot }}</td>
-        <td>{{ item.congelado }}</td>
-        <td>{{ item.cancelado }}</td>
-        <td> {{ item.confirmado }}</td>
-        <td class="text-xs-right">{{ item.salary }}</td>
-      </template> -->
     </v-data-table>
     <template>
         <v-simple-table
@@ -107,12 +96,12 @@
             <tbody>
               <tr v-for="item in values2" :key="item.dato">
                 <td>{{ item.dato }}</td>
-                <td><v-btn class="mx-2" @click="verNoAtendidos(item.prospecto, 'Prospecto',months, yearSelected)" fab dark small color="primary">{{ item.prospecto }}</v-btn> </td>
-                <td><v-btn class="mx-2" @click="verNoAtendidos(item.tentativo, 'Tentativo',months, yearSelected)" fab dark small color="primary">{{ item.tentativo }}</v-btn></td>
-                <td><v-btn class="mx-2" @click="verNoAtendidos(item.hot, 'hot',months, yearSelected)" fab dark small color="primary">{{ item.hot }}</v-btn></td>
-                <td><v-btn class="mx-2" @click="verNoAtendidos(item.congelado, 'Congelado',months, yearSelected)" fab dark small color="primary">{{ item.congelado }}</v-btn></td>
-                <td><v-btn class="mx-2" @click="verNoAtendidos(item.cancelado, 'Cancelado',months, yearSelected)" fab dark small color="primary">{{ item.cancelado }}</v-btn></td>
-                <td><v-btn class="mx-2" @click="verNoAtendidos(item.confirmado, 'Confirmado',months, yearSelected)" fab dark small color="primary">{{ item.confirmado}}</v-btn></td>
+                <td class="text-left"><v-btn  @click="verNoAtendidos(item.prospecto, 'Prospecto',months, yearSelected)" fab dark small color="primary">{{ item.prospecto }}</v-btn> </td>
+                <td class="text-left"><v-btn  @click="verNoAtendidos(item.tentativo, 'Tentativo',months, yearSelected)" fab dark small color="primary">{{ item.tentativo }}</v-btn></td>
+                <td class="text-left"><v-btn  @click="verNoAtendidos(item.hot, 'Hot',months, yearSelected)" fab dark small color="primary">{{ item.hot }}</v-btn></td>
+                <td class="text-left"><v-btn  disabled @click="verNoAtendidos(item.congelado, 'Congelado',months, yearSelected)" fab  small color="primary" style="color: #000;" >{{ item.congelado }}</v-btn></td>
+                <td class="text-left"><v-btn  disabled @click="verNoAtendidos(item.cancelado, 'Cancelado',months, yearSelected)" fab  small color="primary" style="color: #000;" >{{ item.cancelado }}</v-btn></td>
+                <td class="text-left"><v-btn  disabled @click="verNoAtendidos(item.confirmado, 'Confirmado',months, yearSelected)" fab  small color="primary" style="color: #000;" >{{ item.confirmado}}</v-btn></td>
               </tr>
             </tbody>
           </template>

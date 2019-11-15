@@ -458,7 +458,7 @@ export default {
     },
     mounted() {
         try {
-        let data = JSON.parse(localStorage.getItem('dashgerente'))
+        
         if(JSON.parse(localStorage.getItem('yearandmonth'))==null){
         this.monthSelected = '[Seleccionar todos]'
         this.groupSegment = '[Seleccionar todos]'
@@ -482,15 +482,16 @@ export default {
         this.cargarDataInicial()
         this.verificaPermisos()
         this.cargarAños()
-        this.graph1(this.chart)
+       /*  this.graph1(this.chart)
         this.graph2(this.chart2)
         this.graph3(this.chart3)
-        this.graph4(this.chart4)
-        this.cargarTablas(data)
+        this.graph4(this.chart4) */
+        this.graficaTodo()
+        
         if(localStorage.length>=8){
             this.$store.dispatch('stateToken')
         }
-        console.clear() 
+        console.clear()
         } catch (error) {
 
         }
@@ -501,13 +502,38 @@ export default {
       this.cargarDataInicial(data)
     },  */
     methods: {
+    graficaTodo(){
+      setTimeout( () => {
+        this.graph1(this.chart)
+        return true
+      }, 1400);
+      setTimeout( () => {
+        this.graph2(this.chart2)
+        return true
+      }, 1400);
+      setTimeout( () => {
+        this.graph3(this.chart3)
+        return true
+      }, 1400);
+      setTimeout( () => {
+        this.graph4(this.chart4)
+        console.clear()
+        return true
+      }, 1400);
+      setTimeout( () => {
+        let data = JSON.parse(localStorage.getItem('dashgerente'))
+        this.cargarTablas(data)
+        return true
+      }, 1400);
+      
+    },
     abreModalHoteles(){
       try {
         this.headers_usersg = [
           { text: 'Nombre', align: 'left', value: 'name',},
-          { text: 'Total $', sortable: true, value: 'mbruto' },
-          { text: 'Concretado $', sortable: true, value: 'mconcretado' },
-          { text: '% de Concreción', sortable: true, value: 'diferencia' },
+          { text: 'Total $', sortable: false, value: 'mbruto' },
+          { text: 'Concretado $', sortable: false, value: 'mconcretado' },
+          { text: '% de Concreción', sortable: false, value: 'diferencia' },
           { text: 'Actions', value: 'action', sortable: false },
         ]
         this.groups_user = []
@@ -727,7 +753,7 @@ export default {
         }, 500);
         this.groups_user = aux
         this.dialog = true
-        console.clear() 
+        console.clear()
         } catch (error) {  
         }
     },
@@ -735,9 +761,9 @@ export default {
       try {
         this.headers_usersg = [
           { text: 'Nombre', align: 'left', value: 'name',},
-          { text: 'Total $', sortable: true, value: 'mbruto' },
-          { text: 'Concretado $', sortable: true, value: 'mconcretado' },
-          { text: '% de Concreción', sortable: true, value: 'diferencia' },
+          { text: 'Total $', sortable: false, value: 'mbruto' },
+          { text: 'Concretado $', sortable: false, value: 'mconcretado' },
+          { text: '% de Concreción', sortable: false, value: 'diferencia' },
           { text: 'Actions', value: 'action', sortable: false },
         ]
         this.groups_user = []
@@ -1188,7 +1214,7 @@ export default {
       }, 500);
       this.groups_user = aux
       this.dialog = true
-      console.clear() 
+      console.clear()
       } catch (error) {  
       }
     },
@@ -2192,12 +2218,12 @@ export default {
         );
         chart.render();
         this.chart4 = chart
-        console.clear() 
+        console.clear()
     } catch (error) {  
     }
     },
     updated() {
-      /* console.clear() */ 
+      console.clear()
     },
 
     cargarAños(){

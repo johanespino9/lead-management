@@ -532,7 +532,7 @@ export default {
     mes6 : 'Junio',
     mes7 : 'Julio',
     mes8 : 'Agosto',
-    mes9 : 'Septiembre',
+    mes9 : 'Setiembre',
     mes10 : 'Octubre',
     mes11 : 'Noviembre',
     mes12 : 'Diciembre',
@@ -659,6 +659,12 @@ export default {
         this.$store.dispatch('stateToken')
       }
       this.getRazones()
+      let datos = JSON.parse(localStorage.getItem('leads-user'))
+      if(datos != undefined){
+        this.search = JSON.parse(localStorage.getItem('leads-user')).search
+      }
+      datos.search = ''
+      localStorage.setItem('leads-user', JSON.stringify(datos))
     }catch (error){
       console.log('Hubo un error')
     }
@@ -1487,7 +1493,7 @@ export default {
         else if(this.total_months[i].name== 'Junio'){this.estado6 = true}
         else if(this.total_months[i].name== 'Julio'){this.estado7 = true}
         else if(this.total_months[i].name== 'Agosto'){this.estado8 = true}
-        else if(this.total_months[i].name== 'Septiembre'){this.estado9 = true}
+        else if(this.total_months[i].name== 'Setiembre'){this.estado9 = true}
         else if(this.total_months[i].name== 'Octubre'){this.estado10 = true}
         else if(this.total_months[i].name== 'Noviembre'){this.estado11 = true}
         else if(this.total_months[i].name== 'Diciembre'){this.estado12 = true} 
@@ -1529,7 +1535,7 @@ export default {
           this.total_months[i].rateHotel = parseInt(this.tarifa8)
           this.total_months[i].rooms = parseInt(this.habitaciones8)
           this.total_months[i].nights = parseInt(this.noches8)
-        }else if(this.total_months[i].name == 'Septiembre'){
+        }else if(this.total_months[i].name == 'Setiembre'){
           this.total_months[i].rateHotel = parseInt(this.tarifa9)
           this.total_months[i].rooms = parseInt(this.habitaciones9)
           this.total_months[i].nights = parseInt(this.noches9)
@@ -1607,7 +1613,7 @@ export default {
           this.noches8 = item.months[i].nights
           this.estado8 = true
         } 
-        else if(item.months[i].name == 'Septiembre'){
+        else if(item.months[i].name == 'Setiembre'){
           this.tarifa9 = item.months[i].rateHotel
           this.habitaciones9 = item.months[i].rooms
           this.noches9 = item.months[i].nights

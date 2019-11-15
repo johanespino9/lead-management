@@ -25,133 +25,56 @@
 
 <v-container fluid>
 <v-row>
-<v-col cols="auto" sm="4" md="80">
-<template>
-    <div>
-      <v-spacer></v-spacer>
-      <v-dialog v-model="dialog" max-width="1000px" class="center">
-      <template  v-slot:activator="{ on }">
-          <v-btn  style="margin-left: 11px;" dark class="mb-2" v-on="on" @click="LimpiarCampos()">Registrar Nueva Visita</v-btn>
+
+  <v-col cols="20" sm="6" md="80">
+      <template>
+         <v-card class="mb-0" style="border-radius: 0px;">
+            <v-card-text style="marging-top:0; padding-top:0;">
+                <v-row>
+                  <v-col cols="20" sm="8" md="80">
+                    <v-text-field
+                      color="#d69c4f"
+                      class="text-xs-center"
+                      v-model="search"
+                      append-icon="search"
+                      label="Búsqueda"
+                      single-line
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="20" sm="4" md="80">
+                    <v-combobox id="mes-selected" color="#d69c4f" @change="cambiaTableVisits(monthSelected)" class="text-xs-center"  v-model="monthSelected" :items="months" label="Seleccionar Mes" single-line hide-details></v-combobox>
+                  </v-col> 
+              </v-row>
+            
+            </v-card-text>
+          </v-card>
+        <v-data-table
+          :search="search"
+          :headers="header_tvisitas"
+          :items="tableVisits"
+          multi-sort
+          class="elevation-1 mt-0"
+          
+          :items-per-page="itemsPerPage2"
+          @page-count="pageCount2 = $event"
+          :page.sync="page2"
+        >        
+        </v-data-table>
+        <div class="text-center pt-2">
+          <v-pagination v-model="page2" :length="pageCount2"></v-pagination>
+        </div>
       </template>
-       <v-card >
-         <v-card-title>
-              <span class="headline"><strong> Gestión de visitas</strong></span>
-         </v-card-title>
-       <v-card-text >
-         <v-container>
-              <v-row>
-                <!-- <v-col cols="20" sm="6" md="80" class=center >
-                    <v-text-field 
-                    v-model="editedItem.name"
-                    color="#d69c4f" 
-                    label="Motivo">
-                    </v-text-field>
-                  </v-col> -->
-                  <v-col cols="20" sm="6" md="80" class=center>
-                    <v-combobox
-                      v-model="editedItem.reason"
-                      :items="razones"
-                      color="#d69c4f"
-                      label="Seleccionar motivo"
-                      id="reason"
-                    ></v-combobox>
-                  </v-col>
-                  <v-col cols="20" sm="6" md="80" class=center>
-                    <v-combobox
-                      v-model="editedItem.account"
-                      :items="allAccounts"
-                      color="#d69c4f"
-                      label="Seleccionar Empresa"
-                      id="account"
-                    ></v-combobox>
-                  </v-col>
-                  <v-col cols="20" sm="3" md="80" class=center>
-                    <v-combobox
-                      @change="cambiaTextA()"
-                      v-model="status" 
-                      :items="Status"
-                      color="#d69c4f"
-                      label="Seleccionar estado"
-                      id="status"
-                    ></v-combobox>
-                  </v-col>
-                  <v-col cols="20" sm="3" md="80" class=center>
-                      <v-menu
-                        ref="menu"
-                        color="#d69c4f"
-                        v-model="menu"
-                        :close-on-content-click="false"
-                        :return-value.sync="date1"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="290px"
-                        min="26-09-2019"
-                      >
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            color="#d69c4f"
-                            v-model="date1"
-                            label="Fecha de Visita"
-                            prepend-icon="event"
-                            readonly
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker :min="defaultDate" v-model="date1" no-title scrollable color="#000000">
-                          <div class="flex-grow-1"></div>
-                          <v-btn text color="#d69c4f" @click="menu = false">Cancel</v-btn>
-                          <v-btn text color="#d69c4f" @click="$refs.menu.save(date1)">OK</v-btn>
-                        </v-date-picker>
-                      </v-menu>
-                  </v-col>
-                  
-                  <v-col v-if="status == 'Cancelado'" cols="12" sm="6" md="80" >
-                    <v-textarea
-                      v-model="editedItem.description"
-                      color="#d69c4f" 
-                      height="30"
-                      :auto-grow="true"
-                      :clearable="true"
-                      label="Descripción"
-                    ></v-textarea>
-                  </v-col>
-                  <v-col v-if="status != 'Cancelado'" cols="12" sm="6" md="80" ></v-col>
-                  
-                  <v-col class="lg-offset8" md="6" lg="6">
-                        <h3>Hora Inicio</h3>
-                        <v-time-picker :min="HoraMin" :max="HoraMax" width="250" header-color="#000000"  v-model="horaInicio" color="#d69c4f"></v-time-picker>
-                 </v-col>
-                 <v-col class="lg-offset8" md="6" lg="6">
-                      <h3>Hora Fin</h3>
-                       <v-time-picker :min="HoraMin" :max="HoraMax" width="250" header-color="#000000"  v-model="horaFin"  color="#d69c4f"></v-time-picker>
-                 </v-col>
-              
-            </v-row>
-
-         </v-container>
-          <v-card-actions>
-                      <div class="flex-grow-1"></div>
-                      <v-btn color="#d69c4f" text @click="close">Cancel</v-btn>
-                      <v-btn color="#d69c4f" text @click="save()">Save</v-btn>
-            </v-card-actions>
-       </v-card-text>
-       </v-card>         
-      </v-dialog>
-
-
-    </div>
-    </template>
-  </v-col>
-  <v-col cols="20" sm="8" md="80">
+  </v-col> 
+  <v-col cols="20" sm="6" md="80">
       <template>
         <v-data-table
-           
           :headers="header_visita"
           :items="tableOlvidadosInt"
           multi-sort
           class="elevation-1"
           :items-per-page="itemsPerPage"
-          hide-default-footer
+          
           @page-count="pageCount = $event"
           :page.sync="page"
         >
@@ -160,7 +83,124 @@
           <v-pagination v-model="page" :length="pageCount"></v-pagination>
         </div>
       </template>
-    </v-col>    
+    </v-col>  
+    <v-col cols="auto" sm="12" md="80">
+      <template>
+        <div>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="dialog" max-width="1000px" class="center">
+          <template  v-slot:activator="{ on }">
+              <v-btn  style="margin-left: 11px;" dark class="mb-2" v-on="on" @click="LimpiarCampos()">Registrar Nueva Visita</v-btn>
+          </template>
+          <v-card >
+            <v-card-title>
+                  <span class="headline"><strong> Gestión de visitas</strong></span>
+            </v-card-title>
+          <v-card-text >
+            <v-container>
+                  <v-row>
+                    <!-- <v-col cols="20" sm="6" md="80" class=center >
+                        <v-text-field 
+                        v-model="editedItem.name"
+                        color="#d69c4f" 
+                        label="Motivo">
+                        </v-text-field>
+                      </v-col> -->
+                      <v-col cols="20" sm="6" md="80" class=center>
+                        <v-combobox
+                          v-model="editedItem.reason"
+                          :items="razones"
+                          color="#d69c4f"
+                          label="Seleccionar motivo"
+                          id="reason"
+                        ></v-combobox>
+                      </v-col>
+                      <v-col cols="20" sm="6" md="80" class=center>
+                        <v-combobox
+                          v-model="editedItem.account"
+                          :items="allAccounts"
+                          color="#d69c4f"
+                          label="Seleccionar Empresa"
+                          id="account"
+                        ></v-combobox>
+                      </v-col>
+                      <v-col cols="20" sm="3" md="80" class=center>
+                        <v-combobox
+                          @change="cambiaTextA()"
+                          v-model="status" 
+                          :items="Status"
+                          color="#d69c4f"
+                          label="Seleccionar estado"
+                          id="status"
+                        ></v-combobox>
+                      </v-col>
+                      <v-col cols="20" sm="3" md="80" class=center>
+                          <v-menu
+                            ref="menu"
+                            color="#d69c4f"
+                            v-model="menu"
+                            :close-on-content-click="false"
+                            :return-value.sync="date1"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="290px"
+                            min="26-09-2019"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-text-field
+                                color="#d69c4f"
+                                v-model="date1"
+                                label="Fecha de Visita"
+                                prepend-icon="event"
+                                readonly
+                                v-on="on"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker :min="defaultDate" v-model="date1" no-title scrollable color="#000000">
+                              <div class="flex-grow-1"></div>
+                              <v-btn text color="#d69c4f" @click="menu = false">Cancel</v-btn>
+                              <v-btn text color="#d69c4f" @click="$refs.menu.save(date1)">OK</v-btn>
+                            </v-date-picker>
+                          </v-menu>
+                      </v-col>
+                      
+                      <v-col v-if="status == 'Cancelado'" cols="12" sm="6" md="80" >
+                        <v-textarea
+                          v-model="editedItem.description"
+                          color="#d69c4f" 
+                          height="30"
+                          :auto-grow="true"
+                          :clearable="true"
+                          label="Descripción"
+                        ></v-textarea>
+                      </v-col>
+                      <v-col v-if="status != 'Cancelado'" cols="12" sm="6" md="80" ></v-col>
+                      
+                      <v-col class="lg-offset8" md="6" lg="6">
+                            <h3>Hora Inicio</h3>
+                            <v-time-picker :min="HoraMin" :max="HoraMax" width="250" header-color="#000000"  v-model="horaInicio" color="#d69c4f"></v-time-picker>
+                    </v-col>
+                    <v-col class="lg-offset8" md="6" lg="6">
+                          <h3>Hora Fin</h3>
+                          <v-time-picker :min="HoraMin" :max="HoraMax" width="250" header-color="#000000"  v-model="horaFin"  color="#d69c4f"></v-time-picker>
+                    </v-col>
+                  
+                </v-row>
+
+            </v-container>
+              <v-card-actions>
+                          <div class="flex-grow-1"></div>
+                          <v-btn color="#d69c4f" text @click="close">Cancel</v-btn>
+                          <v-btn color="#d69c4f" text @click="save()">Save</v-btn>
+                </v-card-actions>
+          </v-card-text>
+          </v-card>         
+          </v-dialog>
+
+
+        </div>
+        </template>
+  </v-col>  
 </v-row>
 
 </v-container>
@@ -452,9 +492,24 @@ export default {
       {text: "Dias sin visita", value:"days"},
     ],
     tableOlvidadosInt: [],
-    itemsPerPage: 4,
+    itemsPerPage: 5,
     pageCount: 0,
     page: 1,
+    monthSelected: '',
+    itemsPerPage2: 4,
+    pageCount2: 0,
+    page2: 1,
+    search: '',
+    months: ['[Seleccionar todos]', 'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'],
+    tableVisits: [],
+    header_tvisitas: [
+      {text: "Cuenta", value:"account"},
+     /*  {text: "Usuario", value:"user"}, */
+      {text: "Fecha", value:"finish"},
+      {text: "H. Inicio", value:"start2"},
+      {text: "H. Fin", value:"finish2"},
+      {text: "Estatus", value:"status"},
+    ],
     
   }),
   computed: {
@@ -511,6 +566,7 @@ export default {
       this.cargaTable()
       this.cargaOlvidados(visitas.tableOlvidadosInt)
       this.fechaActual()
+      this.cambiaTableVisits('')
       } catch (error) {
        console.log('Ocurrio un error')
      }
@@ -595,11 +651,39 @@ export default {
         array.push(res.data.tableVisits.tableVisitsNumber1, res.data.tableVisits.tableVisitsNumber1, res.data.tableVisits.tableVisitsPercent)
         this.values= array
         this.cargaOlvidados(res.data.tableOlvidadosInt)
+        this.cargaTablaVisitas(res.data, '')
       })
       .catch((error) => {
         alert('Error obteniendo las visitas del año '+ this.yearSelected)
         console.log(error)
       })
+    },
+
+    cargaTablaVisitas(data, type){
+      let calendar = data.calendar.listVisit;
+      let arrayVisits = []
+      for(let i=0; i<calendar.length; i++){
+        let num_mes = parseInt(calendar[i].start.substring(5, 7))
+        let nombre_mes = this.months[num_mes]
+        if(type === '[Seleccionar todos]' || type === ''){
+          calendar[i].start2 = calendar[i].start.substring(11, 16)
+          calendar[i].finish2 = calendar[i].finish.substring(11, 16)
+          calendar[i].finish = calendar[i].start.substring(0, 10)
+          arrayVisits.push(calendar[i])
+        }else{
+          if(nombre_mes === type){
+            calendar[i].start2 = calendar[i].start.substring(11, 16)
+            calendar[i].finish2 = calendar[i].finish.substring(11, 16)
+            calendar[i].finish = calendar[i].start.substring(0, 10)
+            arrayVisits.push(calendar[i])
+          }
+        }
+      }
+      this.tableVisits = arrayVisits
+    },
+    cambiaTableVisits(mes){
+      let data = JSON.parse(localStorage.getItem('visitas'))
+      this.cargaTablaVisitas(data, mes)
     },
     
     //AGREGAR UNA VISITA
@@ -620,11 +704,9 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
       await axios.post(url, datos, config)
       .then((res) => {
-        console.log(res.data)
         this.$store.commit('Visits', res.data)
         localStorage.setItem('visitas', JSON.stringify(res.data))
         let visitas = res.data.calendar.listVisit
@@ -681,11 +763,9 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
       await axios.put(url, datos, config)
       .then((res) => {
-        console.log(res.data)
         this.$store.commit('Visits', res.data)
         localStorage.setItem('visitas', JSON.stringify(res.data))
         let visitas = res.data.calendar.listVisit

@@ -6,6 +6,7 @@ import TableDash from './components/TableDash'
 import RegisterLead from './components/RegisterLead'
 import RegisterUser from './components/RegisterUser'
 import RegisterAccount from './components/RegisterAccount'
+import RegisterAccountAdmin from './components/RegisterAccountAdmin'
 import DashJefe from './components/BarChart'
 import DashGerente from './components/DashboardJefes'
 import ModalEdit from './components/ModalEdit'
@@ -41,7 +42,11 @@ const routerEjecutivo = new Router({
       name: 'register-lead',
       component: RegisterLead,
     },
-    
+    {
+      path: '/dashboard-ejecutivos/leads-user/id',
+      name: 'leads-user',
+      component: LeadsUserId
+    },
     {
       path:'/register-user',
       name: 'register-user',
@@ -51,6 +56,11 @@ const routerEjecutivo = new Router({
       path:'/register-account',
       name: 'register-account',
       component: RegisterAccount
+    },
+    {
+      path:'/register-account-add',
+      name: 'register-account-add',
+      component: RegisterAccountAdmin
     },
     {
       path:'/modaledit',
