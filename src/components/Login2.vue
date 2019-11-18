@@ -26,8 +26,11 @@
         src="../assets/casa-andina.png">
        <v-form>
         <v-col cols="12">
-            <v-text-field color="#d69c4f" v-model="email" label="Usuario" required></v-text-field>
+            <v-text-field class="input" id="username" v-on:keyup="enterLogin" color="#d69c4f" v-model="email" label="Usuario" required></v-text-field>
             <v-text-field
+              id="password"
+              class="input"
+              v-on:keyup="enterLogin" 
               color="#d69c4f"
               v-model="password"
               :append-icon="show1 ? 'visibility' : 'visibility_off'"
@@ -124,7 +127,12 @@ export default {
           console.log(error) 
           swal ( "Usuario y/o contraseña incorrectos" ,  `${error}` ,  "error" )
       }
-    }
+    },
+    enterLogin: function(e) {
+      if (e.keyCode === 13) {
+        this.Ingresar()
+      }      
+    },
   }
 }
 </script>

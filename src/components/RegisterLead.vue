@@ -1,10 +1,120 @@
 <template>
 <div>
   <div v-if="role=='Ejecutivo'">
+    <v-container fluid class="mb-0 pb-0 mt-0 pt-0">
+          <v-card >
+            <v-card-title>
+            <v-container fluid>
+              <v-row class="child-flex">
+                <div style="flex-basis: 50%">
+                  
+                    <v-row>
+                      <v-col cols="20" sm="4" md="80">
+                        Gestion de Leads
+                      </v-col>
+                      <v-divider class="mx-4" inset vertical></v-divider>
+                       <v-spacer></v-spacer>
+                      <v-col cols="20" sm="7" md="80">
+                        <v-text-field
+                          id="date_filtro1"
+                          color="#d69c4f"
+                          class="text-xs-center"
+                          v-model="search"
+                          append-icon="search"
+                          label="Búsqueda"
+                          single-line
+                          hide-details
+                        ></v-text-field>
+                      </v-col>
+                      <v-divider class="mx-4" inset vertical></v-divider>
+                    </v-row>
+                  
+                </div>
+
+                <div style="flex-basis: 43%" class="ml-4">
+                  
+                    <v-row>
+                      <!-- <v-spacer></v-spacer> -->
+                      <v-col cols="20" sm="5" md="80">
+                        <v-dialog
+                          color="#d69c4f"
+                          ref="dialog4"
+                          v-model="modal4"
+                          :return-value.sync="date_filtro1"
+                          persistent
+                          full-width
+                          width="290px"
+                        >
+                          <template v-slot:activator="{ on }">
+                            <v-text-field
+                              id="date_filtro1"
+                              color="#d69c4f"
+                              v-model="date_filtro1"
+                              label="Fecha Inicio"
+                              prepend-icon="event"
+                              readonly
+                              v-on="on"
+                              hide-details
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker v-model="date_filtro1"  scrollable>
+                            <div class="flex-grow-1"></div>
+                            <v-btn text color="primary" @click="modal4 = false">Cancel</v-btn>
+                            <v-btn text color="primary" @click="$refs.dialog4.save(date_filtro1); FiltraPorFecha()">OK</v-btn>
+                          </v-date-picker>
+                        </v-dialog>
+                    </v-col>
+                    <v-divider class="mx-4" inset vertical></v-divider>
+                    <v-col cols="20" sm="5" md="80">
+                        <v-dialog
+                          color="#d69c4f"
+                          ref="dialog5"
+                          v-model="modal5"
+                          :return-value.sync="date_filtro2"
+                          persistent
+                          full-width
+                          width="290px"
+                        >
+                          <template v-slot:activator="{ on }">
+                            <v-text-field
+                              id="date_filtro2"
+                              color="#d69c4f"
+                              v-model="date_filtro2"
+                              label="Fecha Fin"
+                              prepend-icon="event"
+                              readonly
+                              v-on="on"
+                              hide-details
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker v-model="date_filtro2" :min="date_filtro1" scrollable>
+                            <div class="flex-grow-1"></div>
+                            <v-btn text color="primary" @click="modal5 = false">Cancel</v-btn>
+                            <v-btn text color="primary" @click="$refs.dialog5.save(date_filtro2); FiltraPorFecha();">OK</v-btn>
+                          </v-date-picker>
+                        </v-dialog>
+                    </v-col>
+                  </v-row>
+                  
+                </div>
+                <!-- <div style="flex-basis: 10%">
+                  <v-toolbar height="130">
+                    <v-container fluid class="text-center">
+                      <v-btn color="#d69c4f" @click="FiltraDatos()" style="color: #FAFAFA;" dark class="mb-2" v-on="on" >Añadir Nuevo Lead</v-btn>
+                    </v-container>
+                  </v-toolbar>
+                </div> -->
+              </v-row>
+            </v-container>
+            </v-card-title>
+          
+      
+     
   <v-data-table :headers="headers" :items="desserts" :search="search" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Gestión de Leads</v-toolbar-title>
+        <!-- <v-toolbar-title>Gestión de Leads</v-toolbar-title> -->
+        <!-- 
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-text-field
           color="#d69c4f"
@@ -15,12 +125,21 @@
           single-line
           hide-details
         ></v-text-field>
-        <v-spacer></v-spacer>
-        <div class="flex-grow-1"></div>
+        <v-divider class="mx-4" inset vertical></v-divider>
+         <v-combobox  color="#d69c4f"  class="text-xs-center" single-line hide-details  v-model="filtroSelected" :items="filtro" label="Selecciona un elemento"></v-combobox>
+         <v-divider class="mx-4" inset vertical></v-divider>
+         <v-combobox  color="#d69c4f"  class="text-xs-center" single-line hide-details  v-model="filtroSelected" :items="filtro" label="Selecciona un elemento"></v-combobox>
+        <v-spacer></v-spacer> -->
+        <!-- <div class="flex-grow-1"></div> -->
+        <div class="flex-grow-1"></div> 
         <v-dialog v-model="dialog" max-width="1150px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="#d69c4f" @click="FiltraDatos()" style="color: #FAFAFA;" dark class="mb-2" v-on="on" >Añadir Nuevo Lead</v-btn>
-          </template>
+          <v-spacer></v-spacer>
+            <template v-slot:activator="{ on }" >
+              <v-btn  color="#d69c4f" @click="FiltraDatos()" style="color: #FAFAFA;" dark class="mb-2" v-on="on" >Añadir Nuevo Lead</v-btn>
+            </template>
+          
+          
+          
 
           <v-card>
             <v-card-title>
@@ -357,18 +476,19 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </v-toolbar>
+     </v-toolbar> 
     </template>
+
     <template v-slot:item.action="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
-      
      <!--  <v-icon small @click="deleteItem(item)">delete</v-icon> -->
     </template>
     <!-- <template v-slot:no-data>
       <v-btn color="primary" @click="allItems()">Reset</v-btn>
     </template> -->
   </v-data-table>
-
+  </v-card>
+  </v-container>
 
         <!-- <v-alert type="success" v-model="snackbar" dismissible width="300" height="50" style="float: right; position:absolute">
            I'm a success alert.
@@ -604,7 +724,12 @@ export default {
 
     room_revenue: 0,
     event_revenue: 0,
-    
+    date_filtro1: '',
+    date_filtro2: '',
+    dialog4: false,
+    dialog5: false,
+    modal4: false,
+    modal5: false,
    
   }),
   computed: {
@@ -662,9 +787,10 @@ export default {
       let datos = JSON.parse(localStorage.getItem('leads-user'))
       if(datos != undefined){
         this.search = JSON.parse(localStorage.getItem('leads-user')).search
+        datos.search = ''
+        localStorage.setItem('leads-user', JSON.stringify(datos))
       }
-      datos.search = ''
-      localStorage.setItem('leads-user', JSON.stringify(datos))
+      
     }catch (error){
       console.log('Hubo un error')
     }
@@ -1784,6 +1910,27 @@ export default {
     verificaPermisos(){
       this.role = JSON.parse(localStorage.getItem('usuario')).role
     },
+    FiltraPorFecha(){
+      try {
+        let fecha_i = parseInt(this.date_filtro1.replace('-', '').replace('-', ''))
+        let fecha_f = parseInt(this.date_filtro2.replace('-', '').replace('-', ''))
+        if(fecha_i>0 && fecha_f>0){
+          let array = []
+          this.desserts=[]
+          let leads = JSON.parse(localStorage.getItem('leads'))
+          for(let i=0; i<leads.length; i++){
+            let initialBooking = parseInt((leads[i].initialBooking.substring(0,10)).replace('-', '').replace('-', ''))
+            let finalBooking = parseInt((leads[i].finalBooking.substring(0,10)).replace('-', '').replace('-', ''))
+            if((initialBooking>=fecha_i && finalBooking<=fecha_f)){
+              array.push(leads[i])
+            }
+          }
+          this.calculaTotal(array)
+        }
+        
+      } catch (error) {
+      }
+    }
  
   },
 

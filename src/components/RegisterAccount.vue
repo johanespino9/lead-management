@@ -1,15 +1,12 @@
 <template>
   <div>
-      <v-container class="col-lg-6" >
+      <!-- <v-container class="col-lg-6" >
               <v-row justify="center">
                 <v-col cols="6">
                   <v-combobox @change="FiltraCuentas()" color="#d69c4f"  v-model="filtroSelected" :items="filtro" label="Selecciona un elemento"></v-combobox>
                 </v-col>
-                <!-- <v-col cols="auto" style="margin-top: 12px;">
-                  <v-btn @click="FiltraCuentas()" color="#000000" style="color: #FAFAFA;">Filtrar Registros</v-btn>
-                </v-col> -->
               </v-row>
-        </v-container>
+        </v-container> -->
         <v-data-table
               :search="search"
               :headers="headers"
@@ -24,13 +21,15 @@
             
               <template v-slot:top>
                 <v-toolbar flat color="white">
-                  <v-toolbar-title>Gestión de Cuentas</v-toolbar-title>
+                  <v-toolbar-title> Gestión de Cuentas</v-toolbar-title>
                   <v-divider
                     class="mx-4"
                     inset
                     vertical
                   ></v-divider>
                   <v-text-field color="#d69c4f" class="text-xs-center" v-model="search" append-icon="search" label="Búsqueda" single-line hide-details></v-text-field>
+                   <v-divider class="mx-4" inset vertical></v-divider>
+                   <v-combobox @change="FiltraCuentas()" color="#d69c4f" single-line hide-details  v-model="filtroSelected" :items="filtro" label="Selecciona un elemento"></v-combobox>
                    <v-spacer></v-spacer>
                   <div class="flex-grow-1"></div>
                   <v-dialog v-model="dialog" max-width="500px">

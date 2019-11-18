@@ -428,6 +428,14 @@ export default {
         window.location.href = '/#/dashboard_gerentes/visits-user/id'
       } 
     },
+    anterior(){
+      let {role} = JSON.parse(localStorage.getItem('usuario')) 
+      if(role == 'Administrador' || role == 'Gerente de ventas'){
+        window.location.href = '/#/dashboard_gerentes'
+      }else{
+        window.location.href = '/#/dashboard_jefes'
+      }  
+    },
     cambiaLeads(month, year){
       let datos_user = JSON.parse(localStorage.getItem('leads-user')).datos
       let fecha = this.monthSelected+' '+year
@@ -450,14 +458,6 @@ export default {
         window.location.href = '/#/dashboard_gerentes/leads-user/id'
       }else{
         window.location.href = '/#/dashboard_jefes/leads-user/id'
-      }  
-    },
-    anterior(){
-      let {role} = JSON.parse(localStorage.getItem('usuario')) 
-      if(role == 'Administrador' || role == 'Gerente de ventas'){
-        window.location.href = '/#/dashboard_gerentes'
-      }else{
-        window.location.href = '/#/dashboard_jefes'
       }  
     },
     verNoAtendidos(item, valor, month, year){
