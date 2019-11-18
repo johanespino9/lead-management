@@ -97,7 +97,7 @@
             <v-icon>mdi-calendar-edit</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Visitas</v-list-item-title>
+            <v-list-item-title>Gestión de Visitas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item color="#d69c4f" to="/profile">
