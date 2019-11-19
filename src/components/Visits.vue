@@ -484,7 +484,7 @@ export default {
       }
     ],
     items: [],
-    razones: ['Mantenimiento', 'Negociacion', 'Capacitacion', 'Reclamo', 'Otros'],
+    razones: ['Mantenimiento', 'Negociacion', 'Capacitacion', 'Reclamo', 'Ferias', 'Door to door', 'Otros'],
     header_visita: [
       {text: "Cuenta", value:"account"},
       {text: "Categoria", value:"category"},
