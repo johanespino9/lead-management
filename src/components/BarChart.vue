@@ -65,7 +65,7 @@
                         src="../assets/hotel-2-64.png"
                       ></v-img>
                     </v-list-item-avatar>
-                    <span class="title font-weight-light"><strong>Hoteles</strong> </span>
+                    <span class="title font-weight-light"><strong>Alojamiento</strong> </span>
                     <v-list-item-content class="text-right" style="margin-top:5px">
                       <v-list-item-subtitle> <strong></strong>  </v-list-item-subtitle>
                    </v-list-item-content>
@@ -206,7 +206,7 @@
             <div class="card"> 
               <v-card light >
                 <v-card-title>
-                  <span class="title font-weight-light"><strong>Ejecutivos Hoteles</strong> </span>
+                  <span class="title font-weight-light"><strong>Alojamiento</strong> </span>
                 </v-card-title>
                 <div class="position-relative mb-4" style="margin-top:0;">
                   <template>
@@ -233,7 +233,7 @@
             <div class="card"> 
               <v-card light >
                 <v-card-title>
-                  <span class="title font-weight-light"><strong>Ejecutivos Eventos</strong> </span>
+                  <span class="title font-weight-light"><strong>Eventos</strong> </span>
                 </v-card-title>
                 <div class="position-relative mb-4" style="margin-top:0;">
                     <template>

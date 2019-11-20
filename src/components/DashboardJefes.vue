@@ -408,11 +408,11 @@ export default {
         ],
         headers_visits: [
           { text: 'Nombre', align: 'left', value: 'name',},
-          { text: 'Nº Visitas', sortable: true, value: 'number_Of_Visits' },
+          { text: 'Meta', sortable: true, value: 'number_Of_Visits' },
           /* { text: 'Visitas Hechas', sortable: true, value: 'hechas' },
           { text: 'Restante', sortable: true, value: 'restante' }, */
-          { text: '% Nº Visitas', sortable: true, value: 'pbruto' },
-          { text: '% de Concreción', sortable: true, value: 'pconcretado' },
+          { text: 'Nº Visitas', sortable: true, value: 'pbruto' },
+          { text: '% de Visita', sortable: true, value: 'pconcretado' },
           /* { text: '% de Concreción', sortable: true, value: 'diferencia' }, */
         ],
         desserts1: [],
@@ -2442,9 +2442,9 @@ export default {
             }else{
             }
         }
-        if(total1==0){total1=1}
-        if(total2==0){total2=1}
-        if(total3==0){total3=1}
+        if(total1==0){total1=0}
+        if(total2==0){total2=0}
+        if(total3==0){total3=0}
         array1.push({
             name: 'Agencias',
             mbruto: this.separaNumeros(total1),
@@ -2471,9 +2471,9 @@ export default {
                 total3 +=  data.dashboardRateEvents[i].total
             }
         }
-        if(total1==0){total1=1}
-        if(total2==0){total2=1}
-        if(total3==0){total3=1}
+        if(total1==0){total1=0}
+        if(total2==0){total2=0}
+        if(total3==0){total3=0}
         array2.push({
             name: 'Agencias',
             mbruto: this.separaNumeros(total1),
@@ -2511,9 +2511,9 @@ export default {
               return
             }
         }
-        if(total1==0){total1=1}
-        if(total2==0){total2=1}
-        if(total3==0){total3=1}
+        if(total1==0){total1=0}
+        if(total2==0){total2=0}
+        if(total3==0){total3=0}
         array3.push({
             name: 'Agencias',
             number_Of_Visits: visit1,
