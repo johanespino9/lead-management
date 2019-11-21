@@ -2517,23 +2517,23 @@ export default {
         array3.push({
             name: 'Agencias',
             number_Of_Visits: visit1,
-            pbruto: this.separaNumeros(total1)+"%",
+            pbruto: this.separaNumeros(visit1*rate1/total1),
             pconcretado: this.separaNumeros(rate1)+"%",
             diferencia: this.separaNumeros((rate1/total1)*100)+"%"
         },{
             name: 'Corporativo',
             number_Of_Visits: visit2,
-            pbruto: this.separaNumeros(total2)+"%",
+            pbruto: this.separaNumeros(visit2*rate2/total2),
             pconcretado: this.separaNumeros(rate2)+"%",
             diferencia: this.separaNumeros((rate2/total2)*100)+"%"
         },
-        {
+        /*{
             name: 'Eventos',
             number_Of_Visits: visit3,
-            pbruto: this.separaNumeros(total3)+"%",
+            pbruto: this.separaNumeros(visit3*rate3/total3),
             pconcretado: this.separaNumeros(rate3)+"%",
             diferencia: this.separaNumeros((rate3/total2)*100)+"%"
-        })
+        }*/)
 
 
  
@@ -2636,10 +2636,10 @@ export default {
           if(c2==0){percent2=0}
           if(c3==0){percent3=0}
           if(data.tableVisitInt.length > 0){
-            this.ej3.push('Agencias', 'Corporativo', 'Eventos')
-            this.data5.push(rate1, rate2, rate3)
-            this.data6.push((100-percent1), (100-percent2), (100-percent3))
-            this.aux3.push(taux, taux, taux)
+            this.ej3.push('Agencias', 'Corporativo'/*, 'Eventos'*/)
+            this.data5.push(rate1, rate2/*, rate3*/)
+            this.data6.push((100-percent1), (100-percent2)/*, (100-percent3)*/)
+            this.aux3.push(taux, taux/*, taux*/)
           }
           //Eventos
           rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
