@@ -338,11 +338,11 @@ export default {
         ],
         headers_visits: [
           { text: 'Nombre', align: 'left', value: 'name',},
-          { text: 'Nº Visitas', sortable: true, value: 'number_Of_Visits' },
+          { text: 'Meta', sortable: true, value: 'number_Of_Visits' },
           /* { text: 'Visitas Hechas', sortable: true, value: 'hechas' },
           { text: 'Restante', sortable: true, value: 'restante' }, */
-          { text: '% Nº Visitas', sortable: true, value: 'pbruto' },
-          { text: '% de Concreción', sortable: true, value: 'pconcretado' },
+          { text: 'Nº Visitas', sortable: true, value: 'pbruto' },
+          { text: '% de Visitas', sortable: true, value: 'pconcretado' },
           /* { text: '% de Concreción', sortable: true, value: 'diferencia' }, */
         ],
         desserts1: [],
@@ -1459,7 +1459,7 @@ export default {
             array3.push({
             name: data.tableVisitInt[i].name+' '+data.tableVisitInt[i].last_Name,
             number_Of_Visits: data.tableVisitInt[i].number_Of_Visits,
-            pbruto: 100 +"%",
+            pbruto: data.tableVisitInt[i].number_Of_Visits*data.tableVisitInt[i].suma/100,
             pconcretado:  data.tableVisitInt[i].suma +"%",
             diferencia: (100 -parseInt( data.tableVisitInt[i].suma))+"%"
           })

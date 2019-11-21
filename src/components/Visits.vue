@@ -508,7 +508,8 @@ export default {
       {text: "Fecha", value:"finish"},
       {text: "H. Inicio", value:"start2"},
       {text: "H. Fin", value:"finish2"},
-      {text: "Estatus", value:"status"},
+      {text: "Estado", value:"status"},
+      {text: "Motivo", value:"reason"},
     ],
     
   }),
