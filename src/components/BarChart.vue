@@ -1516,7 +1516,7 @@ export default {
           for(let i=0; i<data.tableVisitInt.length; i++){
             this.ids3.push(data.tableVisitInt[i].user_Id)
             this.ej3.push(data.tableVisitInt[i].name+" "+data.tableVisitInt[i].last_Name)
-            this.data5.push(parseInt(data.tableVisitInt[i].suma))
+            this.data5.push(data.tableVisitInt[i].suma)
             this.data6.push(100-data.tableVisitInt[i].suma)
             this.aux3.push(100)
           }

@@ -361,13 +361,13 @@
 <v-container fluid >
   <v-row>
     <v-col class="text-left">
-      <v-btn color="#d69c4f" style="color: white;" @click="retornarAnterior">
-      Anterior
+      <v-btn color="#d69c4f" style="color: white;" @click="retornar">
+      Volver al inicio
     </v-btn>
     </v-col>
     <v-col class="text-right">
-      <v-btn color="#d69c4f" style="color: white;" @click="retornar">
-      Volver al inicio
+      <v-btn color="#d69c4f" style="color: white;" @click="retornarAnterior">
+      Ver Dashboard Leads
     </v-btn>
     </v-col>
   </v-row>

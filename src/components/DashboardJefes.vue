@@ -991,9 +991,9 @@ export default {
       try {
         this.headers_usersg = [
           { text: 'Nombre', align: 'left', value: 'name',},
-          { text: 'Total visitas', sortable: true, value: 'mbruto' },
-          { text: 'Total %', sortable: true, value: 'ptotal' },
-          { text: '% de Concreción', sortable: true, value: 'diferencia' },
+          { text: 'Meta', sortable: true, value: 'mbruto' },
+          { text: 'N° de Visitas', sortable: true, value: 'ptotal' },
+          { text: '% de Visitas', sortable: true, value: 'diferencia' },
           { text: 'Actions', value: 'action', sortable: false },
         ]
         this.groups_user = []
@@ -1017,14 +1017,14 @@ export default {
           item.diferencia = temporal.toFixed(2)+'%';
           item.mbruto = item.number_Of_Visits
           item.mconcretado = this.separaNumeros(concretado)+"%"
-          item.ptotal = this.separaNumeros(100)+"%"
+          item.ptotal = item.suma*item.mbruto/100//aqui
           item.concretado = concretado
           item.bruto = montoB
           if(item.group_Segment == nombre){
             this.dataModal.groupSegment = item.group_Segment
             this.dataModal.type = 'Visitas'
             vbruto.push(100-parseInt(item.concretado))
-            vconcretado.push(parseInt(item.concretado)+"%")
+            vconcretado.push(item.concretado+"%")
             ejecutivos.push(item.name)
             this.auxiliarg4.push(100)
             ids.push(parseInt(item.user_Id))
@@ -1079,7 +1079,7 @@ export default {
                         })
                         .then((willDelete) => {
                           if (willDelete) {
-                            window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+                            window.location.href = '/#/dashboard_gerentes/visits-user/id'//no es por esto lo, no funcionaba antes de que lo cambie
                           } 
                         }); 
                     }
