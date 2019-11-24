@@ -86,7 +86,7 @@
         <v-avatar size="100">
           <img
              id="img"
-             src="../assets/chupetin.jpg"
+             src="../assets/casa-andina-logo.png"
              alt="Cuchito"
           >
         </v-avatar>
@@ -175,7 +175,7 @@
             <v-list-item-title>Gestión de Cuentas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="role=='Ejecutivo' && groupS != 'Eventos'" color="#d69c4f" to="/visits">
+        <v-list-item v-if="role=='Ejecutivo'" color="#d69c4f" to="/visits">
           <v-list-item-action>
             <v-icon>mdi-briefcase-plus-outline</v-icon>
           </v-list-item-action>

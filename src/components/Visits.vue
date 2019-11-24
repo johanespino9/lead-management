@@ -1,7 +1,7 @@
 <template>
 <div>
   
-  <div v-if="groupSG != 'Eventos' ||  role!='Administrador'">
+  <div v-if="role!='Administrador'">
   <v-container class="col-md-12">
     <v-row >
         <v-col cols="auto">
@@ -329,7 +329,7 @@
     </div>
 </div>
 
- <div v-if="role=='Administrador' || groupSG == 'Eventos'">
+ <div v-if="role=='Administrador'">
    <NotFound/>
  </div>
 
@@ -484,7 +484,7 @@ export default {
       }
     ],
     items: [],
-    razones: ['Mantenimiento', 'Negociacion', 'Capacitacion', 'Reclamo', 'Ferias', 'Door to door', 'Otros'],
+    razones: ['Mantenimiento', 'Negociacion', 'Capacitacion', 'Reclamo', 'Ferias', 'Door to door','Prospección', 'Otros'],
     header_visita: [
       {text: "Cuenta", value:"account"},
       {text: "Categoria", value:"category"},
