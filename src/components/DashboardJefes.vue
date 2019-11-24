@@ -1045,10 +1045,10 @@ export default {
           this.graph4(this.chart4)
           this.chart4.updateSeries([
               {
-                name: 'Monto concretado',
+                name: '% Visitas concretadas',
                 data: vconcretado
               },{   
-                name: 'Monto total',
+                name: '% total',
                 data: vbruto
               },
           ])
@@ -2493,20 +2493,23 @@ export default {
         })
         //VISITAS
         rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
-        let visit1=0, visit2=0, visit3=0
+        let visit1=0, visit2=0, visit3=0, u1=0,u2=0,u3=0
         for(let i=0; i< data.tableVisitInt.length; i++){
             if(data.tableVisitInt[i].group_Segment == 'Agencias'){
                 rate1 += data.tableVisitInt[i].suma
                 total1 +=  100
                 visit1 += data.tableVisitInt[i].number_Of_Visits
+                u1++
             }else if(data.tableVisitInt[i].group_Segment == 'Corporativo'){
                 rate2 += data.tableVisitInt[i].suma
                 total2 +=  100
                 visit2 += data.tableVisitInt[i].number_Of_Visits
+                u2++
             }else if(data.tableVisitInt[i].group_Segment == 'Eventos'){
                 rate3 += data.tableVisitInt[i].suma
                 total3 +=  100
                 visit3 += data.tableVisitInt[i].number_Of_Visits
+                u3++
             }else{
               return
             }
@@ -2518,22 +2521,22 @@ export default {
             name: 'Agencias',
             number_Of_Visits: visit1,
             pbruto: this.separaNumeros(visit1*rate1/total1),
-            pconcretado: this.separaNumeros(rate1)+"%",
+            pconcretado: this.separaNumeros(rate1/u1)+"%",
             diferencia: this.separaNumeros((rate1/total1)*100)+"%"
         },{
             name: 'Corporativo',
             number_Of_Visits: visit2,
             pbruto: this.separaNumeros(visit2*rate2/total2),
-            pconcretado: this.separaNumeros(rate2)+"%",
+            pconcretado: this.separaNumeros(rate2/u2)+"%",
             diferencia: this.separaNumeros((rate2/total2)*100)+"%"
         },
-        /*{
+        {
             name: 'Eventos',
             number_Of_Visits: visit3,
             pbruto: this.separaNumeros(visit3*rate3/total3),
-            pconcretado: this.separaNumeros(rate3)+"%",
+            pconcretado: this.separaNumeros(rate3/u3)+"%",
             diferencia: this.separaNumeros((rate3/total2)*100)+"%"
-        }*/)
+        })
 
 
  
@@ -2632,14 +2635,17 @@ export default {
           let percent1= ((rate1/(c1*100))*100)
           let percent2= ((rate2/(c2*100))*100)
           let percent3= ((rate3/(c3*100))*100)
+          let rate1_2 = Math.round(rate1/c1 * 100) / 100 
+          let rate2_2 = Math.round(rate2/c2 * 100) / 100
+          let rate3_2 = Math.round(rate3/c3 * 100) / 100
           if(c1==0){percent1=0}
           if(c2==0){percent2=0}
           if(c3==0){percent3=0}
           if(data.tableVisitInt.length > 0){
-            this.ej3.push('Agencias', 'Corporativo'/*, 'Eventos'*/)
-            this.data5.push(rate1, rate2/*, rate3*/)
-            this.data6.push((100-percent1), (100-percent2)/*, (100-percent3)*/)
-            this.aux3.push(taux, taux/*, taux*/)
+            this.ej3.push('Agencias', 'Corporativo', 'Eventos')
+            this.data5.push(rate1_2, rate2_2, rate3_2)
+            this.data6.push((100-percent1), (100-percent2), (100-percent3))
+            this.aux3.push(taux, taux, taux)
           }
           //Eventos
           rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
@@ -2721,6 +2727,15 @@ export default {
         window.scrollTo(500, 0);
     },
     
+   redondearDecimales (numero, decimales = 2) {
+    //Respuesta de Enrique B.
+    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');
+    if (numeroRegexp.test(numero)) {
+        return Number(numero.toFixed(decimales));
+    } else {
+        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;
+    }
+}
 
 
 
