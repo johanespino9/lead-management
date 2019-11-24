@@ -486,7 +486,7 @@ export default {
         this.graph2(this.chart2)
         this.graph3(this.chart3)
         this.graph4(this.chart4) */
-        this.graficaTodo()
+        /* this.graficaTodo() */
         
         if(localStorage.length>=8){
             this.$store.dispatch('stateToken')
@@ -1228,11 +1228,16 @@ export default {
       })
       .then((willDelete) => {
         if (willDelete) {
+          let url = '/#/dashboard_gerentes/dashboard-user/id'
           let user = JSON.parse(localStorage.getItem('leads-user'))
           user.datos.nombre = item.name
           user.datos.user_id = item.user_id
+          if(item.user_id === undefined){
+            user.datos.user_id = item.user_Id
+            url = '/#/dashboard_gerentes/visits-user/id'
+          }
           localStorage.setItem('leads-user', JSON.stringify(user))
-          window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+          window.location.href = url
           /* swal("Vista cargada correctamente"); */
           /* swal("Poof! Your imaginary file has been deleted!", {
             icon: "success",
@@ -2682,7 +2687,8 @@ export default {
             this.data4.push(total1, total2, total3)
             this.aux2.push(taux, taux2, taux3)
           }
-          
+          this.graficaTodo()
+          console.log('carga terminada')
         }else{
           this.resetFiltro()
         }

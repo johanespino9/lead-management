@@ -191,7 +191,7 @@
               <v-card-actions>
                           <div class="flex-grow-1"></div>
                           <v-btn color="#d69c4f" text @click="close">Cancel</v-btn>
-                          <v-btn color="#d69c4f" text @click="save()">Save</v-btn>
+                          <v-btn v-if="editedItem.edit == true" color="#d69c4f" text @click="save()">Save</v-btn>
                 </v-card-actions>
           </v-card-text>
           </v-card>         
@@ -371,6 +371,7 @@ export default {
       end: null,
       estado: '',
       editedItem: {
+        edit: '',
         visitId: '',
         name: '',
         description:'',
@@ -382,6 +383,7 @@ export default {
         
       },
       defaultItem:{
+        edit: '',
         name: '',
         description:'',
         start: '',
@@ -917,6 +919,7 @@ export default {
        },
        LimpiarCampos(){
          this.status = ''
+         this.editedItem.edit = true
          this.editedItem.reason = ''
          this.editedItem.account = ''
          this.date1 = this.defaultDate

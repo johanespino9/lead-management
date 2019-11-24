@@ -86,7 +86,7 @@
         <v-avatar size="100">
           <img
              id="img"
-             src="../assets/casa-andina-logo.png"
+             src="../assets/profile2.png"
              alt="Cuchito"
           >
         </v-avatar>
@@ -436,7 +436,7 @@ export default {
     if(localStorage.length>=8){
       
     }
-    console.clear()
+     console.clear()
   },
 }
 </script>

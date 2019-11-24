@@ -405,10 +405,10 @@ export default {
         this.cargarDataInicial()
         this.verificaPermisos()
         this.cargarAños()
-        this.graph1(this.chart)
+        /* this.graph1(this.chart)
         this.graph2(this.chart2)
         this.graph3(this.chart3)
-        this.cargarTablas(data)
+        this.cargarTablas(data) */
         if(localStorage.length>=8){
             this.$store.dispatch('stateToken')
         }
@@ -421,6 +421,26 @@ export default {
     
     methods: {
     ...mapActions(['stateToken']),
+    graficaTodo(){
+      setTimeout( () => {
+        this.graph1(this.chart)
+        return true
+      }, 1400);
+      setTimeout( () => {
+        this.graph2(this.chart2)
+        return true
+      }, 1400);
+      setTimeout( () => {
+        this.graph3(this.chart3)
+        return true
+      }, 1400);
+      setTimeout( () => {
+        let data = JSON.parse(localStorage.getItem('dashjefe'))
+        this.cargarTablas(data)
+        return true
+      }, 1400);
+      
+    },
     graph1(chart){
     var users = this.ej1
     var ids = this.ids1
@@ -1007,7 +1027,7 @@ export default {
                         })
                         .then((willDelete) => {
                           if (willDelete) {
-                            window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+                            window.location.href = '/#/dashboard_jefes/visits-user/id'
                           } 
                         });  
                     }
@@ -1520,6 +1540,7 @@ export default {
             this.data6.push(100-data.tableVisitInt[i].suma)
             this.aux3.push(100)
           }
+          this.graficaTodo()
         }else{
           this.resetFiltro()
         }
