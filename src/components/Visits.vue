@@ -880,6 +880,7 @@ export default {
             start: visitas[i].start.toString(),
             end: visitas[i].finish.toString(),
             account: visitas[i].account,
+            edit: visitas[i].edit,
             status: visitas[i].status,
             reason: visitas[i].reason,
             color: '#d69c4f',
