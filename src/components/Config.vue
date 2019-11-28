@@ -72,6 +72,7 @@
                             v-model="user.email"
                             label="E-mail"
                             placeholder=""
+                            disabled
                     ></v-text-field>
                     <v-text-field
                             color="#d69c4f" 
@@ -80,6 +81,7 @@
                             v-model="user.name"
                             label="Nombres"
                             placeholder=""  
+                            disabled
                     ></v-text-field>
                     <v-text-field
                             color="#d69c4f" 
@@ -88,6 +90,7 @@
                             v-model="user.lastName"
                             label="Apellidos"
                             placeholder=""
+                            disabled
                     ></v-text-field>
                     </v-col>
 
