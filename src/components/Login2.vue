@@ -42,7 +42,7 @@
               counter
             ></v-text-field>
             <div class="text-center" style="margin-top: 30px;">
-              <v-btn color="#000000" class="white--text" @click="Ingresar()">Ingresar</v-btn>
+              <v-btn id="btn_ingresar" color="#000000" class="white--text" @click="Ingresar()">Ingresar</v-btn>
             </div>
             <br>
         </v-col>
@@ -96,11 +96,13 @@ export default {
         swal ( "Rellene todos los campos" ,  "Debes rellenar todos los campos" ,  "error" )
       } else{
         this.login()
+        
       }
       
     },
     async login(){
       try {
+      this.bloquearIngreso()
       var sendData = {
         username: this.email,
         password: this.password
@@ -126,6 +128,7 @@ export default {
       } catch (error) {
           console.log(error) 
           swal ( "Usuario y/o contraseña incorrectos" ,  `${error}` ,  "error" )
+          this.desbloquearIngreso()
       }
     },
     enterLogin: function(e) {
@@ -133,6 +136,22 @@ export default {
         this.Ingresar()
       }      
     },
+    bloquearIngreso(){
+      let username = document.getElementById('username')
+      let password = document.getElementById('password')
+      let btn = document.getElementById('btn_ingresar')
+      username.disabled = true
+      password.disabled = true
+      btn.disabled = true
+    },
+    desbloquearIngreso(){
+      let username = document.getElementById('username')
+      let password = document.getElementById('password')
+      let btn = document.getElementById('btn_ingresar')
+      username.disabled = false
+      password.disabled = false
+      btn.disabled = false
+    }
   }
 }
 </script>

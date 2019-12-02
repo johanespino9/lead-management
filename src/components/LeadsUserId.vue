@@ -805,6 +805,7 @@ export default {
         this.leadsAccounts.push(todoaccounts[i].name);
       }
     },
+    */
     cambiaRazones(){
       let reasons = this.todoRazones
       let razon = parseInt(this.editedItem.statusid)
@@ -821,7 +822,7 @@ export default {
             this.razones.push(reasons[i].reason)
           }
         }
-    }, */
+    }, 
 
     /* Get Leads */
     async getUserLeads(){
