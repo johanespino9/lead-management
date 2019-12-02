@@ -481,6 +481,7 @@
 
     <template v-slot:item.action="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
+      <v-icon small class="mr-2" @click="copyItem(item)">fas fa-copy</v-icon>
      <!--  <v-icon small @click="deleteItem(item)">delete</v-icon> -->
     </template>
     <!-- <template v-slot:no-data>
@@ -520,7 +521,7 @@ export default {
   },
   directives: {
       mask,
-    },
+  },
   props: ['totalmeses'],
   data: () => ({
     role: '',
@@ -618,9 +619,36 @@ export default {
       status: 0,
       statusid:0 ,
       tarifaneta: 0,
-      razon: 0
-      
+      razon: 0 
     },
+    copyedItem: {
+      leadid: '',
+      name: "",
+      initialdate: '',
+      finaldate: '',
+      account: '',
+      nights:'',
+      segment:'',
+      hotel:'',
+      rateHotel: 0,
+      rooms: 0,
+      contactName: '',
+      contactPhone:'',
+      contactEmail: '',
+      eventsName:[],
+      rateEvent: 0,
+      rateEvent1: 0,
+      rateEvent2: 0,
+      rateEvent3: 0,
+      contact: '',
+      month:[],
+      status: 0,
+      statusid:0 ,
+      tarifaneta: 0,
+      razon: 0 
+    },
+    copy: false,
+
     razon: 0,
     defaultItem: {
       segment: '',
@@ -1171,25 +1199,60 @@ export default {
       this.FiltraDatos()
       this.editedIndex=-1
       this.editedIndex = this.desserts.indexOf(item);
-      this.dialog = true;
-      if(item.status == 'Congelado'){
-        this.editedItem.statusid = 4
-        this.razon = 4
-        this.cambiaRazones()
-      }else if(item.status == 'Cancelado'){
-        this.editedItem.statusid = 5
-        this.razon = 5
-        this.cambiaRazones()
+      
+      let otro_item = item
+      if(this.copy == false){
+        if(item.status == 'Congelado'){
+          this.editedItem.statusid = 4
+          this.razon = 4
+          this.cambiaRazones()
+        }else if(item.status == 'Cancelado'){
+          this.editedItem.statusid = 5
+          this.razon = 5
+          this.cambiaRazones()
+        }else{
+          this.razon = 0
+        }
       }else{
-        this.razon = 0
+        this.editedIndex = -1
       }
+      
         if(this.editedIndex>=0){
           this.editedItem = Object.assign({}, item);
           this.SeparaMesyRate(item)
           this.EditMesyEvents()
           this.editedItem.razon = item.reason 
         }else{
+          otro_item = item
+          this.editedItem = Object.assign({}, otro_item);
+          this.editedItem.statusid = 1
+          this.editedItem.status = ''
+          this.editedItem.leadid = null 
+          this.editedItem.reason = null
+          this.SeparaMesyRate(this.editedItem)
+          this.EditMesyEvents()
+          this.editedItem.statusid = 1
+          this.razon = 0
         }
+        this.dialog = true;
+        this.copy = false
+    },
+    copyItem(myitem){
+      this.copy = true
+      this.editItem(myitem)
+
+      /* this.copyedItem = myitem
+      this.editedIndex = -1
+      this.FiltraDatos()
+      this.copyedItem.reason = ''
+      this.copyedItem.leadid = null
+      this.copyedItem.razon = 0
+      this.copyedItem.statusid = 1
+      this.copyedItem.status = ''
+      this.editedItem = Object.assign({}, this.copyedItem);
+      this.SeparaMesyRate(this.copyedItem)
+      this.EditMesyEvents()
+      this.dialog = true; */
     },
 
     deleteItem(item) {
@@ -1261,6 +1324,8 @@ export default {
        /* if(groupSegment === 'Eventos'){
           console.log('si', groupSegment)
        } */
+       this.editedItem.statusid = 1
+       this.razon = 0
        if(this.editedItem.segment=='Eventos'){
         this.sevent = 'si'
         this.rateHotel = 0

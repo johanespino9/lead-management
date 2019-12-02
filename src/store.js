@@ -769,7 +769,6 @@ export default new Vuex.Store({
 
       })
       .catch(error => {
-        alert('La sesion se ha terminado')
         console.log('Token expirado', error)
         localStorage.removeItem('token')
         localStorage.removeItem('usuarios')

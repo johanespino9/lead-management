@@ -48,9 +48,14 @@
                             <!-- <v-col v-if="editedIndex>-1" cols="12" sm="6" md="12">
                               <v-text-field disabled color="#ff4200" v-model="editedItem.accountId" label="Account Id"></v-text-field>
                             </v-col> -->
+                            
                             <v-col cols="12" sm="6" md="12">
                               <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="name-account" required disabled color="#d69c4f" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                               <v-text-field v-else required color="#d69c4f" id="name-account" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="12">
+                              <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="ruc" required disabled v-mask="mask" color="#d69c4f" v-model="editedItem.ruc" label="RUC"></v-text-field>
+                              <v-text-field v-else required color="#d69c4f" id="ruc" v-mask="mask" v-model="editedItem.ruc" label="RUC"></v-text-field>
                             </v-col>
                             <v-col cols="auto">
                               <v-combobox color="#d69c4f" id="sector-id" required v-if="editedIndex>=0  && editedItem.edit==false && role=='Ejecutivo'" disabled v-model="editedItem.branch" :items="branchs" label="Seleccionar Sector"></v-combobox>
@@ -113,8 +118,8 @@
     </div>
 </template>
 <script>
-import { mask } from 'vue-the-mask';
 import {mapState, mapActions} from 'vuex'
+import { mask } from 'vue-the-mask'
 import axios from 'axios';
   export default {
     directives: {
@@ -130,6 +135,7 @@ import axios from 'axios';
           align: 'left',
           value: 'name',
         },
+        { text: 'RUC', value: 'ruc' },
         { text: 'Sector', value: 'branch' },
         { text: 'Categoría', value: 'category' },
         { text: 'Grupo Segmento', value: 'groupSegment' },
@@ -148,14 +154,16 @@ import axios from 'axios';
         category: '',
         groupSegment: JSON.parse(localStorage.getItem('usuario')).groupSegment,
         edit: false,
-        user: ''
+        user: '',
+        ruc: ''
       },
       defaultItem: {
         name: '',
         branch: '',
         category: '',
         groupsegment: '',
-        user: ''
+        user: '',
+        ruc: ''
       },
       categories:[],
       branchs:[],
@@ -243,9 +251,10 @@ import axios from 'axios';
           "name": this.editedItem.name,
           "category": this.editedItem.category,
           "branch": this.editedItem.branch,
-          "groupSegment": this.editedItem.groupSegment
+          "groupSegment": this.editedItem.groupSegment,
+          "ruc": this.editedItem.ruc
       }
-      if(!this.verificarNombre()){
+      if(!this.verificarNombre() && !this.verificarRuc()){
         let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
@@ -265,7 +274,7 @@ import axios from 'axios';
           this.alerts('Ocurrio un error y no se guardó', 'error')
         })
       }else{
-        toastr.error('Ya existe una cuenta con ese nombre')
+        toastr.error('Ya existe una cuenta con el mismo nombre y/o Ruc.')
       }
     }, 
 
@@ -276,7 +285,8 @@ import axios from 'axios';
           "name": this.editedItem.name,
           "category": this.editedItem.category,
           "branch": this.editedItem.branch,
-          "groupSegment": this.editedItem.groupSegment
+          "groupSegment": this.editedItem.groupSegment,
+          "ruc": this.editedItem.ruc
       }
       let config = {
         headers: {
@@ -335,9 +345,10 @@ import axios from 'axios';
           "category": this.editedItem.category,
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
-          "user": this.editedItem.user
+          "user": this.editedItem.user,
+          "ruc": this.editedItem.ruc
       }
-      if(!this.verificarNombre()){
+      if(!this.verificarNombre() && !this.verificarRuc()){
         let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
@@ -358,7 +369,7 @@ import axios from 'axios';
           this.alerts('Ocurrio un error y no se guardó', 'error')
         }) 
       }else{
-        toastr.error('Ya existe una cuenta con ese nombre.')
+        toastr.error('Ya existe una cuenta con el mismo nombre y/o Ruc.')
       }
     }, 
     async editAccountJefes(){
@@ -368,7 +379,8 @@ import axios from 'axios';
           "category": this.editedItem.category,
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
-          "user": this.editedItem.user
+          "user": this.editedItem.user,
+          "ruc": this.editedItem.ruc
       }
       let config = {
         headers: {
@@ -504,6 +516,7 @@ import axios from 'axios';
 
       editItem (item) {
         this.editedIndex = this.desserts.indexOf(item)
+        console.log(this.editedIndex)
         if(this.editedIndex>-1){
           this.editedItem = Object.assign({}, item)
           this.dialog = true
@@ -592,6 +605,33 @@ import axios from 'axios';
               return false;
           } catch (error) { 
           }
+    },
+    verificarRuc(){
+      try {
+          let ruc = document.getElementById('ruc').value
+
+          for(let i=0; i<this.desserts.length; i++){
+            if(ruc == this.desserts[i].ruc){
+              return true;
+            }
+          } 
+          return false;
+  
+      } catch (error) { 
+      }
+    },
+    verificarGlobalId(){
+      try {
+          let id = document.getElementById('global-id').value
+          for(let i=0; i<this.desserts.length; i++){
+            if(id == this.desserts[i].global_id){
+              return true;
+            }
+          } 
+          return false;
+  
+      } catch (error) { 
+      }
     },
   },
 
