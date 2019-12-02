@@ -184,7 +184,7 @@ import axios from 'axios';
       ],
       search: "",
       desserts: [],
-      mask: '####-####-####-####',
+      mask: '###########',
       editedIndex: -1,
       gsegment: JSON.parse(localStorage.getItem('usuario')).groupSegment,
       editedItem: {
@@ -330,7 +330,7 @@ import axios from 'axios';
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
           "user": this.editedItem.user,
-          "ruc": this.editedItem.ruc
+          "ruc": parseInt(this.editedItem.ruc)
       }
       if(!this.verificarNombre() && !this.verificarRuc()){
         let config = {
@@ -362,7 +362,7 @@ import axios from 'axios';
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
           "user": this.editedItem.user,
-          "ruc": this.editedItem.ruc
+          "ruc": parseInt(this.editedItem.ruc)
       }
       let config = {
         headers: {

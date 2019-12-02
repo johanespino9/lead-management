@@ -48,7 +48,7 @@
                             <!-- <v-col v-if="editedIndex>-1" cols="12" sm="6" md="12">
                               <v-text-field disabled color="#ff4200" v-model="editedItem.accountId" label="Account Id"></v-text-field>
                             </v-col> -->
-                            
+
                             <v-col cols="12" sm="6" md="12">
                               <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="name-account" required disabled color="#d69c4f" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                               <v-text-field v-else required color="#d69c4f" id="name-account" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
@@ -144,7 +144,7 @@ import axios from 'axios';
       ],
       search: "",
       desserts: [],
-      mask: '####-####-####-####',
+      mask: '###########',
       editedIndex: -1,
       gsegment: JSON.parse(localStorage.getItem('usuario')).groupSegment,
       editedItem: {
@@ -252,7 +252,7 @@ import axios from 'axios';
           "category": this.editedItem.category,
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
-          "ruc": this.editedItem.ruc
+          "ruc": parseInt(this.editedItem.ruc)
       }
       if(!this.verificarNombre() && !this.verificarRuc()){
         let config = {
@@ -263,7 +263,6 @@ import axios from 'axios';
         let url = 'https://casa-andina-backend.azurewebsites.net/user/accounts'
         await axios.post(url, datos, config)
         .then(response => { 
-          console.log(response.data)
           localStorage.setItem('accounts', JSON.stringify(response.data))
           this.$store.commit('Accounts', response.data)
           this.desserts=this.Accounts
@@ -286,14 +285,13 @@ import axios from 'axios';
           "category": this.editedItem.category,
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
-          "ruc": this.editedItem.ruc
+          "ruc": parseInt(this.editedItem.ruc)
       }
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      console.log(datos)
       let url = 'https://casa-andina-backend.azurewebsites.net/user/accounts'
       await axios.put(url, datos, config)
       .then(response => { 
@@ -346,7 +344,7 @@ import axios from 'axios';
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
           "user": this.editedItem.user,
-          "ruc": this.editedItem.ruc
+          "ruc": parseInt(this.editedItem.ruc)
       }
       if(!this.verificarNombre() && !this.verificarRuc()){
         let config = {
@@ -380,7 +378,7 @@ import axios from 'axios';
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
           "user": this.editedItem.user,
-          "ruc": this.editedItem.ruc
+          "ruc": parseInt(this.editedItem.ruc)
       }
       let config = {
         headers: {
