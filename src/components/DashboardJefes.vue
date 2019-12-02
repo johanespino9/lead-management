@@ -2445,6 +2445,8 @@ export default {
                 rate2 += data.dashboardRateHotel[i].rate_hotel
                 total2 +=  data.dashboardRateHotel[i].total
             }else{
+              rate3 += data.dashboardRateHotel[i].rate_hotel
+                total3 +=  data.dashboardRateHotel[i].total
             }
         }
         if(total1==0){total1=0}
@@ -2460,6 +2462,11 @@ export default {
             mbruto: this.separaNumeros(total2),
             mconcretado: this.separaNumeros(rate2),
             diferencia: this.separaNumeros((rate2/total2)*100)+"%"
+        },{
+          name: 'Eventos',
+            mbruto: this.separaNumeros(total3),
+            mconcretado: this.separaNumeros(rate3),
+            diferencia: this.separaNumeros((rate3/total3)*100)+"%"
         })
         //EVENTOS
         rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
@@ -2601,7 +2608,13 @@ export default {
                     total2 += (data.dashboardRateHotel[i].total-data.dashboardRateHotel[i].rate_hotel)
                 }  
             }else{
-                console.log('no habia')
+                rate3 += data.dashboardRateHotel[i].rate_hotel
+                taux3 += data.dashboardRateHotel[i].total
+                if(data.dashboardRateHotel[i].total<data.dashboardRateHotel[i].rate_hotel){
+                    total3 +=  data.dashboardRateHotel[i].total
+                }else{
+                    total3 += (data.dashboardRateHotel[i].total-data.dashboardRateHotel[i].rate_hotel)
+                } 
             }
           }
           /* if(rate1>0 || total1>0){
@@ -2616,10 +2629,10 @@ export default {
             this.aux1.push(taux2)
           } */
           if(data.dashboardRateHotel.length > 0){
-            this.ej1.push('Agencias','Corporativo')
-            this.data1.push(rate1,rate2)
-            this.data2.push(total1,total2)
-            this.aux1.push(taux,taux2)
+            this.ej1.push('Agencias','Corporativo','Eventos')
+            this.data1.push(rate1,rate2,rate3)
+            this.data2.push(total1,total2,total3)
+            this.aux1.push(taux,taux2,taux)
           } 
           //VISITAS
           rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
