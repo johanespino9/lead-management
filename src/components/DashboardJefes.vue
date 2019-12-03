@@ -2632,7 +2632,7 @@ export default {
             this.ej1.push('Agencias','Corporativo','Eventos')
             this.data1.push(rate1,rate2,rate3)
             this.data2.push(total1,total2,total3)
-            this.aux1.push(taux,taux2,taux)
+            this.aux1.push(taux,taux2,taux3)
           } 
           //VISITAS
           rate1=0; rate2=0; rate3 =0; total1 = 0; total2 = 0; total3 = 0; taux = 0; taux2 = 0; taux3 = 0
