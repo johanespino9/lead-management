@@ -484,10 +484,6 @@
     Anterior
   </v-btn>
 </v-container>
-<div v-if="role=='Gerente de ventas'">
-  <NotFound/>
-</div>
-  
 </div>
 </template>
 
