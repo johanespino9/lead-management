@@ -41,7 +41,9 @@
         <v-combobox color="#d69c4f" v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
       </v-col>
       <v-col cols="auto" style="margin-top: 10px;">
-        <v-btn color="#d69c4f" style="color: #FAFAFA;" @click="FiltroDashboardPorId(id, hotelSelected, months, yearSelected)">Buscar Registros</v-btn>
+        <v-btn color="#d69c4f" style="color: #FAFAFA;" @click="FiltroDashboardPorId(id, hotelSelected, months, yearSelected)">
+          <i class="fas fa-search mr-2"></i> Buscar Registros
+        </v-btn>
       </v-col>
     </v-row>
   </v-container> 
@@ -118,15 +120,15 @@
   <v-row>
     <v-col class="text-left">
       <v-btn color="#d69c4f" style="color: white;" class="mr-3" @click="anterior">
-        Anterior
+       <i class="fas fa-arrow-left mr-2"></i> Anterior
       </v-btn>
     </v-col>
     <v-col class="text-right">
       <v-btn color="#d69c4f" style="color: white;" class="mr-3" @click="cambiaLeads(months, yearSelected)">
-          Ver Leads
+        <i class="fas fa-list mr-2"></i>  Ver Leads
       </v-btn>
       <v-btn color="#d69c4f" style="color: white;" @click="cambiaVisitas">
-        IR A VISITAS
+       <i class="fas fa-calendar-alt mr-2"></i> IR A VISITAS
       </v-btn>
     </v-col>
   </v-row>
@@ -225,7 +227,7 @@ export default {
 
 
   computed: {
-    ...mapState(['Users', 'Hoteles', 'Dashboard', 'accessToken']),
+    ...mapState(['Users', 'Hoteles', 'Dashboard', 'accessToken', 'linkServer']),
   },
   created() {
     
@@ -297,7 +299,7 @@ export default {
         }
       }
 
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
+      let url = this.linkServer+'/user/dashboard/ejecutivos/'+id
       await axios.post(url, datos, config)
       .then((res) => {
         let array= []
@@ -333,7 +335,7 @@ export default {
         }
       }
       
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos/'+id
+      let url = this.linkServer+'/user/dashboard/ejecutivos/'+id
       await axios.post(url, datos, config)
       .then((res) => {
         this.values = res.data.table

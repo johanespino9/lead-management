@@ -155,7 +155,7 @@ export default {
       dismissSecs: 2,
     }),
     computed: {
-      ...mapState(['User','accessToken']), 
+      ...mapState(['User','accessToken', 'linkServer']), 
     },
     mounted() {
       /* this.$store.dispatch('getDashJefes') */
@@ -193,7 +193,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/'+this.user.userId
+      let url = this.linkServer+'/user/'+this.user.userId
       await axios.put(url, datos, config)
       .then(response => { 
         this.$store.commit('Users', response.data)

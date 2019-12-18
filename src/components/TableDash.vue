@@ -210,7 +210,7 @@ export default {
   },
   
   methods: {
-    ...mapActions(['getHotels', 'getDashboard', 'stateToken']),
+    ...mapActions(['getHotels', 'getDashboard', 'stateToken', 'linkServer']),
     getNameHotels() {
       var hoteless = JSON.parse(localStorage.getItem('hoteles'))
       for(let i = 0; i < hoteless.length; i++){
@@ -229,7 +229,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos'
+      let url = this.linkServer+'/user/dashboard/ejecutivos'
       await axios.post(url, datos, config)
       .then((res) => {
         this.imprimeNumeros(res.data)

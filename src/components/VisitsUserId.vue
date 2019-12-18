@@ -34,7 +34,10 @@
           <v-combobox color="#d69c4f"  v-model="yearSelected" :items="years" label="Seleccionar Año"></v-combobox>
         </v-col>
         <v-col cols="auto" style="margin-top: 12px;">
-          <v-btn @click="getVisits()" color="#000000" style="color: #FAFAFA;">Filtrar Registros</v-btn>
+          <v-btn @click="getVisits()" color="#000000" style="color: #FAFAFA;">
+            <i class="fas fa-search mr-2"></i>
+            Filtrar Registros
+          </v-btn>
         </v-col>
       </v-row>
       <template>
@@ -49,6 +52,10 @@
       </template>
 </v-container>
 
+
+<v-container fluid class="text-left mt-3 pt-3 mb-0 pb-0">
+        <v-btn color="primary" @click="ExportarVisitas()">Exportar <i class="fas fa-cloud-upload-alt ml-2"></i></v-btn>
+  </v-container>
 <v-container fluid>
   <v-row>
   <v-col cols="20" sm="6" md="80">
@@ -238,7 +245,6 @@
 
 <div >
         
-
  <template>
   <v-row class="fill-height">
     <v-col>
@@ -360,14 +366,15 @@
 
 <v-container fluid >
   <v-row>
+    
     <v-col class="text-left">
-      <v-btn color="#d69c4f" style="color: white;" @click="retornar">
-      Volver al inicio
+      <v-btn color="#d69c4f" style="color: white;" @click="retornarAnterior">
+       <i class="fas fa-arrow-left mr-2"></i> Anterior
     </v-btn>
     </v-col>
     <v-col class="text-right">
-      <v-btn color="#d69c4f" style="color: white;" @click="retornarAnterior">
-      Ver Dashboard Leads
+      <v-btn color="#d69c4f" style="color: white;" @click="retornar">
+       <i class="fas fa-arrow-alt-circle-left mr-2"></i> Volver al inicio
     </v-btn>
     </v-col>
   </v-row>
@@ -561,7 +568,7 @@ export default {
     
   }),
   computed: {
-    ...mapState(['Accounts', 'Reasons', 'accessToken', 'Visits']),
+    ...mapState(['Accounts', 'Reasons', 'accessToken', 'Visits', 'linkServer']),
     title () {
         const { start, end } = this
         if (!start || !end) {
@@ -690,7 +697,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/visits'
+      let url = this.linkServer+'/user/dashboard/visits'
       await axios.post(url, datos, config)
       .then((res) => {
         let array = []
@@ -726,7 +733,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/visits/'+this.id
+      let url = this.linkServer+'/user/dashboard/visits/'+this.id
       await axios.post(url, datos, config)
       .then((res) => {
         this.$store.commit('Visits', res.data)
@@ -937,6 +944,51 @@ export default {
           window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
         } 
     },
+
+    async ExportarVisitas(){
+      console.log(this.tableVisits)
+      try {
+      let datos = []
+      for(let i=0; i<this.tableVisits.length; i++){
+        datos.push(this.tableVisits[i].visitId)
+      }
+      let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+          }
+      } 
+      console.log(datos)
+      let url = this.linkServer+'/user/visits/export'
+      await axios.post(url, datos, config, {responseType: 'blob'})
+      .then(response => { 
+        console.log(response) 
+        let blob = new Blob([response.data],
+        {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"});
+        let link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.setAttribute('download', 'visits.xlsx');
+        /* link.download = 'visits.xlsx'; */
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        toastr.success('Se exportó correctamente')
+        this.close()
+      }).catch(error => {
+      console.log('Hubo un error ', error)
+      this.alerts('Ocurrio un error y no se logró exportar', 'error')
+      this.close()
+      })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    s2ab(s) {
+      let buf = new ArrayBuffer(s.length);
+      let view = new Uint8Array(buf);
+      for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+      return buf;
+    }
 
 
   },

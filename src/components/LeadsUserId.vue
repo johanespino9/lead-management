@@ -6,7 +6,6 @@
             <v-container fluid>
               <v-row class="child-flex">
                 <div style="flex-basis: 50%">
-                  
                     <v-row>
                       <v-col cols="20" sm="4" md="80">
                         LEADS - {{name_user}}
@@ -15,13 +14,13 @@
                        <v-spacer></v-spacer>
                       <v-col cols="20" sm="7" md="80">
                         <v-text-field
-                          disabled
-                          id="date_filtro1"
+                          
+                          id="search-lead-user"
                           color="#d69c4f"
                           class="text-xs-center"
                           v-model="search"
                           
-                          label="Fecha de creación"
+                          label="Búsqueda"
                           
                           hide-details
                         ></v-text-field>
@@ -35,7 +34,7 @@
                   
                     <v-row>
                       <!-- <v-spacer></v-spacer> -->
-                      <v-col cols="20" sm="5" md="80">
+                      <v-col cols="20" sm="4" md="80">
                         <v-dialog
                           color="#d69c4f"
                           ref="dialog4"
@@ -65,7 +64,7 @@
                         </v-dialog>
                     </v-col>
                     <v-divider class="mx-4" inset vertical></v-divider>
-                    <v-col cols="20" sm="5" md="80">
+                    <v-col cols="20" sm="4" md="80">
                         <v-dialog
                           color="#d69c4f"
                           ref="dialog5"
@@ -93,6 +92,9 @@
                             <v-btn text color="primary" @click="$refs.dialog5.save(date_filtro2); FiltraPorFecha();">OK</v-btn>
                           </v-date-picker>
                         </v-dialog>
+                    </v-col>
+                    <v-col v-if="role!='Ejecutivo'" cols="20" sm="3" md="80" class="mt-3 ml-3">
+                        <v-btn color="primary" @click="ExportarLeads()">Exportar <i class="fas fa-cloud-upload-alt ml-2"></i></v-btn>
                     </v-col>
                   </v-row>
                   
@@ -481,7 +483,7 @@
 </div>
 <v-container fluid class="text-left">
   <v-btn color="#d69c4f" style="color: white;" class="mr-3" @click="regresa()">
-    Anterior
+   <i class="fas fa-arrow-left mr-2"></i> Anterior
   </v-btn>
 </v-container>
 </div>
@@ -720,7 +722,7 @@ export default {
    
   }),
   computed: {
-    ...mapState(['Users', 'Hoteles', 'Accounts', 'AllLeads', 'Segmentos', 'accessToken']),
+    ...mapState(['Users', 'Hoteles', 'Accounts', 'AllLeads', 'Segmentos', 'accessToken', 'linkServer']),
     formTitle() {
       return this.editedIndex === -1 ? "Nuevo Lead" : "Editar Lead";
     },
@@ -762,11 +764,11 @@ export default {
       this.fecha = JSON.parse(localStorage.getItem('leads-user')).fecha
       this.name_user = JSON.parse(localStorage.getItem('leads-user')).datos.nombre
       let mes = parseInt(JSON.parse(localStorage.getItem('leads-user')).filtro.substring(5,7))
-      if(mes == 0){
+      /* if(mes == 0){
         this.search = JSON.parse(localStorage.getItem('leads-user')).filtro.substring(0,5)
       }else{
         this.search = JSON.parse(localStorage.getItem('leads-user')).filtro
-      } 
+      }  */
     }catch (error){
       console.log('Hubo un error')
     }
@@ -828,8 +830,9 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      await axios.get('https://casa-andina-backend.azurewebsites.net/user/'+user_id+'/leads', config)
+      await axios.get(this.linkServer+'/user/'+user_id+'/leads', config)
       .then((res) => {
+        console.log(res.data)
         let role = JSON.parse(localStorage.getItem('usuario')).role
         this.role = role
         let hotel = JSON.parse(localStorage.getItem('leads-user')).hotel
@@ -854,8 +857,13 @@ export default {
             }
         }else{
           let fechaFiltro = JSON.parse(localStorage.getItem('leads-user')).filtro
+          //Gerente
           if(status == undefined){
-            if(hotel == '[Seleccionar todos]'){
+            console.log(status, 'gerente')
+            for(let i=0; i<res.data.length; i++){  
+                    leads.push(res.data[i])
+            }
+           /*  if(hotel == '[Seleccionar todos]'){
                 for(let i=0; i<res.data.length; i++){  
                   if(res.data[i].createDate.indexOf(fechaFiltro)>=0){
                     leads.push(res.data[i])
@@ -867,9 +875,10 @@ export default {
                         leads.push(res.data[i])
                     }
                 }
-            }
+            } */
           }else{
             let status = JSON.parse(localStorage.getItem('leads-user')).status
+            console.log(status, 'asd')
             if(hotel == '[Seleccionar todos]'){
                 for(let i=0; i<res.data.length; i++){
                     if((res.data[i].noAttend == true) && (status == res.data[i].status) && (res.data[i].createDate.indexOf(fechaFiltro)>=0)){
@@ -886,6 +895,7 @@ export default {
           }
           localStorage.setItem('leads', JSON.stringify(leads))
         }
+        console.log(leads)
         this.calculaTotal(leads)
       }).catch(error =>{
         console.log(error)
@@ -923,7 +933,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
+      let url = this.linkServer+'/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
@@ -987,7 +997,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
+      let url = this.linkServer+'/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
@@ -1009,7 +1019,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      await axios.get('https://casa-andina-backend.azurewebsites.net/lead/reason', config)
+      await axios.get(this.linkServer+'/lead/reason', config)
       .then(response =>{
         this.razones = []
         this.razones2=[]
@@ -1774,27 +1784,119 @@ export default {
         }
 
     },
+    ConvertirMesesAFecha(meses, year, filtro_i, filtro_f){
+      let months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre']
+      let arrayFechas=[]
+      try {
+        for(let i=0; i<meses.length; i++){
+          if(meses[i].name===months[0]){arrayFechas.push(year+'/'+'01'+'/'+'01')}
+          else if(meses[i].name===months[1]){arrayFechas.push(year+'/'+'02'+'/'+'01')}
+          else if(meses[i].name===months[2]){arrayFechas.push(year+'/'+'03'+'/'+'01')}
+          else if(meses[i].name===months[3]){arrayFechas.push(year+'/'+'04'+'/'+'01')}
+          else if(meses[i].name===months[4]){arrayFechas.push(year+'/'+'05'+'/'+'01')}
+          else if(meses[i].name===months[5]){arrayFechas.push(year+'/'+'06'+'/'+'01')}
+          else if(meses[i].name===months[6]){arrayFechas.push(year+'/'+'07'+'/'+'01')}
+          else if(meses[i].name===months[7]){arrayFechas.push(year+'/'+'08'+'/'+'01')}
+          else if(meses[i].name===months[8]){arrayFechas.push(year+'/'+'09'+'/'+'01')}
+          else if(meses[i].name===months[9]){arrayFechas.push(year+'/'+'10'+'/'+'01')}
+          else if(meses[i].name===months[10]){arrayFechas.push(year+'/'+'11'+'/'+'01')}
+          else if(meses[i].name===months[11]){arrayFechas.push(year+'/'+'12'+'/'+'01')}
+        }
+        let mayor = 0
+        let menor = 0
+        let indexmayor=0
+        let indexmenor=0
+        for(let i=0; i<arrayFechas.length; i++){
+          let fecha = parseInt(arrayFechas[i].replace('-', '').replace('-', ''))
+          console.log(fecha)
+          if(fecha > mayor){
+            mayor = fecha
+            indexmayor = i
+          }
+          if(fecha < menor){
+            menor = fecha
+            indexmenor = i
+          }
+        }
+        console.log('mayor', indexmayor, arrayFechas[indexmayor])
+        console.log('menor', indexmenor, arrayFechas[indexmenor])
+
+        let fechai= arrayFechas[indexmenor].replace('-', '').replace('-', '')
+        let fechaf= arrayFechas[indexmayor].replace('-', '').replace('-', '')
+
+        if(fechai>=filtro_i && fechaf<=filtro_f){
+          console.log('true')
+        }else{
+          console.log('false')
+
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+    },
     FiltraPorFecha(){
       try {
-        this.search = JSON.parse(localStorage.getItem('leads-user')).filtro
+        /* this.search = JSON.parse(localStorage.getItem('leads-user')).filtro */
         let fecha_i = parseInt(this.date_filtro1.replace('-', '').replace('-', ''))
         let fecha_f = parseInt(this.date_filtro2.replace('-', '').replace('-', ''))
         if(fecha_i>0 && fecha_f>0){
           let array = []
           this.desserts=[]
           let leads = JSON.parse(localStorage.getItem('leads'))
+          console.log('asssss')
           for(let i=0; i<leads.length; i++){
-            let initialBooking = parseInt((leads[i].initialBooking.substring(0,10)).replace('-', '').replace('-', ''))
-            let finalBooking = parseInt((leads[i].finalBooking.substring(0,10)).replace('-', '').replace('-', ''))
-            if((initialBooking>=fecha_i && finalBooking<=fecha_f)){
-              array.push(leads[i])
+            if(leads[i].initialBooking!=null && leads[i].finalBooking!=null){
+              let initialBooking = parseInt((leads[i].initialBooking.substring(0,10)).replace('-', '').replace('-', ''))
+              let finalBooking = parseInt((leads[i].finalBooking.substring(0,10)).replace('-', '').replace('-', ''))
+              if((initialBooking>=fecha_i && finalBooking<=fecha_f)){
+                array.push(leads[i])
+              }
+            }else{
+              this.ConvertirMesesAFecha(leads[i].months, 2020, fecha_i, fecha_f)
             }
           }
+          
+          console.log(array)
           this.calculaTotal(array)
         }
+        console.log('filtrando')
         
       } catch (error) {
+        console.log(error)
       }
+    },
+    async ExportarLeads(){
+      let datos = []
+      for(let i=0; i<this.desserts.length; i++){
+        datos.push(this.desserts[i].leadid)
+      }
+      let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+          }
+      }
+      console.log(datos)
+      let url = this.linkServer+'/user/leads/export'
+      await axios.post(url, datos, config, {responseType: 'blob'})
+      .then(response => { 
+        console.log(response) 
+        let blob = new Blob([response.data],
+        {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"});
+        let link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.setAttribute('download', 'leads.xlsx');
+        /* link.download = 'visits.xlsx'; */
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        this.alerts('Se exportó correctamente', 'success')
+        this.close()
+      }).catch(error => {
+      console.log('Hubo un error ', error)
+      this.alerts('Ocurrio un error y no se logró exportar', 'error')
+      this.close()
+      }) 
     }
  
   },

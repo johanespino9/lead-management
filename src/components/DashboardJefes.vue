@@ -44,7 +44,10 @@
                 <v-combobox :items="years" v-model="yearSelected" color="#757575" label="Seleccionar Año"></v-combobox>
                 </v-col>
                 <v-col cols="auto" style="margin-top: 12px;">
-                <v-btn id="btn-filtro" color="#000000" style="color: #FAFAFA;" v-on:click="Filtro()">Filtrar Registros</v-btn>
+                <v-btn id="btn-filtro" color="#000000" style="color: #FAFAFA;" v-on:click="Filtro()">
+                  <i class="fas fa-search mr-2"></i>
+                  Filtrar Registros
+                </v-btn>
                 </v-col>
             </v-row>
             </v-container>
@@ -454,7 +457,7 @@ export default {
         auxiliarg4:[],
     }),
     computed: {
-        ...mapState(['accessToken']),
+        ...mapState(['accessToken', 'linkServer']),
     },
     mounted() {
         try {
@@ -2376,7 +2379,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/gerentes'
+      let url = this.linkServer+'/user/dashboard/gerentes'
       await axios.post(url, datos, config)
       .then(response =>{ 
           let fec = {}
@@ -2391,7 +2394,7 @@ export default {
             fec = {
                     /* groups: this.groupSegment, */
                     year:this.yearSelected,
-                    month: ''
+                    month: this.monthSelected
                   }
           } 
           this.preparaFiltro(this.chart, response.data, 1)
@@ -2400,6 +2403,7 @@ export default {
           this.cargarTablas(response.data)
           localStorage.setItem('dashgerente', JSON.stringify(response.data))
           localStorage.setItem('yearandmonth', JSON.stringify(fec))
+          console.log(fec)
           setTimeout(function(){ location.reload(); }, 1000);
         
         

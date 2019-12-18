@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    linkServer: 'https://casa-andina-backend.azurewebsites.net',
     accessToken: localStorage.getItem('token'),
     localStorageLength: 0,
     otherLenght: localStorage.getItem('objects'),
@@ -145,7 +146,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      await axios.get('https://casa-andina-backend.azurewebsites.net/hotels', config)
+      await axios.get(state.linkServer+'/hotels', config)
       .then(response =>{
       commit('Hoteles', response.data)
       localStorage.setItem('hoteles', JSON.stringify(response.data))
@@ -183,7 +184,8 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      axios.get('https://casa-andina-backend.azurewebsites.net/user/leads', config)
+
+      axios.get(state.linkServer+'/user/leads', config)
       .then((res) => {
         commit('AllLeads', res.data)
         localStorage.setItem('leads', JSON.stringify(res.data))
@@ -222,7 +224,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
         }
-      await axios.get('https://casa-andina-backend.azurewebsites.net/user/accounts', config)
+      await axios.get(state.linkServer+'/user/accounts', config)
       .then((response) => {
         commit('Accounts', response.data)
         localStorage.setItem('accounts', JSON.stringify(response.data))
@@ -262,7 +264,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      await axios.get('https://casa-andina-backend.azurewebsites.net/user/all', config)
+      await axios.get(state.linkServer+'/user/all', config)
       .then((response) => {
         commit('Users', response.data)
         localStorage.setItem('usuarios', JSON.stringify(response.data))
@@ -302,7 +304,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/role/'+state.roleid+'/manager'
+      let url = state.linkServer+'/role/'+state.roleid+'/manager'
       //console.log('ID',id)
       await axios.get(url, config)
       .then((response) => {
@@ -323,7 +325,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      await axios.get('https://casa-andina-backend.azurewebsites.net/user/segment', config)
+      await axios.get(state.linkServer+'/user/segment', config)
       .then((res) => {
         commit('Segmentos', res.data)
         localStorage.setItem('segmentos', JSON.stringify(res.data))
@@ -363,7 +365,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user'
+      let url = state.linkServer+'/user'
       await axios.get(url , config)
       .then((res) => {
         localStorage.setItem('usuario', JSON.stringify(res.data))
@@ -423,7 +425,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/ejecutivos'
+      let url = state.linkServer+'/user/dashboard/ejecutivos'
       await axios.post(url, datos, config)
       .then((res) => {
         localStorage.setItem('dashboard', JSON.stringify(res.data))
@@ -464,7 +466,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/branch'
+      let url = state.linkServer+'/branch'
       await axios.get(url, config)
       .then((res) => {
         localStorage.setItem('branchs', JSON.stringify(res.data))
@@ -505,7 +507,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/category'
+      let url = state.linkServer+'/category'
       await axios.get(url, config)
       .then((res) => {
         localStorage.setItem('categories', JSON.stringify(res.data))
@@ -549,7 +551,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/visits'
+      let url = state.linkServer+'/user/dashboard/visits'
       await axios.post(url, datos, config)
       .then((res) => {
         commit('Visits', res.data)
@@ -616,7 +618,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/jefes'
+      let url = state.linkServer+'/user/dashboard/jefes'
 
       await axios.post(url, datos, config)
       .then(response =>{
@@ -682,7 +684,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/gerentes'
+      let url = state.linkServer+'/user/dashboard/gerentes'
 
       await axios.post(url, datos, config)
       .then(response =>{
@@ -721,7 +723,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/reason'
+      let url = state.linkServer+'/reason'
       await axios.get(url, config)
       .then((res) => {
         commit('Reasons', res.data)
@@ -763,7 +765,7 @@ export default new Vuex.Store({
           'Authorization': 'Bearer ' + state.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/exist_token'
+      let url = state.linkServer+'/user/exist_token'
       await axios.get(url, config)
       .then(response =>{
 

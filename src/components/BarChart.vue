@@ -377,7 +377,7 @@ export default {
 
     }),
     computed: {
-        ...mapState(['accessToken'])
+        ...mapState(['accessToken', 'linkServer'])
     },
     mounted() {
         try {
@@ -1395,7 +1395,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/jefes'
+      let url = this.linkServer+'/user/dashboard/jefes'
       await axios.post(url, datos, config)
       .then(response =>{ 
           let fec = {}
@@ -1409,7 +1409,7 @@ export default {
             fec = {
                     groups: this.groupSegment,
                     year:this.yearSelected,
-                    month: ''
+                    month: this.monthSelected
                   }
           } 
           

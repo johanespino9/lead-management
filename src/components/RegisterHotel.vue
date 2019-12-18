@@ -11,7 +11,10 @@
           </v-col>
           <v-col cols="20" sm="3" md="80" class="text-center"> 
             <template>
-              <v-btn type="submit" x-large color="primary" dark>Subir Hoteles</v-btn>
+              <v-btn type="submit" x-large color="primary" dark>
+                Subir Hoteles
+                <i class="fas fa-file-upload fa-2x ml-4"></i>
+              </v-btn>
             </template>
           </v-col>
         </v-row>
@@ -41,7 +44,10 @@
                   <div class="flex-grow-1"></div>
                   <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on }">
-                      <v-btn @click="vaciaDatos()" color="#d69c4f" dark class="mb-2" v-on="on">Añadir Nuevo Hotel</v-btn>
+                      <v-btn @click="vaciaDatos()" color="#d69c4f" dark class="mb-2" v-on="on">
+                        Añadir Nuevo Hotel
+                        <i class="fas fa-plus-circle  ml-2"></i>
+                      </v-btn>
                     </template>
                       <!-- CARD ADD AND EDIT -->
                       <v-card >
@@ -168,7 +174,7 @@ export default {
       file_upload: null,
     }),
     computed: {
-      ...mapState(['Hoteles', 'accessToken']),
+      ...mapState(['Hoteles', 'accessToken', 'linkServer']),
       formTitle() {
       return this.editedIndex === -1 ? "Nuevo Hotel" : "Editar Hotel";
       },
@@ -193,7 +199,7 @@ export default {
               'Authorization': 'Bearer ' + this.accessToken
             }  
           }
-          let url = 'https://casa-andina-backend.azurewebsites.net/region'
+          let url = this.linkServer+'/region'
           await axios.get(url, config)
           .then(response => { 
             this.regions = response.data
@@ -207,7 +213,7 @@ export default {
               'Authorization': 'Bearer ' + this.accessToken
             }  
           }
-          let url = 'https://casa-andina-backend.azurewebsites.net/type_hotel'
+          let url = this.linkServer+'/type_hotel'
           await axios.get(url, config)
           .then(response => { 
             this.types = response.data
@@ -221,13 +227,13 @@ export default {
             "region": this.editedItem.region,
             "typeHotel": this.editedItem.typeHotel
           }
-          if(!this.verificarNombre()){
+          if(!this.verificarNombre(1)){
             let config = {
               headers: {
                 'Authorization': 'Bearer ' + this.accessToken
               }  
             }
-            let url = 'https://casa-andina-backend.azurewebsites.net/hotels'
+            let url = this.linkServer+'/hotels'
             await axios.post(url, datos, config)
             .then(response => { 
               localStorage.setItem('hoteles', JSON.stringify(response.data))
@@ -243,10 +249,12 @@ export default {
                   "hideDuration": "1000",
                   "timeOut": "5000",
               })
+              this.close()
             }).catch(error => {
               /* this.alerts('Ocurrio un error y no se guardó', 'error') */
               console.log('Hubo un error ', error)
               toastr["error"]("Ocurrió un error y no se guardó")
+              this.close()
             }) 
           }else{
             toastr.error('El nombre de hotel ya se encuentra registrado.')
@@ -259,32 +267,39 @@ export default {
             "region": this.editedItem.region,
             "typeHotel": this.editedItem.typeHotel
           }
-          let config = {
-            headers: {
-              'Authorization': 'Bearer ' + this.accessToken
-            }  
+          if(!this.verificarNombre(1)){
+            let config = {
+              headers: {
+                'Authorization': 'Bearer ' + this.accessToken
+              }  
+            }
+            let url = this.linkServer+'/hotels'
+            await axios.put(url, datos, config)
+            .then(response => { 
+              localStorage.setItem('hoteles', JSON.stringify(response.data))
+              this.desserts = response.data
+              toastr.success('Se guardó correctamente', {
+                  "closeButton": true,
+                  "debug": false,
+                  "newestOnTop": false,
+                  "progressBar": false,
+                  "positionClass": "toast-top-right",
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "3000",
+              })
+              this.close()
+            }).catch(error => {
+              /* this.alerts('Ocurrio un error y no se guardó', 'error') */
+              console.log('Hubo un error ', error)
+              toastr["error"]("Ocurrió un error y no se guardó")
+              this.close()
+            }) 
+          }else{
+            toastr.error('El nombre de hotel ya se encuentra registrado.')
           }
-          let url = 'https://casa-andina-backend.azurewebsites.net/hotels'
-          await axios.put(url, datos, config)
-          .then(response => { 
-            localStorage.setItem('hoteles', JSON.stringify(response.data))
-            this.desserts = response.data
-            toastr.success('Se guardó correctamente', {
-                "closeButton": true,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": false,
-                "positionClass": "toast-top-right",
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "3000",
-            })
-          }).catch(error => {
-            /* this.alerts('Ocurrio un error y no se guardó', 'error') */
-            console.log('Hubo un error ', error)
-            toastr["error"]("Ocurrió un error y no se guardó")
-          }) 
+          
         },
         async FileUpload(){
           let archivo = this.file_upload;
@@ -298,7 +313,7 @@ export default {
                     'Authorization': 'Bearer ' + this.accessToken
                   }
                 }
-                let url = 'https://casa-andina-backend.azurewebsites.net/file/upload/hotels'
+                let url = this.linkServer+'/file/upload/hotels'
                 await axios.post(url, formData, config)
                 .then(response => { 
                   toastr.success('Se subió el archivo correctamente')
@@ -345,24 +360,32 @@ export default {
           if (this.editedIndex > -1) {
             //editando hotel
             this.editHotels()
-            this.close()
+            
           } else {
             //editar hotel
             this.addHotels()
-            if(!this.verificarNombre()){
-              this.close();
-            }
+
           }   
         },
 
-        verificarNombre(){
+        verificarNombre(type){
           try {
               let nombre = document.getElementById('name-id').value
-              for(let i=0; i<this.desserts.length; i++){
-                if(nombre.toLowerCase() == (this.desserts[i].shortName.toLowerCase())){
-                  return true;
+              if(type==1){
+                for(let i=0; i<this.desserts.length; i++){
+                  if(nombre.toLowerCase() == (this.desserts[i].shortName.toLowerCase())){
+                    return true;
+                  }
+                } 
+              }else if(type==2){
+                for(let i=0; i<this.desserts.length; i++){
+                  if(i!=this.editedIndex){
+                    if(nombre.toLowerCase() == (this.desserts[i].shortName.toLowerCase())){
+                      return true;
+                    }
+                  }   
                 }
-              } 
+              }
               return false;
           } catch (error) { 
           }

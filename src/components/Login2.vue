@@ -59,7 +59,7 @@
 
 <script>
 import axios from 'axios'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   data(){
@@ -78,6 +78,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['linkServer'])
   },
   methods: {
       ...mapActions([
@@ -107,7 +108,7 @@ export default {
         username: this.email,
         password: this.password
       }
-      await axios.post('https://casa-andina-backend.azurewebsites.net/login', sendData)
+      await axios.post(this.linkServer+'/login', sendData)
       .then((res) => { 
         localStorage.setItem('token',res.data.token)
         this.$store.dispatch('verLogin')

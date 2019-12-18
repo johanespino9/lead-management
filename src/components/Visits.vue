@@ -516,7 +516,7 @@ export default {
     
   }),
   computed: {
-    ...mapState(['Accounts', 'Reasons', 'accessToken', 'Visits']),
+    ...mapState(['Accounts', 'Reasons', 'accessToken', 'Visits', 'linkServer']),
     title () {
         const { start, end } = this
         if (!start || !end) {
@@ -647,7 +647,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/dashboard/visits'
+      let url = this.linkServer+'/user/dashboard/visits'
       await axios.post(url, datos, config)
       .then((res) => {
         let array = []
@@ -707,7 +707,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
+      let url = this.linkServer+'/user/visits'
       await axios.post(url, datos, config)
       .then((res) => {
         this.$store.commit('Visits', res.data)
@@ -766,7 +766,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/visits'
+      let url = this.linkServer+'/user/visits'
       await axios.put(url, datos, config)
       .then((res) => {
         this.$store.commit('Visits', res.data)

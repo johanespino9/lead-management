@@ -13,7 +13,11 @@
           </v-col>
           <v-col cols="20" sm="3" md="80" class="text-center"> 
             <template>
-              <v-btn type="submit" x-large color="primary" dark>Subir usuarios</v-btn>
+              <v-btn type="submit" x-large color="primary" dark> 
+                
+                Subir usuarios
+                <i class="fas fa-file-upload fa-2x ml-4"></i>
+              </v-btn>
             </template>
           </v-col>
         </v-row>
@@ -39,7 +43,10 @@
                 <div class="flex-grow-1"></div>
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on }">
-                    <v-btn color="#d69c4f"  style="color: #FAFAFA;" dark class="mb-2" v-on="on">Añadir Nuevo Usuario</v-btn>
+                    <v-btn color="#d69c4f"  style="color: #FAFAFA;" dark class="mb-2" v-on="on">
+                       Nuevo Usuario
+                      <i class="fas fa-user-plus ml-2"></i>
+                    </v-btn>
                   </template>
                   <v-card >
                     <v-card-title>
@@ -207,7 +214,7 @@ import { mapState, mapActions } from 'vuex';
   }),
 
   computed: {
-    ...mapState(['Users', 'accessToken']),
+    ...mapState(['Users', 'accessToken', 'linkServer']),
     formTitle () {
       return this.editedIndex === -1 ? 'Nuevo Usuario' : 'Editar Usuario'
     },
@@ -270,27 +277,33 @@ import { mapState, mapActions } from 'vuex';
           "groupSegment": this.editedItem.groupSegment,
           "role": this.editedItem.role
       }
-      if(!this.verificarNombre() && !this.verificaUsername()){
+      if(!this.verificarNombre(1) && !this.verificaUsername(1)){
         let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
           }
         }
-        let url = 'https://casa-andina-backend.azurewebsites.net/user'
+        let url = this.linkServer+'/user'
         await axios.post(url, datos, config)
         .then(response => { 
           localStorage.setItem('usuarios', JSON.stringify(response.data))
           this.$store.commit('Users', response.data)
           this.desserts=this.Users
           this.alerts('Se guardó correctamente', 'success')
+          this.close()
           return true;
         }).catch(error => {
           this.alerts('Ocurrió un error guardando los datos', 'error')
           console.log('Hubo un error ', error)
+          this.close()
         })
       }else{ 
-         toastr.error( "Ejecutivo y/o username ya se encuentran registrado")
-         return false;
+        if(this.verificarNombre(1)){
+          toastr.error('El nombre ya se encuentra en uso')
+        }
+        if(this.verificaUsername(1)){
+          toastr.error('El username ya se encuentra en uso')
+        }
       }
     }, 
     //Editar usuarios
@@ -307,22 +320,34 @@ import { mapState, mapActions } from 'vuex';
           "groupSegment": this.editedItem.groupSegment,
           "role": this.editedItem.role
       }
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.accessToken
+      if(!this.verificarNombre(2) && !this.verificaUsername(2)){
+        let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+        }
+        }
+        let url = this.linkServer+'/user'
+        await axios.put(url, datos, config)
+        .then(response => {
+          localStorage.setItem('usuarios', JSON.stringify(response.data))
+          this.$store.commit('Users', response.data)
+          this.desserts=this.Users
+          this.alerts('Se guardó correctamente', 'success')
+          this.close()
+        }).catch(error => {
+          this.alerts('Ocurrió un error guardando los datos', 'error')
+          console.log('Hubo un error ', error)
+          this.close()
+        })
+      }else{
+        if(this.verificarNombre(2)){
+          toastr.error('El nombre ya se encuentra en uso')
+        }
+        if(this.verificaUsername(2)){
+          toastr.error('El username ya se encuentra en uso')
+        }
       }
-      }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user'
-      await axios.put(url, datos, config)
-      .then(response => {
-        localStorage.setItem('usuarios', JSON.stringify(response.data))
-        this.$store.commit('Users', response.data)
-        this.desserts=this.Users
-        this.alerts('Se guardó correctamente', 'success')
-      }).catch(error => {
-        this.alerts('Ocurrió un error guardando los datos', 'error')
-        console.log('Hubo un error ', error)
-      })
+      
     },
 
     initialize () {
@@ -364,12 +389,9 @@ import { mapState, mapActions } from 'vuex';
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
         this.editUser()
-        this.close()
       } else {
         this.addUser()
-        if(!this.verificarNombre() && !this.verificaUsername()){    
-          this.close()
-        }
+
         /* this.desserts.push(this.editedItem) */
       }
       /* this.close() */
@@ -382,7 +404,7 @@ import { mapState, mapActions } from 'vuex';
             'Authorization': 'Bearer ' + this.accessToken
           }
         }
-        let url = 'https://casa-andina-backend.azurewebsites.net/role/'+(this.rol.indexOf(this.editedItem.role)) +'/manager'
+        let url = this.linkServer+'/role/'+(this.rol.indexOf(this.editedItem.role)) +'/manager'
         await axios.get(url, config)
         .then((response) => {
           this.supervisors = []
@@ -441,7 +463,7 @@ import { mapState, mapActions } from 'vuex';
                 'Authorization': 'Bearer ' + this.accessToken
               }
             }
-            let url = 'https://casa-andina-backend.azurewebsites.net/file/upload/users'
+            let url = this.linkServer+'/file/upload/users'
             await axios.post(url, formData, config)
             .then(response => { 
               this.alerts('Se subió el archivo correctamente', 'success')
@@ -496,28 +518,48 @@ import { mapState, mapActions } from 'vuex';
             })
             }
     },
-    verificarNombre(){
+    verificarNombre(type){
       try {
           let nombre = document.getElementById('nombre').value
           let apellido = document.getElementById('apellido').value
           let nombre_completo = nombre+' '+apellido
-          for(let i=0; i<this.desserts.length; i++){
-            if(nombre_completo.toLowerCase() == (this.desserts[i].name+' '+this.desserts[i].lastName).toLowerCase()){
-              return true;
-            }
-          } 
+          if(type==1){
+            for(let i=0; i<this.desserts.length; i++){
+              if(nombre_completo.toLowerCase().trim() == (this.desserts[i].name+' '+this.desserts[i].lastName).toLowerCase().trim()){
+                return true;
+              }
+            } 
+          }else if(type==2){
+            for(let i=0; i<this.desserts.length; i++){
+              if(i!=this.editedIndex){
+                if(nombre_completo.toLowerCase().trim() == (this.desserts[i].name+' '+this.desserts[i].lastName).toLowerCase().trim()){
+                  return true;
+                }
+              }
+            } 
+          }
           return false;
   
       } catch (error) { 
       }
     },
-    verificaUsername(){
+    verificaUsername(type){
       try {
           let username = document.getElementById('username').value
-          for(let i=0; i<this.desserts.length; i++){
-              if(username == this.desserts[i].username){
+          if(type==1){
+            for(let i=0; i<this.desserts.length; i++){
+              if(username.toLowerCase().trim() == this.desserts[i].username.toLowerCase().trim()){
                 return true;
               }
+            }
+          }else if(type==2){
+            for(let i=0; i<this.desserts.length; i++){
+              if(i!=this.editedIndex){
+                if(username.toLowerCase().trim() == this.desserts[i].username.toLowerCase().trim()){
+                  return true;
+                }
+              }  
+            }
           }
           return false; 
       } catch (error) {

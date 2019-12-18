@@ -117,19 +117,7 @@ export default {
         this.Logout()
       }
     },
-   /* mounted(){
-    try {
-      this.Usuario = JSON.parse(localStorage.getItem('usuario'))
-      console.log(this.Usuario)
-      console.log(this.User)
-      this.usern = this.Usuario.username
-      this.email = this.Usuario.email
-      this.role = this.Usuario.role
-      
-    } catch (error) {
-      console.log('Hubo un error')
-    }
-  } */
+ 
   created() {
     try {
       this.Usuario = JSON.parse(localStorage.getItem('usuario'))

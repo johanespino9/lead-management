@@ -761,7 +761,7 @@ export default {
    
   }),
   computed: {
-    ...mapState(['Users', 'Hoteles', 'Accounts', 'AllLeads', 'Segmentos', 'accessToken']),
+    ...mapState(['Users', 'Hoteles', 'Accounts', 'AllLeads', 'Segmentos', 'accessToken', 'linkServer']),
     formTitle() {
       return this.editedIndex === -1 ? "Nuevo Lead" : "Editar Lead";
     },
@@ -903,7 +903,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
+      let url = this.linkServer+'/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
@@ -945,7 +945,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
+      let url = this.linkServer+'/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
@@ -978,11 +978,14 @@ export default {
       this.editedItem.finaldate=this.date2
       var rateevent =[]
       var events =[]
-      rateevent.push(this.rateEvent1, this.rateEvent2,this.rateEvent3)
-      for(let i = 0; i < this.editedItem.eventsName.length; i++){
-         var obj = {name: this.editedItem.eventsName[i], rateEvent: parseInt(rateevent[i])}
-         events.push(obj)
+      if(this.editedItem.eventsName!= undefined){
+          rateevent.push(this.rateEvent1, this.rateEvent2,this.rateEvent3)
+          for(let i = 0; i < this.editedItem.eventsName.length; i++){
+            var obj = {name: this.editedItem.eventsName[i], rateEvent: parseInt(rateevent[i])}
+            events.push(obj)
+          }
       }
+      
       var datos={
         "name": this.editedItem.name,
         "initialBooking": this.editedItem.initialdate,
@@ -1003,7 +1006,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
+      let url = this.linkServer+'/user/leads'
       await axios.post(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
@@ -1042,7 +1045,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
+      let url = this.linkServer+'/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
@@ -1087,7 +1090,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
+      let url = this.linkServer+'/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
         localStorage.setItem('leads', JSON.stringify(response.data))
@@ -1146,14 +1149,16 @@ export default {
         "events": events,
         "reason": this.editedItem.razon
       }
+      console.log(datos)
       let config = {
         headers: {
           'Authorization': 'Bearer ' + this.accessToken
         }  
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/leads'
+      let url = this.linkServer+'/user/leads'
       await axios.put(url, datos, config)
       .then(response => { 
+        console.log(response.data)
         localStorage.setItem('leads', JSON.stringify(response.data))
         this.$store.commit('AllLeads', response.data)
         this.desserts = []
@@ -1173,7 +1178,7 @@ export default {
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      await axios.get('https://casa-andina-backend.azurewebsites.net/lead/reason', config)
+      await axios.get(this.linkServer+'/lead/reason', config)
       .then(response =>{
         this.razones = []
         this.razones2=[]

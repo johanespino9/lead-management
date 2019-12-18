@@ -11,7 +11,10 @@
           </v-col>
           <v-col cols="20" sm="3" md="80" class="text-center"> 
             <template>
-              <v-btn type="submit" x-large color="primary" dark >Subir Cuentas</v-btn>
+              <v-btn type="submit" x-large color="primary" dark >
+                Subir Cuentas
+                <i class="fas fa-file-upload fa-2x ml-4"></i>
+              </v-btn>
             </template>
           </v-col>
         </v-row>
@@ -31,7 +34,10 @@
                                     <v-combobox @change="FiltraCuentas()" color="#d69c4f"  class="text-xs-center"   v-model="filtroSelected" :items="filtro" label="Selecciona un elemento"></v-combobox>
                                   </v-col>
                                   <v-col class="text-center mt-3" cols="20" sm="2" md="80">
-                                        <v-btn @click="rellenadatos()" color="#d69c4f" dark class="btn-block">Nueva Cuenta</v-btn> 
+                                        <v-btn @click="rellenadatos()" color="#d69c4f" dark class="btn-block">
+                                          Nueva Cuenta
+                                           <i class="fas fa-plus-circle  ml-2"></i>
+                                        </v-btn> 
                                   </v-col>
                               </v-row>
                           </v-card-title>
@@ -89,6 +95,10 @@
                             <!-- <v-col v-if="editedIndex>-1" cols="12" sm="6" md="12">
                               <v-text-field disabled color="#ff4200" v-model="editedItem.accountId" label="Account Id"></v-text-field>
                             </v-col> -->
+                            <v-col cols="12" sm="12" md="12">
+                              <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="globalId" required disabled color="#d69c4f" v-model="editedItem.globalId" label="ID Global"></v-text-field>
+                              <v-text-field v-else required color="#d69c4f" id="globalId" v-model="editedItem.globalId" label="ID Global"></v-text-field>
+                            </v-col>
                             <v-col cols="12" sm="12" md="12">
                               <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="name-id" required disabled color="#d69c4f" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                               <v-text-field v-else required color="#d69c4f" id="name-account" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
@@ -170,6 +180,7 @@ import axios from 'axios';
     select: '',
       headers: [
         { text: 'ID', value: 'accountId' },
+        { text: 'ID Global', value: 'globalId' },
         {
           text: 'Nombre de Cuenta',
           align: 'left',
@@ -195,7 +206,8 @@ import axios from 'axios';
         groupSegment: JSON.parse(localStorage.getItem('usuario')).groupSegment,
         edit: false,
         user: '',
-        ruc: ''
+        ruc: '',
+        globalId: ''
       },
       defaultItem: {
         name: '',
@@ -203,7 +215,8 @@ import axios from 'axios';
         category: '',
         groupsegment: '',
         user: '',
-        ruc: ''
+        ruc: '',
+        globalId: ''
       },
       categories:[],
       branchs:[],
@@ -222,11 +235,12 @@ import axios from 'axios';
       filtro: [],
       filtroSelected: 'Todas las cuentas',
       cuentasTemporal: [],
-      file_upload: null
+      file_upload: null,
+      positionEdit: null
     }),
 
     computed: {
-       ...mapState(['Accounts', 'Branchs', 'Categories', 'accessToken']),
+       ...mapState(['Accounts', 'Branchs', 'Categories', 'accessToken', 'linkServer']),
       formTitle () {
         return this.editedIndex === -1 ? 'Nueva Cuenta' : 'Detalles de Cuenta'
       },
@@ -298,7 +312,7 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/user/ejecutivos/all'
+      let url = this.linkServer+'/user/ejecutivos/all'
       await axios.get(url, config)
       .then(response => { 
         this.getNameEjecutivos(response.data)
@@ -313,7 +327,7 @@ import axios from 'axios';
           'Authorization': 'Bearer ' + this.accessToken
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/account/jefes'
+      let url = this.linkServer+'/account/jefes'
       await axios.get(url, config)
       .then(response => { 
         this.desserts = response.data
@@ -330,15 +344,17 @@ import axios from 'axios';
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
           "user": this.editedItem.user,
-          "ruc": parseInt(this.editedItem.ruc)
+          "ruc": parseInt(this.editedItem.ruc),
+          "globalId": this.editedItem.globalId
       }
-      if(!this.verificarNombre() && !this.verificarRuc()){
+      
+      if(!this.verificarRuc(1) && !this.verificarNombre(1) && !this.verificarGlobalId(1)){
         let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
           }
         }
-        let url = 'https://casa-andina-backend.azurewebsites.net/account/jefes'
+        let url = this.linkServer+'/account/jefes'
         await axios.post(url, datos, config)
         .then(response => { 
           localStorage.setItem('accounts', JSON.stringify(response.data))
@@ -346,12 +362,22 @@ import axios from 'axios';
           this.desserts=this.Accounts
           this.FiltrarCuentas(response.data)
           this.alerts('Se guardó correctamente', 'success')
+          this.close()
         }).catch(error => {
           console.log('Hubo un error ', error)
           this.alerts('Ocurrio un error y no se guardó', 'error')
-        }) 
+          this.close()
+        });
       }else{
-        toastr.error('Ya existe una cuenta con el mismo nombre y/o Ruc.')
+        if(this.verificarNombre(1)){
+          toastr.error('Ya existe una cuenta con el mismo nombre')
+        } 
+        if(this.verificarRuc(1)){
+          toastr.error('Ya existe una cuenta con el mismo N° de Ruc')
+        }
+        if(this.verificarGlobalId(1)){
+          toastr.error('Ya existe una cuenta con el mismo Global ID')
+        }
       }
     }, 
     async editAccountJefes(){
@@ -362,25 +388,41 @@ import axios from 'axios';
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
           "user": this.editedItem.user,
-          "ruc": parseInt(this.editedItem.ruc)
+          "ruc": parseInt(this.editedItem.ruc),
+          "globalId": this.editedItem.globalId
       }
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.accessToken
+      if(!this.verificarNombre(2) && !this.verificarRuc(2) && !this.verificarGlobalId(2)){
+        let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+          }
+        }
+        let url = this.linkServer+'/account/jefes'
+        await axios.put(url, datos, config)
+        .then(response => {
+          localStorage.setItem('accounts', JSON.stringify(response.data))
+          this.$store.commit('Accounts', response.data)
+          this.desserts=this.Accounts
+          this.FiltrarCuentas(response.data)
+          this.alerts('Se guardó correctamente', 'success')
+          this.close()
+        }).catch(error => {
+          console.log('Hubo un error ', error)
+          this.alerts('Ocurrio un error y no se guardó', 'error')
+          this.close()
+        }); 
+      }else{
+        if(this.verificarNombre(2)){
+          toastr.error('Ya existe una cuenta con el mismo nombre')
+        } 
+        if(this.verificarRuc(2)){
+          toastr.error('Ya existe una cuenta con el mismo N° de Ruc')
+        }
+        if(this.verificarGlobalId(2)){
+          toastr.error('Ya existe una cuenta con el mismo Global ID')
         }
       }
-      let url = 'https://casa-andina-backend.azurewebsites.net/account/jefes'
-      await axios.put(url, datos, config)
-      .then(response => { 
-        localStorage.setItem('accounts', JSON.stringify(response.data))
-        this.$store.commit('Accounts', response.data)
-        this.desserts=this.Accounts
-        this.FiltrarCuentas(response.data)
-        this.alerts('Se guardó correctamente', 'success')
-      }).catch(error => {
-        console.log('Hubo un error ', error)
-        this.alerts('Ocurrio un error y no se guardó', 'error')
-      });
+      
     }, 
 
 
@@ -505,7 +547,7 @@ import axios from 'axios';
                     'Authorization': 'Bearer ' + this.accessToken
                   }
                 }
-                let url = 'https://casa-andina-backend.azurewebsites.net/file/upload/accounts'
+                let url = this.linkServer+'/file/upload/accounts'
                 await axios.post(url, formData, config)
                 .then(response => { 
                   toastr.success('Se subió el archivo correctamente')
@@ -556,12 +598,12 @@ import axios from 'axios';
       save () {
         if (this.editedIndex > -1) {
             this.editAccountJefes()
-            this.close()
+            
         } else {
             this.addAcountJefes()
-            if(!this.verificarNombre()){
+            /* if(!this.verificarNombre()){
               this.close()
-            }
+            } */
         }
         
       },
@@ -597,44 +639,77 @@ import axios from 'axios';
     verificaPermisos(){
       this.role = JSON.parse(localStorage.getItem('usuario')).role
     },
-    verificarNombre(){
+    verificarNombre(type){
           try {
-              let nombre = document.getElementById('name-account').value
-              for(let i=0; i<this.desserts.length; i++){
-                if(nombre.toLowerCase() == (this.desserts[i].name.toLowerCase())){
-                  return true;
+              let nombre = (document.getElementById('name-account').value).trim()
+              if(type==1){//añadir
+                for(let i=0; i<this.desserts.length; i++){
+                  if(nombre.toLowerCase() == (this.desserts[i].name.toLowerCase()).trim()){
+                    return true;
+                  }
+                } 
+              }else if(type==2){//editar
+                for(let i=0; i<this.desserts.length; i++){
+                  if(i!=this.editedIndex){
+                    if(nombre.toLowerCase() == (this.desserts[i].name.toLowerCase()).trim()){
+                      return true;
+                    }
+                  }
                 }
-              } 
+              }
+
               return false;
           } catch (error) { 
           }
     },
-    verificarRuc(){
+    verificarRuc(type){
       try {
-          let ruc = document.getElementById('ruc').value
-          for(let i=0; i<this.desserts.length; i++){
-            if(ruc == this.desserts[i].ruc){
-              return true;
+          let ruc = (document.getElementById('ruc').value)
+          if(type==1){//añadir
+            for(let i=0; i<this.desserts.length; i++){
+              if(ruc == this.desserts[i].ruc){
+                return true;
+              }
+            } 
+          }else if(type==2){//editar
+            for(let i=0; i<this.desserts.length; i++){
+              if(i!=this.editedIndex){
+                if(ruc == this.desserts[i].ruc){
+                  return true;
+                }
+              }
             }
-          } 
+          }
           return false;
   
       } catch (error) { 
       }
     },
-    verificarGlobalId(){
+    verificarGlobalId(type){
       try {
-          let id = document.getElementById('global-id').value
-          for(let i=0; i<this.desserts.length; i++){
-            if(id == this.desserts[i].global_id){
-              return true;
+          let id = (document.getElementById('globalId').value)
+          if(type == 1){//Añadir
+            for(let i=0; i<this.desserts.length; i++){
+              if(id.trim().toLowerCase() == this.desserts[i].globalId.trim().toLowerCase()){
+                return true;
+              }
+            } 
+          }else if(type==2){//editar
+            for(let i=0; i<this.desserts.length; i++){
+              if(i!=this.editedIndex){
+                if(id.trim().toLowerCase() == this.desserts[i].globalId.trim().toLowerCase()){
+                  return true;
+                }
+              }
             }
-          } 
+          }
+          
           return false;
-  
       } catch (error) { 
       }
     },
+  
+    
   },
 
   }
