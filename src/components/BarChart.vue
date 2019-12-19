@@ -1479,7 +1479,7 @@ export default {
             array3.push({
             name: data.tableVisitInt[i].name+' '+data.tableVisitInt[i].last_Name,
             number_Of_Visits: data.tableVisitInt[i].number_Of_Visits,
-            pbruto: data.tableVisitInt[i].number_Of_Visits*data.tableVisitInt[i].suma/100,
+            pbruto: Math.round(data.tableVisitInt[i].number_Of_Visits*data.tableVisitInt[i].suma/100),
             pconcretado:  data.tableVisitInt[i].suma +"%",
             diferencia: (100 -parseInt( data.tableVisitInt[i].suma))+"%"
           })
