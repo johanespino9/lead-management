@@ -1020,7 +1020,7 @@ export default {
           item.diferencia = temporal.toFixed(2)+'%';
           item.mbruto = item.number_Of_Visits
           item.mconcretado = this.separaNumeros(concretado)+"%"
-          item.ptotal = item.suma*item.mbruto/100//aqui
+          item.ptotal = Math.round(item.suma*item.mbruto/100)//aqui
           item.concretado = concretado
           item.bruto = montoB
           if(item.group_Segment == nombre){
