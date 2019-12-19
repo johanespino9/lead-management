@@ -426,6 +426,7 @@ export default new Vuex.Store({
         }
       }
       let url = state.linkServer+'/user/dashboard/ejecutivos'
+      console.log(url)
       await axios.post(url, datos, config)
       .then((res) => {
         localStorage.setItem('dashboard', JSON.stringify(res.data))

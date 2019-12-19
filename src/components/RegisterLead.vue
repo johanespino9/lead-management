@@ -16,7 +16,7 @@
                        <v-spacer></v-spacer>
                       <v-col cols="20" sm="7" md="80">
                         <v-text-field
-                          id="date_filtro1"
+                          id="search-lead"
                           color="#d69c4f"
                           class="text-xs-center"
                           v-model="search"

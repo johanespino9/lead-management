@@ -49,10 +49,10 @@
                               <v-text-field disabled color="#ff4200" v-model="editedItem.accountId" label="Account Id"></v-text-field>
                             </v-col> -->
 
-                            <v-col cols="12" sm="6" md="12">
+                            <!-- <v-col cols="12" sm="6" md="12">
                               <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="globalId" required disabled color="#d69c4f" v-model="editedItem.globalId" label="ID Global"></v-text-field>
                               <v-text-field v-else required color="#d69c4f" id="globalId" v-model="editedItem.globalId" label="ID Global"></v-text-field>
-                            </v-col>
+                            </v-col> -->
                             <v-col cols="12" sm="6" md="12">
                               <v-text-field v-if="editedIndex>=0  &&  editedItem.edit==false && role=='Ejecutivo'" id="name-account" required disabled color="#d69c4f" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
                               <v-text-field v-else required color="#d69c4f" id="name-account" v-model="editedItem.name" label="Nombre de Cuenta"></v-text-field>
@@ -259,9 +259,10 @@ import axios from 'axios';
           "branch": this.editedItem.branch,
           "groupSegment": this.editedItem.groupSegment,
           "ruc": parseInt(this.editedItem.ruc),
-          "globalId": this.editedItem.globalId
+          "globalId": null
       }
-      if(!this.verificarNombre(1) && !this.verificarRuc(1) && !this.verificarGlobalId(1)){
+      if(!this.verificarNombre(1) && !this.verificarRuc(1)){
+        this.close()
         let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
@@ -275,7 +276,6 @@ import axios from 'axios';
           this.desserts=this.Accounts
           this.FiltrarCuentas(response.data)
           this.alerts('Se guardó correctamente', 'success')
-          this.close()
         }).catch(error => {
           console.log('Hubo un error ', error)
           this.alerts('Ocurrio un error y no se guardó', 'error')
@@ -305,7 +305,8 @@ import axios from 'axios';
           "ruc": parseInt(this.editedItem.ruc),
           "globalId": this.editedItem.globalId
       }
-      if(!this.verificarNombre(2) && !this.verificarRuc(2) && !this.verificarGlobalId(2)){
+      if(!this.verificarNombre(2) && !this.verificarRuc(2)){
+        this.close()
         let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
@@ -319,7 +320,6 @@ import axios from 'axios';
           this.desserts=this.Accounts
           this.FiltrarCuentas(response.data)
           this.alerts('Se guardó correctamente', 'success')
-          this.close()
         }).catch(error => {
           console.log('Hubo un error ', error)
           this.alerts('Ocurrio un error y no se guardó', 'error')
@@ -378,9 +378,10 @@ import axios from 'axios';
           "groupSegment": this.editedItem.groupSegment,
           "user": this.editedItem.user,
           "ruc": parseInt(this.editedItem.ruc),
-          "globalId": this.editedItem.globalId
+          "globalId": null
       }
-      if(!this.verificarNombre(1) && !this.verificarRuc(1) && !this.verificarGlobalId(1)){
+      if(!this.verificarNombre(1) && !this.verificarRuc(1) ){
+        this.close()
         let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
@@ -390,13 +391,11 @@ import axios from 'axios';
         let url = this.linkServer+'/account/jefes'
         await axios.post(url, datos, config)
         .then(response => { 
-          console.log(response.data)
           localStorage.setItem('accounts', JSON.stringify(response.data))
           this.$store.commit('Accounts', response.data)
           this.desserts=this.Accounts
           this.FiltrarCuentas(response.data)
           this.alerts('Se guardó correctamente', 'success')
-          this.close()
         }).catch(error => {
           console.log('Hubo un error ', error)
           this.alerts('Ocurrio un error y no se guardó', 'error')
@@ -425,7 +424,8 @@ import axios from 'axios';
           "ruc": parseInt(this.editedItem.ruc),
           "globalId": this.editedItem.globalId
       }
-      if(!this.verificarNombre(2) && !this.verificarRuc(2) && !this.verificarGlobalId(2)){
+      if(!this.verificarNombre(2) && !this.verificarRuc(2) ){
+        this.close()
         let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
@@ -439,7 +439,6 @@ import axios from 'axios';
           this.desserts=this.Accounts
           this.FiltrarCuentas(response.data)
           this.alerts('Se guardó correctamente', 'success')
-          this.close()
         }).catch(error => {
           console.log('Hubo un error ', error)
           this.alerts('Ocurrio un error y no se guardó', 'error')

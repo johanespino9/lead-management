@@ -176,7 +176,7 @@ export default {
 
 
   computed: {
-    ...mapState(['Users', 'Hoteles', 'Dashboard', 'accessToken']),
+    ...mapState(['Users', 'Hoteles', 'Dashboard', 'accessToken', 'linkServer']),
   },
   created() {
     
@@ -210,7 +210,7 @@ export default {
   },
   
   methods: {
-    ...mapActions(['getHotels', 'getDashboard', 'stateToken', 'linkServer']),
+    ...mapActions(['getHotels', 'getDashboard', 'stateToken']),
     getNameHotels() {
       var hoteless = JSON.parse(localStorage.getItem('hoteles'))
       for(let i = 0; i < hoteless.length; i++){
@@ -230,6 +230,8 @@ export default {
         }
       }
       let url = this.linkServer+'/user/dashboard/ejecutivos'
+      console.log(this.linkServer)
+      console.log(url)
       await axios.post(url, datos, config)
       .then((res) => {
         this.imprimeNumeros(res.data)
