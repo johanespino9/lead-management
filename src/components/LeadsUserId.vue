@@ -1874,11 +1874,12 @@ export default {
       let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
-          }
+          },
+          responseType: "blob"  
       }
       console.log(datos)
       let url = this.linkServer+'/user/leads/export'
-      await axios.post(url, datos, config, {responseType: 'blob'})
+      await axios.post(url, datos, config)
       .then(response => { 
         console.log(response) 
         let blob = new Blob([response.data],

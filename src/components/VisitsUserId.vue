@@ -955,13 +955,13 @@ export default {
       let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
-          }
+          },
+          responseType: "blob" 
       } 
       console.log(datos)
       let url = this.linkServer+'/user/visits/export'
-      await axios.post(url, datos, config, {responseType: 'blob'})
+      await axios.post(url, datos, config)
       .then(response => { 
-        console.log(response) 
         let blob = new Blob([response.data],
         {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"});
         let link = document.createElement('a');
@@ -976,21 +976,14 @@ export default {
         this.close()
       }).catch(error => {
       console.log('Hubo un error ', error)
-      this.alerts('Ocurrio un error y no se logró exportar', 'error')
+      toastr.error('Ocurrio un error y no se logró exportar')
       this.close()
       })
       } catch (error) {
         console.log(error)
       }
     },
-    s2ab(s) {
-      let buf = new ArrayBuffer(s.length);
-      let view = new Uint8Array(buf);
-      for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-      return buf;
-    }
-
-
+  
   },
 
 };

@@ -110,7 +110,7 @@ const routerEjecutivo = new Router({
     },
     {
       path: '/dashboard_jefes/leads-user/id',
-      name: 'leads-user',
+      name: 'leads-user-id',
       component: LeadsUserId
     }, 
     {
