@@ -932,10 +932,12 @@ export default {
         if (this.editedIndex > -1) {
           console.log('se edito')
           this.editVisit()
+          this.$router.push("/dashboard-ejecutivos");
         } else {
           console.log('se añadio')
           this.addVisit()
           this.addVisitMS()
+          this.$router.push("/dashboard-ejecutivos");
         }
         this.close()
       },
