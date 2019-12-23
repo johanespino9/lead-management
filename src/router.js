@@ -18,14 +18,29 @@ import VisitsUserId from './components/VisitsUserId'
 import DashboardUserId from './components/DashboardUserId'
 import Hotels from './components/RegisterHotel'
 import LeadsUserId from './components/LeadsUserId'
+import Office365 from './components/Office365'
+import ErrorOffice365 from './components/ErrorOffice365'
+
+
 
 Vue.use(Router)
 const routerEjecutivo = new Router({
+  mode: 'history', 
   routes:[
     {
       path: '/dashboard_jefes',
       name: 'dashboard_jefes',
       component: DashJefe, 
+    },
+    {//router cuando devuelve el microsoft
+      path: '/authorization',
+      name: 'authorization',
+      component: Office365, 
+    },
+    {//router cuando no devuelve el microsoft
+      path: '/authorization_error',
+      name: 'authorization_error',
+      component: ErrorOffice365, 
     },
     {
       path: '/dashboard_gerentes',

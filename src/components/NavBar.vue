@@ -191,6 +191,11 @@
             <v-list-item-title>Mi Perfil</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+       <!-- boton de microsoft-->
+          <v-btn v-if="token_ms==null && role=='Ejecutivo'"  block tile outlined color="#dc3e15" @click="redireccionar()">
+              <v-icon right>Office</v-icon> Office 365
+          </v-btn>
+
         
       <!--   <div id="robotin" style="margin-bottom: 5px; margin-top:20px; margin-right: 10px; display:scroll;position:fixed; bottom:0px; left:55px;cursor:pointer; max-width:60px;">
           <a  @click="abreModalSugestion()"> <img style="margin-bottom: 10px;" src="../assets/robotin.gif" alt="robotin"></a>
@@ -357,7 +362,9 @@ export default {
       url: "",
       msj: '',
       dialog2: false,
-      cuerpo: ''
+      cuerpo: '',
+      login: "",
+      token_ms: localStorage.getItem('token_ms')
     }),
     computed: {
       ...mapState(['username', 'User'])
@@ -392,6 +399,13 @@ export default {
           this.Logout()
         } 
         }); 
+      },
+       redireccionar(){
+        var client_id="eee66c32-6da2-49e8-b003-235b3f434b66"//<--reemplazar por el Id. de aplicación (cliente)
+        var redirect_uri="https://lead-management.renzgmc.now.sh"/*<--poner el link del aplicativo*/+"/authorization"
+
+        this.login="https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id="+client_id+"&redirect_uri="+redirect_uri+"&response_type=code&scope=offline_access%20openid%20Calendars.ReadWrite"
+        location.href= this.login
       },
       cambiarImagen(name, lastName){
         document.getElementById("img").src="https://www.gravatar.com/avatar/EMAIL_MD5?d=https%3A%2F%2Fui-avatars.com%2Fapi%2F/"+name.substr(0, 1) +""+ lastName.substr(0, 1)+"+/200";
@@ -436,7 +450,7 @@ export default {
     if(localStorage.length>=8){
       
     }
-     console.clear()
+     //console.clear()
   },
 }
 </script>

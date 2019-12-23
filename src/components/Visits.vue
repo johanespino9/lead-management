@@ -736,16 +736,97 @@ export default {
         this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
         this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3)
         this.cargaOlvidados(res.data.tableOlvidadosInt)
-        toastr.success('Se guardó correctamente')
+        toastr.success('Se guardó correctamente')        
       })
+      
       .catch((error) => {
         toastr.error('Ocurrió un error agregando la visita')
         console.log(error)
-      }) 
+      })
       } catch (error) {
         
       } 
     },
+
+    async addVisitMS(){
+        try{
+             //enviar a la API
+        var token_ms=JSON.parse(localStorage.getItem('token_ms'))
+        let hour1= this.horaInicio
+        let hour2= this.horaFin
+        console.log(token_ms.access_token)
+        let datos2= {
+        "subject": this.editedItem.reason,
+        "body": {
+          "contentType": "HTML",
+        },
+        "start": {
+          "dateTime": this.date1+"T"+hour1+":00",
+          "timeZone": "Eastern Standard Time"
+        },
+        "end": {
+          "dateTime": this.date1+"T"+hour2+":00",
+          "timeZone": "Eastern Standard Time"
+        },
+        "location":{
+          "displayName":this.editedItem.account
+        }
+
+      }
+      console.log(datos2)
+      let config2 = {
+        headers: {
+          'Authorization': 'Bearer ' + token_ms.access_token
+        }
+      }
+
+      let url2='https://graph.microsoft.com/v1.0/me/events'
+      await axios.post(url2, datos2, config2)
+      .then((res) => {
+          if(res.status==201){
+              toastr.success('Se guardó correctamente en el calendario personal')        
+          }else {
+            console.log(res.error.code + res.error.message)
+            this.refreshToken();
+          }  
+      })
+      .catch((error) => {
+        toastr.error('Ocurrió un error agregando la visita a tu calendario personal')
+        return;
+        console.log(error)
+      }) 
+        }catch(error){
+          addVisitMS();
+        }
+    },
+
+    async refreshToken(){
+          const qs = require('querystring')
+          var token_ms=JSON.parse(localStorage.getItem('token_ms'))
+          let config = {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                } ,
+            }
+            let url = 'https://login.microsoftonline.com/organizations/oauth2/v2.0/token'
+            const requestBody = {
+            grant_type: 'refresh_token',
+            refresh_token: this.token_ms.refresh_token,
+            redirect_uri: 'https://lead-management.renzgmc.now.sh'/*<--Reemplazar por el link del Frontend*/+'/authorization',
+            client_id: 'eee66c32-6da2-49e8-b003-235b3f434b66',/*<--Reemplazar por Id. de aplicación (cliente)*/
+            client_secret: '/ImKQi5PSvV76:FHXE.4CL.8ZyzBQBPG',/*<--Reemplazar por el cliente secreto generado*/
+            scope: 'Calendars.ReadWrite offline_access'
+            }
+            console.log(qs.stringify(requestBody))
+            await axios.post(url, qs.stringify(requestBody), config)
+            .then(response => { 
+                localStorage.setItem('token_ms', JSON.stringify(response.data))
+                var token_ms=JSON.parse(localStorage.getItem('token_ms'))
+                console.log(response.data)
+            }).catch(error => {
+                console.log(error)
+            })
+        },
 
     //Edit a visit
     async editVisit(){
@@ -854,6 +935,7 @@ export default {
         } else {
           console.log('se añadio')
           this.addVisit()
+          this.addVisitMS()
         }
         this.close()
       },

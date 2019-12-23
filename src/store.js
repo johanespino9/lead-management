@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    linkServer: 'https://casa-andina-backend.azurewebsites.net',
+    linkServer: 'https://casa-andina-backend.azurewebsites.net',//cambiar el link del backend
     accessToken: localStorage.getItem('token'),
     localStorageLength: 0,
     otherLenght: localStorage.getItem('objects'),
@@ -105,6 +105,7 @@ export default new Vuex.Store({
     Logout({state, commit}){
        //Remover los items del localStorage
       localStorage.removeItem('token')
+      localStorage.removeItem('token_ms')
       localStorage.removeItem('usuarios')
       localStorage.removeItem('dashboard')
       localStorage.removeItem('leads')
