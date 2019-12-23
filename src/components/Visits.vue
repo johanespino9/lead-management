@@ -813,7 +813,7 @@ export default {
             let url = 'https://login.microsoftonline.com/organizations/oauth2/v2.0/token'
             const requestBody = {
             grant_type: 'refresh_token',
-            refresh_token: this.token_ms.refresh_token,
+            refresh_token: token_ms.refresh_token,
             redirect_uri: 'https://lead-management.renzgmc.now.sh'/*<--Reemplazar por el link del Frontend*/+'/authorization',
             client_id: 'eee66c32-6da2-49e8-b003-235b3f434b66',/*<--Reemplazar por Id. de aplicación (cliente)*/
             client_secret: '/ImKQi5PSvV76:FHXE.4CL.8ZyzBQBPG',/*<--Reemplazar por el cliente secreto generado*/
