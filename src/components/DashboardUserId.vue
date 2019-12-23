@@ -272,14 +272,19 @@ export default {
     },
     //Filtro dashboard
     async FiltroDashboardPorId(id, hotel, month, year){
+      console.log(month)
       let datos_user = JSON.parse(localStorage.getItem('leads-user')).datos
       let fecha = this.monthSelected+' '+year
       let filtro = 0
-      if(month.indexOf(this.monthSelected)<10){
-        filtro = year+'-0'+month.indexOf(this.monthSelected)
+      if(month.indexOf(this.monthSelected)!=0){
+        if(month.indexOf(this.monthSelected)<10){
+          filtro = year+'-0'+month.indexOf(this.monthSelected)
+        }else{
+          filtro = year+'-'+month.indexOf(this.monthSelected)
+        } 
       }else{
-        filtro = year+'-'+month.indexOf(this.monthSelected)
-      } 
+        filtro=year
+      }
       let dataLS = {
         datos: datos_user,
         leads: [],
@@ -442,11 +447,16 @@ export default {
       let datos_user = JSON.parse(localStorage.getItem('leads-user')).datos
       let fecha = this.monthSelected+' '+year
       let filtro = 0
-      if(month.indexOf(this.monthSelected)<10){
-        filtro = year+'-0'+month.indexOf(this.monthSelected)
+
+      if(month.indexOf(this.monthSelected)!=0){
+        if(month.indexOf(this.monthSelected)<10){
+          filtro = year+'-0'+month.indexOf(this.monthSelected)
+        }else{
+          filtro = year+'-'+month.indexOf(this.monthSelected)
+        } 
       }else{
-        filtro = year+'-'+month.indexOf(this.monthSelected)
-      } 
+        filtro = year
+      }
       let dataLS = {
         datos: datos_user,
         leads: [],
@@ -464,13 +474,19 @@ export default {
     },
     verNoAtendidos(item, valor, month, year){
       let datos_user = JSON.parse(localStorage.getItem('leads-user')).datos
-      let fecha = this.monthSelected+' '+year
+      let fecha = ''
       let filtro = 0
-      if(month.indexOf(this.monthSelected)<10){
-        filtro = year+'-0'+month.indexOf(this.monthSelected)
+      if(month.indexOf(this.monthSelected)!=0){
+        fecha = this.monthSelected+' '+year
+        if(month.indexOf(this.monthSelected)<10){
+          filtro = year+'-0'+month.indexOf(this.monthSelected)
+        }else{
+          filtro = year+'-'+month.indexOf(this.monthSelected)
+        } 
       }else{
-        filtro = year+'-'+month.indexOf(this.monthSelected)
-      } 
+        fecha = year
+        filtro=year
+      }
       let dataLS = {
         datos: datos_user,
         leads: [],
@@ -481,6 +497,8 @@ export default {
       }
       localStorage.setItem('leads-user', JSON.stringify(dataLS))
       console.log(item, valor)
+      
+
       let {role} = JSON.parse(localStorage.getItem('usuario')) 
       if(role == 'Administrador' || role == 'Gerente de ventas'){
         window.location.href = '/dashboard_gerentes/leads-user/id'

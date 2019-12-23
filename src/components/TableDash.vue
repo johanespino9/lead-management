@@ -255,13 +255,21 @@ export default {
       
     },
     verNoAtendidos(item, valor, month, year){
-      let fecha = this.monthSelected+' '+year
-      let filtro = 0
-      if(month.indexOf(this.monthSelected)<10){
-        filtro = year+'-0'+month.indexOf(this.monthSelected)
-      }else{
-        filtro = year+'-'+month.indexOf(this.monthSelected)
-      } 
+        let fecha = ''
+        let filtro = 0
+      if(month!=0){
+         fecha = this.monthSelected+' '+year
+         filtro = 0
+        if(month.indexOf(this.monthSelected)<10){
+          filtro = year+'-0'+month.indexOf(this.monthSelected)
+        }else{
+          filtro = year+'-'+month.indexOf(this.monthSelected)
+        } 
+      }
+      else{
+         fecha = year
+         filtro = year
+      }
       let dataLS = {
         datos: {
           user_id: JSON.parse(localStorage.getItem('usuario')).userId
