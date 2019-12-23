@@ -425,17 +425,17 @@ export default {
     cambiaVisitas(){
       let {role} = JSON.parse(localStorage.getItem('usuario')) 
       if(role == 'Supervisor de Segmento'){
-        window.location.href = '/#/dashboard_jefes/visits-user/id'
+        window.location.href = '/dashboard_jefes/visits-user/id'
       }else{
-        window.location.href = '/#/dashboard_gerentes/visits-user/id'
+        window.location.href = '/dashboard_gerentes/visits-user/id'
       } 
     },
     anterior(){
       let {role} = JSON.parse(localStorage.getItem('usuario')) 
       if(role == 'Administrador' || role == 'Gerente de ventas'){
-        window.location.href = '/#/dashboard_gerentes'
+        window.location.href = '/dashboard_gerentes'
       }else{
-        window.location.href = '/#/dashboard_jefes'
+        window.location.href = '/dashboard_jefes'
       }  
     },
     cambiaLeads(month, year){
@@ -457,9 +457,9 @@ export default {
 
       let {role} = JSON.parse(localStorage.getItem('usuario')) 
       if(role == 'Administrador' || role == 'Gerente de ventas'){
-        window.location.href = '/#/dashboard_gerentes/leads-user/id'
+        window.location.href = '/dashboard_gerentes/leads-user/id'
       }else{
-        window.location.href = '/#/dashboard_jefes/leads-user/id'
+        window.location.href = '/dashboard_jefes/leads-user/id'
       }  
     },
     verNoAtendidos(item, valor, month, year){
@@ -483,9 +483,9 @@ export default {
       console.log(item, valor)
       let {role} = JSON.parse(localStorage.getItem('usuario')) 
       if(role == 'Administrador' || role == 'Gerente de ventas'){
-        window.location.href = '/#/dashboard_gerentes/leads-user/id'
+        window.location.href = '/dashboard_gerentes/leads-user/id'
       }else{
-        window.location.href = '/#/dashboard_jefes/leads-user/id'
+        window.location.href = '/dashboard_jefes/leads-user/id'
       }  
     }
    

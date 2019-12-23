@@ -620,7 +620,7 @@ export default {
                         })
                         .then((willDelete) => {
                           if (willDelete) {
-                            window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+                            window.location.href = '/dashboard_gerentes/dashboard-user/id'
                           } 
                         }); 
                         
@@ -851,7 +851,7 @@ export default {
                         })
                         .then((willDelete) => {
                           if (willDelete) {
-                            window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+                            window.location.href = '/dashboard_gerentes/dashboard-user/id'
                           } 
                         }); 
                     }
@@ -1082,7 +1082,7 @@ export default {
                         })
                         .then((willDelete) => {
                           if (willDelete) {
-                            window.location.href = '/#/dashboard_gerentes/visits-user/id'//no es por esto lo, no funcionaba antes de que lo cambie
+                            window.location.href = '/dashboard_gerentes/visits-user/id'//no es por esto lo, no funcionaba antes de que lo cambie
                           } 
                         }); 
                     }
@@ -1231,13 +1231,13 @@ export default {
       })
       .then((willDelete) => {
         if (willDelete) {
-          let url = '/#/dashboard_gerentes/dashboard-user/id'
+          let url = '/dashboard_gerentes/dashboard-user/id'
           let user = JSON.parse(localStorage.getItem('leads-user'))
           user.datos.nombre = item.name
           user.datos.user_id = item.user_id
           if(item.user_id === undefined){
             user.datos.user_id = item.user_Id
-            url = '/#/dashboard_gerentes/visits-user/id'
+            url = '/dashboard_gerentes/visits-user/id'
           }
           localStorage.setItem('leads-user', JSON.stringify(user))
           window.location.href = url
@@ -2270,7 +2270,7 @@ export default {
                         }
                         localStorage.setItem('leads-user', JSON.stringify(user))
                         /* alert("Se está dirigiendo a ver los Leads del usuario "+ejecutivos[e.dataPointIndex]+"")
-                        window.location.href = '/#/dashboard_jefes/dashboard-user/id'   */
+                        window.location.href = '/dashboard_jefes/dashboard-user/id'   */
                     }
                     }
                 },

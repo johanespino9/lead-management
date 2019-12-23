@@ -476,7 +476,7 @@ export default {
                         })
                         .then((willDelete) => {
                           if (willDelete) {
-                            window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+                            window.location.href = '/dashboard_jefes/dashboard-user/id'
                           } 
                         }); 
                     }
@@ -754,7 +754,7 @@ export default {
                         })
                         .then((willDelete) => {
                           if (willDelete) {
-                            window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+                            window.location.href = '/dashboard_jefes/dashboard-user/id'
                           } 
                         });  
                     }
@@ -1027,7 +1027,7 @@ export default {
                         })
                         .then((willDelete) => {
                           if (willDelete) {
-                            window.location.href = '/#/dashboard_jefes/visits-user/id'
+                            window.location.href = '/dashboard_jefes/visits-user/id'
                           } 
                         });  
                     }
@@ -1292,7 +1292,7 @@ export default {
                         })
                         .then((willDelete) => {
                           if (willDelete) {
-                            window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+                            window.location.href = '/dashboard_jefes/dashboard-user/id'
                           } 
                         }); 
                     }

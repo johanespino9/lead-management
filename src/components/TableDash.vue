@@ -273,14 +273,14 @@ export default {
         status: valor
       }
       localStorage.setItem('leads-user', JSON.stringify(dataLS))
-      window.location.href = '/#/dashboard-ejecutivos/leads-user/id'
+      window.location.href = '/dashboard-ejecutivos/leads-user/id'
       /* localStorage.setItem('leads-user', JSON.stringify(dataLS))
       console.log(item, valor)
       let {role} = JSON.parse(localStorage.getItem('usuario')) 
       if(role == 'Administrador' || role == 'Gerente de ventas'){
-        window.location.href = '/#/dashboard_gerentes/leads-user/id'
+        window.location.href = '/dashboard_gerentes/leads-user/id'
       }else{
-        window.location.href = '/#/dashboard_jefes/leads-user/id'
+        window.location.href = '/dashboard_jefes/leads-user/id'
       }  */ 
     },
 

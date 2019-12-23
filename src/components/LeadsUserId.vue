@@ -1084,7 +1084,7 @@ export default {
         let datos = JSON.parse(localStorage.getItem('leads-user'))
         datos.search = this.editedItem.createDate
         localStorage.setItem('leads-user', JSON.stringify(datos))
-        window.location.href = '/#/register-lead'
+        window.location.href = '/register-lead'
       } 
       this.close();
     },
@@ -1775,11 +1775,11 @@ export default {
     regresa(){
         let {role} = JSON.parse(localStorage.getItem('usuario')) 
         if(role == 'Administrador' || role == 'Gerente de ventas'){
-            window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+            window.location.href = '/dashboard_gerentes/dashboard-user/id'
         }else if(role == 'Supervisor de Segmento'){
-            window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+            window.location.href = '/dashboard_jefes/dashboard-user/id'
         }else{
-           window.location.href = '/#/dashboard-ejecutivos'
+           window.location.href = '/dashboard-ejecutivos'
         }
 
     },

@@ -35,10 +35,10 @@ export default {
         irAlInicio(){
             let role = JSON.parse(localStorage.getItem('usuario')).role
             if(role=='Ejecutivo'){
-                /* window.location.href = '/#/dashboard-ejecutivos' */
+                /* window.location.href = '/dashboard-ejecutivos' */
                this.$router.push("/dashboard-ejecutivos"); 
             }else if(role == 'Supervisor de Segmento'){
-                /* window.location.href = '/#/dashboard_jefes' */
+                /* window.location.href = '/dashboard_jefes' */
                 this.$router.push("/dashboard_jefes");
             }else{
                 this.$router.push("/dashboard_gerentes");

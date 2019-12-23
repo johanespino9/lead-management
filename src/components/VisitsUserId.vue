@@ -931,17 +931,17 @@ export default {
       retornar(){
         let {role} = JSON.parse(localStorage.getItem('usuario')) 
         if(role == 'Supervisor de Segmento'){
-          window.location.href = '/#/dashboard_jefes'
+          window.location.href = '/dashboard_jefes'
         }else{
-          window.location.href = '/#/dashboard_gerentes'
+          window.location.href = '/dashboard_gerentes'
         } 
     },
     retornarAnterior(){
       let {role} = JSON.parse(localStorage.getItem('usuario')) 
         if(role == 'Supervisor de Segmento'){
-          window.location.href = '/#/dashboard_jefes/dashboard-user/id'
+          window.location.href = '/dashboard_jefes/dashboard-user/id'
         }else{
-          window.location.href = '/#/dashboard_gerentes/dashboard-user/id'
+          window.location.href = '/dashboard_gerentes/dashboard-user/id'
         } 
     },
 
