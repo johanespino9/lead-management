@@ -8,7 +8,7 @@
                 <div style="flex-basis: 50%">
                     <v-row>
                       <v-col cols="20" sm="4" md="80">
-                        LEADS - {{name_user}}
+                        LEADS - {{name_user}} 
                       </v-col>
                       <v-divider class="mx-4" inset vertical></v-divider>
                        <v-spacer></v-spacer>
@@ -760,6 +760,7 @@ export default {
   },
   mounted() {
     try {
+      this.verificaPermisos()
       this.getUserLeads()
       this.fecha = JSON.parse(localStorage.getItem('leads-user')).fecha
       this.name_user = JSON.parse(localStorage.getItem('leads-user')).datos.nombre
@@ -832,7 +833,6 @@ export default {
       }
       await axios.get(this.linkServer+'/user/'+user_id+'/leads', config)
       .then((res) => {
-        console.log(res.data)
         let role = JSON.parse(localStorage.getItem('usuario')).role
         this.role = role
         let hotel = JSON.parse(localStorage.getItem('leads-user')).hotel
@@ -859,7 +859,7 @@ export default {
           let fechaFiltro = JSON.parse(localStorage.getItem('leads-user')).filtro
           //Gerente
           if(status == undefined){
-            console.log(status, 'gerente')
+           
             for(let i=0; i<res.data.length; i++){  
                     leads.push(res.data[i])
             }
@@ -878,7 +878,7 @@ export default {
             } */
           }else{
             let status = JSON.parse(localStorage.getItem('leads-user')).status
-            console.log(status, 'asd')
+            
             if(hotel == '[Seleccionar todos]'){
                 for(let i=0; i<res.data.length; i++){
                     if((res.data[i].noAttend == true) && (status == res.data[i].status) && (res.data[i].createDate.indexOf(fechaFiltro)>=0)){
@@ -895,7 +895,6 @@ export default {
           }
           localStorage.setItem('leads', JSON.stringify(leads))
         }
-        console.log(leads)
         this.calculaTotal(leads)
       }).catch(error =>{
         console.log(error)
@@ -1784,23 +1783,33 @@ export default {
         }
 
     },
-    ConvertirMesesAFecha(meses, year, filtro_i, filtro_f){
+    ConvertirMesesAFecha(meses, createDate, filtro_i, filtro_f){
       let months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre']
       let arrayFechas=[]
+      let fechaCreacion = createDate.substring(0, 7).replace('-', '')+'01'
+      let year = parseInt(fechaCreacion.substring(0,4))
       try {
         for(let i=0; i<meses.length; i++){
-          if(meses[i].name===months[0]){arrayFechas.push(year+'/'+'01'+'/'+'01')}
-          else if(meses[i].name===months[1]){arrayFechas.push(year+'/'+'02'+'/'+'01')}
-          else if(meses[i].name===months[2]){arrayFechas.push(year+'/'+'03'+'/'+'01')}
-          else if(meses[i].name===months[3]){arrayFechas.push(year+'/'+'04'+'/'+'01')}
-          else if(meses[i].name===months[4]){arrayFechas.push(year+'/'+'05'+'/'+'01')}
-          else if(meses[i].name===months[5]){arrayFechas.push(year+'/'+'06'+'/'+'01')}
-          else if(meses[i].name===months[6]){arrayFechas.push(year+'/'+'07'+'/'+'01')}
-          else if(meses[i].name===months[7]){arrayFechas.push(year+'/'+'08'+'/'+'01')}
-          else if(meses[i].name===months[8]){arrayFechas.push(year+'/'+'09'+'/'+'01')}
-          else if(meses[i].name===months[9]){arrayFechas.push(year+'/'+'10'+'/'+'01')}
-          else if(meses[i].name===months[10]){arrayFechas.push(year+'/'+'11'+'/'+'01')}
-          else if(meses[i].name===months[11]){arrayFechas.push(year+'/'+'12'+'/'+'01')}
+          let fechaaInsertar = ''
+          if(meses[i].name===months[0]){fechaaInsertar = year+'-'+'01'+'-'+'31'}
+          else if(meses[i].name===months[1]){fechaaInsertar = year+'-'+'02'+'-'+'29'}
+          else if(meses[i].name===months[2]){fechaaInsertar = year+'-'+'03'+'-'+'31'}
+          else if(meses[i].name===months[3]){fechaaInsertar = year+'-'+'04'+'-'+'30'}
+          else if(meses[i].name===months[4]){fechaaInsertar = year+'-'+'05'+'-'+'31'}
+          else if(meses[i].name===months[5]){fechaaInsertar = year+'-'+'06'+'-'+'30'}
+          else if(meses[i].name===months[6]){fechaaInsertar = year+'-'+'07'+'-'+'31'}
+          else if(meses[i].name===months[7]){fechaaInsertar = year+'-'+'08'+'-'+'31'}
+          else if(meses[i].name===months[8]){fechaaInsertar = year+'-'+'09'+'-'+'30'}
+          else if(meses[i].name===months[9]){fechaaInsertar = year+'-'+'10'+'-'+'31'}
+          else if(meses[i].name===months[10]){fechaaInsertar = year+'-'+'11'+'-'+'30'}
+          else if(meses[i].name===months[11]){fechaaInsertar = year+'-'+'12'+'-'+'31'}
+
+          if(parseInt(fechaaInsertar.replace('-', '').replace('-', '')) <= parseInt(fechaCreacion)){
+            let semicad = fechaaInsertar.substring(4,10)
+            fechaaInsertar = (year+1) + semicad
+          }
+          arrayFechas.push(fechaaInsertar)
+
         }
         let mayor = 0
         let menor = 0
@@ -1808,7 +1817,6 @@ export default {
         let indexmenor=0
         for(let i=0; i<arrayFechas.length; i++){
           let fecha = parseInt(arrayFechas[i].replace('-', '').replace('-', ''))
-          console.log(fecha)
           if(fecha > mayor){
             mayor = fecha
             indexmayor = i
@@ -1818,19 +1826,17 @@ export default {
             indexmenor = i
           }
         }
-        console.log('mayor', indexmayor, arrayFechas[indexmayor])
-        console.log('menor', indexmenor, arrayFechas[indexmenor])
+ /*        console.log('mayor', indexmayor, arrayFechas[indexmayor])
+        console.log('menor', indexmenor, arrayFechas[indexmenor])  */
 
         let fechai= arrayFechas[indexmenor].replace('-', '').replace('-', '')
         let fechaf= arrayFechas[indexmayor].replace('-', '').replace('-', '')
 
         if(fechai>=filtro_i && fechaf<=filtro_f){
-          console.log('true')
+          return true
         }else{
-          console.log('false')
-
+          return false
         }
-
       } catch (error) {
         console.log(error)
       }
@@ -1844,7 +1850,6 @@ export default {
           let array = []
           this.desserts=[]
           let leads = JSON.parse(localStorage.getItem('leads'))
-          console.log('asssss')
           for(let i=0; i<leads.length; i++){
             if(leads[i].initialBooking!=null && leads[i].finalBooking!=null){
               let initialBooking = parseInt((leads[i].initialBooking.substring(0,10)).replace('-', '').replace('-', ''))
@@ -1853,14 +1858,14 @@ export default {
                 array.push(leads[i])
               }
             }else{
-              this.ConvertirMesesAFecha(leads[i].months, 2020, fecha_i, fecha_f)
+              let condition = this.ConvertirMesesAFecha(leads[i].months, leads[i].createDate, fecha_i, fecha_f)
+              if(condition){
+                array.push(leads[i])
+              }
             }
           }
-          
-          console.log(array)
           this.calculaTotal(array)
         }
-        console.log('filtrando')
         
       } catch (error) {
         console.log(error)
@@ -1877,7 +1882,6 @@ export default {
           },
           responseType: "blob"  
       }
-      console.log(datos)
       let url = this.linkServer+'/user/leads/export'
       await axios.post(url, datos, config)
       .then(response => { 

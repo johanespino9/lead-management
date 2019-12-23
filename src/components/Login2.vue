@@ -26,7 +26,7 @@
         src="../assets/casa-andina.png">
        <v-form>
         <v-col cols="12">
-            <v-text-field class="input" id="username" v-on:keyup="enterLogin" color="#d69c4f" v-model="email" label="Usuario" required></v-text-field>
+            <v-text-field class="input" id="username-leadm" v-on:keyup="enterLogin" color="#d69c4f" v-model="email" label="Usuario" required></v-text-field>
             <v-text-field
               id="password"
               class="input"
@@ -138,7 +138,7 @@ export default {
       }      
     },
     bloquearIngreso(){
-      let username = document.getElementById('username')
+      let username = document.getElementById('username-leadm')
       let password = document.getElementById('password')
       let btn = document.getElementById('btn_ingresar')
       username.disabled = true
@@ -146,7 +146,7 @@ export default {
       btn.disabled = true
     },
     desbloquearIngreso(){
-      let username = document.getElementById('username')
+      let username = document.getElementById('username-leadm')
       let password = document.getElementById('password')
       let btn = document.getElementById('btn_ingresar')
       username.disabled = false

@@ -278,6 +278,7 @@ import { mapState, mapActions } from 'vuex';
           "role": this.editedItem.role
       }
       if(!this.verificarNombre(1) && !this.verificaUsername(1)){
+        this.close()
         let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
@@ -290,7 +291,6 @@ import { mapState, mapActions } from 'vuex';
           this.$store.commit('Users', response.data)
           this.desserts=this.Users
           this.alerts('Se guardó correctamente', 'success')
-          this.close()
           return true;
         }).catch(error => {
           this.alerts('Ocurrió un error guardando los datos', 'error')
@@ -321,6 +321,7 @@ import { mapState, mapActions } from 'vuex';
           "role": this.editedItem.role
       }
       if(!this.verificarNombre(2) && !this.verificaUsername(2)){
+        this.close()
         let config = {
           headers: {
             'Authorization': 'Bearer ' + this.accessToken
@@ -333,7 +334,6 @@ import { mapState, mapActions } from 'vuex';
           this.$store.commit('Users', response.data)
           this.desserts=this.Users
           this.alerts('Se guardó correctamente', 'success')
-          this.close()
         }).catch(error => {
           this.alerts('Ocurrió un error guardando los datos', 'error')
           console.log('Hubo un error ', error)

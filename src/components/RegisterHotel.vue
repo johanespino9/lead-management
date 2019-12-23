@@ -228,6 +228,7 @@ export default {
             "typeHotel": this.editedItem.typeHotel
           }
           if(!this.verificarNombre(1)){
+            this.close()
             let config = {
               headers: {
                 'Authorization': 'Bearer ' + this.accessToken
@@ -249,7 +250,6 @@ export default {
                   "hideDuration": "1000",
                   "timeOut": "5000",
               })
-              this.close()
             }).catch(error => {
               /* this.alerts('Ocurrio un error y no se guardó', 'error') */
               console.log('Hubo un error ', error)
@@ -268,6 +268,7 @@ export default {
             "typeHotel": this.editedItem.typeHotel
           }
           if(!this.verificarNombre(1)){
+            this.close()
             let config = {
               headers: {
                 'Authorization': 'Bearer ' + this.accessToken
@@ -289,7 +290,6 @@ export default {
                   "hideDuration": "1000",
                   "timeOut": "3000",
               })
-              this.close()
             }).catch(error => {
               /* this.alerts('Ocurrio un error y no se guardó', 'error') */
               console.log('Hubo un error ', error)

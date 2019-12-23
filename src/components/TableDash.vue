@@ -230,10 +230,10 @@ export default {
         }
       }
       let url = this.linkServer+'/user/dashboard/ejecutivos'
-      console.log(this.linkServer)
-      console.log(url)
       await axios.post(url, datos, config)
       .then((res) => {
+        /* swal ( "Filtro satisfactorio" ,  `${this.hotelSelected}, ${this.monthSelected}, ${this.yearSelected}` ,  "success" ) */
+        console.log('asdfhbdhfb')
         this.imprimeNumeros(res.data)
         this.percents = res.data.porcentajeConcrecion
         let array = res.data.table
