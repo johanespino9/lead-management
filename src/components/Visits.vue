@@ -784,19 +784,21 @@ export default {
       await axios.post(url2, datos2, config2)
       .then((res) => {
           if(res.status==201){
-              toastr.success('Se guardó correctamente en el calendario personal')        
+              toastr.success('Se guardó correctamente en el calendario personal')  
+              return;      
           }else {
             console.log(res.error.code + res.error.message)
             this.refreshToken();
+            return;
           }  
       })
       .catch((error) => {
         toastr.error('Ocurrió un error agregando la visita a tu calendario personal')
-        return;
+        this.refreshToken();
         console.log(error)
+        return;
       }) 
         }catch(error){
-          addVisitMS();
         }
     },
 
@@ -823,6 +825,7 @@ export default {
                 localStorage.setItem('token_ms', JSON.stringify(response.data))
                 var token_ms=JSON.parse(localStorage.getItem('token_ms'))
                 console.log(response.data)
+                this.addVisitMS();
             }).catch(error => {
                 console.log(error)
             })
