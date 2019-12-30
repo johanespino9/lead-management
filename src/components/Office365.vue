@@ -6,7 +6,7 @@
             </div>
             <br>
             <div class="buttons">
-                <a class="button" @click="irAlInicio" >Volver al inicio</a>
+                <a class="button" @click="irAlInicio()" >Volver al inicio</a>
             </div>
         </div> 
 
@@ -21,47 +21,68 @@ import axios from "axios"
 import { mapState, mapActions } from 'vuex';
 
 export default {
-    
     data: () => ({
         code:'',
+
+        token_ms:JSON.parse(localStorage.getItem('token_ms')),
+        razones: ['Mantenimiento', 'Negociacion', 'Capacitacion', 'Reclamo', 'Ferias', 'Door to door','Prospección', 'Otros'],
     }),
     mounted() {
         this.code=this.$route.query.code
         console.log(this.code)
-        this.obtenerToken()
+        if(this.token_ms==null){
+            this.obtenerToken()
+        }
+    },
+    computed: {
+    ...mapState(['accessToken','linkServer']),
     },
     methods: {
-        async obtenerToken(){
-            try{
-           const qs = require('querystring')
-            let config = {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                } ,
-            }
-            let url = 'https://login.microsoftonline.com/organizations/oauth2/v2.0/token'
-            const requestBody = {
-            grant_type: 'authorization_code',
-            code: this.code,
-            redirect_uri: 'https://lead-management.renzgmc.now.sh'/*<--Reemplazar por el link del Frontend*/+'/authorization',
-            client_id: 'eee66c32-6da2-49e8-b003-235b3f434b66',/*<--Reemplazar por Id. de aplicación (cliente)*/
-            client_secret: '/ImKQi5PSvV76:FHXE.4CL.8ZyzBQBPG',/*<--Reemplazar por el cliente secreto generado*/
-            scope: 'Calendars.ReadWrite offline_access'
-            }
-            console.log(qs.stringify(requestBody))
-            await axios.post(url, qs.stringify(requestBody), config)
-            .then(response => { 
-                localStorage.setItem('token_ms', JSON.stringify(response.data))
-                var token_ms=JSON.parse(localStorage.getItem('token_ms'))
-                console.log(response.data)
-            }).catch(error => {
-                console.log(error)
-                //this.$router.push("/authorization_error")
+        alerts(msj, type){
+        const msje = msj
+            if(type == 'success'){
+              toastr.success(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }else{
+              toastr.error(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
             })
             }
-            catch(error){
-                this.$router.push("/authorization_error")
+    },
+        async obtenerToken(){
+            let config = {
+                headers: {
+                'Authorization': 'Bearer ' + this.accessToken
+                }
             }
+            let url = this.linkServer+'/microsoft/token'
+            await axios.post(url, this.code, config)
+            .then((res) => {
+                localStorage.setItem('token_ms', JSON.stringify(res.data))
+                this.getVisitsMS()
+            })
+            .catch((error) => {
+                console.log(error)
+                this.$router.push("/authorization_error")
+                this.alerts('Ocurrió un error generando el Token')
+            })
         },
         irAlInicio(){
             let role = JSON.parse(localStorage.getItem('usuario')).role
@@ -74,9 +95,114 @@ export default {
             }else{
                 this.$router.push("/dashboard_gerentes");
             }
+        },
+        async getVisitsMS(){
+            let array = []
+            var token_ms=JSON.parse(localStorage.getItem('token_ms'))
+            let accounts=JSON.parse(localStorage.getItem('accounts'))
+            let visitas=JSON.parse(localStorage.getItem('visitas'))
+            let config = {
+                headers: {
+                'Authorization': 'Bearer ' + this.accessToken
+                }
+            }
+            let url = this.linkServer+'/microsoft/get_event'
+            let fec = new Date()
+            let visitascalendar=visitas.calendar.listVisit
+            let year = fec.getFullYear()
+            let datos= {
+                "year": year,
+                "token":token_ms.access_token
+            }
+            await axios.post(url, datos, config)
+            .then((res) => {
+                let visitasMS=res.data.value
+                for(let i=0; i<visitasMS.length; i++){
+                    var date1=new Date(visitasMS[i].start.dateTime)
+                    var date2=new Date(visitasMS[i].end.dateTime)
+                    var initialdate=this.convertDate(date1)
+                    var finaldate=this.convertDate(date2)
+                    array.push({
+                        id: '',
+                        user: '',
+                        name: visitasMS[i].subject+'<br>'+ visitasMS[i].location.displayName,
+                        description: '',
+                        start: initialdate,
+                        end: finaldate,
+                        account: visitasMS[i].location.displayName,
+                        edit: false,
+                        status: '',
+                        reason: visitasMS[i].subject,
+                        color: '#077cd2',
+                    })
+                }
+                console.log(array)
+                for(let i=0; i<array.length; i++){
+                    for(let j=0; j<visitascalendar.length; j++){
+                        if(array[i].reason==visitascalendar[j].reason&&array[i].account==visitascalendar[j].account&&array[i].start==visitascalendar[j].start&&array[i].end==visitascalendar[j].finish){
+                            array.splice(i,1,{
+                            id: visitascalendar[j].visitId,
+                            user: visitascalendar[j].user,
+                            name: visitascalendar[j].reason+'<br>'+ visitascalendar[i].account,
+                            description: visitascalendar[j].description,
+                            start: visitascalendar[j].start.toString(),
+                            end: visitascalendar[j].finish.toString(),
+                            account: visitascalendar[j].account,
+                            edit: visitascalendar[j].edit,
+                            status: visitascalendar[j].status,
+                            reason: visitascalendar[j].reason,
+                            color: '#d69c4f',
+                            })
+                        }   
+                    }
+                }
+                localStorage.setItem('visitas2', JSON.stringify(array))
+                console.log(array)
+            })
+            .catch((error) => {
+                console.log(error)
+                this.alerts('Ocurrió un error al obtener los Eventos')
+            })
+      
+        },
+        convertDate(date){
+        var day=''
+        var month=''
+        var year=''
+        var hour=''
+        var min=''
+        if(date.getDate()<10){
+            day='0'+date.getDate().toString()
+        }else{
+            day=date.getDate().toString()
         }
-
+        if(date.getMonth()<10){
+            var x=date.getMonth()+1
+            month='0'+x.toString()
+        }else{
+            var x=date.getMonth()+1
+            month=x.toString()
+        }   
+        if(date.getFullYear()<10){
+            year='0'+date.getFullYear().toString()
+        }else{
+            year=date.getFullYear().toString()
+        }  
+        if(date.getHours()<10){
+            hour='0'+date.getHours().toString()
+        }else{
+            hour=date.getHours().toString()
+        }    
+        if(date.getMinutes()<10){
+            min='0'+date.getMinutes().toString()
+        }else{
+            min=date.getMinutes().toString()
+        }                   
+        var initialdate= year+'-'+month+'-'+day+' '+hour+':'+min        
+        return initialdate;
+    },       
     },
+                 
 
 }
 </script>

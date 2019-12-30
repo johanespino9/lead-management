@@ -11,12 +11,10 @@
             </div>
             <br>
             <div class="buttons">
-                <a class="button" @click="irAlInicio" >Volver al inicio</a>
+                <a class="button" @click="irAlInicio()" >Volver al inicio</a>
             </div>
         </div> 
-
     </div>
-
 </div>
 </template> 
 <script>

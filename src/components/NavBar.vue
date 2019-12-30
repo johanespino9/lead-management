@@ -192,8 +192,8 @@
           </v-list-item-content>
         </v-list-item>
        <!-- boton de microsoft-->
-          <v-btn v-if="token_ms==null && role=='Ejecutivo'"  block tile outlined color="#dc3e15" @click="redireccionar()">
-              <v-icon right>Office</v-icon> Office 365
+          <v-btn v-if="token_ms==null && role=='Ejecutivo'"  block tile color="#dc3e15" @click="redireccionar()">
+              <v-icon>email</v-icon> Office 365
           </v-btn>
 
         
@@ -404,7 +404,7 @@ export default {
         var client_id="eee66c32-6da2-49e8-b003-235b3f434b66"//<--reemplazar por el Id. de aplicación (cliente)
         var redirect_uri="https://lead-management.renzgmc.now.sh"/*<--poner el link del aplicativo*/+"/authorization"
 
-        this.login="https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id="+client_id+"&redirect_uri="+redirect_uri+"&response_type=code&scope=offline_access%20openid%20Calendars.ReadWrite"
+        this.login="https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id="+client_id+"&redirect_uri="+redirect_uri+"&response_type=code&scope=offline_access%20openid%20Calendars.ReadWrite.Shared"
         location.href= this.login
       },
       cambiarImagen(name, lastName){

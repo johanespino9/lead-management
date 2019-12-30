@@ -85,6 +85,7 @@ export default {
   },
   destroyed() {
         localStorage.removeItem('token')
+        localStorage.removeItem('token_ms')
         localStorage.removeItem('usuarios')
         localStorage.removeItem('dashboard')
         localStorage.removeItem('leads')
@@ -103,6 +104,7 @@ export default {
   },
   beforeDestroy() {
         localStorage.removeItem('token')
+        localStorage.removeItem('token_ms')
         localStorage.removeItem('usuarios')
         localStorage.removeItem('dashboard')
         localStorage.removeItem('leads')

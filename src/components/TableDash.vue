@@ -201,7 +201,7 @@ export default {
         this.$store.dispatch('stateToken')
       }
       this.verificaPermisos()
-      console.clear()
+      //console.clear()
       /* this.$store.dispatch('getUsers')
         this.desserts= this.Users */
     }catch (error){

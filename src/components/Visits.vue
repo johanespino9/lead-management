@@ -90,8 +90,13 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="1000px" class="center">
           <template  v-slot:activator="{ on }">
-              <v-btn  style="margin-left: 11px;" dark class="mb-2" v-on="on" @click="LimpiarCampos()">Registrar Nueva Visita</v-btn>
+               <v-btn  style="margin-right: 50px;" dark class="mb-2" v-on="on" @click="LimpiarCampos()"> <v-icon>event_available</v-icon>
+                Registrar Nueva Visita
+               </v-btn>
+
           </template>
+          
+
           <v-card >
             <v-card-title>
                   <span class="headline"><strong> Gestión de visitas</strong></span>
@@ -196,6 +201,9 @@
           </v-card-text>
           </v-card>         
           </v-dialog>
+          <v-btn  style="text-align: left" dark class="mb-2" @click="getVisitsMS()"> <v-icon>autorenew</v-icon>
+                Recargar
+          </v-btn> 
 
 
         </div>
@@ -259,7 +267,7 @@
           ref="calendar"
           v-model="focus"
           color="info"
-          :events="events"
+          :events="events2"
           :event-color="getEventColor"
           :event-margin-bottom="3"
           :now="today"
@@ -404,6 +412,7 @@ export default {
       tablaVisitas2:{},
       tablaVisitas3:{},
       events: [],
+      events2: [],
       date1: new Date().toISOString().substr(0, 10),
       date2: new Date().toISOString().substr(0, 10),
       defaultDate: new Date().toISOString().substr(0, 10),
@@ -555,6 +564,7 @@ export default {
       this.verificaPermisos()
       let visitas = JSON.parse(localStorage.getItem('visitas'))
       this.cargarVisitas(visitas)
+      this.getVisitsMS()
       this.listaVisitas = visitas.calendar.listVisit
       this.tablaVisitas = visitas.tableVisits 
       var fecha = new Date();
@@ -731,6 +741,7 @@ export default {
         }
         this.events = array 
         this.values = []
+        this.getVisitsMS()
         this.tablaVisitas1 = res.data.tableVisits.tableVisitsNumber1
         this.tablaVisitas2 = res.data.tableVisits.tableVisitsNumber2
         this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
@@ -750,87 +761,72 @@ export default {
 
     async addVisitMS(){
         try{
-             //enviar a la API
-        var token_ms=JSON.parse(localStorage.getItem('token_ms'))
         let hour1= this.horaInicio
-        let hour2= this.horaFin
+        var token_ms=JSON.parse(localStorage.getItem('token_ms'))
         console.log(token_ms.access_token)
-        let datos2= {
-        "subject": this.editedItem.reason,
-        "body": {
-          "contentType": "HTML",
-        },
-        "start": {
-          "dateTime": this.date1+"T"+hour1+":00",
-          "timeZone": "Eastern Standard Time"
-        },
-        "end": {
-          "dateTime": this.date1+"T"+hour2+":00",
-          "timeZone": "Eastern Standard Time"
-        },
-        "location":{
-          "displayName":this.editedItem.account
-        }
-
+        let hour2= this.horaFin
+      let datos= {
+        "description": this.editedItem.description,
+        "start": this.date1+"T"+hour1+":00",
+        "finish": this.date1+"T"+hour2+":00",
+        "account": this.editedItem.account,
+        "reason": this.editedItem.reason,
+        "status": this.status,
+        "token":token_ms.access_token
       }
-      console.log(datos2)
-      let config2 = {
+      let config = {
         headers: {
-          'Authorization': 'Bearer ' + token_ms.access_token
+          'Authorization': 'Bearer ' + this.accessToken
         }
       }
-
-      let url2='https://graph.microsoft.com/v1.0/me/events'
-      await axios.post(url2, datos2, config2)
+      console.log(datos)
+      let url = this.linkServer+'/microsoft/add_event'
+      await axios.post(url, datos, config)
+      //________________________
       .then((res) => {
-          if(res.status==201){
+          if(res.status==200){
+              console.log(res)
+              this.getVisitsMS()
               toastr.success('Se guardó correctamente en el calendario personal')  
               return;      
           }else {
             console.log(res.error.code + res.error.message)
+            toastr.error('Ocurrió un error, espere un momento')
             this.refreshToken();
             return;
           }  
       })
       .catch((error) => {
-        toastr.error('Ocurrió un error agregando la visita a tu calendario personal')
+        toastr.error('Ocurrió un error, espere un momento')
         this.refreshToken();
         console.log(error)
         return;
       }) 
         }catch(error){
+          console.log(error)
         }
     },
 
     async refreshToken(){
-          const qs = require('querystring')
-          var token_ms=JSON.parse(localStorage.getItem('token_ms'))
-          let config = {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                } ,
+            let config = {
+                  headers: {
+                  'Authorization': 'Bearer ' + this.accessToken
+                  }
             }
-            let url = 'https://login.microsoftonline.com/organizations/oauth2/v2.0/token'
-            const requestBody = {
-            grant_type: 'refresh_token',
-            refresh_token: token_ms.refresh_token,
-            redirect_uri: 'https://lead-management.renzgmc.now.sh'/*<--Reemplazar por el link del Frontend*/+'/authorization',
-            client_id: 'eee66c32-6da2-49e8-b003-235b3f434b66',/*<--Reemplazar por Id. de aplicación (cliente)*/
-            client_secret: '/ImKQi5PSvV76:FHXE.4CL.8ZyzBQBPG',/*<--Reemplazar por el cliente secreto generado*/
-            scope: 'Calendars.ReadWrite offline_access'
-            }
-            console.log(qs.stringify(requestBody))
-            await axios.post(url, qs.stringify(requestBody), config)
-            .then(response => { 
-                localStorage.setItem('token_ms', JSON.stringify(response.data))
-                var token_ms=JSON.parse(localStorage.getItem('token_ms'))
-                console.log(response.data)
-                this.addVisitMS();
-            }).catch(error => {
+            var token_ms=JSON.parse(localStorage.getItem('token_ms'))
+            let url = this.linkServer+'/microsoft/refresh_token'
+            await axios.post(url, token_ms.refresh_token, config)
+            .then((res) => {
+                localStorage.setItem('token_ms', JSON.stringify(res.data))
+                toastr.success('Se volvió a conectar con el Calendario')  
+                console.log(this.token_ms)
+            })
+            .catch((error) => {
                 console.log(error)
+                this.$router.push("/authorization_error")
+                toastr.error('Ocurrió un error, espere un momento')
             })
         },
-
     //Edit a visit
     async editVisit(){
       try {
@@ -901,7 +897,7 @@ export default {
 
      editItem (item) {
        try {
-        this.editedIndex = this.events.indexOf(item)
+        this.editedIndex = this.events2.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.status = item.status
         this.dialog = true
@@ -931,6 +927,8 @@ export default {
          
        }
     }, 
+
+
     save () {
         if (this.editedIndex > -1) {
           console.log('se edito')
@@ -954,25 +952,27 @@ export default {
       focuss(){
         this.editedItem.reason = ''
       },
+
+    //___________________________________
       cargarVisitas(data){
         try {
-        let visitas =  data.calendar.listVisit
-        let array = []
-        for(let i=0; i<visitas.length; i++){
-          array.push({
-            id: visitas[i].visitId,
-            user: visitas[i].user,
-            name: visitas[i].reason+'<br>'+ visitas[i].account,
-            description: visitas[i].description,
-            start: visitas[i].start.toString(),
-            end: visitas[i].finish.toString(),
-            account: visitas[i].account,
-            edit: visitas[i].edit,
-            status: visitas[i].status,
-            reason: visitas[i].reason,
-            color: '#d69c4f',
-          })
-        }     
+          let array = []
+            let visitas =  data.calendar.listVisit
+            for(let i=0; i<visitas.length; i++){
+              array.push({
+                id: visitas[i].visitId,
+                user: visitas[i].user,
+                name: visitas[i].reason+'<br>'+ visitas[i].account,
+                description: visitas[i].description,
+                start: visitas[i].start.toString(),
+                end: visitas[i].finish.toString(),
+                account: visitas[i].account,
+                edit: visitas[i].edit,
+                status: visitas[i].status,
+                reason: visitas[i].reason,
+                color: '#d69c4f',
+              })
+            }
         this.events = []
         this.events= array
         } catch (error) {
@@ -1049,6 +1049,113 @@ export default {
           }
         }
       },
+      async getVisitsMS(){
+            let array = []
+            var token_ms=JSON.parse(localStorage.getItem('token_ms'))
+            let accounts=JSON.parse(localStorage.getItem('accounts'))
+            let visitas=JSON.parse(localStorage.getItem('visitas'))
+            let config = {
+                headers: {
+                'Authorization': 'Bearer ' + this.accessToken
+                }
+            }
+            let url = this.linkServer+'/microsoft/get_event'
+            let fec = new Date()
+            let visitascalendar=visitas.calendar.listVisit
+            let year = fec.getFullYear()
+            let datos= {
+                "year": year,
+                "token":token_ms.access_token
+            }
+            await axios.post(url, datos, config)
+            .then((res) => {
+                let visitasMS=res.data.value
+                for(let i=0; i<visitasMS.length; i++){
+                    var date1=new Date(visitasMS[i].start.dateTime)
+                    var date2=new Date(visitasMS[i].end.dateTime)
+                    var initialdate=this.convertDate(date1)
+                    var finaldate=this.convertDate(date2)
+                    array.push({
+                        id: '',
+                        user: '',
+                        name: visitasMS[i].subject+'<br>'+ visitasMS[i].location.displayName,
+                        description: '',
+                        start: initialdate,
+                        end: finaldate,
+                        account: visitasMS[i].location.displayName,
+                        edit: false,
+                        status: '',
+                        reason: visitasMS[i].subject,
+                        color: '#077cd2',
+                    })
+                }
+                console.log(array)
+                for(let i=0; i<array.length; i++){
+                    for(let j=0; j<visitascalendar.length; j++){
+                        if(array[i].reason==visitascalendar[j].reason&&array[i].account==visitascalendar[j].account&&array[i].start==visitascalendar[j].start&&array[i].end==visitascalendar[j].finish){
+                            array.splice(i,1,{
+                            id: visitascalendar[j].visitId,
+                            user: visitascalendar[j].user,
+                            name: visitascalendar[j].reason+'<br>'+ visitascalendar[i].account,
+                            description: visitascalendar[j].description,
+                            start: visitascalendar[j].start.toString(),
+                            end: visitascalendar[j].finish.toString(),
+                            account: visitascalendar[j].account,
+                            edit: visitascalendar[j].edit,
+                            status: visitascalendar[j].status,
+                            reason: visitascalendar[j].reason,
+                            color: '#d69c4f',
+                            })
+                        }   
+                    }
+                }
+                localStorage.setItem('visitas2', JSON.stringify(array))
+                this.events2 = []
+                this.events2= array
+                console.log(array)
+            })
+            .catch((error) => {
+                console.log(error)
+                //this.alerts('Ocurrió un error al obtener los Eventos')
+            })
+      
+        },
+        convertDate(date){
+        var day=''
+        var month=''
+        var year=''
+        var hour=''
+        var min=''
+        if(date.getDate()<10){
+            day='0'+date.getDate().toString()
+        }else{
+            day=date.getDate().toString()
+        }
+        if(date.getMonth()<10){
+            var x=date.getMonth()+1
+            month='0'+x.toString()
+        }else{
+            var x=date.getMonth()+1
+            month=x.toString()
+        }   
+        if(date.getFullYear()<10){
+            year='0'+date.getFullYear().toString()
+        }else{
+            year=date.getFullYear().toString()
+        }  
+        if(date.getHours()<10){
+            hour='0'+date.getHours().toString()
+        }else{
+            hour=date.getHours().toString()
+        }    
+        if(date.getMinutes()<10){
+            min='0'+date.getMinutes().toString()
+        }else{
+            min=date.getMinutes().toString()
+        }                   
+        var initialdate= year+'-'+month+'-'+day+' '+hour+':'+min        
+        return initialdate;
+    },       
 
 
   },
