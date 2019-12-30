@@ -94,7 +94,16 @@
                         </v-dialog>
                     </v-col>
                     <v-col v-if="role!='Ejecutivo'" cols="20" sm="3" md="80" class="mt-3 ml-3">
-                        <v-btn color="primary" @click="ExportarLeads()">Exportar <i class="fas fa-cloud-upload-alt ml-2"></i></v-btn>
+                        <v-btn
+                        :loading="loading"
+                        :disabled="loading"
+                        color="primary"
+                        class="ma-2 white--text"
+                        @click="ExportarLeads()"
+                      >
+                        Exportar Leads
+                        <v-icon right dark>mdi-cloud-downlad</v-icon>
+                      </v-btn>
                     </v-col>
                   </v-row>
                   
@@ -511,6 +520,7 @@ export default {
     },
   props: ['totalmeses'],
   data: () => ({
+    loading:false,
     role: '',
     sevent: 'no',
     rateEvent1:0,
@@ -1872,6 +1882,7 @@ export default {
       }
     },
     async ExportarLeads(){
+      this.loading=true
       let datos = []
       for(let i=0; i<this.desserts.length; i++){
         datos.push(this.desserts[i].leadid)
@@ -1897,10 +1908,12 @@ export default {
         document.body.removeChild(link);
         this.alerts('Se exportó correctamente', 'success')
         this.close()
+        this.loading=false
       }).catch(error => {
       console.log('Hubo un error ', error)
       this.alerts('Ocurrio un error y no se logró exportar', 'error')
       this.close()
+      this.loading=false
       }) 
     }
  

@@ -201,9 +201,23 @@
           </v-card-text>
           </v-card>         
           </v-dialog>
-          <v-btn  style="text-align: left" dark class="mb-2" @click="getVisitsMS()"> <v-icon>autorenew</v-icon>
+          <!--<v-btn  style="text-align: left" dark class="mb-2" @click="getVisitsMS()"> <v-icon>autorenew</v-icon>
                 Recargar
-          </v-btn> 
+          </v-btn> -->
+          <v-btn
+            class="mb-2"
+            dark
+            :loading="loading"
+            :disabled="loading"
+            @click="getVisitsMS()"
+          >
+            Recargar
+            <template v-slot:loader>
+              <span class="custom-loader">
+                <v-icon light>cached</v-icon>
+              </span>
+            </template>
+          </v-btn>
 
 
         </div>
@@ -353,6 +367,7 @@ export default {
     NotFound
   },
   data: () => ({
+    loading:false,
     role:'',
     groupSG: '',
     colorIcon: 'white',
@@ -561,11 +576,9 @@ export default {
   },
    mounted (){ 
     try { 
-      this.verificaPermisos()
       let visitas = JSON.parse(localStorage.getItem('visitas'))
-      this.cargarVisitas(visitas)
-      let visitas2 = JSON.parse(localStorage.getItem('visitas2'))
-      this.cargarVisitasMS(visitas2)
+      this.verificaPermisos()
+      this.cargarVisitasMS()
       //this.getVisitsMS()
       this.listaVisitas = visitas.calendar.listVisit
       this.tablaVisitas = visitas.tableVisits 
@@ -583,7 +596,8 @@ export default {
       this.fechaActual()
       this.cambiaTableVisits('')
       } catch (error) {
-       console.log('Ocurrio un error')
+       console.log('Ocurrio un error'+error)
+
      }
     },
     
@@ -978,6 +992,8 @@ export default {
             }
         this.events = []
         this.events= array
+        this.events2 = []
+        this.events2= array
         } catch (error) {
         }
       },
@@ -1052,12 +1068,21 @@ export default {
           }
         }
       },
-      cargarVisitasMS(visitas2){
-        this.events2=visitas2
+      cargarVisitasMS(){
+          let visitas = JSON.parse(localStorage.getItem('visitas'))
+          let visitas2 = JSON.parse(localStorage.getItem('visitas2'))
+        if(visitas2!=null){
+           this.events2=visitas2
+        }else{
+          this.cargarVisitas(visitas)
+        }       
       },
       async getVisitsMS(){
+            this.loading=true
             let array = []
+            
             var token_ms=JSON.parse(localStorage.getItem('token_ms'))
+          if(token_ms!=null){
             let accounts=JSON.parse(localStorage.getItem('accounts'))
             let visitas=JSON.parse(localStorage.getItem('visitas'))
             let config = {
@@ -1133,13 +1158,37 @@ export default {
 
                 localStorage.setItem('visitas2', JSON.stringify(array))
                 console.log(array)
+                this.loading=false
             })
             .catch((error) => {
                 console.log(error)
                 this.refreshToken();
+                this.loading=false
                 this.alerts('Ocurrió un error al obtener los Eventos')
             })
-      
+          }else{
+            let data = JSON.parse(localStorage.getItem('visitas'))
+            let array = []
+            let visitas =  data.calendar.listVisit
+            for(let i=0; i<visitas.length; i++){
+              array.push({
+                id: visitas[i].visitId,
+                user: visitas[i].user,
+                name: visitas[i].reason+'<br>'+ visitas[i].account,
+                description: visitas[i].description,
+                start: visitas[i].start.toString(),
+                end: visitas[i].finish.toString(),
+                account: visitas[i].account,
+                edit: visitas[i].edit,
+                status: visitas[i].status,
+                reason: visitas[i].reason,
+                color: '#d69c4f',
+              })
+            }
+            this.events2 = []
+            this.events2= array
+            this.loading=false
+          }
         },
         convertDate(date){
         var day=''
@@ -1207,4 +1256,40 @@ export default {
   right: 4px;
   margin-right: 0px;
 }
+.custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>

@@ -54,7 +54,16 @@
 
 
 <v-container fluid class="text-left mt-3 pt-3 mb-0 pb-0">
-        <v-btn color="primary" @click="ExportarVisitas()">Exportar <i class="fas fa-cloud-upload-alt ml-2"></i></v-btn>
+        <v-btn
+                        :loading="loading"
+                        :disabled="loading"
+                        color="primary"
+                        class="ma-2 white--text"
+                        @click="ExportarVisitas()"
+                      >
+                        Exportar Visitas
+                        <v-icon right dark>mdi-cloud-download</v-icon>
+                      </v-btn>
   </v-container>
 <v-container fluid>
   <v-row>
@@ -398,6 +407,7 @@ export default {
     NotFound
   },
   data: () => ({
+    loading:false,
     role:'',
     usuario: '',
     id: 0,
@@ -557,6 +567,7 @@ export default {
     search: '',
     months: ['[Seleccionar todos]', 'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'],
     tableVisits: [],
+    
     header_tvisitas: [
       {text: "Cuenta", value:"account"},
       {text: "Usuario", value:"user"},
@@ -946,6 +957,7 @@ export default {
     },
 
     async ExportarVisitas(){
+      this.loading=true
       console.log(this.tableVisits)
       try {
       let datos = []
@@ -974,10 +986,12 @@ export default {
 
         toastr.success('Se exportó correctamente')
         this.close()
+        this.loading=false
       }).catch(error => {
       console.log('Hubo un error ', error)
       toastr.error('Ocurrio un error y no se logró exportar')
       this.close()
+      this.loading=false
       })
       } catch (error) {
         console.log(error)

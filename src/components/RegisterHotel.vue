@@ -9,11 +9,22 @@
               <!-- <input type="file" ref="file"> -->
             </template>
           </v-col>
-          <v-col cols="20" sm="3" md="80" class="text-center"> 
+          <v-col cols="20" sm="1" md="80" class="text-center"> 
             <template>
-              <v-btn type="submit" x-large color="primary" dark>
+              <!--<v-btn type="submit" x-large color="primary" dark>
                 Subir Hoteles
                 <i class="fas fa-file-upload fa-2x ml-4"></i>
+              </v-btn>-->
+              <v-btn
+                type="submit"
+                dark
+                :loading="loading"
+                :disabled="loading"
+                color="primary"
+                class="ma-2 white--text"
+                fab
+              >
+                <v-icon dark>mdi-cloud-upload</v-icon>
               </v-btn>
             </template>
           </v-col>
@@ -131,6 +142,7 @@ export default {
       mask,
     },
     data: () => ({
+    loading:false,
     dialog: false,
     role: '',
     select: '',
@@ -302,6 +314,7 @@ export default {
           
         },
         async FileUpload(){
+          this.loading=true
           let archivo = this.file_upload;
           if(archivo!=null){
             let extension = archivo.name.substring(archivo.name.length-4 ,archivo.name.length).toLowerCase();
@@ -320,14 +333,18 @@ export default {
                   this.file_upload = null
                   localStorage.setItem('hoteles', JSON.stringify(response.data))
                   this.desserts = response.data
+                  this.loading=false
                 }).catch(error => {
                   toastr.error('El modelo de archivo es erroneo')
+                  this.loading=false
                 });
             }else{
               toastr.warning('Debes seleccionar un archivo Excel .xlsx')
+              this.loading=false
             } 
           }else{
             toastr.error('Selecciona un archivo primero')
+            this.loading=false
           }
         },
         rellenadatos(){
