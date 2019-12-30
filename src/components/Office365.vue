@@ -136,14 +136,13 @@ export default {
                         color: '#077cd2',
                     })
                 }
-                console.log(array)
                 for(let i=0; i<array.length; i++){
                     for(let j=0; j<visitascalendar.length; j++){
                         if(array[i].reason==visitascalendar[j].reason&&array[i].account==visitascalendar[j].account&&array[i].start==visitascalendar[j].start&&array[i].end==visitascalendar[j].finish){
                             array.splice(i,1,{
                             id: visitascalendar[j].visitId,
                             user: visitascalendar[j].user,
-                            name: visitascalendar[j].reason+'<br>'+ visitascalendar[i].account,
+                            name: visitascalendar[j].reason+'<br>'+ visitascalendar[j].account,
                             description: visitascalendar[j].description,
                             start: visitascalendar[j].start.toString(),
                             end: visitascalendar[j].finish.toString(),
@@ -153,9 +152,27 @@ export default {
                             reason: visitascalendar[j].reason,
                             color: '#d69c4f',
                             })
+                            visitascalendar.splice(j,1)
+                            j--
                         }   
                     }
                 }
+                for(let j=0; j<visitascalendar.length; j++){
+                    array.push({
+                        id: visitascalendar[j].visitId,
+                        user: visitascalendar[j].user,
+                        name: visitascalendar[j].reason+'<br>'+ visitascalendar[j].account,
+                        description: visitascalendar[j].description,
+                        start: visitascalendar[j].start.toString(),
+                        end: visitascalendar[j].finish.toString(),
+                        account: visitascalendar[j].account,
+                        edit: visitascalendar[j].edit,
+                        status: visitascalendar[j].status,
+                        reason: visitascalendar[j].reason,
+                        color: '#d69c4f',
+                    })
+                }
+
                 localStorage.setItem('visitas2', JSON.stringify(array))
                 console.log(array)
             })

@@ -564,7 +564,9 @@ export default {
       this.verificaPermisos()
       let visitas = JSON.parse(localStorage.getItem('visitas'))
       this.cargarVisitas(visitas)
-      this.getVisitsMS()
+      let visitas2 = JSON.parse(localStorage.getItem('visitas2'))
+      this.cargarVisitasMS(visitas2)
+      //this.getVisitsMS()
       this.listaVisitas = visitas.calendar.listVisit
       this.tablaVisitas = visitas.tableVisits 
       var fecha = new Date();
@@ -874,6 +876,7 @@ export default {
         this.tablaVisitas3 = res.data.tableVisits.tableVisitsPercent
         this.values.push(this.tablaVisitas1, this.tablaVisitas2, this.tablaVisitas3)
         this.cargaOlvidados(res.data.tableOlvidadosInt)
+        this.getVisitsMS()
         toastr.success('Se guardó correctamente')
       })
       .catch((error) => {
@@ -1049,6 +1052,9 @@ export default {
           }
         }
       },
+      cargarVisitasMS(visitas2){
+        this.events2=visitas2
+      },
       async getVisitsMS(){
             let array = []
             var token_ms=JSON.parse(localStorage.getItem('token_ms'))
@@ -1062,9 +1068,8 @@ export default {
             let url = this.linkServer+'/microsoft/get_event'
             let fec = new Date()
             let visitascalendar=visitas.calendar.listVisit
-            let year = fec.getFullYear()
             let datos= {
-                "year": year,
+                "year": this.yearSelected,
                 "token":token_ms.access_token
             }
             await axios.post(url, datos, config)
@@ -1089,14 +1094,13 @@ export default {
                         color: '#077cd2',
                     })
                 }
-                console.log(array)
                 for(let i=0; i<array.length; i++){
                     for(let j=0; j<visitascalendar.length; j++){
                         if(array[i].reason==visitascalendar[j].reason&&array[i].account==visitascalendar[j].account&&array[i].start==visitascalendar[j].start&&array[i].end==visitascalendar[j].finish){
                             array.splice(i,1,{
                             id: visitascalendar[j].visitId,
                             user: visitascalendar[j].user,
-                            name: visitascalendar[j].reason+'<br>'+ visitascalendar[i].account,
+                            name: visitascalendar[j].reason+'<br>'+ visitascalendar[j].account,
                             description: visitascalendar[j].description,
                             start: visitascalendar[j].start.toString(),
                             end: visitascalendar[j].finish.toString(),
@@ -1106,17 +1110,34 @@ export default {
                             reason: visitascalendar[j].reason,
                             color: '#d69c4f',
                             })
+                            visitascalendar.splice(j,1)
+                            j--
                         }   
                     }
                 }
+                for(let j=0; j<visitascalendar.length; j++){
+                    array.push({
+                        id: visitascalendar[j].visitId,
+                        user: visitascalendar[j].user,
+                        name: visitascalendar[j].reason+'<br>'+ visitascalendar[j].account,
+                        description: visitascalendar[j].description,
+                        start: visitascalendar[j].start.toString(),
+                        end: visitascalendar[j].finish.toString(),
+                        account: visitascalendar[j].account,
+                        edit: visitascalendar[j].edit,
+                        status: visitascalendar[j].status,
+                        reason: visitascalendar[j].reason,
+                        color: '#d69c4f',
+                    })
+                }
+
                 localStorage.setItem('visitas2', JSON.stringify(array))
-                this.events2 = []
-                this.events2= array
                 console.log(array)
             })
             .catch((error) => {
                 console.log(error)
-                //this.alerts('Ocurrió un error al obtener los Eventos')
+                this.refreshToken();
+                this.alerts('Ocurrió un error al obtener los Eventos')
             })
       
         },
