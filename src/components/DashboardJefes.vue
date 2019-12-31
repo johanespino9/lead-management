@@ -52,6 +52,42 @@
             </v-row>
             </v-container>
          </div>
+         <div class="card" style="background: #FFF; margin-top: 0px; margin-bottom: 10px; border-radius: 5px;">
+            <v-container class="col-md-10">
+            <v-row justify="center">
+                <!-- <v-col cols="auto">
+                <v-combobox :items="groupSegments" v-model="groupSegment" color="#757575" label="Group Segment"></v-combobox>
+                </v-col> -->
+                <v-col cols="auto">
+                <!--<v-combobox :items="months" v-model="monthSelected" color="#757575" label="Seleccionar Mes"></v-combobox>-->
+                  <v-btn
+                        :loading="loading1"
+                        :disabled="loading1"
+                        color="primary"
+                        class="ma-2 white--text"
+                        @click="ExportarLeads()"
+                      >
+                        Exportar Leads
+                        <v-icon right dark>mdi-cloud-download</v-icon>
+                      </v-btn>
+                </v-col>
+                <v-col cols="auto">
+                <!--<v-combobox :items="years" v-model="yearSelected" color="#757575" label="Seleccionar Año"></v-combobox>-->
+                  <v-btn
+                        :loading="loading2"
+                        :disabled="loading2"
+                        color="primary"
+                        class="ma-2 white--text"
+                        @click="ExportarVisits()"
+                      >
+                        Exportar Visitas
+                        <v-icon right dark>mdi-cloud-download</v-icon>
+                      </v-btn>
+                </v-col>
+            </v-row>
+            </v-container>
+         </div>
+         
 
         <!-- SEGUNDO ROW -->
         <div class="row">
@@ -353,6 +389,8 @@ export default {
     NotFound
   },
     data: () => ({
+      loading1:false,
+      loading2:false,
       /* elimiar luego desde aca */
       ciudades:[
             'Santiago de surco',
@@ -2758,12 +2796,98 @@ export default {
     } else {
         return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;
     }
-}
-
-
-
-
-  
+},
+async ExportarLeads(){
+      this.loading1=true
+      let datos = []
+      let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+          },
+          responseType: "blob"  
+      }
+      let url = this.linkServer+'/user/leads/export/all'
+      await axios.post(url, datos, config)
+      .then(response => { 
+        console.log(response) 
+        let blob = new Blob([response.data],
+        {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"});
+        let link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.setAttribute('download', 'leads.xlsx');
+        /* link.download = 'visits.xlsx'; */
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        this.alerts('Se exportó correctamente', 'success')
+        this.dialog = false;
+        this.loading1=false
+      }).catch(error => {
+      console.log('Hubo un error ', error)
+      this.alerts('Ocurrio un error y no se logró exportar', 'error')
+       this.dialog = false;
+      this.loading1=false
+      }) 
+    },
+    async ExportarVisits(){
+      this.loading2=true
+      let datos = []
+      let config = {
+          headers: {
+            'Authorization': 'Bearer ' + this.accessToken
+          },
+          responseType: "blob"  
+      }
+      let url = this.linkServer+'/user/visits/export/all'
+      await axios.post(url, datos, config)
+      .then(response => { 
+        console.log(response) 
+        let blob = new Blob([response.data],
+        {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"});
+        let link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.setAttribute('download', 'visits.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        this.alerts('Se exportó correctamente', 'success')
+        this.dialog = false;
+        this.loading2=false
+      }).catch(error => {
+      console.log('Hubo un error ', error)
+      this.alerts('Ocurrio un error y no se logró exportar', 'error')
+       this.dialog = false;
+      this.loading2=false
+      }) 
+    },
+     alerts(msj, type){
+        const msje = msj
+            if(type == 'success'){
+              toastr.success(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }else{
+              toastr.error(msje, {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+            })
+            }
+    },
 
     },
 }

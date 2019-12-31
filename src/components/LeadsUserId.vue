@@ -101,8 +101,8 @@
                         class="ma-2 white--text"
                         @click="ExportarLeads()"
                       >
-                        Exportar Leads
-                        <v-icon right dark>mdi-cloud-downlad</v-icon>
+                        Exportar
+                        <v-icon right dark>mdi-cloud-download</v-icon>
                       </v-btn>
                     </v-col>
                   </v-row>
