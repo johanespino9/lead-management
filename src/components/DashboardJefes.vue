@@ -31,28 +31,7 @@
         <!-- COMIENZAN LOS CARDS -->
     <div class="wrapper">
       
-        <div class="card" style="background: #FFF; margin-top: 0px; margin-bottom: 10px; border-radius: 5px;">
-            <v-container class="col-md-10">
-            <v-row justify="center">
-                <!-- <v-col cols="auto">
-                <v-combobox :items="groupSegments" v-model="groupSegment" color="#757575" label="Group Segment"></v-combobox>
-                </v-col> -->
-                <v-col cols="auto">
-                <v-combobox :items="months" v-model="monthSelected" color="#757575" label="Seleccionar Mes"></v-combobox>
-                </v-col>
-                <v-col cols="auto">
-                <v-combobox :items="years" v-model="yearSelected" color="#757575" label="Seleccionar Año"></v-combobox>
-                </v-col>
-                <v-col cols="auto" style="margin-top: 12px;">
-                <v-btn id="btn-filtro" color="#000000" style="color: #FAFAFA;" v-on:click="Filtro()">
-                  <i class="fas fa-search mr-2"></i>
-                  Filtrar Registros
-                </v-btn>
-                </v-col>
-            </v-row>
-            </v-container>
-         </div>
-         <div class="card" style="background: #FFF; margin-top: 0px; margin-bottom: 10px; border-radius: 5px;">
+      <div class="card" style="background: #FFF; margin-top: 0px; margin-bottom: 10px; border-radius: 5px;">
             <v-container class="col-md-10">
             <v-row justify="center">
                 <!-- <v-col cols="auto">
@@ -87,6 +66,30 @@
             </v-row>
             </v-container>
          </div>
+
+
+        <div class="card" style="background: #FFF; margin-top: 0px; margin-bottom: 10px; border-radius: 5px;">
+            <v-container class="col-md-10">
+            <v-row justify="center">
+                <!-- <v-col cols="auto">
+                <v-combobox :items="groupSegments" v-model="groupSegment" color="#757575" label="Group Segment"></v-combobox>
+                </v-col> -->
+                <v-col cols="auto">
+                <v-combobox :items="months" v-model="monthSelected" color="#757575" label="Seleccionar Mes"></v-combobox>
+                </v-col>
+                <v-col cols="auto">
+                <v-combobox :items="years" v-model="yearSelected" color="#757575" label="Seleccionar Año"></v-combobox>
+                </v-col>
+                <v-col cols="auto" style="margin-top: 12px;">
+                <v-btn id="btn-filtro" color="#000000" style="color: #FAFAFA;" v-on:click="Filtro()">
+                  <i class="fas fa-search mr-2"></i>
+                  Filtrar Registros
+                </v-btn>
+                </v-col>
+            </v-row>
+            </v-container>
+         </div>
+         
          
 
         <!-- SEGUNDO ROW -->
